@@ -405,7 +405,7 @@ class APITester:
             print(f"Warning: Could not recreate main session: {e}")
     
     def create_match_target_user(self):
-        """Create a target user for matching tests"""
+        """Create a target user for matching tests with appropriate gender for preference testing"""
         try:
             import subprocess
             subprocess.run([
@@ -420,9 +420,16 @@ class APITester:
                   role: 'student',
                   interests: ['Art', 'Music'],
                   university: 'Harvard',
+                  university_location: 'Boston, MA',
+                  campus_name: 'Harvard Yard',
+                  course: 'Psychology',
                   age: 22,
                   study_style: 'visual',
                   bio: 'Target bio',
+                  ethnicity: 'Asian',
+                  gender: 'woman',
+                  interested_in: ['men'],
+                  notifications_enabled: true,
                   created_at: new Date()
                 });
                 """
