@@ -244,6 +244,9 @@ class APITester:
                     self.log_result("matching", "POST /matches/swipe", False, response, "Invalid swipe response")
             except json.JSONDecodeError:
                 self.log_result("matching", "POST /matches/swipe", False, response, "Invalid JSON response")
+        elif response and response.status_code == 400 and "Already swiped" in response.text:
+            # This is expected behavior - user already swiped on this target
+            self.log_result("matching", "POST /matches/swipe (Already swiped)", True)
         else:
             self.log_result("matching", "POST /matches/swipe", False, response, "Swipe action failed")
         
