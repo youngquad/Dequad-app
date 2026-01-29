@@ -228,10 +228,27 @@ export default function MatchesScreen() {
             {profile.age && <Text style={styles.cardAge}>, {profile.age}</Text>}
           </Text>
 
+          {profile.course && (
+            <View style={styles.infoRow}>
+              <Ionicons name="library-outline" size={16} color="#9CA3AF" />
+              <Text style={styles.infoText}>{profile.course}</Text>
+            </View>
+          )}
+
           {profile.university && (
             <View style={styles.infoRow}>
               <Ionicons name="school-outline" size={16} color="#9CA3AF" />
-              <Text style={styles.infoText}>{profile.university}</Text>
+              <Text style={styles.infoText}>
+                {profile.university}
+                {profile.campus_name && ` - ${profile.campus_name}`}
+              </Text>
+            </View>
+          )}
+
+          {profile.university_location && (
+            <View style={styles.infoRow}>
+              <Ionicons name="location-outline" size={16} color="#9CA3AF" />
+              <Text style={styles.infoText}>{profile.university_location}</Text>
             </View>
           )}
 
