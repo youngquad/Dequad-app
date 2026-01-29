@@ -103,6 +103,8 @@ export default function ProfileScreen() {
   }, []);
 
   const registerForPushNotifications = async () => {
+    // Push notifications only work on physical devices with development builds
+    // Expo Go has limitations with push notifications since SDK 53
     if (!Device.isDevice) {
       console.log('Push notifications require a physical device');
       return;
@@ -122,11 +124,22 @@ export default function ProfileScreen() {
         return;
       }
       
-      const token = (await Notifications.getExpoPushTokenAsync()).data;
-      
-      // Save push token to backend
-      if (token && sessionToken) {
-        await api.put('/profile', { push_token: token }, sessionToken);
+      // Note: Push tokens require a projectId which is only available in development builds
+      // In Expo Go, this will fail gracefully
+      try {
+        const token = (await Notifications.getExpoPushTokenAsync({
+          projectId: 'educare-app'
+        })).data;
+        
+        // Save push token to backend
+        if (token && sessionToken) {
+          await api.put('/profile', { push_token: token }, sessionToken);
+          console.log('Push token registered successfully');
+        }
+      } catch (tokenError) {
+        // This is expected in Expo Go - push notifications require a development build
+        console.log('Push notifications require a development build. Using Expo Go has limitations.');
+      }
       }
     } catch (error) {
       console.error('Error registering for push notifications:', error);
