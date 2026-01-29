@@ -699,6 +699,22 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
     )
     
     await db.chat_messages.insert_one(message.dict())
+    
+    # Send push notification to the other user
+    # Determine the recipient (the other person in the match)
+    if match["user_id"] == current_user.user_id:
+        recipient_id = match["matched_user_id"]
+    else:
+        recipient_id = match["user_id"]
+    
+    await send_push_notification(
+        recipient_id,
+        f"New message from {current_user.name}",
+        "You have a new message. Tap to read.",
+        "new_message",
+        {"match_id": data.match_id, "sender_name": current_user.name}
+    )
+    
     return message
 
 @api_router.get("/chat/{match_id}")
