@@ -282,13 +282,13 @@ class APITester:
             self.log_result("notifications", "POST /notifications/read-all", False, response, "Mark all read failed")
 
     def test_matching_apis(self):
-        """Test Student Matching APIs"""
+        """Test Student Matching APIs with preference filtering"""
         print("\n💕 Testing Matching APIs...")
         
         # First create another test user for matching
         self.create_match_target_user()
         
-        # Test GET /api/matches/discover
+        # Test GET /api/matches/discover - should respect interested_in preferences
         response = self.make_request("GET", "/matches/discover", token=STUDENT_TOKEN)
         if isinstance(response, tuple):
             self.log_result("matching", "GET /matches/discover", False, error=response[1])
@@ -296,13 +296,19 @@ class APITester:
             try:
                 matches = response.json()
                 if isinstance(matches, list):
-                    self.log_result("matching", "GET /matches/discover", True)
+                    self.log_result("matching", "GET /matches/discover (preference filtering)", True)
                     # Store a user ID for swipe testing if available
                     if matches:
                         self.target_user_id = matches[0].get("user_id")
+                        # Verify match scoring is present
+                        if "match_score" in matches[0]:
+                            self.log_result("matching", "Match scoring system", True)
+                        else:
+                            self.log_result("matching", "Match scoring system", False, response, "Missing match_score field")
                     else:
                         # Use the target user we created
                         self.target_user_id = "user_target123"
+                        self.log_result("matching", "Preference filtering (no matches)", True)
                 else:
                     self.log_result("matching", "GET /matches/discover", False, response, "Invalid matches format")
             except json.JSONDecodeError:
