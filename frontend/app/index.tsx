@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -17,18 +17,9 @@ const { width, height } = Dimensions.get('window');
 
 export default function LandingScreen() {
   const router = useRouter();
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      // Navigate based on role
-      if (user?.role === 'admin') {
-        router.replace('/(admin)/dashboard');
-      } else {
-        router.replace('/(main)/mood');
-      }
-    }
-  }, [isAuthenticated, isLoading, user]);
+  // Route protection is handled in _layout.tsx
 
   if (isLoading) {
     return (
