@@ -214,6 +214,9 @@ class APITester:
                     # Store a user ID for swipe testing if available
                     if matches:
                         self.target_user_id = matches[0].get("user_id")
+                    else:
+                        # Use the target user we created
+                        self.target_user_id = "user_target123"
                 else:
                     self.log_result("matching", "GET /matches/discover", False, response, "Invalid matches format")
             except json.JSONDecodeError:
@@ -221,28 +224,28 @@ class APITester:
         else:
             self.log_result("matching", "GET /matches/discover", False, response, "Match discovery failed")
         
-        # Test POST /api/matches/swipe (if we have a target user)
-        if hasattr(self, 'target_user_id') and self.target_user_id:
-            swipe_data = {"target_user_id": self.target_user_id, "action": "like"}
-            response = self.make_request("POST", "/matches/swipe", token=STUDENT_TOKEN, data=swipe_data)
-            if isinstance(response, tuple):
-                self.log_result("matching", "POST /matches/swipe", False, error=response[1])
-            elif response and response.status_code == 200:
-                try:
-                    swipe_response = response.json()
-                    if "match" in swipe_response:
-                        self.log_result("matching", "POST /matches/swipe", True)
-                        # Store match_id for chat testing
-                        if swipe_response.get("is_mutual"):
-                            self.match_id = swipe_response["match"]["id"]
-                    else:
-                        self.log_result("matching", "POST /matches/swipe", False, response, "Invalid swipe response")
-                except json.JSONDecodeError:
-                    self.log_result("matching", "POST /matches/swipe", False, response, "Invalid JSON response")
-            else:
-                self.log_result("matching", "POST /matches/swipe", False, response, "Swipe action failed")
+        # Test POST /api/matches/swipe (use target user we created)
+        if not hasattr(self, 'target_user_id'):
+            self.target_user_id = "user_target123"
+            
+        swipe_data = {"target_user_id": self.target_user_id, "action": "like"}
+        response = self.make_request("POST", "/matches/swipe", token=STUDENT_TOKEN, data=swipe_data)
+        if isinstance(response, tuple):
+            self.log_result("matching", "POST /matches/swipe", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                swipe_response = response.json()
+                if "match" in swipe_response:
+                    self.log_result("matching", "POST /matches/swipe", True)
+                    # Store match_id for chat testing
+                    if swipe_response.get("is_mutual"):
+                        self.match_id = swipe_response["match"]["id"]
+                else:
+                    self.log_result("matching", "POST /matches/swipe", False, response, "Invalid swipe response")
+            except json.JSONDecodeError:
+                self.log_result("matching", "POST /matches/swipe", False, response, "Invalid JSON response")
         else:
-            self.log_result("matching", "POST /matches/swipe", False, error="No target user available for swipe test")
+            self.log_result("matching", "POST /matches/swipe", False, response, "Swipe action failed")
         
         # Test GET /api/matches/accepted
         response = self.make_request("GET", "/matches/accepted", token=STUDENT_TOKEN)
