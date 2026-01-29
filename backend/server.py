@@ -468,35 +468,69 @@ async def get_feedback_history(current_user: User = Depends(get_current_user)):
 # ==================== MATCHING ENDPOINTS ====================
 
 def calculate_match_score(user: dict, other: dict) -> float:
-    """Calculate match score based on interests, university, age, study_style"""
+    """Calculate match score based on interests, university, campus, course, age, study_style, ethnicity"""
     score = 0.0
     
-    # Interest similarity (40%)
+    # Interest similarity (25%)
     user_interests = set(user.get("interests", []))
     other_interests = set(other.get("interests", []))
     if user_interests and other_interests:
         common = user_interests.intersection(other_interests)
         total = max(len(user_interests), len(other_interests))
-        score += (len(common) / total) * 0.4 if total > 0 else 0
+        score += (len(common) / total) * 0.25 if total > 0 else 0
     
-    # Same university (20%)
+    # Same university (15%)
     if user.get("university") and user.get("university") == other.get("university"):
-        score += 0.2
+        score += 0.15
+        # Bonus for same campus (5%)
+        if user.get("campus_name") and user.get("campus_name") == other.get("campus_name"):
+            score += 0.05
     
-    # Age proximity (20%)
+    # Same course (15%)
+    if user.get("course") and user.get("course") == other.get("course"):
+        score += 0.15
+    
+    # Age proximity (15%)
     user_age = user.get("age", 0)
     other_age = other.get("age", 0)
     if user_age and other_age:
         if abs(user_age - other_age) <= 3:
-            score += 0.2
+            score += 0.15
         elif abs(user_age - other_age) <= 5:
-            score += 0.1
+            score += 0.075
     
-    # Same study style (20%)
+    # Same study style (15%)
     if user.get("study_style") and user.get("study_style") == other.get("study_style"):
-        score += 0.2
+        score += 0.15
     
-    return score
+    # Same location (10%)
+    if user.get("university_location") and user.get("university_location") == other.get("university_location"):
+        score += 0.1
+    
+    return min(score, 1.0)  # Cap at 1.0
+
+def check_preference_match(user: dict, other: dict) -> bool:
+    """Check if other matches user's dating preferences"""
+    user_interested_in = user.get("interested_in", [])
+    other_gender = other.get("gender")
+    
+    # If no preferences set or "everyone" is selected, match everyone
+    if not user_interested_in or "everyone" in user_interested_in:
+        return True
+    
+    # If other hasn't set gender, allow the match
+    if not other_gender:
+        return True
+    
+    # Map gender to preference format
+    gender_to_preference = {
+        "man": "men",
+        "woman": "women",
+        "non-binary": "non-binary"
+    }
+    
+    preference_match = gender_to_preference.get(other_gender, other_gender)
+    return preference_match in user_interested_in
 
 @api_router.get("/matches/discover")
 async def discover_matches(current_user: User = Depends(get_current_user)):
