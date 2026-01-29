@@ -126,9 +126,17 @@ class FeedbackCreate(BaseModel):
 class ProfileUpdate(BaseModel):
     interests: Optional[List[str]] = None
     university: Optional[str] = None
+    university_location: Optional[str] = None
+    campus_name: Optional[str] = None
+    course: Optional[str] = None
     age: Optional[int] = None
     study_style: Optional[str] = None
     bio: Optional[str] = None
+    ethnicity: Optional[str] = None
+    interested_in: Optional[List[str]] = None
+    gender: Optional[str] = None
+    push_token: Optional[str] = None
+    notifications_enabled: Optional[bool] = None
 
 class SwipeAction(BaseModel):
     target_user_id: str
