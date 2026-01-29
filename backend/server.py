@@ -869,6 +869,466 @@ async def make_admin(user_id: str, admin: User = Depends(require_admin)):
     
     return {"message": "User promoted to admin", "user_id": user_id}
 
+# ==================== ANALYTICS ENDPOINTS ====================
+
+async def calculate_student_engagement(user_id: str) -> dict:
+    """Calculate engagement metrics for a student"""
+    now = datetime.now(timezone.utc)
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    
+    # Count activities
+    mood_entries_week = await db.mood_entries.count_documents({
+        "user_id": user_id,
+        "created_at": {"$gte": week_ago}
+    })
+    
+    mood_entries_month = await db.mood_entries.count_documents({
+        "user_id": user_id,
+        "created_at": {"$gte": month_ago}
+    })
+    
+    feedback_entries_week = await db.feedback_entries.count_documents({
+        "user_id": user_id,
+        "created_at": {"$gte": week_ago}
+    })
+    
+    feedback_entries_month = await db.feedback_entries.count_documents({
+        "user_id": user_id,
+        "created_at": {"$gte": month_ago}
+    })
+    
+    chat_messages_week = await db.chat_messages.count_documents({
+        "sender_id": user_id,
+        "created_at": {"$gte": week_ago}
+    })
+    
+    matches_count = await db.matches.count_documents({
+        "user_id": user_id,
+        "status": "accepted"
+    })
+    
+    # Calculate engagement score (0-100)
+    engagement_score = min(100, (
+        mood_entries_week * 10 +
+        feedback_entries_week * 15 +
+        chat_messages_week * 5 +
+        matches_count * 5
+    ))
+    
+    # Get average mood
+    recent_moods = await db.mood_entries.find(
+        {"user_id": user_id, "created_at": {"$gte": month_ago}},
+        {"mood": 1}
+    ).to_list(100)
+    
+    avg_mood = 0
+    if recent_moods:
+        avg_mood = sum(m["mood"] for m in recent_moods) / len(recent_moods)
+    
+    # Get average risk score
+    recent_risks = await db.risk_scores.find(
+        {"user_id": user_id, "created_at": {"$gte": month_ago}},
+        {"risk_score": 1}
+    ).to_list(100)
+    
+    avg_risk = 0
+    if recent_risks:
+        avg_risk = sum(r["risk_score"] for r in recent_risks) / len(recent_risks)
+    
+    return {
+        "engagement_score": engagement_score,
+        "mood_entries_week": mood_entries_week,
+        "mood_entries_month": mood_entries_month,
+        "feedback_entries_week": feedback_entries_week,
+        "feedback_entries_month": feedback_entries_month,
+        "chat_messages_week": chat_messages_week,
+        "matches_count": matches_count,
+        "average_mood": round(avg_mood, 1),
+        "average_risk": round(avg_risk, 1)
+    }
+
+@api_router.get("/admin/analytics/overview")
+async def get_analytics_overview(admin: User = Depends(require_admin)):
+    """Get comprehensive analytics overview for student retention and engagement"""
+    now = datetime.now(timezone.utc)
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    
+    # Total counts
+    total_students = await db.users.count_documents({"role": "student"})
+    
+    # Active students (any activity in last 7 days)
+    active_mood_users = await db.mood_entries.distinct("user_id", {"created_at": {"$gte": week_ago}})
+    active_feedback_users = await db.feedback_entries.distinct("user_id", {"created_at": {"$gte": week_ago}})
+    active_chat_users = await db.chat_messages.distinct("sender_id", {"created_at": {"$gte": week_ago}})
+    
+    active_users = set(active_mood_users + active_feedback_users + active_chat_users)
+    active_count = len(active_users)
+    
+    # Engagement rate
+    engagement_rate = (active_count / total_students * 100) if total_students > 0 else 0
+    
+    # Average mood across platform
+    all_moods = await db.mood_entries.find(
+        {"created_at": {"$gte": month_ago}},
+        {"mood": 1}
+    ).to_list(10000)
+    
+    platform_avg_mood = 0
+    if all_moods:
+        platform_avg_mood = sum(m["mood"] for m in all_moods) / len(all_moods)
+    
+    # Risk distribution
+    high_risk_students = await db.risk_scores.distinct("user_id", {
+        "risk_score": {"$gte": 70},
+        "created_at": {"$gte": week_ago}
+    })
+    
+    medium_risk_students = await db.risk_scores.distinct("user_id", {
+        "risk_score": {"$gte": 40, "$lt": 70},
+        "created_at": {"$gte": week_ago}
+    })
+    
+    low_risk_students = await db.risk_scores.distinct("user_id", {
+        "risk_score": {"$lt": 40},
+        "created_at": {"$gte": week_ago}
+    })
+    
+    # University breakdown
+    university_stats = await db.users.aggregate([
+        {"$match": {"role": "student", "university": {"$ne": None}}},
+        {"$group": {
+            "_id": "$university",
+            "count": {"$sum": 1}
+        }},
+        {"$sort": {"count": -1}},
+        {"$limit": 10}
+    ]).to_list(10)
+    
+    return {
+        "total_students": total_students,
+        "active_students_week": active_count,
+        "engagement_rate": round(engagement_rate, 1),
+        "platform_average_mood": round(platform_avg_mood, 1),
+        "high_risk_count": len(high_risk_students),
+        "medium_risk_count": len(medium_risk_students),
+        "low_risk_count": len(low_risk_students),
+        "university_breakdown": [{"university": u["_id"], "students": u["count"]} for u in university_stats]
+    }
+
+@api_router.get("/admin/analytics/at-risk-students")
+async def get_at_risk_students(admin: User = Depends(require_admin)):
+    """Get list of students at risk of dropping out with AI analysis"""
+    now = datetime.now(timezone.utc)
+    month_ago = now - timedelta(days=30)
+    
+    # Get all students
+    students = await db.users.find(
+        {"role": "student"},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    at_risk_students = []
+    
+    for student in students:
+        user_id = student["user_id"]
+        
+        # Calculate engagement
+        engagement = await calculate_student_engagement(user_id)
+        
+        # Determine risk factors
+        risk_factors = []
+        dropout_risk = 0
+        
+        # Low engagement
+        if engagement["engagement_score"] < 20:
+            risk_factors.append("Very low platform engagement")
+            dropout_risk += 30
+        elif engagement["engagement_score"] < 40:
+            risk_factors.append("Low platform engagement")
+            dropout_risk += 15
+        
+        # Low mood
+        if engagement["average_mood"] > 0 and engagement["average_mood"] < 4:
+            risk_factors.append("Consistently low mood")
+            dropout_risk += 25
+        elif engagement["average_mood"] > 0 and engagement["average_mood"] < 6:
+            risk_factors.append("Below average mood")
+            dropout_risk += 10
+        
+        # High risk scores
+        if engagement["average_risk"] > 70:
+            risk_factors.append("High wellbeing risk score")
+            dropout_risk += 30
+        elif engagement["average_risk"] > 50:
+            risk_factors.append("Elevated wellbeing risk")
+            dropout_risk += 15
+        
+        # No recent activity
+        if engagement["mood_entries_week"] == 0 and engagement["feedback_entries_week"] == 0:
+            risk_factors.append("No recent activity")
+            dropout_risk += 20
+        
+        # No social connections
+        if engagement["matches_count"] == 0:
+            risk_factors.append("No peer connections")
+            dropout_risk += 10
+        
+        dropout_risk = min(100, dropout_risk)
+        
+        if dropout_risk >= 30:  # Only include students with significant risk
+            at_risk_students.append({
+                "user_id": user_id,
+                "name": student.get("name", "Unknown"),
+                "email": student.get("email", ""),
+                "university": student.get("university"),
+                "course": student.get("course"),
+                "dropout_risk": dropout_risk,
+                "risk_level": "High" if dropout_risk >= 60 else "Medium" if dropout_risk >= 40 else "Low",
+                "risk_factors": risk_factors,
+                "engagement_score": engagement["engagement_score"],
+                "average_mood": engagement["average_mood"],
+                "last_activity": {
+                    "mood_entries_week": engagement["mood_entries_week"],
+                    "feedback_entries_week": engagement["feedback_entries_week"]
+                }
+            })
+    
+    # Sort by risk level
+    at_risk_students.sort(key=lambda x: x["dropout_risk"], reverse=True)
+    
+    return {
+        "total_at_risk": len(at_risk_students),
+        "high_risk": len([s for s in at_risk_students if s["risk_level"] == "High"]),
+        "medium_risk": len([s for s in at_risk_students if s["risk_level"] == "Medium"]),
+        "students": at_risk_students[:50]  # Top 50 at-risk students
+    }
+
+@api_router.get("/admin/analytics/student/{user_id}")
+async def get_student_analytics(user_id: str, admin: User = Depends(require_admin)):
+    """Get detailed analytics for a specific student"""
+    student = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    engagement = await calculate_student_engagement(user_id)
+    
+    # Get mood history
+    mood_history = await db.mood_entries.find(
+        {"user_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(30)
+    
+    # Get feedback history
+    feedback_history = await db.feedback_entries.find(
+        {"user_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(20)
+    
+    # Get risk score history
+    risk_history = await db.risk_scores.find(
+        {"user_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(30)
+    
+    return {
+        "student": student,
+        "engagement": engagement,
+        "mood_history": mood_history,
+        "feedback_history": feedback_history,
+        "risk_history": risk_history
+    }
+
+@api_router.get("/admin/analytics/retention")
+async def get_retention_analytics(admin: User = Depends(require_admin)):
+    """Get student retention analytics by university"""
+    now = datetime.now(timezone.utc)
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    
+    # Get all universities
+    universities = await db.users.distinct("university", {"role": "student", "university": {"$ne": None}})
+    
+    retention_data = []
+    
+    for uni in universities:
+        if not uni:
+            continue
+            
+        # Total students at university
+        total_students = await db.users.count_documents({
+            "role": "student",
+            "university": uni
+        })
+        
+        # Get active students at university
+        uni_students = await db.users.find(
+            {"role": "student", "university": uni},
+            {"user_id": 1}
+        ).to_list(1000)
+        
+        uni_user_ids = [s["user_id"] for s in uni_students]
+        
+        active_week = await db.mood_entries.distinct("user_id", {
+            "user_id": {"$in": uni_user_ids},
+            "created_at": {"$gte": week_ago}
+        })
+        
+        active_month = await db.mood_entries.distinct("user_id", {
+            "user_id": {"$in": uni_user_ids},
+            "created_at": {"$gte": month_ago}
+        })
+        
+        # Get average mood for university
+        uni_moods = await db.mood_entries.find(
+            {"user_id": {"$in": uni_user_ids}, "created_at": {"$gte": month_ago}},
+            {"mood": 1}
+        ).to_list(10000)
+        
+        avg_mood = 0
+        if uni_moods:
+            avg_mood = sum(m["mood"] for m in uni_moods) / len(uni_moods)
+        
+        # Get at-risk count for university
+        at_risk = await db.risk_scores.distinct("user_id", {
+            "user_id": {"$in": uni_user_ids},
+            "risk_score": {"$gte": 60},
+            "created_at": {"$gte": week_ago}
+        })
+        
+        weekly_retention = (len(active_week) / total_students * 100) if total_students > 0 else 0
+        monthly_retention = (len(active_month) / total_students * 100) if total_students > 0 else 0
+        
+        retention_data.append({
+            "university": uni,
+            "total_students": total_students,
+            "active_weekly": len(active_week),
+            "active_monthly": len(active_month),
+            "weekly_retention_rate": round(weekly_retention, 1),
+            "monthly_retention_rate": round(monthly_retention, 1),
+            "average_mood": round(avg_mood, 1),
+            "at_risk_count": len(at_risk),
+            "health_status": "Good" if avg_mood >= 6 and weekly_retention >= 50 else "Attention Needed" if avg_mood >= 4 else "Critical"
+        })
+    
+    # Sort by retention rate
+    retention_data.sort(key=lambda x: x["weekly_retention_rate"], reverse=True)
+    
+    return {
+        "universities": retention_data,
+        "total_universities": len(retention_data)
+    }
+
+@api_router.post("/admin/analytics/ai-insights")
+async def get_ai_insights(admin: User = Depends(require_admin)):
+    """Get AI-powered insights on student retention and wellbeing"""
+    # Gather platform data
+    now = datetime.now(timezone.utc)
+    month_ago = now - timedelta(days=30)
+    
+    total_students = await db.users.count_documents({"role": "student"})
+    
+    # Get mood distribution
+    all_moods = await db.mood_entries.find(
+        {"created_at": {"$gte": month_ago}},
+        {"mood": 1, "user_id": 1}
+    ).to_list(10000)
+    
+    mood_distribution = {i: 0 for i in range(1, 11)}
+    for m in all_moods:
+        mood_distribution[m["mood"]] = mood_distribution.get(m["mood"], 0) + 1
+    
+    # Get risk distribution
+    risk_scores = await db.risk_scores.find(
+        {"created_at": {"$gte": month_ago}},
+        {"risk_score": 1}
+    ).to_list(10000)
+    
+    high_risk = len([r for r in risk_scores if r["risk_score"] >= 70])
+    medium_risk = len([r for r in risk_scores if 40 <= r["risk_score"] < 70])
+    low_risk = len([r for r in risk_scores if r["risk_score"] < 40])
+    
+    # Get university data
+    university_counts = await db.users.aggregate([
+        {"$match": {"role": "student", "university": {"$ne": None}}},
+        {"$group": {"_id": "$university", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 5}
+    ]).to_list(5)
+    
+    # Generate AI insights
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"admin_insights_{uuid.uuid4().hex[:8]}",
+            system_message="""You are an educational analytics AI assistant. Analyze the provided student wellbeing data and generate actionable insights for university administrators.
+
+Focus on:
+1. Student retention risks
+2. Dropout prediction factors
+3. Engagement improvement suggestions
+4. University-specific recommendations
+5. Early intervention opportunities
+
+Respond in JSON format:
+{
+    "summary": "Brief overview of platform health",
+    "retention_insights": ["insight1", "insight2"],
+    "dropout_risk_factors": ["factor1", "factor2"],
+    "recommendations": ["recommendation1", "recommendation2"],
+    "priority_actions": ["action1", "action2"],
+    "positive_trends": ["trend1", "trend2"]
+}"""
+        ).with_model("openai", "gpt-4o")
+        
+        data_summary = f"""
+Platform Data (Last 30 days):
+- Total Students: {total_students}
+- Mood Entries: {len(all_moods)}
+- Mood Distribution: {mood_distribution}
+- Risk Scores: High={high_risk}, Medium={medium_risk}, Low={low_risk}
+- Top Universities: {[{'name': u['_id'], 'students': u['count']} for u in university_counts]}
+"""
+        
+        user_message = UserMessage(text=data_summary)
+        response = await chat.send_message(user_message)
+        
+        import json
+        try:
+            insights = json.loads(response)
+        except:
+            insights = {
+                "summary": response,
+                "retention_insights": [],
+                "dropout_risk_factors": [],
+                "recommendations": [],
+                "priority_actions": [],
+                "positive_trends": []
+            }
+        
+    except Exception as e:
+        logger.error(f"AI insights error: {e}")
+        insights = {
+            "summary": "Unable to generate AI insights at this time",
+            "retention_insights": [],
+            "dropout_risk_factors": [],
+            "recommendations": [],
+            "priority_actions": [],
+            "positive_trends": []
+        }
+    
+    return {
+        "insights": insights,
+        "data_summary": {
+            "total_students": total_students,
+            "mood_entries_count": len(all_moods),
+            "high_risk_count": high_risk,
+            "medium_risk_count": medium_risk,
+            "low_risk_count": low_risk
+        }
+    }
+
 # ==================== HEALTH CHECK ====================
 
 @api_router.get("/")
