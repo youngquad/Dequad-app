@@ -7,14 +7,21 @@
     "icon": "./assets/images/icon.png",
     "scheme": "educare",
     "userInterfaceStyle": "automatic",
+    "extra": {
+      "eas": {
+        "projectId": "educare-app"
+      }
+    },
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.educare.app",
       "infoPlist": {
         "NSCameraUsageDescription": "Take profile photos",
         "NSPhotoLibraryUsageDescription": "Select profile photos"
       }
     },
     "android": {
+      "package": "com.educare.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#111827"
