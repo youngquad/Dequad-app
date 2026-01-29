@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  AppState,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
@@ -28,32 +29,86 @@ interface Message {
 export default function ChatScreen() {
   const { matchId, name } = useLocalSearchParams<{ matchId: string; name: string }>();
   const navigation = useNavigation();
-  const { sessionToken, user } = useAuth();
+  const { sessionToken, user, isAuthenticated } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const flatListRef = useRef<FlatList>(null);
+  const isMounted = useRef(true);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    isMounted.current = true;
+    
     navigation.setOptions({
       title: name || 'Chat',
     });
-    loadMessages();
     
-    // Poll for new messages
-    const interval = setInterval(loadMessages, 3000);
-    return () => clearInterval(interval);
-  }, [matchId]);
+    if (matchId && sessionToken && isAuthenticated) {
+      loadMessages();
+      
+      // Poll for new messages only when app is active
+      intervalRef.current = setInterval(() => {
+        if (isMounted.current && isAuthenticated) {
+          loadMessages();
+        }
+      }, 3000);
+    }
+    
+    // Handle app state changes
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
+        // Stop polling when app is in background
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      } else if (nextAppState === 'active' && isMounted.current && isAuthenticated) {
+        // Resume polling when app becomes active
+        loadMessages();
+        if (!intervalRef.current) {
+          intervalRef.current = setInterval(() => {
+            if (isMounted.current && isAuthenticated) {
+              loadMessages();
+            }
+          }, 3000);
+        }
+      }
+    });
+    
+    return () => {
+      isMounted.current = false;
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      subscription.remove();
+    };
+  }, [matchId, sessionToken, isAuthenticated]);
 
   const loadMessages = async () => {
+    if (!matchId || !sessionToken || !isMounted.current) return;
+    
     try {
       const data = await api.get(`/chat/${matchId}`, sessionToken);
-      setMessages(data);
-    } catch (error) {
-      console.error('Error loading messages:', error);
+      if (isMounted.current) {
+        setMessages(data);
+        setHasError(false);
+      }
+    } catch (error: any) {
+      if (isMounted.current) {
+        // Only log error once, don't spam console
+        if (!hasError) {
+          console.log('Chat polling paused due to network issue');
+          setHasError(true);
+        }
+      }
     } finally {
-      setIsLoading(false);
+      if (isMounted.current) {
+        setIsLoading(false);
+      }
     }
   };
 
