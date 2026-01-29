@@ -174,26 +174,59 @@ class APITester:
             self.log_result("feedback", "GET /feedback", False, response, "Feedback history retrieval failed")
     
     def test_profile_api(self):
-        """Test Profile API"""
+        """Test Profile API with enhanced fields"""
         print("\n👤 Testing Profile API...")
         
-        # Test PUT /api/profile
-        profile_data = {"interests": ["Art", "Music"], "university": "Harvard"}
+        # Test PUT /api/profile with new enhanced fields
+        profile_data = {
+            "university_location": "Boston, MA",
+            "campus_name": "Harvard Yard", 
+            "course": "Psychology",
+            "ethnicity": "Caucasian/White",
+            "interested_in": ["women"],
+            "gender": "man",
+            "notifications_enabled": True,
+            "interests": ["Art", "Music"], 
+            "university": "Harvard"
+        }
         response = self.make_request("PUT", "/profile", token=STUDENT_TOKEN, data=profile_data)
         if isinstance(response, tuple):
-            self.log_result("profile", "PUT /profile", False, error=response[1])
+            self.log_result("profile", "PUT /profile (enhanced fields)", False, error=response[1])
         elif response and response.status_code == 200:
             try:
                 profile_response = response.json()
-                if (profile_response.get("university") == "Harvard" and 
-                    "Art" in profile_response.get("interests", [])):
-                    self.log_result("profile", "PUT /profile", True)
+                # Check all new fields are updated
+                success = True
+                missing_fields = []
+                
+                expected_fields = {
+                    "university_location": "Boston, MA",
+                    "campus_name": "Harvard Yard",
+                    "course": "Psychology", 
+                    "ethnicity": "Caucasian/White",
+                    "gender": "man",
+                    "notifications_enabled": True,
+                    "university": "Harvard"
+                }
+                
+                for field, expected_value in expected_fields.items():
+                    if profile_response.get(field) != expected_value:
+                        missing_fields.append(f"{field} (expected: {expected_value}, got: {profile_response.get(field)})")
+                        success = False
+                
+                # Check interested_in array
+                if profile_response.get("interested_in") != ["women"]:
+                    missing_fields.append(f"interested_in (expected: ['women'], got: {profile_response.get('interested_in')})")
+                    success = False
+                
+                if success:
+                    self.log_result("profile", "PUT /profile (enhanced fields)", True)
                 else:
-                    self.log_result("profile", "PUT /profile", False, response, "Profile update not reflected")
+                    self.log_result("profile", "PUT /profile (enhanced fields)", False, response, f"Missing/incorrect fields: {missing_fields}")
             except json.JSONDecodeError:
-                self.log_result("profile", "PUT /profile", False, response, "Invalid JSON response")
+                self.log_result("profile", "PUT /profile (enhanced fields)", False, response, "Invalid JSON response")
         else:
-            self.log_result("profile", "PUT /profile", False, response, "Profile update failed")
+            self.log_result("profile", "PUT /profile (enhanced fields)", False, response, "Profile update failed")
     
     def test_matching_apis(self):
         """Test Student Matching APIs"""
