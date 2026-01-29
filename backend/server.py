@@ -105,6 +105,16 @@ class Report(BaseModel):
     status: str = "pending"  # pending, reviewed, resolved
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class Notification(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    title: str
+    body: str
+    notification_type: str  # new_match, new_message
+    data: dict = {}
+    read: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ==================== REQUEST/RESPONSE MODELS ====================
 
 class SessionDataResponse(BaseModel):
