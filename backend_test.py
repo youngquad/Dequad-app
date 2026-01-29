@@ -260,6 +260,42 @@ class APITester:
         else:
             self.log_result("matching", "GET /matches/accepted", False, response, "Accepted matches retrieval failed")
     
+    def create_temp_session(self):
+        """Create a temporary session for logout testing"""
+        try:
+            import subprocess
+            subprocess.run([
+                "mongosh", "test_database", "--eval",
+                """
+                db.user_sessions.insertOne({
+                  user_id: 'user_test123',
+                  session_token: 'temp_session_token_456',
+                  expires_at: new Date(Date.now() + 7*24*60*60*1000),
+                  created_at: new Date()
+                });
+                """
+            ], capture_output=True, text=True, timeout=10)
+        except Exception as e:
+            print(f"Warning: Could not create temp session: {e}")
+    
+    def recreate_main_session(self):
+        """Recreate the main session after logout test"""
+        try:
+            import subprocess
+            subprocess.run([
+                "mongosh", "test_database", "--eval",
+                """
+                db.user_sessions.insertOne({
+                  user_id: 'user_test123',
+                  session_token: 'test_session_token_123',
+                  expires_at: new Date(Date.now() + 7*24*60*60*1000),
+                  created_at: new Date()
+                });
+                """
+            ], capture_output=True, text=True, timeout=10)
+        except Exception as e:
+            print(f"Warning: Could not recreate main session: {e}")
+    
     def create_match_target_user(self):
         """Create a target user for matching tests"""
         try:
