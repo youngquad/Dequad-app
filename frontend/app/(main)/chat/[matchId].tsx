@@ -1,0 +1,314 @@
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../../../src/contexts/AuthContext';
+import { api } from '../../../src/services/api';
+import { encrypt, decrypt } from '../../../src/utils/encryption';
+
+interface Message {
+  id: string;
+  match_id: string;
+  sender_id: string;
+  text: string;
+  created_at: string;
+}
+
+export default function ChatScreen() {
+  const { matchId, name } = useLocalSearchParams<{ matchId: string; name: string }>();
+  const navigation = useNavigation();
+  const { sessionToken, user } = useAuth();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: name || 'Chat',
+    });
+    loadMessages();
+    
+    // Poll for new messages
+    const interval = setInterval(loadMessages, 3000);
+    return () => clearInterval(interval);
+  }, [matchId]);
+
+  const loadMessages = async () => {
+    try {
+      const data = await api.get(`/chat/${matchId}`, sessionToken);
+      setMessages(data);
+    } catch (error) {
+      console.error('Error loading messages:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!inputText.trim()) return;
+
+    setIsSending(true);
+    const encryptedText = encrypt(inputText.trim());
+
+    try {
+      await api.post(
+        '/chat/send',
+        {
+          match_id: matchId,
+          text: encryptedText,
+        },
+        sessionToken
+      );
+      setInputText('');
+      loadMessages();
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const renderMessage = ({ item }: { item: Message }) => {
+    const isOwnMessage = item.sender_id === user?.user_id;
+    const decryptedText = decrypt(item.text);
+
+    return (
+      <View
+        style={[
+          styles.messageContainer,
+          isOwnMessage ? styles.ownMessage : styles.otherMessage,
+        ]}
+      >
+        <View
+          style={[
+            styles.messageBubble,
+            isOwnMessage ? styles.ownBubble : styles.otherBubble,
+          ]}
+        >
+          <Text style={styles.messageText}>{decryptedText}</Text>
+          <View style={styles.messageFooter}>
+            <Text style={styles.messageTime}>{formatTime(item.created_at)}</Text>
+            <Ionicons
+              name="lock-closed"
+              size={10}
+              color="#6B7280"
+              style={styles.lockIcon}
+            />
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['bottom']}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#6366F1" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={100}
+      >
+        <View style={styles.encryptionBanner}>
+          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+          <Text style={styles.encryptionText}>
+            Messages are end-to-end encrypted
+          </Text>
+        </View>
+
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={renderMessage}
+          contentContainerStyle={styles.messagesList}
+          onContentSizeChange={() =>
+            flatListRef.current?.scrollToEnd({ animated: true })
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyChat}>
+              <Ionicons name="chatbubble-ellipses-outline" size={48} color="#4B5563" />
+              <Text style={styles.emptyChatText}>No messages yet</Text>
+              <Text style={styles.emptyChatSubtext}>
+                Send a message to start the conversation
+              </Text>
+            </View>
+          }
+        />
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Type a message..."
+            placeholderTextColor="#6B7280"
+            value={inputText}
+            onChangeText={setInputText}
+            multiline
+            maxLength={1000}
+          />
+          <TouchableOpacity
+            style={[
+              styles.sendButton,
+              (!inputText.trim() || isSending) && styles.sendButtonDisabled,
+            ]}
+            onPress={sendMessage}
+            disabled={!inputText.trim() || isSending}
+          >
+            {isSending ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Ionicons name="send" size={20} color="#fff" />
+            )}
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#111827',
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  encryptionBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+  },
+  encryptionText: {
+    color: '#10B981',
+    fontSize: 12,
+    marginLeft: 6,
+  },
+  messagesList: {
+    padding: 16,
+    flexGrow: 1,
+  },
+  messageContainer: {
+    marginBottom: 12,
+  },
+  ownMessage: {
+    alignItems: 'flex-end',
+  },
+  otherMessage: {
+    alignItems: 'flex-start',
+  },
+  messageBubble: {
+    maxWidth: '80%',
+    borderRadius: 16,
+    padding: 12,
+  },
+  ownBubble: {
+    backgroundColor: '#6366F1',
+    borderBottomRightRadius: 4,
+  },
+  otherBubble: {
+    backgroundColor: '#1F2937',
+    borderBottomLeftRadius: 4,
+  },
+  messageText: {
+    color: '#fff',
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  messageFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 4,
+  },
+  messageTime: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 10,
+  },
+  lockIcon: {
+    marginLeft: 4,
+  },
+  emptyChat: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  emptyChatText: {
+    color: '#9CA3AF',
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 16,
+  },
+  emptyChatSubtext: {
+    color: '#6B7280',
+    fontSize: 14,
+    marginTop: 8,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    padding: 12,
+    backgroundColor: '#1F2937',
+    borderTopWidth: 1,
+    borderTopColor: '#374151',
+  },
+  input: {
+    flex: 1,
+    backgroundColor: '#111827',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    color: '#fff',
+    fontSize: 16,
+    maxHeight: 100,
+    marginRight: 8,
+  },
+  sendButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#6366F1',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendButtonDisabled: {
+    backgroundColor: '#374151',
+  },
+});
