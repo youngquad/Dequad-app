@@ -229,6 +229,58 @@ class APITester:
         else:
             self.log_result("profile", "PUT /profile (enhanced fields)", False, response, "Profile update failed")
     
+    def test_notifications_api(self):
+        """Test Notification APIs"""
+        print("\n🔔 Testing Notification APIs...")
+        
+        # Test GET /api/notifications
+        response = self.make_request("GET", "/notifications", token=STUDENT_TOKEN)
+        if isinstance(response, tuple):
+            self.log_result("notifications", "GET /notifications", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                notifications = response.json()
+                if isinstance(notifications, list):
+                    self.log_result("notifications", "GET /notifications", True)
+                else:
+                    self.log_result("notifications", "GET /notifications", False, response, "Invalid notifications format")
+            except json.JSONDecodeError:
+                self.log_result("notifications", "GET /notifications", False, response, "Invalid JSON response")
+        else:
+            self.log_result("notifications", "GET /notifications", False, response, "Notifications retrieval failed")
+        
+        # Test GET /api/notifications/unread-count
+        response = self.make_request("GET", "/notifications/unread-count", token=STUDENT_TOKEN)
+        if isinstance(response, tuple):
+            self.log_result("notifications", "GET /notifications/unread-count", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                count_data = response.json()
+                if "count" in count_data and isinstance(count_data["count"], int):
+                    self.log_result("notifications", "GET /notifications/unread-count", True)
+                else:
+                    self.log_result("notifications", "GET /notifications/unread-count", False, response, "Missing or invalid count field")
+            except json.JSONDecodeError:
+                self.log_result("notifications", "GET /notifications/unread-count", False, response, "Invalid JSON response")
+        else:
+            self.log_result("notifications", "GET /notifications/unread-count", False, response, "Unread count retrieval failed")
+        
+        # Test POST /api/notifications/read-all
+        response = self.make_request("POST", "/notifications/read-all", token=STUDENT_TOKEN)
+        if isinstance(response, tuple):
+            self.log_result("notifications", "POST /notifications/read-all", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                result_data = response.json()
+                if result_data.get("success") == True:
+                    self.log_result("notifications", "POST /notifications/read-all", True)
+                else:
+                    self.log_result("notifications", "POST /notifications/read-all", False, response, "Success field not True")
+            except json.JSONDecodeError:
+                self.log_result("notifications", "POST /notifications/read-all", False, response, "Invalid JSON response")
+        else:
+            self.log_result("notifications", "POST /notifications/read-all", False, response, "Mark all read failed")
+
     def test_matching_apis(self):
         """Test Student Matching APIs"""
         print("\n💕 Testing Matching APIs...")
