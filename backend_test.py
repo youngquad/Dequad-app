@@ -456,7 +456,10 @@ class APITester:
         # Run all test suites
         self.test_auth_apis()
         # Recreate session after auth tests (logout invalidates it)
+        print("🔄 Recreating session after auth tests...")
         self.recreate_main_session()
+        import time
+        time.sleep(1)  # Small delay to ensure session is created
         self.test_mood_apis()
         self.test_feedback_apis()
         self.test_profile_api()
