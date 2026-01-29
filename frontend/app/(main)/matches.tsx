@@ -25,9 +25,14 @@ interface UserProfile {
   picture?: string;
   interests: string[];
   university?: string;
+  university_location?: string;
+  campus_name?: string;
+  course?: string;
   age?: number;
   study_style?: string;
   bio?: string;
+  ethnicity?: string;
+  gender?: string;
   match_score?: number;
 }
 
