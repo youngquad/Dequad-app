@@ -140,7 +140,6 @@ export default function ProfileScreen() {
         // This is expected in Expo Go - push notifications require a development build
         console.log('Push notifications require a development build. Using Expo Go has limitations.');
       }
-      }
     } catch (error) {
       console.error('Error registering for push notifications:', error);
     }
