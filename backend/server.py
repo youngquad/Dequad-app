@@ -46,9 +46,17 @@ class User(BaseModel):
     role: str = "student"  # student, admin
     interests: List[str] = []
     university: Optional[str] = None
+    university_location: Optional[str] = None
+    campus_name: Optional[str] = None
+    course: Optional[str] = None
     age: Optional[int] = None
     study_style: Optional[str] = None
     bio: Optional[str] = None
+    ethnicity: Optional[str] = None
+    interested_in: List[str] = []  # men, women, non-binary, everyone
+    gender: Optional[str] = None  # man, woman, non-binary
+    push_token: Optional[str] = None
+    notifications_enabled: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UserSession(BaseModel):
