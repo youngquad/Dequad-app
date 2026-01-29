@@ -82,8 +82,10 @@ class APITester:
         else:
             self.log_result("auth", "GET /auth/me", False, response, "Authentication failed")
         
-        # Test POST /api/auth/logout
-        response = self.make_request("POST", "/auth/logout", token=STUDENT_TOKEN)
+        # Test POST /api/auth/logout (test with a separate token to avoid invalidating main session)
+        # Create a temporary session for logout test
+        self.create_temp_session()
+        response = self.make_request("POST", "/auth/logout", token="temp_session_token_456")
         if isinstance(response, tuple):
             self.log_result("auth", "POST /auth/logout", False, error=response[1])
         elif response and response.status_code == 200:
