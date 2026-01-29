@@ -551,12 +551,19 @@ async def discover_matches(current_user: User = Depends(get_current_user)):
             "role": "student"
         },
         {"_id": 0}
-    ).to_list(50)
+    ).to_list(100)
     
-    # Calculate and sort by match score
+    # Filter by preferences and calculate scores
     current_user_dict = current_user.dict()
     scored_users = []
     for user in potential_users:
+        # Check if user matches current user's preferences
+        if not check_preference_match(current_user_dict, user):
+            continue
+        # Check if current user matches the other user's preferences (mutual)
+        if not check_preference_match(user, current_user_dict):
+            continue
+        
         score = calculate_match_score(current_user_dict, user)
         user["match_score"] = score
         scored_users.append(user)
@@ -564,7 +571,7 @@ async def discover_matches(current_user: User = Depends(get_current_user)):
     # Sort by score descending
     scored_users.sort(key=lambda x: x["match_score"], reverse=True)
     
-    return scored_users
+    return scored_users[:50]  # Limit to 50
 
 @api_router.post("/matches/swipe")
 async def swipe_action(data: SwipeAction, current_user: User = Depends(get_current_user)):
