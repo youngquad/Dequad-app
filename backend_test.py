@@ -258,7 +258,7 @@ class APITester:
                 else:
                     self.log_result("matching", "POST /matches/swipe", False, response, "Bad request with invalid JSON")
         else:
-            self.log_result("matching", "POST /matches/swipe", False, response, "Swipe action failed")
+            self.log_result("matching", "POST /matches/swipe", False, response, f"Swipe action failed (Status: {response.status_code if response else 'No response'})")
         
         # Test GET /api/matches/accepted
         response = self.make_request("GET", "/matches/accepted", token=STUDENT_TOKEN)
