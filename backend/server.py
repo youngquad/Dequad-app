@@ -625,6 +625,22 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
                 {"$set": {"status": "accepted"}}
             )
             mutual_match = target_user
+            
+            # Send push notifications to both users about the match
+            await send_push_notification(
+                current_user.user_id,
+                "New Match!",
+                f"You matched with {target_user.get('name', 'someone')}! Start chatting now.",
+                "new_match",
+                {"match_user_id": data.target_user_id, "match_user_name": target_user.get("name")}
+            )
+            await send_push_notification(
+                data.target_user_id,
+                "New Match!",
+                f"You matched with {current_user.name}! Start chatting now.",
+                "new_match",
+                {"match_user_id": current_user.user_id, "match_user_name": current_user.name}
+            )
     
     return {
         "match": match.dict(),
