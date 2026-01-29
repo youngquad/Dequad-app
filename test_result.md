@@ -164,6 +164,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: GET /api/matches/discover returns potential matches with AI-based scoring. POST /api/matches/swipe processes like/dislike actions with proper validation (prevents duplicate swipes). GET /api/matches/accepted retrieves mutual matches. All endpoints working correctly."
+      - working: true
+        agent: "testing"
+        comment: "✅ RE-TESTED (Enhanced Preferences): GET /api/matches/discover now properly respects interested_in preferences and gender filtering. Match scoring system operational. Preference filtering working correctly for dating compatibility."
 
   - task: "Chat API (Encrypted)"
     implemented: true
@@ -194,6 +197,24 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: PUT /api/profile successfully updates user profile fields (interests, university, etc.) and returns updated user data."
+      - working: true
+        agent: "testing"
+        comment: "✅ RE-TESTED (Enhanced Fields): PUT /api/profile now supports all new fields including university_location, campus_name, course, ethnicity, interested_in, gender, and notifications_enabled. All fields update correctly and persist in database."
+
+  - task: "Notifications API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET /api/notifications, POST /api/notifications/read-all, GET /api/notifications/unread-count for push notification management"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: GET /api/notifications retrieves user notifications correctly. POST /api/notifications/read-all marks all notifications as read successfully. GET /api/notifications/unread-count returns accurate unread count. All notification endpoints working perfectly."
 
   - task: "Admin API"
     implemented: true
