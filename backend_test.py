@@ -568,6 +568,7 @@ class APITester:
         self.test_mood_apis()
         self.test_feedback_apis()
         self.test_profile_api()
+        self.test_notifications_api()
         self.test_matching_apis()
         self.test_chat_apis()
         self.test_admin_apis()
