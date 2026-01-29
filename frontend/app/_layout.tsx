@@ -1,12 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRole?: string) {
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(auth)';
+    const inMainGroup = segments[0] === '(main)';
+    const inAdminGroup = segments[0] === '(admin)';
+    const isLandingPage = segments.length === 0 || segments[0] === 'index';
+
+    if (!isAuthenticated) {
+      // If user is not authenticated and trying to access protected routes
+      if (inMainGroup || inAdminGroup) {
+        router.replace('/');
+      }
+    } else {
+      // If user is authenticated
+      if (isLandingPage || inAuthGroup) {
+        // Redirect to appropriate screen based on role
+        if (userRole === 'admin') {
+          router.replace('/(admin)/dashboard');
+        } else {
+          router.replace('/(main)/mood');
+        }
+      }
+      // Admin-only route protection
+      if (inAdminGroup && userRole !== 'admin') {
+        router.replace('/(main)/mood');
+      }
+    }
+  }, [isAuthenticated, isLoading, segments, userRole]);
+}
+
 function RootLayoutNav() {
   const { isLoading, isAuthenticated, user } = useAuth();
+
+  // Apply route protection
+  useProtectedRoute(isAuthenticated, isLoading, user?.role);
 
   if (isLoading) {
     return (
