@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -18,6 +19,7 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import * as ImagePicker from 'expo-image-picker';
 
 const INTERESTS = [
   'Computer Science',
