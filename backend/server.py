@@ -148,6 +148,7 @@ class ProfileUpdate(BaseModel):
     gender: Optional[str] = None
     push_token: Optional[str] = None
     notifications_enabled: Optional[bool] = None
+    photos: Optional[List[str]] = None  # Up to 3 photos in base64
 
 class SwipeAction(BaseModel):
     target_user_id: str
