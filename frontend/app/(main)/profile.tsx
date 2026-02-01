@@ -82,7 +82,10 @@ export default function ProfileScreen() {
   const { user, logout, refreshUser, sessionToken } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [activeSection, setActiveSection] = useState<'basic' | 'preferences' | 'interests'>('basic');
+  const [activeSection, setActiveSection] = useState<'photos' | 'basic' | 'preferences' | 'interests'>('photos');
+  
+  // Photos
+  const [photos, setPhotos] = useState<string[]>(user?.photos || []);
   
   // Basic Info
   const [university, setUniversity] = useState(user?.university || '');
@@ -99,6 +102,13 @@ export default function ProfileScreen() {
   const [ethnicity, setEthnicity] = useState(user?.ethnicity || '');
   const [interestedIn, setInterestedIn] = useState<string[]>(user?.interested_in || []);
   const [notificationsEnabled, setNotificationsEnabled] = useState(user?.notifications_enabled ?? true);
+
+  useEffect(() => {
+    // Update photos when user changes
+    if (user?.photos) {
+      setPhotos(user.photos);
+    }
+  }, [user?.photos]);
 
   useEffect(() => {
     registerForPushNotifications();
