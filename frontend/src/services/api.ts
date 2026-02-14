@@ -30,7 +30,11 @@ class ApiService {
     };
 
     // Use provided token or fall back to stored token
-    const authToken = token ?? await this.getStoredToken();
+    let authToken = token;
+    if (!authToken) {
+      authToken = await this.getStoredToken();
+      console.log(`API ${method} ${endpoint} - Using stored token:`, authToken ? authToken.substring(0, 20) + '...' : 'none');
+    }
     
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
