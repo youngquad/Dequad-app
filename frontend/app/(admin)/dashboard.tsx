@@ -498,7 +498,7 @@ export default function AdminDashboard() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {['overview', 'safeguarding', 'universities', 'analytics', 'export'].map((tab) => (
+        {['overview', 'safeguarding', 'ai-learning', 'universities', 'analytics', 'export'].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -508,6 +508,7 @@ export default function AdminDashboard() {
               name={
                 tab === 'overview' ? 'grid-outline' :
                 tab === 'safeguarding' ? 'shield-outline' :
+                tab === 'ai-learning' ? 'bulb-outline' :
                 tab === 'universities' ? 'school-outline' :
                 tab === 'analytics' ? 'bar-chart-outline' : 'download-outline'
               }
@@ -515,7 +516,10 @@ export default function AdminDashboard() {
               color={activeTab === tab ? '#6366F1' : '#9CA3AF'}
             />
             <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-              {tab === 'universities' ? 'Unis' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === 'universities' ? 'Unis' : 
+               tab === 'ai-learning' ? 'AI' :
+               tab === 'safeguarding' ? 'Safe' :
+               tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Text>
           </TouchableOpacity>
         ))}
