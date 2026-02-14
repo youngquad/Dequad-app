@@ -198,6 +198,13 @@ export default function ChatScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Safeguarding Alert Modal */}
+      <SafeguardingAlert
+        visible={showSafeguardingModal}
+        onClose={() => setShowSafeguardingModal(false)}
+        alertData={safeguardingAlert}
+      />
+
       <KeyboardAvoidingView
         style={styles.keyboardView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
