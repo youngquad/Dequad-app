@@ -497,6 +497,142 @@ export default function AdminDashboard() {
           </View>
         )}
 
+        {/* Universities Tab */}
+        {activeTab === 'universities' && (
+          <View style={styles.content}>
+            <Text style={styles.sectionTitle}>Universities</Text>
+            <Text style={styles.sectionSubtitle}>
+              Select a university to view students and run analysis
+            </Text>
+
+            {/* University List */}
+            {universities.length === 0 ? (
+              <View style={styles.emptyState}>
+                <Ionicons name="school-outline" size={48} color="#4B5563" />
+                <Text style={styles.emptyStateText}>No universities found</Text>
+              </View>
+            ) : (
+              universities.map((uni, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.universitySelectCard,
+                    selectedUniversity === uni.name && styles.universitySelectCardActive
+                  ]}
+                  onPress={() => loadUniversityStudents(uni.name)}
+                >
+                  <View style={styles.universitySelectInfo}>
+                    <View style={styles.universitySelectIcon}>
+                      <Ionicons name="school" size={24} color="#6366F1" />
+                    </View>
+                    <View style={styles.universitySelectText}>
+                      <Text style={styles.universitySelectName}>{uni.name}</Text>
+                      <Text style={styles.universitySelectCount}>{uni.student_count} students</Text>
+                    </View>
+                  </View>
+                  <View style={styles.universitySelectActions}>
+                    <TouchableOpacity
+                      style={styles.universityAnalyzeBtn}
+                      onPress={() => runUniversityAnalysis(uni.name)}
+                      disabled={isAnalyzing}
+                    >
+                      <Ionicons name="analytics" size={16} color="#F59E0B" />
+                    </TouchableOpacity>
+                    <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+                  </View>
+                </TouchableOpacity>
+              ))
+            )}
+
+            {/* Selected University Students */}
+            {selectedUniversity && (
+              <View style={styles.selectedUniversitySection}>
+                <View style={styles.selectedUniversityHeader}>
+                  <Text style={styles.selectedUniversityTitle}>{selectedUniversity}</Text>
+                  <TouchableOpacity
+                    style={styles.runAnalysisBtn}
+                    onPress={() => runUniversityAnalysis(selectedUniversity)}
+                    disabled={isAnalyzing}
+                  >
+                    {isAnalyzing ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <>
+                        <Ionicons name="analytics" size={16} color="#fff" />
+                        <Text style={styles.runAnalysisBtnText}>Run AI Analysis</Text>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
+
+                {/* University Analysis Results */}
+                {universityAnalysis && universityAnalysis.university === selectedUniversity && (
+                  <View style={styles.analysisResultCard}>
+                    <View style={styles.analysisScoreRow}>
+                      <Text style={styles.analysisScoreLabel}>Wellbeing Score</Text>
+                      <Text style={[
+                        styles.analysisScoreValue,
+                        { color: universityAnalysis.ai_analysis?.overall_wellbeing_score >= 60 ? '#10B981' : '#EF4444' }
+                      ]}>
+                        {universityAnalysis.ai_analysis?.overall_wellbeing_score || 'N/A'}/100
+                      </Text>
+                    </View>
+                    <Text style={styles.analysisSummary}>
+                      {universityAnalysis.ai_analysis?.summary || 'No summary available'}
+                    </Text>
+                    {universityAnalysis.ai_analysis?.key_concerns?.length > 0 && (
+                      <View style={styles.analysisConcerns}>
+                        <Text style={styles.analysisConcernsTitle}>Key Concerns:</Text>
+                        {universityAnalysis.ai_analysis.key_concerns.map((concern: string, i: number) => (
+                          <Text key={i} style={styles.analysisConcernItem}>• {concern}</Text>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                )}
+
+                {/* Student List */}
+                {isLoadingUniversity ? (
+                  <ActivityIndicator size="large" color="#6366F1" style={{ marginTop: 20 }} />
+                ) : (
+                  <>
+                    <Text style={styles.studentListTitle}>
+                      Students ({universityStudents.length}) - Sorted by Risk
+                    </Text>
+                    {universityStudents.map((student, idx) => (
+                      <View 
+                        key={student.user_id || idx} 
+                        style={[styles.studentCard, { borderLeftColor: getRiskColor(student.risk_level) }]}
+                      >
+                        <View style={styles.studentHeader}>
+                          <Text style={styles.studentName}>{student.name}</Text>
+                          <View style={[styles.riskBadge, { backgroundColor: getRiskColor(student.risk_level) + '20' }]}>
+                            <Text style={[styles.riskBadgeText, { color: getRiskColor(student.risk_level) }]}>
+                              {student.risk_score}%
+                            </Text>
+                          </View>
+                        </View>
+                        <Text style={styles.studentEmail}>{student.email}</Text>
+                        <View style={styles.studentStats}>
+                          <Text style={styles.studentStatItem}>
+                            Course: {student.course || 'N/A'}
+                          </Text>
+                          <Text style={styles.studentStatItem}>
+                            Mood: {student.average_mood?.toFixed(1) || 'N/A'}
+                          </Text>
+                          <Text style={styles.studentStatItem}>
+                            Alerts: {student.safeguarding_alerts}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  </>
+                )}
+              </View>
+            )}
+          </View>
+        )}
+
         {/* Analytics Tab */}
         {activeTab === 'analytics' && (
           <View style={styles.content}>
