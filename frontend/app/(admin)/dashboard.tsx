@@ -9,450 +9,584 @@ import {
   Dimensions,
   Alert,
   RefreshControl,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import Constants from 'expo-constants';
 
 const { width } = Dimensions.get('window');
 
-interface Stats {
-  total_users: number;
-  total_students: number;
-  total_feedback: number;
-  total_matches: number;
-  pending_reports: number;
-  average_risk_score: number;
-  recent_risk_scores: Array<{
-    user_id: string;
-    user_name: string;
-    risk_score: number;
-    created_at: string;
-  }>;
+interface SafeguardingAlert {
+  alert_id: string;
+  user_id: string;
+  user_name: string;
+  user_email: string;
+  source: string;
+  risk_level: string;
+  matched_keywords: string[];
+  content: string;
+  acknowledged: boolean;
+  created_at: string;
 }
 
-interface AnalyticsOverview {
-  total_students: number;
-  active_students_week: number;
+interface MoodTrend {
+  date: string;
+  average_mood: number;
+  entry_count: number;
+}
+
+interface UniversityData {
+  university: string;
+  student_count: number;
+  average_mood: number;
+  mood_entries: number;
+  feedback_entries: number;
+  safeguarding_alerts: number;
   engagement_rate: number;
-  platform_average_mood: number;
-  high_risk_count: number;
-  medium_risk_count: number;
-  low_risk_count: number;
-  university_breakdown: Array<{ university: string; students: number }>;
 }
 
-interface AtRiskStudent {
+interface RiskDistribution {
+  risk_score_distribution: {
+    low: number;
+    medium: number;
+    high: number;
+    critical: number;
+  };
+  safeguarding_alert_distribution: {
+    high: number;
+    medium: number;
+  };
+}
+
+interface BulkAnalysisResult {
   user_id: string;
   name: string;
   email: string;
-  university?: string;
-  course?: string;
-  dropout_risk: number;
-  risk_level: string;
-  risk_factors: string[];
-  engagement_score: number;
-  average_mood: number;
-}
-
-interface RetentionData {
   university: string;
-  total_students: number;
-  active_weekly: number;
-  weekly_retention_rate: number;
-  average_mood: number;
-  at_risk_count: number;
-  health_status: string;
+  average_mood: number | null;
+  risk_score: number;
+  risk_level: string;
+  mood_entries_count: number;
+  safeguarding_alerts: number;
 }
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const { sessionToken, user } = useAuth();
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
-  const [atRiskStudents, setAtRiskStudents] = useState<AtRiskStudent[]>([]);
-  const [retentionData, setRetentionData] = useState<RetentionData[]>([]);
-  const [aiInsights, setAiInsights] = useState<any>(null);
+  const { sessionToken, user, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'retention' | 'at-risk' | 'insights'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'export'>('overview');
+  
+  // Data states
+  const [stats, setStats] = useState<any>(null);
+  const [safeguardingAlerts, setSafeguardingAlerts] = useState<SafeguardingAlert[]>([]);
+  const [alertStats, setAlertStats] = useState({ unacknowledged: 0, high_risk: 0, total: 0 });
+  const [moodTrends, setMoodTrends] = useState<MoodTrend[]>([]);
+  const [universityData, setUniversityData] = useState<UniversityData[]>([]);
+  const [riskDistribution, setRiskDistribution] = useState<RiskDistribution | null>(null);
+  const [bulkAnalysis, setBulkAnalysis] = useState<BulkAnalysisResult[]>([]);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Date filters
+  const [dateRange, setDateRange] = useState('30'); // days
+
+  const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
   useEffect(() => {
-    if (user?.role !== 'admin') {
-      Alert.alert('Access Denied', 'You need admin access to view this page');
-      router.back();
-      return;
-    }
-    loadData();
-  }, []);
+    loadAllData();
+  }, [dateRange]);
 
-  const loadData = async () => {
+  const loadAllData = async () => {
+    setIsLoading(true);
     try {
-      const [statsData, analyticsData, atRiskData, retentionResponse] = await Promise.all([
-        api.get('/admin/stats', sessionToken),
-        api.get('/admin/analytics/overview', sessionToken),
-        api.get('/admin/analytics/at-risk-students', sessionToken),
-        api.get('/admin/analytics/retention', sessionToken),
+      await Promise.all([
+        loadStats(),
+        loadSafeguardingAlerts(),
+        loadMoodTrends(),
+        loadUniversityComparison(),
+        loadRiskDistribution(),
       ]);
-      setStats(statsData);
-      setAnalytics(analyticsData);
-      setAtRiskStudents(atRiskData.students || []);
-      setRetentionData(retentionResponse.universities || []);
     } catch (error) {
       console.error('Error loading admin data:', error);
-      Alert.alert('Error', 'Failed to load admin data');
     } finally {
       setIsLoading(false);
-      setRefreshing(false);
     }
   };
 
-  const loadAiInsights = async () => {
+  const loadStats = async () => {
     try {
-      const data = await api.post('/admin/analytics/ai-insights', {}, sessionToken);
-      setAiInsights(data);
+      const data = await api.get('/admin/stats', sessionToken);
+      setStats(data);
     } catch (error) {
-      console.error('Error loading AI insights:', error);
+      console.error('Error loading stats:', error);
     }
   };
 
-  const onRefresh = () => {
+  const loadSafeguardingAlerts = async () => {
+    try {
+      const data = await api.get('/admin/safeguarding-alerts', sessionToken);
+      setSafeguardingAlerts(data.alerts || []);
+      setAlertStats({
+        unacknowledged: data.unacknowledged_count || 0,
+        high_risk: data.high_risk_count || 0,
+        total: data.total_count || 0,
+      });
+    } catch (error) {
+      console.error('Error loading safeguarding alerts:', error);
+    }
+  };
+
+  const loadMoodTrends = async () => {
+    try {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - parseInt(dateRange));
+      const data = await api.get(`/admin/analytics/mood-trends?start_date=${startDate.toISOString()}&group_by=day`, sessionToken);
+      setMoodTrends(data.trends || []);
+    } catch (error) {
+      console.error('Error loading mood trends:', error);
+    }
+  };
+
+  const loadUniversityComparison = async () => {
+    try {
+      const data = await api.get('/admin/analytics/university-comparison', sessionToken);
+      setUniversityData(data.universities || []);
+    } catch (error) {
+      console.error('Error loading university data:', error);
+    }
+  };
+
+  const loadRiskDistribution = async () => {
+    try {
+      const data = await api.get('/admin/analytics/risk-distribution', sessionToken);
+      setRiskDistribution(data);
+    } catch (error) {
+      console.error('Error loading risk distribution:', error);
+    }
+  };
+
+  const runBulkAnalysis = async () => {
+    setIsAnalyzing(true);
+    try {
+      const data = await api.post('/admin/analytics/bulk-ai-analysis', { limit: 100 }, sessionToken);
+      setBulkAnalysis(data.results || []);
+      Alert.alert(
+        'Analysis Complete',
+        `Analyzed ${data.students_analyzed} students:\n• High Risk: ${data.high_risk_count}\n• Medium Risk: ${data.medium_risk_count}\n• Low Risk: ${data.low_risk_count}`
+      );
+    } catch (error) {
+      console.error('Error running bulk analysis:', error);
+      Alert.alert('Error', 'Failed to run bulk analysis');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const acknowledgeAlert = async (alertId: string) => {
+    try {
+      await api.post(`/admin/safeguarding-alerts/${alertId}/acknowledge`, {}, sessionToken);
+      loadSafeguardingAlerts();
+      Alert.alert('Success', 'Alert acknowledged');
+    } catch (error) {
+      console.error('Error acknowledging alert:', error);
+      Alert.alert('Error', 'Failed to acknowledge alert');
+    }
+  };
+
+  const exportData = async (type: string) => {
+    const exportUrl = `${backendUrl}/api/admin/export/${type}`;
+    Alert.alert(
+      'Export Data',
+      `This will download ${type} data as CSV. Continue?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Export',
+          onPress: () => {
+            Linking.openURL(exportUrl).catch(() => {
+              Alert.alert('Error', 'Could not open export link. Copy this URL to download: ' + exportUrl);
+            });
+          },
+        },
+      ]
+    );
+  };
+
+  const onRefresh = async () => {
     setRefreshing(true);
-    loadData();
-  };
-
-  const getRiskColor = (score: number) => {
-    if (score < 30) return '#10B981';
-    if (score < 60) return '#F59E0B';
-    return '#EF4444';
-  };
-
-  const getHealthColor = (status: string) => {
-    if (status === 'Good') return '#10B981';
-    if (status === 'Attention Needed') return '#F59E0B';
-    return '#EF4444';
+    await loadAllData();
+    setRefreshing(false);
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
+    return date.toLocaleDateString('en-GB', {
       day: 'numeric',
+      month: 'short',
       hour: '2-digit',
       minute: '2-digit',
     });
   };
 
+  const getRiskColor = (level: string) => {
+    switch (level) {
+      case 'high':
+      case 'critical':
+        return '#EF4444';
+      case 'medium':
+        return '#F59E0B';
+      default:
+        return '#10B981';
+    }
+  };
+
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container} edges={['bottom']}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#6366F1" />
-          <Text style={styles.loadingText}>Loading analytics...</Text>
+          <Text style={styles.loadingText}>Loading Admin Dashboard...</Text>
         </View>
       </SafeAreaView>
     );
   }
 
-  const renderOverviewTab = () => (
-    <View>
-      {/* Key Metrics */}
-      <View style={styles.metricsGrid}>
-        <View style={[styles.metricCard, styles.metricPrimary]}>
-          <Ionicons name="people" size={28} color="#6366F1" />
-          <Text style={styles.metricValue}>{analytics?.total_students || 0}</Text>
-          <Text style={styles.metricLabel}>Total Students</Text>
-        </View>
-        <View style={styles.metricCard}>
-          <Ionicons name="pulse" size={28} color="#10B981" />
-          <Text style={styles.metricValue}>{analytics?.active_students_week || 0}</Text>
-          <Text style={styles.metricLabel}>Active (7d)</Text>
-        </View>
-        <View style={styles.metricCard}>
-          <Ionicons name="trending-up" size={28} color="#F59E0B" />
-          <Text style={styles.metricValue}>{analytics?.engagement_rate || 0}%</Text>
-          <Text style={styles.metricLabel}>Engagement</Text>
-        </View>
-        <View style={styles.metricCard}>
-          <Ionicons name="happy" size={28} color="#EC4899" />
-          <Text style={styles.metricValue}>{analytics?.platform_average_mood || 0}</Text>
-          <Text style={styles.metricLabel}>Avg Mood</Text>
-        </View>
-      </View>
-
-      {/* Risk Distribution */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Risk Distribution</Text>
-        <View style={styles.riskDistribution}>
-          <View style={[styles.riskBar, { backgroundColor: '#EF4444', flex: analytics?.high_risk_count || 1 }]}>
-            <Text style={styles.riskBarText}>{analytics?.high_risk_count || 0}</Text>
-            <Text style={styles.riskBarLabel}>High</Text>
-          </View>
-          <View style={[styles.riskBar, { backgroundColor: '#F59E0B', flex: analytics?.medium_risk_count || 1 }]}>
-            <Text style={styles.riskBarText}>{analytics?.medium_risk_count || 0}</Text>
-            <Text style={styles.riskBarLabel}>Medium</Text>
-          </View>
-          <View style={[styles.riskBar, { backgroundColor: '#10B981', flex: analytics?.low_risk_count || 1 }]}>
-            <Text style={styles.riskBarText}>{analytics?.low_risk_count || 0}</Text>
-            <Text style={styles.riskBarLabel}>Low</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* University Breakdown */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Top Universities</Text>
-        {analytics?.university_breakdown?.map((uni, index) => (
-          <View key={index} style={styles.universityItem}>
-            <View style={styles.universityRank}>
-              <Text style={styles.rankNumber}>{index + 1}</Text>
-            </View>
-            <View style={styles.universityInfo}>
-              <Text style={styles.universityName}>{uni.university}</Text>
-              <Text style={styles.universityCount}>{uni.students} students</Text>
-            </View>
-          </View>
-        ))}
-        {(!analytics?.university_breakdown || analytics.university_breakdown.length === 0) && (
-          <Text style={styles.emptyText}>No university data available</Text>
-        )}
-      </View>
-    </View>
-  );
-
-  const renderRetentionTab = () => (
-    <View>
-      <Text style={styles.sectionTitle}>University Retention Analytics</Text>
-      {retentionData.map((uni, index) => (
-        <View key={index} style={styles.retentionCard}>
-          <View style={styles.retentionHeader}>
-            <Text style={styles.retentionUniversity}>{uni.university}</Text>
-            <View style={[styles.healthBadge, { backgroundColor: getHealthColor(uni.health_status) + '20' }]}>
-              <Text style={[styles.healthBadgeText, { color: getHealthColor(uni.health_status) }]}>
-                {uni.health_status}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.retentionStats}>
-            <View style={styles.retentionStat}>
-              <Text style={styles.retentionStatValue}>{uni.total_students}</Text>
-              <Text style={styles.retentionStatLabel}>Students</Text>
-            </View>
-            <View style={styles.retentionStat}>
-              <Text style={styles.retentionStatValue}>{uni.weekly_retention_rate}%</Text>
-              <Text style={styles.retentionStatLabel}>Retention</Text>
-            </View>
-            <View style={styles.retentionStat}>
-              <Text style={styles.retentionStatValue}>{uni.average_mood}/10</Text>
-              <Text style={styles.retentionStatLabel}>Avg Mood</Text>
-            </View>
-            <View style={styles.retentionStat}>
-              <Text style={[styles.retentionStatValue, { color: '#EF4444' }]}>{uni.at_risk_count}</Text>
-              <Text style={styles.retentionStatLabel}>At Risk</Text>
-            </View>
-          </View>
-        </View>
-      ))}
-      {retentionData.length === 0 && (
-        <View style={styles.emptyState}>
-          <Ionicons name="school-outline" size={48} color="#4B5563" />
-          <Text style={styles.emptyText}>No retention data available</Text>
-        </View>
-      )}
-    </View>
-  );
-
-  const renderAtRiskTab = () => (
-    <View>
-      <View style={styles.atRiskSummary}>
-        <Text style={styles.atRiskTitle}>Students at Risk of Dropout</Text>
-        <Text style={styles.atRiskCount}>{atRiskStudents.length} students identified</Text>
-      </View>
-      {atRiskStudents.map((student, index) => (
-        <View key={index} style={styles.studentCard}>
-          <View style={styles.studentHeader}>
-            <View style={styles.studentInfo}>
-              <Text style={styles.studentName}>{student.name}</Text>
-              <Text style={styles.studentDetails}>
-                {student.university || 'Unknown University'} • {student.course || 'Unknown Course'}
-              </Text>
-            </View>
-            <View style={[styles.riskLevelBadge, { backgroundColor: getRiskColor(student.dropout_risk) + '20' }]}>
-              <Text style={[styles.riskLevelText, { color: getRiskColor(student.dropout_risk) }]}>
-                {student.dropout_risk}%
-              </Text>
-            </View>
-          </View>
-          <View style={styles.riskFactorsContainer}>
-            <Text style={styles.riskFactorsLabel}>Risk Factors:</Text>
-            {student.risk_factors.map((factor, i) => (
-              <View key={i} style={styles.riskFactor}>
-                <Ionicons name="warning" size={14} color="#F59E0B" />
-                <Text style={styles.riskFactorText}>{factor}</Text>
-              </View>
-            ))}
-          </View>
-          <View style={styles.studentMetrics}>
-            <View style={styles.studentMetric}>
-              <Ionicons name="pulse" size={16} color="#6366F1" />
-              <Text style={styles.studentMetricText}>Engagement: {student.engagement_score}%</Text>
-            </View>
-            <View style={styles.studentMetric}>
-              <Ionicons name="happy" size={16} color="#10B981" />
-              <Text style={styles.studentMetricText}>Avg Mood: {student.average_mood}/10</Text>
-            </View>
-          </View>
-        </View>
-      ))}
-      {atRiskStudents.length === 0 && (
-        <View style={styles.emptyState}>
-          <Ionicons name="checkmark-circle" size={48} color="#10B981" />
-          <Text style={styles.emptyText}>No students currently at high risk</Text>
-        </View>
-      )}
-    </View>
-  );
-
-  const renderInsightsTab = () => (
-    <View>
-      <TouchableOpacity style={styles.generateButton} onPress={loadAiInsights}>
-        <Ionicons name="sparkles" size={24} color="#fff" />
-        <Text style={styles.generateButtonText}>Generate AI Insights</Text>
-      </TouchableOpacity>
-
-      {aiInsights && (
-        <View style={styles.insightsContainer}>
-          <View style={styles.insightSection}>
-            <Text style={styles.insightTitle}>Summary</Text>
-            <Text style={styles.insightText}>{aiInsights.insights?.summary || 'No summary available'}</Text>
-          </View>
-
-          {aiInsights.insights?.retention_insights?.length > 0 && (
-            <View style={styles.insightSection}>
-              <Text style={styles.insightTitle}>Retention Insights</Text>
-              {aiInsights.insights.retention_insights.map((insight: string, i: number) => (
-                <View key={i} style={styles.insightItem}>
-                  <Ionicons name="analytics" size={16} color="#6366F1" />
-                  <Text style={styles.insightItemText}>{insight}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {aiInsights.insights?.dropout_risk_factors?.length > 0 && (
-            <View style={styles.insightSection}>
-              <Text style={styles.insightTitle}>Dropout Risk Factors</Text>
-              {aiInsights.insights.dropout_risk_factors.map((factor: string, i: number) => (
-                <View key={i} style={styles.insightItem}>
-                  <Ionicons name="warning" size={16} color="#EF4444" />
-                  <Text style={styles.insightItemText}>{factor}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {aiInsights.insights?.recommendations?.length > 0 && (
-            <View style={styles.insightSection}>
-              <Text style={styles.insightTitle}>Recommendations</Text>
-              {aiInsights.insights.recommendations.map((rec: string, i: number) => (
-                <View key={i} style={styles.insightItem}>
-                  <Ionicons name="bulb" size={16} color="#F59E0B" />
-                  <Text style={styles.insightItemText}>{rec}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {aiInsights.insights?.priority_actions?.length > 0 && (
-            <View style={styles.insightSection}>
-              <Text style={styles.insightTitle}>Priority Actions</Text>
-              {aiInsights.insights.priority_actions.map((action: string, i: number) => (
-                <View key={i} style={styles.insightItem}>
-                  <Ionicons name="flash" size={16} color="#EC4899" />
-                  <Text style={styles.insightItemText}>{action}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-      )}
-
-      {!aiInsights && (
-        <View style={styles.emptyState}>
-          <Ionicons name="sparkles-outline" size={48} color="#4B5563" />
-          <Text style={styles.emptyText}>Tap the button above to generate AI-powered insights</Text>
-        </View>
-      )}
-    </View>
-  );
-
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.headerTitle}>Admin Dashboard</Text>
+          <Text style={styles.headerSubtitle}>Educare Analytics</Text>
+        </View>
+        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+          <Ionicons name="log-out-outline" size={24} color="#EF4444" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Tab Navigation */}
+      <View style={styles.tabContainer}>
+        {['overview', 'safeguarding', 'analytics', 'export'].map((tab) => (
+          <TouchableOpacity
+            key={tab}
+            style={[styles.tab, activeTab === tab && styles.activeTab]}
+            onPress={() => setActiveTab(tab as any)}
+          >
+            <Ionicons
+              name={
+                tab === 'overview' ? 'grid-outline' :
+                tab === 'safeguarding' ? 'shield-outline' :
+                tab === 'analytics' ? 'bar-chart-outline' : 'download-outline'
+              }
+              size={18}
+              color={activeTab === tab ? '#6366F1' : '#9CA3AF'}
+            />
+            <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <ScrollView
         style={styles.scrollView}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6366F1" />}
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6366F1" />
-        }
       >
-        <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#fff" />
-            </TouchableOpacity>
-            <View>
-              <Text style={styles.headerTitle}>Admin Dashboard</Text>
-              <Text style={styles.headerSubtitle}>Student Analytics & Retention</Text>
+        {/* Overview Tab */}
+        {activeTab === 'overview' && (
+          <View style={styles.content}>
+            {/* Quick Stats */}
+            <View style={styles.statsGrid}>
+              <View style={[styles.statCard, { backgroundColor: '#6366F1' }]}>
+                <Text style={styles.statValue}>{stats?.total_students || 0}</Text>
+                <Text style={styles.statLabel}>Students</Text>
+              </View>
+              <View style={[styles.statCard, { backgroundColor: '#10B981' }]}>
+                <Text style={styles.statValue}>{stats?.total_feedback || 0}</Text>
+                <Text style={styles.statLabel}>Feedback</Text>
+              </View>
+              <View style={[styles.statCard, { backgroundColor: '#F59E0B' }]}>
+                <Text style={styles.statValue}>{alertStats.unacknowledged}</Text>
+                <Text style={styles.statLabel}>Alerts</Text>
+              </View>
+              <View style={[styles.statCard, { backgroundColor: '#EF4444' }]}>
+                <Text style={styles.statValue}>{alertStats.high_risk}</Text>
+                <Text style={styles.statLabel}>High Risk</Text>
+              </View>
+            </View>
+
+            {/* Risk Distribution */}
+            {riskDistribution && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Risk Distribution</Text>
+                <View style={styles.riskBars}>
+                  {Object.entries(riskDistribution.risk_score_distribution).map(([level, count]) => (
+                    <View key={level} style={styles.riskBarItem}>
+                      <Text style={styles.riskBarLabel}>{level}</Text>
+                      <View style={styles.riskBarBg}>
+                        <View
+                          style={[
+                            styles.riskBarFill,
+                            {
+                              width: `${Math.min((count / Math.max(riskDistribution.total_feedback_entries || 1, 1)) * 100, 100)}%`,
+                              backgroundColor: getRiskColor(level),
+                            },
+                          ]}
+                        />
+                      </View>
+                      <Text style={styles.riskBarCount}>{count}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* University Breakdown */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>University Breakdown</Text>
+              {universityData.slice(0, 5).map((uni, index) => (
+                <View key={index} style={styles.universityCard}>
+                  <View style={styles.universityHeader}>
+                    <Text style={styles.universityName}>{uni.university || 'Unknown'}</Text>
+                    <Text style={styles.universityStudents}>{uni.student_count} students</Text>
+                  </View>
+                  <View style={styles.universityStats}>
+                    <View style={styles.uniStat}>
+                      <Ionicons name="happy-outline" size={16} color="#10B981" />
+                      <Text style={styles.uniStatText}>Mood: {uni.average_mood.toFixed(1)}</Text>
+                    </View>
+                    <View style={styles.uniStat}>
+                      <Ionicons name="pulse-outline" size={16} color="#6366F1" />
+                      <Text style={styles.uniStatText}>Engagement: {uni.engagement_rate}</Text>
+                    </View>
+                    <View style={styles.uniStat}>
+                      <Ionicons name="warning-outline" size={16} color="#EF4444" />
+                      <Text style={styles.uniStatText}>Alerts: {uni.safeguarding_alerts}</Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
             </View>
           </View>
+        )}
 
-          {/* Tabs */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsContainer}>
-            <TouchableOpacity
-              style={[styles.tab, activeTab === 'overview' && styles.activeTab]}
-              onPress={() => setActiveTab('overview')}
-            >
-              <Ionicons name="grid" size={18} color={activeTab === 'overview' ? '#fff' : '#9CA3AF'} />
-              <Text style={[styles.tabText, activeTab === 'overview' && styles.activeTabText]}>Overview</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tab, activeTab === 'retention' && styles.activeTab]}
-              onPress={() => setActiveTab('retention')}
-            >
-              <Ionicons name="school" size={18} color={activeTab === 'retention' ? '#fff' : '#9CA3AF'} />
-              <Text style={[styles.tabText, activeTab === 'retention' && styles.activeTabText]}>Retention</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tab, activeTab === 'at-risk' && styles.activeTab]}
-              onPress={() => setActiveTab('at-risk')}
-            >
-              <Ionicons name="alert-circle" size={18} color={activeTab === 'at-risk' ? '#fff' : '#9CA3AF'} />
-              <Text style={[styles.tabText, activeTab === 'at-risk' && styles.activeTabText]}>At Risk</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tab, activeTab === 'insights' && styles.activeTab]}
-              onPress={() => setActiveTab('insights')}
-            >
-              <Ionicons name="sparkles" size={18} color={activeTab === 'insights' ? '#fff' : '#9CA3AF'} />
-              <Text style={[styles.tabText, activeTab === 'insights' && styles.activeTabText]}>AI Insights</Text>
-            </TouchableOpacity>
-          </ScrollView>
+        {/* Safeguarding Tab */}
+        {activeTab === 'safeguarding' && (
+          <View style={styles.content}>
+            {/* Alert Summary */}
+            <View style={styles.alertSummary}>
+              <View style={[styles.alertSummaryCard, { borderLeftColor: '#EF4444' }]}>
+                <Text style={styles.alertSummaryValue}>{alertStats.high_risk}</Text>
+                <Text style={styles.alertSummaryLabel}>High Risk</Text>
+              </View>
+              <View style={[styles.alertSummaryCard, { borderLeftColor: '#F59E0B' }]}>
+                <Text style={styles.alertSummaryValue}>{alertStats.unacknowledged}</Text>
+                <Text style={styles.alertSummaryLabel}>Unacknowledged</Text>
+              </View>
+              <View style={[styles.alertSummaryCard, { borderLeftColor: '#6366F1' }]}>
+                <Text style={styles.alertSummaryValue}>{alertStats.total}</Text>
+                <Text style={styles.alertSummaryLabel}>Total Alerts</Text>
+              </View>
+            </View>
 
-          {/* Tab Content */}
-          {activeTab === 'overview' && renderOverviewTab()}
-          {activeTab === 'retention' && renderRetentionTab()}
-          {activeTab === 'at-risk' && renderAtRiskTab()}
-          {activeTab === 'insights' && renderInsightsTab()}
+            {/* Alert List */}
+            <Text style={styles.sectionTitle}>Recent Alerts</Text>
+            {safeguardingAlerts.length === 0 ? (
+              <View style={styles.emptyState}>
+                <Ionicons name="shield-checkmark" size={48} color="#10B981" />
+                <Text style={styles.emptyStateText}>No safeguarding alerts</Text>
+              </View>
+            ) : (
+              safeguardingAlerts.map((alert) => (
+                <View
+                  key={alert.alert_id}
+                  style={[styles.alertCard, { borderLeftColor: getRiskColor(alert.risk_level) }]}
+                >
+                  <View style={styles.alertHeader}>
+                    <View style={styles.alertUser}>
+                      <Text style={styles.alertUserName}>{alert.user_name}</Text>
+                      <Text style={styles.alertUserEmail}>{alert.user_email}</Text>
+                    </View>
+                    <View style={[styles.alertBadge, { backgroundColor: getRiskColor(alert.risk_level) + '20' }]}>
+                      <Text style={[styles.alertBadgeText, { color: getRiskColor(alert.risk_level) }]}>
+                        {alert.risk_level.toUpperCase()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.alertMeta}>
+                    <Text style={styles.alertSource}>Source: {alert.source}</Text>
+                    <Text style={styles.alertDate}>{formatDate(alert.created_at)}</Text>
+                  </View>
+                  <View style={styles.alertKeywords}>
+                    {alert.matched_keywords.map((keyword, i) => (
+                      <View key={i} style={styles.keywordTag}>
+                        <Text style={styles.keywordText}>{keyword}</Text>
+                      </View>
+                    ))}
+                  </View>
+                  <Text style={styles.alertContent} numberOfLines={3}>
+                    {alert.content}
+                  </Text>
+                  {!alert.acknowledged && (
+                    <TouchableOpacity
+                      style={styles.acknowledgeButton}
+                      onPress={() => acknowledgeAlert(alert.alert_id)}
+                    >
+                      <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                      <Text style={styles.acknowledgeText}>Acknowledge</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              ))
+            )}
+          </View>
+        )}
 
-          {/* Back to App */}
-          <TouchableOpacity style={styles.backToAppButton} onPress={() => router.push('/(main)/mood')}>
-            <Ionicons name="arrow-back" size={20} color="#fff" />
-            <Text style={styles.backToAppText}>Back to App</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Analytics Tab */}
+        {activeTab === 'analytics' && (
+          <View style={styles.content}>
+            {/* Date Range Filter */}
+            <View style={styles.filterSection}>
+              <Text style={styles.filterLabel}>Date Range:</Text>
+              <View style={styles.filterButtons}>
+                {['7', '30', '90'].map((days) => (
+                  <TouchableOpacity
+                    key={days}
+                    style={[styles.filterButton, dateRange === days && styles.filterButtonActive]}
+                    onPress={() => setDateRange(days)}
+                  >
+                    <Text style={[styles.filterButtonText, dateRange === days && styles.filterButtonTextActive]}>
+                      {days}d
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+
+            {/* Mood Trends */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Mood Trends (Last {dateRange} Days)</Text>
+              <View style={styles.trendChart}>
+                {moodTrends.slice(-14).map((trend, index) => (
+                  <View key={index} style={styles.trendBar}>
+                    <View
+                      style={[
+                        styles.trendBarFill,
+                        {
+                          height: `${(trend.average_mood / 10) * 100}%`,
+                          backgroundColor: trend.average_mood >= 7 ? '#10B981' : trend.average_mood >= 5 ? '#F59E0B' : '#EF4444',
+                        },
+                      ]}
+                    />
+                    <Text style={styles.trendBarLabel}>{trend.date.slice(-2)}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.chartNote}>Average mood score by day (scale 1-10)</Text>
+            </View>
+
+            {/* Bulk AI Analysis */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Bulk AI Analysis</Text>
+              <TouchableOpacity
+                style={styles.analyzeButton}
+                onPress={runBulkAnalysis}
+                disabled={isAnalyzing}
+              >
+                {isAnalyzing ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="analytics" size={20} color="#fff" />
+                    <Text style={styles.analyzeButtonText}>Run Analysis on All Students</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+
+              {bulkAnalysis.length > 0 && (
+                <View style={styles.analysisResults}>
+                  <Text style={styles.analysisResultsTitle}>High Risk Students:</Text>
+                  {bulkAnalysis.filter(s => s.risk_level === 'high').slice(0, 5).map((student) => (
+                    <View key={student.user_id} style={styles.analysisCard}>
+                      <View style={styles.analysisHeader}>
+                        <Text style={styles.analysisName}>{student.name}</Text>
+                        <View style={[styles.riskBadge, { backgroundColor: '#EF444420' }]}>
+                          <Text style={[styles.riskBadgeText, { color: '#EF4444' }]}>
+                            Risk: {student.risk_score}%
+                          </Text>
+                        </View>
+                      </View>
+                      <Text style={styles.analysisDetail}>
+                        {student.university || 'Unknown University'} • Mood: {student.average_mood?.toFixed(1) || 'N/A'}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+
+        {/* Export Tab */}
+        {activeTab === 'export' && (
+          <View style={styles.content}>
+            <Text style={styles.sectionTitle}>Export Data (CSV)</Text>
+            <Text style={styles.exportNote}>
+              Download data reports for external analysis. All exports are in CSV format.
+            </Text>
+
+            <TouchableOpacity style={styles.exportCard} onPress={() => exportData('students')}>
+              <View style={styles.exportIcon}>
+                <Ionicons name="people" size={24} color="#6366F1" />
+              </View>
+              <View style={styles.exportInfo}>
+                <Text style={styles.exportTitle}>Student Data</Text>
+                <Text style={styles.exportDesc}>Export all student profiles and details</Text>
+              </View>
+              <Ionicons name="download-outline" size={24} color="#6366F1" />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.exportCard} onPress={() => exportData('mood-history')}>
+              <View style={styles.exportIcon}>
+                <Ionicons name="happy" size={24} color="#10B981" />
+              </View>
+              <View style={styles.exportInfo}>
+                <Text style={styles.exportTitle}>Mood History</Text>
+                <Text style={styles.exportDesc}>Export all mood entries with timestamps</Text>
+              </View>
+              <Ionicons name="download-outline" size={24} color="#10B981" />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.exportCard} onPress={() => exportData('feedback-history')}>
+              <View style={styles.exportIcon}>
+                <Ionicons name="chatbox" size={24} color="#F59E0B" />
+              </View>
+              <View style={styles.exportInfo}>
+                <Text style={styles.exportTitle}>Feedback History</Text>
+                <Text style={styles.exportDesc}>Export lecture feedback with risk scores</Text>
+              </View>
+              <Ionicons name="download-outline" size={24} color="#F59E0B" />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.exportCard} onPress={() => exportData('safeguarding-alerts')}>
+              <View style={styles.exportIcon}>
+                <Ionicons name="shield" size={24} color="#EF4444" />
+              </View>
+              <View style={styles.exportInfo}>
+                <Text style={styles.exportTitle}>Safeguarding Alerts</Text>
+                <Text style={styles.exportDesc}>Export all safeguarding alerts</Text>
+              </View>
+              <Ionicons name="download-outline" size={24} color="#EF4444" />
+            </TouchableOpacity>
+          </View>
+        )}
+
+        <View style={{ height: 50 }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -472,25 +606,12 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     marginTop: 12,
   },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    padding: 20,
-  },
   header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
+    padding: 20,
+    paddingTop: 10,
   },
   headerTitle: {
     fontSize: 24,
@@ -500,320 +621,407 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 14,
     color: '#9CA3AF',
-    marginTop: 2,
   },
-  tabsContainer: {
-    marginBottom: 20,
+  logoutButton: {
+    padding: 8,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
   tab: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    justifyContent: 'center',
     paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    marginRight: 8,
+    borderRadius: 8,
+    marginHorizontal: 4,
+    backgroundColor: 'rgba(255,255,255,0.05)',
   },
   activeTab: {
-    backgroundColor: '#6366F1',
+    backgroundColor: 'rgba(99, 102, 241, 0.2)',
   },
   tabText: {
+    fontSize: 12,
     color: '#9CA3AF',
-    fontSize: 14,
-    fontWeight: '600',
-    marginLeft: 6,
+    marginLeft: 4,
   },
   activeTabText: {
-    color: '#fff',
+    color: '#6366F1',
+    fontWeight: '600',
   },
-  metricsGrid: {
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 16,
+  },
+  statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
     marginBottom: 20,
   },
-  metricCard: {
-    width: (width - 52) / 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 16,
+  statCard: {
+    width: (width - 48) / 2,
     padding: 16,
+    borderRadius: 12,
+    margin: 4,
     alignItems: 'center',
   },
-  metricPrimary: {
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
-    borderWidth: 1,
-    borderColor: '#6366F1',
-  },
-  metricValue: {
+  statValue: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#fff',
-    marginTop: 8,
   },
-  metricLabel: {
+  statLabel: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: 'rgba(255,255,255,0.8)',
     marginTop: 4,
   },
   section: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
+    marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#fff',
-    marginBottom: 16,
+    marginBottom: 12,
   },
-  riskDistribution: {
-    flexDirection: 'row',
-    height: 60,
+  riskBars: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
     borderRadius: 12,
-    overflow: 'hidden',
+    padding: 16,
   },
-  riskBar: {
-    justifyContent: 'center',
+  riskBarItem: {
+    flexDirection: 'row',
     alignItems: 'center',
-    minWidth: 50,
-  },
-  riskBarText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+    marginBottom: 12,
   },
   riskBarLabel: {
-    fontSize: 10,
-    color: 'rgba(255,255,255,0.8)',
+    width: 60,
+    fontSize: 12,
+    color: '#9CA3AF',
+    textTransform: 'capitalize',
   },
-  universityItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.05)',
-  },
-  universityRank: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#6366F1',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  rankNumber: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  universityInfo: {
+  riskBarBg: {
     flex: 1,
+    height: 20,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  riskBarFill: {
+    height: '100%',
+    borderRadius: 10,
+  },
+  riskBarCount: {
+    width: 40,
+    textAlign: 'right',
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: '600',
+  },
+  universityCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 8,
+  },
+  universityHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   universityName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
-  },
-  universityCount: {
-    fontSize: 12,
-    color: '#9CA3AF',
-  },
-  retentionCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-  },
-  retentionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  retentionUniversity: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
     flex: 1,
   },
-  healthBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  healthBadgeText: {
+  universityStudents: {
     fontSize: 12,
-    fontWeight: '600',
+    color: '#9CA3AF',
   },
-  retentionStats: {
+  universityStats: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  retentionStat: {
-    alignItems: 'center',
-  },
-  retentionStatValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  retentionStatLabel: {
-    fontSize: 10,
-    color: '#9CA3AF',
-    marginTop: 2,
-  },
-  atRiskSummary: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-  atRiskTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#EF4444',
-  },
-  atRiskCount: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    marginTop: 4,
-  },
-  studentCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-  },
-  studentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  studentInfo: {
-    flex: 1,
-  },
-  studentName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  studentDetails: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    marginTop: 2,
-  },
-  riskLevelBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  riskLevelText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  riskFactorsContainer: {
-    marginBottom: 12,
-  },
-  riskFactorsLabel: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    marginBottom: 6,
-  },
-  riskFactor: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  riskFactorText: {
-    fontSize: 13,
-    color: '#F59E0B',
-    marginLeft: 6,
-  },
-  studentMetrics: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  studentMetric: {
+  uniStat: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  studentMetricText: {
+  uniStatText: {
     fontSize: 12,
     color: '#9CA3AF',
     marginLeft: 4,
   },
-  generateButton: {
+  alertSummary: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  alertSummaryCard: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 4,
+    borderLeftWidth: 3,
+    alignItems: 'center',
+  },
+  alertSummaryValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  alertSummaryLabel: {
+    fontSize: 10,
+    color: '#9CA3AF',
+    marginTop: 4,
+  },
+  emptyState: {
+    alignItems: 'center',
+    padding: 40,
+  },
+  emptyStateText: {
+    color: '#9CA3AF',
+    marginTop: 12,
+  },
+  alertCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderLeftWidth: 4,
+  },
+  alertHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  alertUser: {
+    flex: 1,
+  },
+  alertUserName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  alertUserEmail: {
+    fontSize: 12,
+    color: '#9CA3AF',
+  },
+  alertBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  alertBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  alertMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  alertSource: {
+    fontSize: 12,
+    color: '#9CA3AF',
+  },
+  alertDate: {
+    fontSize: 12,
+    color: '#9CA3AF',
+  },
+  alertKeywords: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 8,
+  },
+  keywordTag: {
+    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginRight: 6,
+    marginBottom: 4,
+  },
+  keywordText: {
+    fontSize: 10,
+    color: '#EF4444',
+  },
+  alertContent: {
+    fontSize: 13,
+    color: '#9CA3AF',
+    lineHeight: 18,
+    marginBottom: 12,
+  },
+  acknowledgeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  acknowledgeText: {
+    fontSize: 12,
+    color: '#10B981',
+    marginLeft: 6,
+  },
+  filterSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  filterLabel: {
+    fontSize: 14,
+    color: '#9CA3AF',
+    marginRight: 12,
+  },
+  filterButtons: {
+    flexDirection: 'row',
+  },
+  filterButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    marginRight: 8,
+  },
+  filterButtonActive: {
+    backgroundColor: '#6366F1',
+  },
+  filterButtonText: {
+    fontSize: 14,
+    color: '#9CA3AF',
+  },
+  filterButtonTextActive: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  trendChart: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    height: 150,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 12,
+  },
+  trendBar: {
+    flex: 1,
+    alignItems: 'center',
+    height: '100%',
+    justifyContent: 'flex-end',
+  },
+  trendBarFill: {
+    width: 12,
+    borderRadius: 6,
+    minHeight: 4,
+  },
+  trendBarLabel: {
+    fontSize: 8,
+    color: '#9CA3AF',
+    marginTop: 4,
+  },
+  chartNote: {
+    fontSize: 11,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  analyzeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#6366F1',
-    paddingVertical: 16,
-    borderRadius: 12,
-    marginBottom: 20,
-  },
-  generateButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  insightsContainer: {
-    gap: 16,
-  },
-  insightSection: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
-    padding: 16,
-  },
-  insightTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 12,
-  },
-  insightText: {
-    fontSize: 14,
-    color: '#D1D5DB',
-    lineHeight: 22,
-  },
-  insightItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  insightItemText: {
-    fontSize: 14,
-    color: '#D1D5DB',
-    marginLeft: 8,
-    flex: 1,
-    lineHeight: 20,
-  },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    marginTop: 12,
-    textAlign: 'center',
-  },
-  backToAppButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#374151',
     paddingVertical: 14,
     borderRadius: 12,
-    marginTop: 20,
-    marginBottom: 32,
+    marginBottom: 16,
   },
-  backToAppText: {
-    color: '#fff',
+  analyzeButtonText: {
     fontSize: 16,
     fontWeight: '600',
+    color: '#fff',
     marginLeft: 8,
+  },
+  analysisResults: {
+    marginTop: 12,
+  },
+  analysisResultsTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#EF4444',
+    marginBottom: 8,
+  },
+  analysisCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 8,
+  },
+  analysisHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  analysisName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  riskBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  riskBadgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  analysisDetail: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 4,
+  },
+  exportNote: {
+    fontSize: 14,
+    color: '#9CA3AF',
+    marginBottom: 20,
+    lineHeight: 20,
+  },
+  exportCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  exportIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  exportInfo: {
+    flex: 1,
+  },
+  exportTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  exportDesc: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 2,
   },
 });
