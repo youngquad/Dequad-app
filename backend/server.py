@@ -72,6 +72,11 @@ class User(BaseModel):
     gender: Optional[str] = None  # man, woman, non-binary
     push_token: Optional[str] = None
     notifications_enabled: bool = True
+    # Subscription fields
+    plan: str = "free"  # free, premium
+    stripe_customer_id: Optional[str] = None
+    swipes_today: int = 0
+    last_swipe_date: Optional[str] = None  # YYYY-MM-DD format
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UserSession(BaseModel):
