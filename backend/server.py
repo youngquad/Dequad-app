@@ -457,11 +457,29 @@ async def update_profile(data: ProfileUpdate, current_user: User = Depends(get_c
 
 # ==================== MOOD ENDPOINTS ====================
 
+async def create_safeguarding_alert(user: User, source: str, content: str, safeguarding_result: dict):
+    """Create a safeguarding alert for admin review"""
+    alert = SafeguardingAlert(
+        user_id=user.user_id,
+        user_name=user.name,
+        user_email=user.email,
+        source=source,
+        content=content,
+        risk_level=safeguarding_result["risk_level"],
+        matched_keywords=safeguarding_result["matched_keywords"]
+    )
+    await db.safeguarding_alerts.insert_one(alert.dict())
+    logger.warning(f"SAFEGUARDING ALERT: {safeguarding_result['risk_level']} risk detected for user {user.user_id} in {source}")
+    return alert
+
 @api_router.post("/mood")
 async def create_mood(data: MoodCreate, current_user: User = Depends(get_current_user)):
-    """Log mood entry"""
+    """Log mood entry with safeguarding check"""
     if data.mood < 1 or data.mood > 10:
         raise HTTPException(status_code=400, detail="Mood must be between 1 and 10")
+    
+    # Check for safeguarding concerns in notes
+    safeguarding_result = check_safeguarding_content(data.notes or "")
     
     mood_entry = MoodEntry(
         user_id=current_user.user_id,
@@ -470,7 +488,27 @@ async def create_mood(data: MoodCreate, current_user: User = Depends(get_current
     )
     
     await db.mood_entries.insert_one(mood_entry.dict())
-    return mood_entry
+    
+    # If safeguarding concern detected, create alert for admin
+    if safeguarding_result["flagged"]:
+        await create_safeguarding_alert(
+            current_user,
+            "mood",
+            data.notes or "",
+            safeguarding_result
+        )
+    
+    # Return mood entry with safeguarding info if flagged
+    response = mood_entry.dict()
+    if safeguarding_result["flagged"]:
+        response["safeguarding_alert"] = {
+            "flagged": True,
+            "risk_level": safeguarding_result["risk_level"],
+            "resources": safeguarding_result["resources"],
+            "message": "We noticed you may be going through a difficult time. Please know that support is available."
+        }
+    
+    return response
 
 @api_router.get("/mood", response_model=List[MoodEntry])
 async def get_mood_history(current_user: User = Depends(get_current_user)):
