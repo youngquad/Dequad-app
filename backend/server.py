@@ -1556,6 +1556,76 @@ async def get_crisis_resources(admin: User = Depends(require_admin)):
         "keywords": SAFEGUARDING_KEYWORDS
     }
 
+@api_router.get("/admin/email-config")
+async def get_email_config(admin: User = Depends(require_admin)):
+    """Check email configuration status (Admin Only)"""
+    return {
+        "smtp_configured": is_smtp_configured(),
+        "smtp_host": SMTP_HOST if SMTP_HOST else "Not configured",
+        "smtp_port": SMTP_PORT,
+        "smtp_from_email": SMTP_FROM_EMAIL,
+        "smtp_from_name": SMTP_FROM_NAME,
+        "message": "SMTP is configured and ready" if is_smtp_configured() else "SMTP not configured. Add SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD to .env file"
+    }
+
+@api_router.post("/admin/test-email")
+async def test_email_notification(admin: User = Depends(require_admin)):
+    """Send a test safeguarding email notification (Admin Only)"""
+    if not is_smtp_configured():
+        return {
+            "success": False,
+            "message": "SMTP not configured. Please add SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD to backend/.env file",
+            "required_env_vars": [
+                "SMTP_HOST (e.g., smtp.gmail.com)",
+                "SMTP_PORT (default: 587)",
+                "SMTP_USERNAME (your email)",
+                "SMTP_PASSWORD (app password)",
+                "SMTP_FROM_EMAIL (optional)",
+                "SMTP_FROM_NAME (optional)"
+            ]
+        }
+    
+    # Get admin emails
+    admin_emails = await get_admin_emails()
+    if not admin_emails:
+        return {
+            "success": False,
+            "message": "No admin users found in the database"
+        }
+    
+    # Create test alert data
+    test_alert = {
+        "alert_id": "test_" + str(uuid.uuid4())[:8],
+        "user_id": "test_user",
+        "user_name": "Test Student",
+        "user_email": "test@example.com",
+        "source": "mood",
+        "content": "This is a TEST email notification. If you received this, your safeguarding email notifications are working correctly.",
+        "risk_level": "medium",
+        "matched_keywords": ["test keyword"],
+        "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    }
+    
+    try:
+        # Create email content
+        subject = "🧪 TEST - Safeguarding Email Notification"
+        html_body = create_safeguarding_email_html(test_alert)
+        text_body = create_safeguarding_email_text(test_alert)
+        
+        # Send email
+        success = await send_email_async(admin_emails, subject, html_body, text_body)
+        
+        return {
+            "success": success,
+            "message": f"Test email sent to {len(admin_emails)} admin(s)" if success else "Failed to send test email",
+            "recipients": admin_emails
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Error sending test email: {str(e)}"
+        }
+
 # ==================== DATA EXPORT ENDPOINTS ====================
 
 import csv
