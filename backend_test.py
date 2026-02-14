@@ -776,6 +776,8 @@ class APITester:
         self.test_notifications_api()
         self.test_matching_apis()
         self.test_chat_apis()
+        self.test_subscription_apis()
+        self.test_swipe_limit_enforcement()
         self.test_admin_apis()
         
         # Print summary
