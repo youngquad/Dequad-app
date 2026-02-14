@@ -80,7 +80,7 @@ index a8fd623..e69de29 100644
 ---+from datetime import datetime
 ---+
 ---+# Configuration
----+BASE_URL = "https://mood-tracker-289.preview.emergentagent.com/api"
+---+BASE_URL = "https://educare-app-1.preview.emergentagent.com/api"
 ---+SESSION_TOKEN = "test_session_token_123"
 ---+HEADERS = {
 ---+    "Authorization": f"Bearer {SESSION_TOKEN}",
