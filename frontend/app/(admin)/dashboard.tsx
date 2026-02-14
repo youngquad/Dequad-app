@@ -140,12 +140,16 @@ export default function AdminDashboard() {
   const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
   useEffect(() => {
-    // Only load data when sessionToken is available
-    if (sessionToken) {
+    // Only load data when sessionToken is available and token loading is complete
+    if (tokenLoaded && sessionToken) {
       console.log('Loading admin data with token:', sessionToken?.substring(0, 20) + '...');
       loadAllData();
+    } else if (tokenLoaded && !sessionToken) {
+      // No token available after loading - redirect to login
+      console.log('No session token found, redirecting to login...');
+      router.replace('/(admin)/login');
     }
-  }, [dateRange, sessionToken, localSessionToken]);
+  }, [dateRange, sessionToken, localSessionToken, tokenLoaded]);
 
   const loadAllData = async () => {
     setIsLoading(true);
