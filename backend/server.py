@@ -565,6 +565,171 @@ class AdminLoginRequest(BaseModel):
     password: str
     admin_code: Optional[str] = None
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+def create_password_reset_email_html(name: str, reset_url: str) -> str:
+    """Create HTML email for password reset"""
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+            .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: #6366F1; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }}
+            .content {{ background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; }}
+            .button {{ display: inline-block; background: #6366F1; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }}
+            .footer {{ text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }}
+            .warning {{ background: #fef3c7; border: 1px solid #f59e0b; padding: 12px; border-radius: 6px; margin-top: 20px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🔐 Password Reset</h1>
+            </div>
+            <div class="content">
+                <p>Hi {name},</p>
+                <p>We received a request to reset your admin password for Educare. Click the button below to set a new password:</p>
+                
+                <div style="text-align: center;">
+                    <a href="{reset_url}" class="button">Reset Password</a>
+                </div>
+                
+                <p>Or copy and paste this link into your browser:</p>
+                <p style="word-break: break-all; background: #e5e7eb; padding: 10px; border-radius: 4px; font-size: 12px;">{reset_url}</p>
+                
+                <div class="warning">
+                    <strong>⚠️ This link expires in 1 hour.</strong><br>
+                    If you didn't request this reset, please ignore this email.
+                </div>
+            </div>
+            <div class="footer">
+                <p>This is an automated message from Educare.<br>Please do not reply to this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(data: ForgotPasswordRequest):
+    """Request password reset for admin account"""
+    import secrets
+    
+    # Find user by email
+    user = await db.users.find_one(
+        {"email": data.email.lower()},
+        {"_id": 0}
+    )
+    
+    # Always return success to prevent email enumeration
+    if not user or user.get("role") != "admin":
+        return {"message": "If an admin account exists with this email, a reset link has been sent."}
+    
+    # Generate reset token
+    reset_token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    # Store reset token in database
+    await db.password_resets.delete_many({"email": data.email.lower()})  # Remove old tokens
+    await db.password_resets.insert_one({
+        "email": data.email.lower(),
+        "token": reset_token,
+        "created_at": datetime.now(timezone.utc),
+        "expires_at": expires_at,
+        "used": False
+    })
+    
+    # Create reset URL (frontend will handle this route)
+    reset_url = f"https://student-connect-46.preview.emergentagent.com/admin/reset-password?token={reset_token}"
+    
+    # Send email
+    if is_smtp_configured():
+        subject = "🔐 Educare Admin Password Reset"
+        html_body = create_password_reset_email_html(user.get("name", "Admin"), reset_url)
+        text_body = f"""
+Hi {user.get("name", "Admin")},
+
+We received a request to reset your admin password for Educare.
+
+Click here to reset your password:
+{reset_url}
+
+This link expires in 1 hour.
+
+If you didn't request this reset, please ignore this email.
+
+- Educare Team
+        """
+        
+        await send_email_async([data.email.lower()], subject, html_body, text_body)
+        logger.info(f"Password reset email sent to {data.email.lower()}")
+    else:
+        logger.warning(f"SMTP not configured - password reset token: {reset_token}")
+    
+    return {"message": "If an admin account exists with this email, a reset link has been sent."}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(data: ResetPasswordRequest):
+    """Reset password using token"""
+    import hashlib
+    
+    # Find valid reset token
+    reset_record = await db.password_resets.find_one({
+        "token": data.token,
+        "used": False,
+        "expires_at": {"$gt": datetime.now(timezone.utc)}
+    })
+    
+    if not reset_record:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    
+    # Validate password
+    if len(data.new_password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+    
+    # Hash new password
+    password_hash = hashlib.sha256(data.new_password.encode()).hexdigest()
+    
+    # Update user password
+    result = await db.users.update_one(
+        {"email": reset_record["email"]},
+        {"$set": {"admin_password": password_hash}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Failed to update password")
+    
+    # Mark token as used
+    await db.password_resets.update_one(
+        {"token": data.token},
+        {"$set": {"used": True}}
+    )
+    
+    logger.info(f"Password reset successful for {reset_record['email']}")
+    
+    return {"message": "Password reset successful. You can now login with your new password."}
+
+@api_router.get("/auth/verify-reset-token")
+async def verify_reset_token(token: str):
+    """Verify if a reset token is valid"""
+    reset_record = await db.password_resets.find_one({
+        "token": token,
+        "used": False,
+        "expires_at": {"$gt": datetime.now(timezone.utc)}
+    })
+    
+    if not reset_record:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    
+    return {"valid": True, "email": reset_record["email"]}
+
 @api_router.post("/auth/admin-login")
 async def admin_login(data: AdminLoginRequest):
     """Admin login endpoint with email/password"""
