@@ -243,6 +243,7 @@ export default function ProfileScreen() {
           ethnicity: ethnicity || null,
           interested_in: interestedIn,
           notifications_enabled: notificationsEnabled,
+          photos: photos,
         },
         sessionToken
       );
