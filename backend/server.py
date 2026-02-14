@@ -3321,6 +3321,348 @@ async def stripe_webhook(request: Request):
     
     return {"received": True}
 
+# ==================== AI LEARNING SYSTEM ====================
+
+# Store approved keywords learned by AI
+AI_LEARNED_KEYWORDS = set()
+
+async def load_approved_keywords():
+    """Load approved keywords from database into memory"""
+    global AI_LEARNED_KEYWORDS
+    approved = await db.ai_learned_keywords.find({"status": "approved"}).to_list(1000)
+    AI_LEARNED_KEYWORDS = set(k["keyword"].lower() for k in approved)
+    logger.info(f"Loaded {len(AI_LEARNED_KEYWORDS)} approved AI-learned keywords")
+
+async def analyze_text_for_new_patterns(text: str, source: str):
+    """Use AI to analyze text for potential new concerning patterns (anonymized)"""
+    if not text or len(text) < 20:
+        return
+    
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"pattern_analysis_{uuid.uuid4().hex[:8]}",
+            system_message="""You are an AI that analyzes text to identify potentially concerning language patterns for student wellbeing monitoring.
+            
+            Your task is to identify any phrases or patterns that might indicate:
+            - Mental health struggles (anxiety, depression, stress)
+            - Social isolation
+            - Academic distress
+            - Self-harm or crisis indicators
+            
+            IMPORTANT: Only suggest NEW patterns that are NOT common/obvious keywords like "suicide", "kill", "harm" etc.
+            Look for subtle phrases, metaphors, or emerging slang that young people might use.
+            
+            Return JSON with:
+            {
+                "suggested_keywords": [
+                    {"keyword": "phrase", "risk_category": "low|medium|high", "reasoning": "why this is concerning"}
+                ],
+                "behavioral_insight": "any notable pattern or context observed (anonymized)"
+            }
+            
+            Return empty arrays if nothing notable found. Be conservative - only suggest genuinely concerning patterns."""
+        ).with_model("openai", "gpt-4o")
+        
+        response = await chat.send_message(
+            UserMessage(text=f"Analyze this text from {source} for concerning patterns:\n\n{text[:500]}")
+        )
+        
+        import json
+        try:
+            result = json.loads(response.text.strip().replace("```json", "").replace("```", ""))
+            
+            # Store any suggested keywords for admin review
+            for suggestion in result.get("suggested_keywords", []):
+                keyword = suggestion.get("keyword", "").lower().strip()
+                if keyword and len(keyword) > 3:
+                    # Check if keyword already exists
+                    existing = await db.ai_learned_keywords.find_one({"keyword": keyword})
+                    if not existing:
+                        new_keyword = LearnedKeyword(
+                            keyword=keyword,
+                            context_examples=[f"[{source}] {text[:100]}..."],  # Truncated for privacy
+                            risk_category=suggestion.get("risk_category", "medium"),
+                            confidence_score=0.6,
+                            frequency_score=1
+                        )
+                        await db.ai_learned_keywords.insert_one(new_keyword.dict())
+                        logger.info(f"AI suggested new keyword: {keyword}")
+                    else:
+                        # Update frequency if exists
+                        await db.ai_learned_keywords.update_one(
+                            {"keyword": keyword},
+                            {
+                                "$inc": {"frequency_score": 1},
+                                "$push": {"context_examples": {"$each": [f"[{source}] {text[:100]}..."], "$slice": -10}}
+                            }
+                        )
+            
+            # Store behavioral insight if any
+            if result.get("behavioral_insight"):
+                insight = AILearningInsight(
+                    insight_type="behavioral_pattern",
+                    title="New Behavioral Pattern Detected",
+                    description=result["behavioral_insight"],
+                    data={"source": source},
+                    severity="info"
+                )
+                await db.ai_learning_insights.insert_one(insight.dict())
+                
+        except json.JSONDecodeError:
+            pass
+            
+    except Exception as e:
+        logger.error(f"Error in pattern analysis: {e}")
+
+async def record_alert_feedback(alert_id: str, was_true_positive: bool, notes: str = None, admin_id: str = None):
+    """Record admin feedback on alerts to improve AI learning"""
+    await db.safeguarding_alerts.update_one(
+        {"alert_id": alert_id},
+        {
+            "$set": {
+                "was_true_positive": was_true_positive,
+                "feedback_notes": notes,
+                "feedback_by": admin_id,
+                "feedback_at": datetime.now(timezone.utc)
+            }
+        }
+    )
+    
+    # If false positive, record for learning
+    if not was_true_positive:
+        alert = await db.safeguarding_alerts.find_one({"alert_id": alert_id})
+        if alert:
+            insight = AILearningInsight(
+                insight_type="false_positive",
+                title="False Positive Recorded",
+                description=f"Alert marked as false positive. Keywords: {alert.get('matched_keywords', [])}",
+                data={
+                    "alert_id": alert_id,
+                    "matched_keywords": alert.get("matched_keywords", []),
+                    "source": alert.get("source")
+                },
+                severity="info"
+            )
+            await db.ai_learning_insights.insert_one(insight.dict())
+
+async def detect_behavioral_anomalies():
+    """Periodically analyze aggregated data for behavioral anomalies"""
+    # Get mood trends over last 7 days
+    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    
+    # Aggregate mood data by university (anonymized)
+    pipeline = [
+        {"$match": {"created_at": {"$gte": seven_days_ago}}},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user"
+        }},
+        {"$unwind": {"path": "$user", "preserveNullAndEmptyArrays": True}},
+        {"$group": {
+            "_id": "$user.university",
+            "avg_mood": {"$avg": "$mood"},
+            "mood_count": {"$sum": 1},
+            "low_moods": {"$sum": {"$cond": [{"$lte": ["$mood", 3]}, 1, 0]}}
+        }}
+    ]
+    
+    results = await db.mood_entries.aggregate(pipeline).to_list(100)
+    
+    for uni_data in results:
+        if uni_data.get("mood_count", 0) >= 10:  # Only analyze if enough data
+            low_mood_ratio = uni_data.get("low_moods", 0) / uni_data.get("mood_count", 1)
+            
+            if low_mood_ratio > 0.4:  # More than 40% low moods
+                # Check if insight already exists
+                existing = await db.ai_learning_insights.find_one({
+                    "insight_type": "university_concern",
+                    "data.university": uni_data["_id"],
+                    "created_at": {"$gte": seven_days_ago}
+                })
+                
+                if not existing:
+                    insight = AILearningInsight(
+                        insight_type="university_concern",
+                        title=f"High Distress Pattern: {uni_data['_id'] or 'Unknown University'}",
+                        description=f"Detected elevated distress levels. {int(low_mood_ratio*100)}% of mood entries are low (≤3). Average mood: {uni_data['avg_mood']:.1f}",
+                        data={
+                            "university": uni_data["_id"],
+                            "avg_mood": uni_data["avg_mood"],
+                            "low_mood_ratio": low_mood_ratio,
+                            "sample_size": uni_data["mood_count"]
+                        },
+                        severity="warning"
+                    )
+                    await db.ai_learning_insights.insert_one(insight.dict())
+
+# ==================== AI LEARNING API ENDPOINTS ====================
+
+@api_router.get("/admin/ai-learning/keywords")
+async def get_learned_keywords(status: Optional[str] = None, admin: User = Depends(require_admin)):
+    """Get AI-suggested keywords for admin review"""
+    query = {}
+    if status:
+        query["status"] = status
+    
+    keywords = await db.ai_learned_keywords.find(query, {"_id": 0}).sort("created_at", -1).to_list(200)
+    
+    # Get stats
+    pending_count = await db.ai_learned_keywords.count_documents({"status": "pending"})
+    approved_count = await db.ai_learned_keywords.count_documents({"status": "approved"})
+    rejected_count = await db.ai_learned_keywords.count_documents({"status": "rejected"})
+    
+    return {
+        "keywords": keywords,
+        "stats": {
+            "pending": pending_count,
+            "approved": approved_count,
+            "rejected": rejected_count,
+            "total": pending_count + approved_count + rejected_count
+        }
+    }
+
+class KeywordActionRequest(BaseModel):
+    action: str  # approve, reject
+    risk_category: Optional[str] = None
+
+@api_router.post("/admin/ai-learning/keywords/{keyword_id}/action")
+async def action_keyword(keyword_id: str, data: KeywordActionRequest, admin: User = Depends(require_admin)):
+    """Approve or reject an AI-suggested keyword"""
+    keyword = await db.ai_learned_keywords.find_one({"keyword_id": keyword_id})
+    if not keyword:
+        raise HTTPException(status_code=404, detail="Keyword not found")
+    
+    update_data = {
+        "status": "approved" if data.action == "approve" else "rejected",
+        "approved_by": admin.user_id,
+        "updated_at": datetime.now(timezone.utc)
+    }
+    
+    if data.risk_category:
+        update_data["risk_category"] = data.risk_category
+    
+    await db.ai_learned_keywords.update_one(
+        {"keyword_id": keyword_id},
+        {"$set": update_data}
+    )
+    
+    # If approved, add to active keywords
+    if data.action == "approve":
+        AI_LEARNED_KEYWORDS.add(keyword["keyword"].lower())
+        logger.info(f"Admin {admin.email} approved keyword: {keyword['keyword']}")
+    
+    return {"success": True, "message": f"Keyword {data.action}d"}
+
+@api_router.get("/admin/ai-learning/insights")
+async def get_learning_insights(limit: int = 50, admin: User = Depends(require_admin)):
+    """Get AI learning insights and behavioral patterns"""
+    insights = await db.ai_learning_insights.find(
+        {},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(limit)
+    
+    # Get unreviewed count
+    unreviewed = await db.ai_learning_insights.count_documents({"reviewed": False})
+    
+    return {
+        "insights": insights,
+        "unreviewed_count": unreviewed
+    }
+
+@api_router.post("/admin/ai-learning/insights/{insight_id}/review")
+async def review_insight(insight_id: str, action: str = "reviewed", admin: User = Depends(require_admin)):
+    """Mark an insight as reviewed"""
+    await db.ai_learning_insights.update_one(
+        {"insight_id": insight_id},
+        {
+            "$set": {
+                "reviewed": True,
+                "reviewed_by": admin.user_id,
+                "action_taken": action
+            }
+        }
+    )
+    return {"success": True}
+
+class AlertFeedbackRequest(BaseModel):
+    was_true_positive: bool
+    notes: Optional[str] = None
+
+@api_router.post("/admin/safeguarding-alerts/{alert_id}/feedback")
+async def provide_alert_feedback(alert_id: str, data: AlertFeedbackRequest, admin: User = Depends(require_admin)):
+    """Provide feedback on a safeguarding alert (was it a true positive?)"""
+    await record_alert_feedback(alert_id, data.was_true_positive, data.notes, admin.user_id)
+    
+    # Log for learning
+    insight_type = "true_positive_confirmed" if data.was_true_positive else "false_positive_reported"
+    logger.info(f"Alert {alert_id} marked as {'true' if data.was_true_positive else 'false'} positive by {admin.email}")
+    
+    return {"success": True, "message": "Feedback recorded for AI learning"}
+
+@api_router.get("/admin/ai-learning/stats")
+async def get_ai_learning_stats(admin: User = Depends(require_admin)):
+    """Get overall AI learning statistics"""
+    # Keyword stats
+    keyword_stats = {
+        "pending": await db.ai_learned_keywords.count_documents({"status": "pending"}),
+        "approved": await db.ai_learned_keywords.count_documents({"status": "approved"}),
+        "rejected": await db.ai_learned_keywords.count_documents({"status": "rejected"})
+    }
+    
+    # Alert feedback stats
+    alert_stats = {
+        "total_with_feedback": await db.safeguarding_alerts.count_documents({"was_true_positive": {"$exists": True}}),
+        "true_positives": await db.safeguarding_alerts.count_documents({"was_true_positive": True}),
+        "false_positives": await db.safeguarding_alerts.count_documents({"was_true_positive": False})
+    }
+    
+    # Calculate accuracy if we have feedback
+    if alert_stats["total_with_feedback"] > 0:
+        alert_stats["accuracy_rate"] = round(
+            (alert_stats["true_positives"] / alert_stats["total_with_feedback"]) * 100, 1
+        )
+    else:
+        alert_stats["accuracy_rate"] = None
+    
+    # Insight stats
+    insight_stats = {
+        "total": await db.ai_learning_insights.count_documents({}),
+        "unreviewed": await db.ai_learning_insights.count_documents({"reviewed": False}),
+        "by_type": {}
+    }
+    
+    # Count by type
+    insight_types = await db.ai_learning_insights.aggregate([
+        {"$group": {"_id": "$insight_type", "count": {"$sum": 1}}}
+    ]).to_list(20)
+    
+    for it in insight_types:
+        insight_stats["by_type"][it["_id"]] = it["count"]
+    
+    # Built-in vs learned keywords
+    keyword_coverage = {
+        "built_in": len(SAFEGUARDING_KEYWORDS),
+        "learned_approved": keyword_stats["approved"],
+        "total_active": len(SAFEGUARDING_KEYWORDS) + keyword_stats["approved"]
+    }
+    
+    return {
+        "keywords": keyword_stats,
+        "alerts": alert_stats,
+        "insights": insight_stats,
+        "keyword_coverage": keyword_coverage,
+        "learning_active": True
+    }
+
+@api_router.post("/admin/ai-learning/trigger-analysis")
+async def trigger_behavioral_analysis(admin: User = Depends(require_admin)):
+    """Manually trigger behavioral anomaly detection"""
+    await detect_behavioral_anomalies()
+    return {"success": True, "message": "Behavioral analysis completed"}
+
 # ==================== HEALTH CHECK ====================
 
 @api_router.get("/")
