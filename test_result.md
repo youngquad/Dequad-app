@@ -251,6 +251,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ LIVE STRIPE KEYS VERIFIED: Comprehensive testing confirms Stripe is now configured with LIVE keys. GET /api/subscription/status working perfectly - returns plan: free, remaining_swipes: 4, daily_limit: 5, price: £4.99/month. POST /api/subscription/create-checkout successfully creates LIVE Stripe checkout sessions with valid checkout.stripe.com URLs and cs_live_ session IDs. Backend logs show successful Stripe API calls to live endpoints (customers, checkout/sessions). All requested test steps completed successfully - Stripe integration is fully operational with live keys."
+      - working: true
+        agent: "testing"
+        comment: "✅ UPDATED STRIPE CHECKOUT SESSION TESTED: Successfully tested the updated Stripe checkout session creation endpoint as requested. All test steps completed: 1) Used authenticated user session (user_test123), 2) Called POST /api/subscription/create-checkout with success_url and cancel_url parameters, 3) Verified checkout session created successfully with checkout_url and session_id returned. Additional validation: checkout sessions created with both custom URLs and default URLs, live Stripe sessions confirmed (cs_live_ prefix), valid checkout.stripe.com URLs generated, authentication properly required (401 for unauthenticated requests). New payment method configuration operational with card and link payment types, 3D Secure enabled, billing address collection, and promotional codes supported. 100% test success rate (5/5 tests passed)."
 
   - task: "Safeguarding Matrix Features"
     implemented: true
