@@ -2112,4 +2112,273 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#6B7280',
   },
+  // AI Learning Styles
+  aiStatsContainer: {
+    marginBottom: 20,
+  },
+  aiStatRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 12,
+  },
+  aiStatCard: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  aiStatValue: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 4,
+  },
+  aiStatLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#D1D5DB',
+    marginBottom: 2,
+  },
+  aiStatSub: {
+    fontSize: 11,
+    color: '#9CA3AF',
+    textAlign: 'center',
+  },
+  aiSection: {
+    marginBottom: 24,
+  },
+  aiSectionHeader: {
+    marginBottom: 16,
+  },
+  aiSectionDesc: {
+    fontSize: 13,
+    color: '#9CA3AF',
+    marginBottom: 16,
+  },
+  keywordFilterRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 12,
+  },
+  keywordFilterBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+  },
+  keywordFilterBtnActive: {
+    backgroundColor: '#6366F1',
+  },
+  keywordFilterText: {
+    fontSize: 13,
+    color: '#9CA3AF',
+  },
+  keywordFilterTextActive: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  keywordCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  keywordHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  riskBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  riskBadgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  keywordFrequency: {
+    fontSize: 12,
+    color: '#9CA3AF',
+  },
+  keywordText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: 8,
+  },
+  keywordContext: {
+    fontSize: 12,
+    color: '#6B7280',
+    fontStyle: 'italic',
+    marginBottom: 8,
+  },
+  keywordConfidence: {
+    fontSize: 11,
+    color: '#9CA3AF',
+    marginBottom: 12,
+  },
+  keywordActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  keywordActionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 8,
+    gap: 6,
+  },
+  approveBtn: {
+    backgroundColor: '#10B981',
+  },
+  rejectBtn: {
+    backgroundColor: '#EF4444',
+  },
+  keywordActionText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: '#9CA3AF',
+    marginTop: 12,
+  },
+  emptyStateSubtext: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  insightCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderLeftWidth: 4,
+  },
+  insightHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 8,
+  },
+  insightTitle: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  newBadge: {
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  newBadgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  insightDesc: {
+    fontSize: 13,
+    color: '#D1D5DB',
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  insightTime: {
+    fontSize: 11,
+    color: '#6B7280',
+  },
+  reviewBtn: {
+    marginTop: 12,
+    paddingVertical: 8,
+    alignItems: 'center',
+    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    borderRadius: 8,
+  },
+  reviewBtnText: {
+    fontSize: 13,
+    color: '#818CF8',
+    fontWeight: '600',
+  },
+  feedbackCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  feedbackHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  feedbackName: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  feedbackSource: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    textTransform: 'capitalize',
+  },
+  feedbackContent: {
+    fontSize: 13,
+    color: '#D1D5DB',
+    marginBottom: 8,
+  },
+  feedbackKeywords: {
+    fontSize: 11,
+    color: '#F59E0B',
+    marginBottom: 12,
+  },
+  feedbackActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  feedbackBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 8,
+    gap: 6,
+  },
+  truePositiveBtn: {
+    backgroundColor: '#10B981',
+  },
+  falsePositiveBtn: {
+    backgroundColor: '#6B7280',
+  },
+  feedbackBtnText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  analyzeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#6366F1',
+    paddingVertical: 14,
+    borderRadius: 12,
+    marginBottom: 24,
+    gap: 8,
+  },
+  analyzeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
