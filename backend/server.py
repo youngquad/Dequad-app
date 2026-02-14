@@ -1063,12 +1063,47 @@ async def get_unread_count(current_user: User = Depends(get_current_user)):
 
 @api_router.get("/admin/stats")
 async def get_admin_stats(admin: User = Depends(require_admin)):
-    """Get admin dashboard statistics"""
+    """Get admin dashboard statistics including subscription and university data"""
     total_users = await db.users.count_documents({})
     total_students = await db.users.count_documents({"role": "student"})
     total_feedback = await db.feedback_entries.count_documents({})
     total_matches = await db.matches.count_documents({"status": "accepted"})
     pending_reports = await db.reports.count_documents({"status": "pending"})
+    
+    # Subscription stats
+    premium_students = await db.users.count_documents({"role": "student", "plan": "premium"})
+    free_students = total_students - premium_students
+    
+    # University breakdown with subscription info
+    university_pipeline = [
+        {"$match": {"role": "student", "university": {"$exists": True, "$ne": None, "$ne": ""}}},
+        {"$group": {
+            "_id": "$university",
+            "total_students": {"$sum": 1},
+            "premium_count": {
+                "$sum": {"$cond": [{"$eq": ["$plan", "premium"]}, 1, 0]}
+            },
+            "free_count": {
+                "$sum": {"$cond": [{"$or": [{"$eq": ["$plan", "free"]}, {"$eq": ["$plan", None]}]}, 1, 0]}
+            }
+        }},
+        {"$sort": {"total_students": -1}},
+        {"$limit": 20}
+    ]
+    
+    universities_breakdown = await db.users.aggregate(university_pipeline).to_list(20)
+    
+    # Format university data
+    university_stats = []
+    for uni in universities_breakdown:
+        if uni["_id"]:
+            university_stats.append({
+                "university": uni["_id"],
+                "total_students": uni["total_students"],
+                "premium_count": uni["premium_count"],
+                "free_count": uni["free_count"],
+                "premium_percentage": round((uni["premium_count"] / uni["total_students"]) * 100, 1) if uni["total_students"] > 0 else 0
+            })
     
     # Get recent risk scores
     risk_scores = await db.risk_scores.find(
@@ -1081,6 +1116,11 @@ async def get_admin_stats(admin: User = Depends(require_admin)):
     if risk_scores:
         avg_risk = sum(r.get("risk_score", 0) for r in risk_scores) / len(risk_scores)
     
+    # Safeguarding alerts summary
+    total_alerts = await db.safeguarding_alerts.count_documents({})
+    unacknowledged_alerts = await db.safeguarding_alerts.count_documents({"acknowledged": False})
+    high_risk_alerts = await db.safeguarding_alerts.count_documents({"risk_level": "high"})
+    
     return {
         "total_users": total_users,
         "total_students": total_students,
@@ -1088,7 +1128,22 @@ async def get_admin_stats(admin: User = Depends(require_admin)):
         "total_matches": total_matches,
         "pending_reports": pending_reports,
         "average_risk_score": round(avg_risk, 2),
-        "recent_risk_scores": risk_scores[:20]
+        "recent_risk_scores": risk_scores[:20],
+        # Subscription stats
+        "subscription_stats": {
+            "premium_students": premium_students,
+            "free_students": free_students,
+            "premium_percentage": round((premium_students / total_students) * 100, 1) if total_students > 0 else 0
+        },
+        # University breakdown
+        "university_breakdown": university_stats,
+        "total_universities": len(university_stats),
+        # Safeguarding summary
+        "safeguarding_summary": {
+            "total_alerts": total_alerts,
+            "unacknowledged": unacknowledged_alerts,
+            "high_risk": high_risk_alerts
+        }
     }
 
 @api_router.get("/admin/reports")
