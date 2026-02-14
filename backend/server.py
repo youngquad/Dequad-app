@@ -1385,6 +1385,202 @@ Platform Data (Last 30 days):
         }
     }
 
+# ==================== SUBSCRIPTION & BILLING ENDPOINTS ====================
+
+class CreateCheckoutRequest(BaseModel):
+    success_url: Optional[str] = None
+    cancel_url: Optional[str] = None
+
+@api_router.post("/subscription/create-checkout")
+async def create_checkout_session(data: CreateCheckoutRequest, current_user: User = Depends(get_current_user)):
+    """Create a Stripe checkout session for premium subscription"""
+    try:
+        # Create or retrieve Stripe customer
+        user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+        stripe_customer_id = user_doc.get("stripe_customer_id")
+        
+        if not stripe_customer_id:
+            # Create new Stripe customer
+            customer = stripe.Customer.create(
+                email=current_user.email,
+                name=current_user.name,
+                metadata={"user_id": current_user.user_id}
+            )
+            stripe_customer_id = customer.id
+            
+            # Save customer ID to database
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$set": {"stripe_customer_id": stripe_customer_id}}
+            )
+        
+        # Create checkout session
+        checkout_session = stripe.checkout.Session.create(
+            customer=stripe_customer_id,
+            mode="subscription",
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": STRIPE_PRICE_CURRENCY,
+                    "unit_amount": STRIPE_PRICE_AMOUNT,
+                    "recurring": {"interval": "month"},
+                    "product_data": {"name": STRIPE_PRODUCT_NAME},
+                },
+                "quantity": 1,
+            }],
+            success_url=data.success_url or "educare://subscription-success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=data.cancel_url or "educare://subscription-cancel",
+            metadata={"user_id": current_user.user_id},
+        )
+        
+        return {
+            "checkout_url": checkout_session.url,
+            "session_id": checkout_session.id
+        }
+    
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+@api_router.get("/subscription/status")
+async def get_subscription_status(current_user: User = Depends(get_current_user)):
+    """Get current subscription status for user"""
+    user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    swipes_today = user_doc.get("swipes_today", 0)
+    last_swipe_date = user_doc.get("last_swipe_date")
+    
+    # Reset swipes if it's a new day
+    if last_swipe_date != today:
+        swipes_today = 0
+    
+    plan = user_doc.get("plan", "free")
+    remaining_swipes = FREE_SWIPES_PER_DAY - swipes_today if plan == "free" else None
+    
+    return {
+        "plan": plan,
+        "is_premium": plan == "premium",
+        "stripe_customer_id": user_doc.get("stripe_customer_id"),
+        "swipes_today": swipes_today if plan == "free" else 0,
+        "remaining_swipes": remaining_swipes,
+        "daily_limit": FREE_SWIPES_PER_DAY if plan == "free" else None,
+        "price": f"£{STRIPE_PRICE_AMOUNT / 100:.2f}/month"
+    }
+
+@api_router.post("/subscription/cancel")
+async def cancel_subscription(current_user: User = Depends(get_current_user)):
+    """Cancel user's premium subscription"""
+    user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    stripe_customer_id = user_doc.get("stripe_customer_id")
+    
+    if not stripe_customer_id:
+        raise HTTPException(status_code=400, detail="No active subscription")
+    
+    try:
+        # List active subscriptions for this customer
+        subscriptions = stripe.Subscription.list(
+            customer=stripe_customer_id,
+            status="active",
+            limit=1
+        )
+        
+        if not subscriptions.data:
+            raise HTTPException(status_code=400, detail="No active subscription found")
+        
+        # Cancel the subscription
+        stripe.Subscription.cancel(subscriptions.data[0].id)
+        
+        # Update user plan in database
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$set": {"plan": "free"}}
+        )
+        
+        return {"message": "Subscription cancelled successfully", "plan": "free"}
+    
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error cancelling subscription: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+@api_router.post("/subscription/webhook")
+async def stripe_webhook(request: Request):
+    """Handle Stripe webhook events"""
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+    
+    if not sig_header:
+        raise HTTPException(status_code=400, detail="Missing Stripe signature")
+    
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError as e:
+        logger.error(f"Invalid payload: {e}")
+        raise HTTPException(status_code=400, detail="Invalid payload")
+    except stripe.error.SignatureVerificationError as e:
+        logger.error(f"Invalid signature: {e}")
+        raise HTTPException(status_code=400, detail="Invalid signature")
+    
+    # Handle the event
+    event_type = event["type"]
+    event_data = event["data"]["object"]
+    
+    logger.info(f"Processing Stripe webhook: {event_type}")
+    
+    if event_type == "checkout.session.completed":
+        # Payment successful, upgrade user to premium
+        user_id = event_data.get("metadata", {}).get("user_id")
+        customer_id = event_data.get("customer")
+        
+        if user_id:
+            await db.users.update_one(
+                {"user_id": user_id},
+                {"$set": {
+                    "plan": "premium",
+                    "stripe_customer_id": customer_id
+                }}
+            )
+            logger.info(f"User {user_id} upgraded to premium")
+    
+    elif event_type == "customer.subscription.deleted":
+        # Subscription cancelled or expired
+        customer_id = event_data.get("customer")
+        
+        if customer_id:
+            await db.users.update_one(
+                {"stripe_customer_id": customer_id},
+                {"$set": {"plan": "free"}}
+            )
+            logger.info(f"Subscription deleted for customer {customer_id}")
+    
+    elif event_type == "customer.subscription.updated":
+        # Subscription updated (could be paused, resumed, etc.)
+        customer_id = event_data.get("customer")
+        status = event_data.get("status")
+        
+        if customer_id:
+            plan = "premium" if status == "active" else "free"
+            await db.users.update_one(
+                {"stripe_customer_id": customer_id},
+                {"$set": {"plan": plan}}
+            )
+            logger.info(f"Subscription updated for customer {customer_id}, status: {status}")
+    
+    elif event_type == "invoice.payment_failed":
+        # Payment failed, downgrade user
+        customer_id = event_data.get("customer")
+        
+        if customer_id:
+            await db.users.update_one(
+                {"stripe_customer_id": customer_id},
+                {"$set": {"plan": "free"}}
+            )
+            logger.info(f"Payment failed for customer {customer_id}, downgraded to free")
+    
+    return {"received": True}
+
 # ==================== HEALTH CHECK ====================
 
 @api_router.get("/")
