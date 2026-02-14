@@ -2819,7 +2819,7 @@ async def create_payment_sheet(current_user: User = Depends(get_current_user)):
                     }],
                     payment_behavior="default_incomplete",
                     payment_settings={"save_default_payment_method": "on_subscription"},
-                    expand=["latest_invoice.payment_intent"],
+                    expand=["latest_invoice.payments"],
                     metadata={"user_id": current_user.user_id}
                 )
             else:
@@ -2836,12 +2836,24 @@ async def create_payment_sheet(current_user: User = Depends(get_current_user)):
                     items=[{"price": price.id}],
                     payment_behavior="default_incomplete",
                     payment_settings={"save_default_payment_method": "on_subscription"},
-                    expand=["latest_invoice.payment_intent"],
+                    expand=["latest_invoice.payments"],
                     metadata={"user_id": current_user.user_id}
                 )
         
         # Get the client secret from the payment intent
-        payment_intent = subscription.latest_invoice.payment_intent
+        # Access payment intent through the payments array
+        invoice = subscription.latest_invoice
+        if invoice.payments and invoice.payments.data:
+            payment_intent_id = invoice.payments.data[0].payment.payment_intent
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        else:
+            # Fallback: create a payment intent manually
+            payment_intent = stripe.PaymentIntent.create(
+                amount=STRIPE_PRICE_AMOUNT,
+                currency=STRIPE_PRICE_CURRENCY,
+                customer=stripe_customer_id,
+                metadata={"subscription_id": subscription.id, "user_id": current_user.user_id}
+            )
         
         return {
             "paymentIntent": payment_intent.client_secret,
