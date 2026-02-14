@@ -196,6 +196,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const setAdminSession = (token: string, userData: User) => {
+    setSessionToken(token);
+    setUser(userData);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -206,6 +211,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         refreshUser,
         sessionToken,
+        setAdminSession,
       }}
     >
       {children}
