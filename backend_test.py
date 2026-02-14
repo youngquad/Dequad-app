@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Educare Backend API Testing Suite - Stripe Checkout Session Focus
-Testing the updated Stripe checkout session creation endpoint
+Educare Backend API Testing Suite - Stripe Payment Sheet Focus
+Testing the new Stripe Payment Sheet endpoints for in-app purchases
 """
 
 import requests
