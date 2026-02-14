@@ -217,6 +217,27 @@ export default function AdminDashboard() {
     }
   };
 
+  // Individual student AI analysis
+  const [studentAnalysis, setStudentAnalysis] = useState<any>(null);
+  const [analyzingStudentId, setAnalyzingStudentId] = useState<string | null>(null);
+
+  const runStudentAnalysis = async (userId: string, userName: string) => {
+    setAnalyzingStudentId(userId);
+    try {
+      const data = await api.get(`/admin/ai-risk-analysis/${userId}`, sessionToken);
+      setStudentAnalysis(data);
+      Alert.alert(
+        `Analysis: ${userName}`,
+        `Risk Level: ${data.ai_analysis?.risk_level?.toUpperCase() || 'N/A'}\nRisk Score: ${data.ai_analysis?.overall_risk_score || 'N/A'}/100\n\n${data.ai_analysis?.summary || 'No summary available'}`
+      );
+    } catch (error) {
+      console.error('Error running student analysis:', error);
+      Alert.alert('Error', 'Failed to analyze student');
+    } finally {
+      setAnalyzingStudentId(null);
+    }
+  };
+
   const runBulkAnalysis = async (university?: string) => {
     setIsAnalyzing(true);
     try {
