@@ -914,6 +914,7 @@ class APITester:
         self.test_chat_apis()
         self.test_subscription_apis()
         self.test_swipe_limit_enforcement()
+        self.test_safeguarding_features()  # New safeguarding tests
         self.test_admin_apis()
         
         # Print summary
