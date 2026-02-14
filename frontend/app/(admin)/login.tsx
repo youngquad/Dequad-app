@@ -295,6 +295,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  forgotPasswordButton: {
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    color: '#6366F1',
+    fontWeight: '500',
+  },
   securityNotice: {
     flexDirection: 'row',
     alignItems: 'flex-start',
