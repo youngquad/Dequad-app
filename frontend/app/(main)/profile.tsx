@@ -940,6 +940,38 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 4,
   },
+  adminLoginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.3)',
+  },
+  adminLoginIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  adminLoginInfo: {
+    flex: 1,
+  },
+  adminLoginTitle: {
+    color: '#6366F1',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  adminLoginSubtitle: {
+    color: '#9CA3AF',
+    fontSize: 12,
+    marginTop: 2,
+  },
   sectionTabs: {
     flexDirection: 'row',
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
