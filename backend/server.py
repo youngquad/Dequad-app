@@ -2790,22 +2790,55 @@ async def create_payment_sheet(current_user: User = Depends(get_current_user)):
             # Use existing incomplete subscription
             subscription = existing_subs.data[0]
         else:
+            # Create or get product first
+            try:
+                # Try to find existing product
+                products = stripe.Product.list(limit=1)
+                if products.data:
+                    product_id = products.data[0].id
+                else:
+                    # Create new product
+                    product = stripe.Product.create(name=STRIPE_PRODUCT_NAME)
+                    product_id = product.id
+            except Exception as e:
+                # Fallback: create product inline
+                logger.warning(f"Could not create/find product, using inline creation: {e}")
+                product_id = None
+            
             # Create new subscription with incomplete status to get PaymentIntent
-            subscription = stripe.Subscription.create(
-                customer=stripe_customer_id,
-                items=[{
-                    "price_data": {
-                        "currency": STRIPE_PRICE_CURRENCY,
-                        "unit_amount": STRIPE_PRICE_AMOUNT,
-                        "recurring": {"interval": "month"},
-                        "product": STRIPE_PRODUCT_NAME
-                    }
-                }],
-                payment_behavior="default_incomplete",
-                payment_settings={"save_default_payment_method": "on_subscription"},
-                expand=["latest_invoice.payment_intent"],
-                metadata={"user_id": current_user.user_id}
-            )
+            if product_id:
+                subscription = stripe.Subscription.create(
+                    customer=stripe_customer_id,
+                    items=[{
+                        "price_data": {
+                            "currency": STRIPE_PRICE_CURRENCY,
+                            "unit_amount": STRIPE_PRICE_AMOUNT,
+                            "recurring": {"interval": "month"},
+                            "product": product_id
+                        }
+                    }],
+                    payment_behavior="default_incomplete",
+                    payment_settings={"save_default_payment_method": "on_subscription"},
+                    expand=["latest_invoice.payment_intent"],
+                    metadata={"user_id": current_user.user_id}
+                )
+            else:
+                # Alternative approach: create price separately
+                price = stripe.Price.create(
+                    currency=STRIPE_PRICE_CURRENCY,
+                    unit_amount=STRIPE_PRICE_AMOUNT,
+                    recurring={"interval": "month"},
+                    product_data={"name": STRIPE_PRODUCT_NAME}
+                )
+                
+                subscription = stripe.Subscription.create(
+                    customer=stripe_customer_id,
+                    items=[{"price": price.id}],
+                    payment_behavior="default_incomplete",
+                    payment_settings={"save_default_payment_method": "on_subscription"},
+                    expand=["latest_invoice.payment_intent"],
+                    metadata={"user_id": current_user.user_id}
+                )
         
         # Get the client secret from the payment intent
         payment_intent = subscription.latest_invoice.payment_intent
