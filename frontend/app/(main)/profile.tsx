@@ -710,6 +710,23 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             )}
 
+            {/* Admin Login Link (for non-admin users) */}
+            {user?.role !== 'admin' && (
+              <TouchableOpacity
+                style={styles.adminLoginButton}
+                onPress={() => router.push('/(admin)/login')}
+              >
+                <View style={styles.adminLoginIconContainer}>
+                  <Ionicons name="shield" size={24} color="#6366F1" />
+                </View>
+                <View style={styles.adminLoginInfo}>
+                  <Text style={styles.adminLoginTitle}>Admin Access</Text>
+                  <Text style={styles.adminLoginSubtitle}>Login as administrator</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color="#6366F1" />
+              </TouchableOpacity>
+            )}
+
             {/* Premium Subscription Link */}
             <TouchableOpacity
               style={styles.premiumButton}
