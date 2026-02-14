@@ -382,14 +382,28 @@ frontend:
         agent: "testing"
         comment: "✅ ROUTE PROTECTION VERIFIED: Direct access to /(admin)/dashboard properly redirects unauthenticated users to landing page. Authentication routing working correctly."
 
+  - task: "Subscription/Premium Screen"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/app/(main)/subscription.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Premium subscription screen with: current plan badge, swipe counter for free users, premium features list, upgrade to premium button that opens Stripe checkout, cancel subscription button for premium users. Added to tab navigation with diamond icon."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 2
+  test_sequence: 3
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Stripe Subscription API"
+    - "Subscription/Premium Screen"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -405,3 +419,5 @@ agent_communication:
     message: "✅ FRONTEND MOBILE TESTING COMPLETE: Landing page and login screen working perfectly on mobile (390x844). All 4 features displayed, Google OAuth button functional, dark theme consistent, mobile responsive. ⚠️ AUTHENTICATION ROUTING ISSUE: Protected routes (/profile, /mood, etc.) accessible without authentication - may need route guards. All backend APIs confirmed working, but frontend screens need authenticated sessions for full testing."
   - agent: "testing"
     message: "✅ AUTHENTICATION ROUTE PROTECTION VERIFIED: Re-tested all protected routes on mobile (390x844). All routes /(main)/mood, /(main)/profile, /(main)/matches, /(main)/chat, and /(admin)/dashboard properly redirect unauthenticated users to landing page. Route guards working correctly. Landing page displays all 4 features, login navigation functional. Authentication routing issue RESOLVED."
+  - agent: "main"
+    message: "Implemented Stripe billing system for premium subscriptions (£4.99/month). Backend: Added POST /api/subscription/create-checkout, GET /api/subscription/status, POST /api/subscription/cancel, POST /api/subscription/webhook endpoints. Modified POST /api/matches/swipe to enforce 5 swipes/day limit for free users. Frontend: Created subscription.tsx screen with premium features display and upgrade flow. Modified matches.tsx to show swipe counter banner and upgrade prompt when limit reached. Added 'Premium' tab to navigation. Please test the new subscription endpoints."
