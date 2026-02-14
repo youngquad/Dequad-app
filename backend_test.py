@@ -1231,7 +1231,7 @@ class APITester:
         if isinstance(response, tuple):
             print(f"      ❌ create-payment-sheet request failed: {response[1]}")
             auth_protected = False
-        elif response and response.status_code == 401:
+        elif response is not None and response.status_code == 401:
             print("      ✅ create-payment-sheet properly protected (401 without auth)")
             auth_protected = True
         else:
@@ -1243,7 +1243,7 @@ class APITester:
         if isinstance(response, tuple):
             print(f"      ❌ confirm-payment request failed: {response[1]}")
             auth_protected = False
-        elif response and response.status_code == 401:
+        elif response is not None and response.status_code == 401:
             print("      ✅ confirm-payment properly protected (401 without auth)")
             if auth_protected:
                 self.log_result("subscription", "Payment Sheet Authentication Protection", True)
