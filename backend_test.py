@@ -1263,6 +1263,7 @@ class APITester:
         self.test_chat_apis()
         self.test_subscription_apis()
         self.test_swipe_limit_enforcement()
+        self.test_stripe_payment_sheet_apis()  # New Stripe Payment Sheet tests
         self.test_safeguarding_features()  # New safeguarding tests
         self.test_admin_email_notification_apis()  # New email notification tests
         self.test_admin_apis()
