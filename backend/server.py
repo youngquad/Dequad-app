@@ -565,7 +565,7 @@ async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get
     
     # Return feedback WITHOUT AI analysis (users don't see risk scores)
     response = {
-        "entry_id": feedback_entry.entry_id,
+        "entry_id": feedback_entry.id,
         "mood": feedback_entry.mood,
         "feedback": feedback_entry.feedback,
         "lecture_topic": feedback_entry.lecture_topic,
