@@ -168,16 +168,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    // Clear state first before API call to ensure immediate UI update
+    setUser(null);
+    setSessionToken(null);
+    await AsyncStorage.removeItem('session_token');
+    
+    // Then try to invalidate session on backend (non-blocking)
     try {
       if (sessionToken) {
         await api.post('/auth/logout', {}, sessionToken);
       }
     } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setUser(null);
-      setSessionToken(null);
-      await AsyncStorage.removeItem('session_token');
+      console.error('Logout API error:', error);
+      // Ignore API errors - user is already logged out locally
     }
   };
 
