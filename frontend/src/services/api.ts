@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'https://educare-app-1.preview.emergentagent.com';
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'https://student-connect-46.preview.emergentagent.com';
 export const API_URL = BACKEND_URL;
 
 class ApiService {

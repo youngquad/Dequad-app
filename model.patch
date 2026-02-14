@@ -16,7 +16,7 @@ index e9e3521..e69de29 100644
 -+import sys
 -+
 -+# Configuration
--+BASE_URL = "https://educare-app-1.preview.emergentagent.com/api"
+-+BASE_URL = "https://student-connect-46.preview.emergentagent.com/api"
 -+ADMIN_TOKEN = "admin_session_token_123"
 -+
 -+def test_admin_safeguarding_endpoints():
@@ -418,7 +418,7 @@ index e9e3521..e69de29 100644
 -------+from datetime import datetime
 -------+
 -------+# Configuration
--------+BASE_URL = "https://educare-app-1.preview.emergentagent.com/api"
+-------+BASE_URL = "https://student-connect-46.preview.emergentagent.com/api"
 -------+SESSION_TOKEN = "test_session_token_123"
 -------+HEADERS = {
 -------+    "Authorization": f"Bearer {SESSION_TOKEN}",
@@ -1106,7 +1106,7 @@ index e9e3521..e69de29 100644
 ---+from datetime import datetime
 ---+
 ---+# Configuration
----+BASE_URL = "https://educare-app-1.preview.emergentagent.com/api"
+---+BASE_URL = "https://student-connect-46.preview.emergentagent.com/api"
 ---+STUDENT_TOKEN = "test_session_token_123"
 ---+
 ---+def make_request(method, endpoint, token=None, data=None):
@@ -1393,7 +1393,7 @@ index e9e3521..e69de29 100644
 -+from datetime import datetime
 -+
 -+# Configuration
--+BASE_URL = "https://educare-app-1.preview.emergentagent.com/api"
+-+BASE_URL = "https://student-connect-46.preview.emergentagent.com/api"
 -+STUDENT_TOKEN = "test_session_token_123"
 -+
 -+def test_safeguarding_features():

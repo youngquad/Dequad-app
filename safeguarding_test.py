@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://educare-app-1.preview.emergentagent.com/api"
+BASE_URL = "https://student-connect-46.preview.emergentagent.com/api"
 STUDENT_TOKEN = "test_session_token_123"
 
 def test_safeguarding_features():
