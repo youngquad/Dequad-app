@@ -1076,9 +1076,6 @@ async def get_analytics_overview(admin: User = Depends(require_admin)):
 @api_router.get("/admin/analytics/at-risk-students")
 async def get_at_risk_students(admin: User = Depends(require_admin)):
     """Get list of students at risk of dropping out with AI analysis"""
-    now = datetime.now(timezone.utc)
-    month_ago = now - timedelta(days=30)
-    
     # Get all students
     students = await db.users.find(
         {"role": "student"},
