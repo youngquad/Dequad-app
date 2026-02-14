@@ -2798,7 +2798,7 @@ async def create_payment_sheet(current_user: User = Depends(get_current_user)):
                         "currency": STRIPE_PRICE_CURRENCY,
                         "unit_amount": STRIPE_PRICE_AMOUNT,
                         "recurring": {"interval": "month"},
-                        "product_data": {"name": STRIPE_PRODUCT_NAME}
+                        "product": STRIPE_PRODUCT_NAME
                     }
                 }],
                 payment_behavior="default_incomplete",
