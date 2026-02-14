@@ -171,6 +171,14 @@ export default function AdminLoginScreen() {
                 </>
               )}
             </TouchableOpacity>
+
+            {/* Forgot Password Link */}
+            <TouchableOpacity
+              style={styles.forgotPasswordButton}
+              onPress={() => router.push('/(admin)/forgot-password')}
+            >
+              <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+            </TouchableOpacity>
           </View>
 
           {/* Security Notice */}
