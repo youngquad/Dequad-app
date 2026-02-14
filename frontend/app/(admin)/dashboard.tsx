@@ -503,18 +503,90 @@ export default function AdminDashboard() {
                   <Text style={styles.alertContent} numberOfLines={3}>
                     {alert.content}
                   </Text>
-                  {!alert.acknowledged && (
+                  
+                  {/* Action Buttons */}
+                  <View style={styles.alertActions}>
+                    {!alert.acknowledged && (
+                      <TouchableOpacity
+                        style={styles.acknowledgeButton}
+                        onPress={() => acknowledgeAlert(alert.alert_id)}
+                      >
+                        <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                        <Text style={styles.acknowledgeText}>Acknowledge</Text>
+                      </TouchableOpacity>
+                    )}
                     <TouchableOpacity
-                      style={styles.acknowledgeButton}
-                      onPress={() => acknowledgeAlert(alert.alert_id)}
+                      style={styles.analyzeStudentButton}
+                      onPress={() => runStudentAnalysis(alert.user_id, alert.user_name)}
+                      disabled={analyzingStudentId === alert.user_id}
                     >
-                      <Ionicons name="checkmark-circle" size={18} color="#10B981" />
-                      <Text style={styles.acknowledgeText}>Acknowledge</Text>
+                      {analyzingStudentId === alert.user_id ? (
+                        <ActivityIndicator size="small" color="#6366F1" />
+                      ) : (
+                        <>
+                          <Ionicons name="analytics" size={18} color="#6366F1" />
+                          <Text style={styles.analyzeStudentText}>Analyze Student</Text>
+                        </>
+                      )}
                     </TouchableOpacity>
-                  )}
+                  </View>
                 </View>
               ))
             )}
+
+            {/* University Quick Analysis Section */}
+            <View style={styles.safeguardingUniversitySection}>
+              <Text style={styles.sectionTitle}>Analyze by University</Text>
+              <Text style={styles.sectionSubtitle}>
+                Run AI analysis on all students from a specific university
+              </Text>
+              
+              {universities.length === 0 ? (
+                <Text style={styles.noUniversitiesText}>No universities found</Text>
+              ) : (
+                <View style={styles.universityQuickList}>
+                  {universities.slice(0, 5).map((uni, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.universityQuickCard}
+                      onPress={() => runUniversityAnalysis(uni.name)}
+                      disabled={isAnalyzing}
+                    >
+                      <View style={styles.universityQuickInfo}>
+                        <Ionicons name="school" size={20} color="#6366F1" />
+                        <Text style={styles.universityQuickName} numberOfLines={1}>
+                          {uni.name}
+                        </Text>
+                        <Text style={styles.universityQuickCount}>
+                          ({uni.student_count})
+                        </Text>
+                      </View>
+                      {isAnalyzing ? (
+                        <ActivityIndicator size="small" color="#F59E0B" />
+                      ) : (
+                        <Ionicons name="analytics" size={20} color="#F59E0B" />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+
+              {/* Run All Students Analysis */}
+              <TouchableOpacity
+                style={styles.analyzeAllButton}
+                onPress={() => runBulkAnalysis()}
+                disabled={isAnalyzing}
+              >
+                {isAnalyzing ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="people" size={20} color="#fff" />
+                    <Text style={styles.analyzeAllButtonText}>Analyze All Students</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
