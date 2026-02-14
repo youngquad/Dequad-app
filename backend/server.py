@@ -2842,7 +2842,9 @@ async def create_payment_sheet(current_user: User = Depends(get_current_user)):
         
         # Get the client secret from the payment intent
         # Access payment intent through the payments array
-        invoice = subscription.latest_invoice
+        invoice_id = subscription.latest_invoice
+        invoice = stripe.Invoice.retrieve(invoice_id, expand=["payments"])
+        
         if invoice.payments and invoice.payments.data:
             payment_intent_id = invoice.payments.data[0].payment.payment_intent
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
