@@ -2749,9 +2749,113 @@ class CreateCheckoutRequest(BaseModel):
     success_url: Optional[str] = None
     cancel_url: Optional[str] = None
 
+@api_router.post("/subscription/create-payment-sheet")
+async def create_payment_sheet(current_user: User = Depends(get_current_user)):
+    """Create a Stripe Payment Sheet for in-app premium subscription"""
+    try:
+        # Create or retrieve Stripe customer
+        user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+        stripe_customer_id = user_doc.get("stripe_customer_id")
+        
+        if not stripe_customer_id:
+            # Create new Stripe customer
+            customer = stripe.Customer.create(
+                email=current_user.email,
+                name=current_user.name,
+                metadata={"user_id": current_user.user_id}
+            )
+            stripe_customer_id = customer.id
+            
+            # Save customer ID to database
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$set": {"stripe_customer_id": stripe_customer_id}}
+            )
+        
+        # Create ephemeral key for the customer
+        ephemeral_key = stripe.EphemeralKey.create(
+            customer=stripe_customer_id,
+            stripe_version="2023-10-16"
+        )
+        
+        # Create a subscription with payment_behavior for immediate charge
+        # First check if there's an existing incomplete subscription
+        existing_subs = stripe.Subscription.list(
+            customer=stripe_customer_id,
+            status="incomplete",
+            limit=1
+        )
+        
+        if existing_subs.data:
+            # Use existing incomplete subscription
+            subscription = existing_subs.data[0]
+        else:
+            # Create new subscription with incomplete status to get PaymentIntent
+            subscription = stripe.Subscription.create(
+                customer=stripe_customer_id,
+                items=[{
+                    "price_data": {
+                        "currency": STRIPE_PRICE_CURRENCY,
+                        "unit_amount": STRIPE_PRICE_AMOUNT,
+                        "recurring": {"interval": "month"},
+                        "product_data": {"name": STRIPE_PRODUCT_NAME}
+                    }
+                }],
+                payment_behavior="default_incomplete",
+                payment_settings={"save_default_payment_method": "on_subscription"},
+                expand=["latest_invoice.payment_intent"],
+                metadata={"user_id": current_user.user_id}
+            )
+        
+        # Get the client secret from the payment intent
+        payment_intent = subscription.latest_invoice.payment_intent
+        
+        return {
+            "paymentIntent": payment_intent.client_secret,
+            "ephemeralKey": ephemeral_key.secret,
+            "customer": stripe_customer_id,
+            "publishableKey": os.environ.get("STRIPE_PUBLISHABLE_KEY", ""),
+            "subscriptionId": subscription.id
+        }
+    
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error creating payment sheet: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+@api_router.post("/subscription/confirm-payment")
+async def confirm_subscription_payment(current_user: User = Depends(get_current_user)):
+    """Confirm subscription after successful Payment Sheet completion"""
+    try:
+        user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+        stripe_customer_id = user_doc.get("stripe_customer_id")
+        
+        if not stripe_customer_id:
+            raise HTTPException(status_code=400, detail="No customer found")
+        
+        # Check for active subscription
+        subscriptions = stripe.Subscription.list(
+            customer=stripe_customer_id,
+            status="active",
+            limit=1
+        )
+        
+        if subscriptions.data:
+            # Update user to premium
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$set": {"plan": "premium", "subscription_id": subscriptions.data[0].id}}
+            )
+            return {"success": True, "plan": "premium", "message": "Subscription activated!"}
+        
+        return {"success": False, "message": "No active subscription found"}
+    
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error confirming payment: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
 @api_router.post("/subscription/create-checkout")
 async def create_checkout_session(data: CreateCheckoutRequest, current_user: User = Depends(get_current_user)):
-    """Create a Stripe checkout session for premium subscription"""
+    """Create a Stripe checkout session for premium subscription (fallback/web)"""
     try:
         # Create or retrieve Stripe customer
         user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
