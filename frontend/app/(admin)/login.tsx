@@ -57,7 +57,10 @@ export default function AdminLoginScreen() {
       const token = authResponse.session_token;
       console.log('Storing session token:', token?.substring(0, 30) + '...');
 
-      // Store session in AsyncStorage with correct key
+      // Store session using the API service's setToken method (works on both web and mobile)
+      await api.setToken(token);
+      
+      // Also store in AsyncStorage for backup
       await AsyncStorage.setItem('session_token', token);
       
       // Verify it was stored
