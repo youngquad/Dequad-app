@@ -24,6 +24,20 @@ export default function AdminLayout() {
         }}
       />
       <Stack.Screen
+        name="forgot-password"
+        options={{
+          title: 'Forgot Password',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="reset-password"
+        options={{
+          title: 'Reset Password',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="dashboard"
         options={{
           title: 'Admin Dashboard',
