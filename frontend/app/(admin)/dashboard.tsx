@@ -378,8 +378,8 @@ export default function AdminDashboard() {
                 <Text style={styles.statLabel}>Students</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: '#10B981' }]}>
-                <Text style={styles.statValue}>{stats?.total_feedback || 0}</Text>
-                <Text style={styles.statLabel}>Feedback</Text>
+                <Text style={styles.statValue}>{stats?.subscription_stats?.premium_students || 0}</Text>
+                <Text style={styles.statLabel}>Premium</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: '#F59E0B' }]}>
                 <Text style={styles.statValue}>{alertStats.unacknowledged}</Text>
@@ -390,6 +390,76 @@ export default function AdminDashboard() {
                 <Text style={styles.statLabel}>High Risk</Text>
               </View>
             </View>
+
+            {/* Subscription Stats Section */}
+            {stats?.subscription_stats && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Subscription Overview</Text>
+                <View style={styles.subscriptionCard}>
+                  <View style={styles.subscriptionRow}>
+                    <View style={styles.subscriptionItem}>
+                      <Ionicons name="diamond" size={24} color="#F59E0B" />
+                      <Text style={styles.subscriptionValue}>{stats.subscription_stats.premium_students}</Text>
+                      <Text style={styles.subscriptionLabel}>Premium</Text>
+                    </View>
+                    <View style={styles.subscriptionDivider} />
+                    <View style={styles.subscriptionItem}>
+                      <Ionicons name="person" size={24} color="#9CA3AF" />
+                      <Text style={styles.subscriptionValue}>{stats.subscription_stats.free_students}</Text>
+                      <Text style={styles.subscriptionLabel}>Free</Text>
+                    </View>
+                    <View style={styles.subscriptionDivider} />
+                    <View style={styles.subscriptionItem}>
+                      <Ionicons name="trending-up" size={24} color="#10B981" />
+                      <Text style={styles.subscriptionValue}>{stats.subscription_stats.premium_percentage}%</Text>
+                      <Text style={styles.subscriptionLabel}>Conversion</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            )}
+
+            {/* University Stats Section */}
+            {stats?.university_breakdown && stats.university_breakdown.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.sectionHeaderRow}>
+                  <Text style={styles.sectionTitle}>Students by University</Text>
+                  <Text style={styles.sectionSubcount}>{stats.total_universities} universities</Text>
+                </View>
+                {stats.university_breakdown.slice(0, 5).map((uni: any, index: number) => (
+                  <View key={index} style={styles.universityStatCard}>
+                    <View style={styles.universityStatHeader}>
+                      <View style={styles.universityStatIcon}>
+                        <Ionicons name="school" size={18} color="#6366F1" />
+                      </View>
+                      <View style={styles.universityStatInfo}>
+                        <Text style={styles.universityStatName} numberOfLines={1}>{uni.university || 'Unknown'}</Text>
+                        <Text style={styles.universityStatTotal}>{uni.total_students} students</Text>
+                      </View>
+                    </View>
+                    <View style={styles.universityStatBar}>
+                      <View 
+                        style={[
+                          styles.universityStatBarFill, 
+                          { 
+                            width: `${Math.max(uni.premium_percentage || 0, 5)}%`,
+                            backgroundColor: '#F59E0B' 
+                          }
+                        ]} 
+                      />
+                    </View>
+                    <View style={styles.universityStatFooter}>
+                      <Text style={styles.universityStatPremium}>
+                        <Ionicons name="diamond" size={12} color="#F59E0B" /> {uni.premium_count} premium
+                      </Text>
+                      <Text style={styles.universityStatFree}>
+                        {uni.free_count} free
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
 
             {/* Risk Distribution */}
             {riskDistribution && (
