@@ -153,6 +153,7 @@ export default function AdminDashboard() {
 
   const loadAllData = async () => {
     setIsLoading(true);
+    console.log('Starting to load all admin data...');
     try {
       await Promise.all([
         loadStats(),
@@ -162,6 +163,7 @@ export default function AdminDashboard() {
         loadRiskDistribution(),
         loadUniversitiesList(),
       ]);
+      console.log('All admin data loaded successfully');
     } catch (error) {
       console.error('Error loading admin data:', error);
     } finally {
@@ -171,7 +173,9 @@ export default function AdminDashboard() {
 
   const loadStats = async () => {
     try {
+      console.log('Loading stats...');
       const data = await api.get('/admin/stats', sessionToken);
+      console.log('Stats loaded:', data?.total_students, 'students');
       setStats(data);
     } catch (error) {
       console.error('Error loading stats:', error);
@@ -180,7 +184,9 @@ export default function AdminDashboard() {
 
   const loadSafeguardingAlerts = async () => {
     try {
+      console.log('Loading safeguarding alerts...');
       const data = await api.get('/admin/safeguarding-alerts', sessionToken);
+      console.log('Safeguarding alerts loaded:', data?.alerts?.length || 0, 'alerts');
       setSafeguardingAlerts(data.alerts || []);
       setAlertStats({
         unacknowledged: data.unacknowledged_count || 0,
@@ -194,9 +200,11 @@ export default function AdminDashboard() {
 
   const loadMoodTrends = async () => {
     try {
+      console.log('Loading mood trends...');
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - parseInt(dateRange));
       const data = await api.get(`/admin/analytics/mood-trends?start_date=${startDate.toISOString()}&group_by=day`, sessionToken);
+      console.log('Mood trends loaded:', data?.trends?.length || 0, 'data points');
       setMoodTrends(data.trends || []);
     } catch (error) {
       console.error('Error loading mood trends:', error);
@@ -205,7 +213,9 @@ export default function AdminDashboard() {
 
   const loadUniversityComparison = async () => {
     try {
+      console.log('Loading university comparison...');
       const data = await api.get('/admin/analytics/university-comparison', sessionToken);
+      console.log('University comparison loaded:', data?.universities?.length || 0, 'universities');
       setUniversityData(data.universities || []);
     } catch (error) {
       console.error('Error loading university data:', error);
@@ -214,7 +224,9 @@ export default function AdminDashboard() {
 
   const loadRiskDistribution = async () => {
     try {
+      console.log('Loading risk distribution...');
       const data = await api.get('/admin/analytics/risk-distribution', sessionToken);
+      console.log('Risk distribution loaded:', data);
       setRiskDistribution(data);
     } catch (error) {
       console.error('Error loading risk distribution:', error);
@@ -223,10 +235,12 @@ export default function AdminDashboard() {
 
   const loadUniversitiesList = async () => {
     try {
+      console.log('Loading universities list...');
       const data = await api.get('/admin/universities', sessionToken);
+      console.log('Universities list loaded:', data?.universities?.length || 0, 'universities');
       setUniversities(data.universities || []);
     } catch (error) {
-      console.error('Error loading universities:', error);
+      console.error('Error loading universities list:', error);
     }
   };
 
