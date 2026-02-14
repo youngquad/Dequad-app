@@ -42,6 +42,8 @@ export default function AdminLoginScreen() {
         admin_code: adminCode.trim() || null,
       });
 
+      console.log('Admin login response:', JSON.stringify(authResponse, null, 2));
+
       if (authResponse.error) {
         Alert.alert('Access Denied', authResponse.error);
         return;
@@ -52,13 +54,23 @@ export default function AdminLoginScreen() {
         return;
       }
 
+      const token = authResponse.session_token;
+      console.log('Storing session token:', token?.substring(0, 30) + '...');
+
       // Store session in AsyncStorage with correct key
-      await AsyncStorage.setItem('session_token', authResponse.session_token);
+      await AsyncStorage.setItem('session_token', token);
+      
+      // Verify it was stored
+      const storedToken = await AsyncStorage.getItem('session_token');
+      console.log('Verified stored token:', storedToken?.substring(0, 30) + '...');
       
       // Update AuthContext state
       if (setAdminSession) {
-        setAdminSession(authResponse.session_token, authResponse.user);
+        setAdminSession(token, authResponse.user);
       }
+      
+      // Small delay to ensure state is updated
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       // Navigate to admin dashboard
       router.replace('/(admin)/dashboard');
