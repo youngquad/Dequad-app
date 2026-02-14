@@ -230,6 +230,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: GET /api/admin/stats returns comprehensive dashboard statistics including user counts, risk scores, and metrics. GET /api/admin/reports retrieves all reports. GET /api/admin/users lists all users. All admin endpoints require proper admin role validation."
+      - working: true
+        agent: "testing"
+        comment: "✅ RE-TESTED (New Subscription & University Data): GET /api/admin/stats now correctly returns subscription_stats object with premium_students (5), free_students (26), and premium_percentage (16.1%). Returns university_breakdown array with 6 universities showing detailed breakdown: University of Oxford (3 students, 66.7% premium), University of Cambridge (3 students, 33.3% premium), Imperial College London (2 students, 50% premium), University College London (2 students, 50% premium), King's College London (1 student, 0% premium), and Harvard (20 students, 0% premium). Returns total_universities count (6). All new fields properly structured and validated. Admin authentication correctly enforced (401 without token/invalid token). Data consistency verified between subscription stats and university breakdown."
 
   - task: "Stripe Subscription API"
     implemented: true
