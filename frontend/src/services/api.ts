@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'https://student-connect-46.preview.emergentagent.com';
 export const API_URL = BACKEND_URL;
@@ -12,10 +13,41 @@ class ApiService {
 
   private async getStoredToken(): Promise<string | null> {
     try {
+      // On web, try localStorage first as it's more reliable
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        const webToken = window.localStorage.getItem('session_token');
+        if (webToken) {
+          return webToken;
+        }
+      }
+      // Fall back to AsyncStorage
       return await AsyncStorage.getItem('session_token');
     } catch (error) {
       console.error('Error getting stored token:', error);
       return null;
+    }
+  }
+
+  async setToken(token: string): Promise<void> {
+    try {
+      // Store in both localStorage (for web) and AsyncStorage (for mobile)
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('session_token', token);
+      }
+      await AsyncStorage.setItem('session_token', token);
+    } catch (error) {
+      console.error('Error storing token:', error);
+    }
+  }
+
+  async clearToken(): Promise<void> {
+    try {
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem('session_token');
+      }
+      await AsyncStorage.removeItem('session_token');
+    } catch (error) {
+      console.error('Error clearing token:', error);
     }
   }
 
