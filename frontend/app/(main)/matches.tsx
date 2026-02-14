@@ -374,6 +374,35 @@ export default function MatchesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Upgrade Prompt Modal */}
+      {showUpgradePrompt && (
+        <View style={styles.matchOverlay}>
+          <View style={styles.upgradeModal}>
+            <Ionicons name="diamond" size={60} color="#F59E0B" />
+            <Text style={styles.upgradeTitle}>Daily Limit Reached</Text>
+            <Text style={styles.upgradeSubtitle}>
+              You've used all 5 swipes for today. Upgrade to Premium for unlimited swipes!
+            </Text>
+            <TouchableOpacity
+              style={styles.upgradeButton}
+              onPress={() => {
+                setShowUpgradePrompt(false);
+                router.push('/(main)/subscription');
+              }}
+            >
+              <Ionicons name="diamond" size={20} color="#fff" />
+              <Text style={styles.upgradeButtonText}>Upgrade to Premium</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.laterButton}
+              onPress={() => setShowUpgradePrompt(false)}
+            >
+              <Text style={styles.laterButtonText}>Maybe Later</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
       {matchAlert && (
         <View style={styles.matchOverlay}>
           <View style={styles.matchModal}>
@@ -390,6 +419,26 @@ export default function MatchesScreen() {
             </TouchableOpacity>
           </View>
         </View>
+      )}
+
+      {/* Swipe Counter Banner (for free users) */}
+      {!swipeInfo.is_premium && (
+        <TouchableOpacity 
+          style={styles.swipeBanner}
+          onPress={() => router.push('/(main)/subscription')}
+        >
+          <View style={styles.swipeBannerContent}>
+            <Text style={styles.swipeBannerText}>
+              {swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes > 0
+                ? `${swipeInfo.remaining_swipes} swipes left today`
+                : 'No swipes left today'}
+            </Text>
+            <View style={styles.upgradeBadge}>
+              <Ionicons name="diamond" size={14} color="#F59E0B" />
+              <Text style={styles.upgradeBadgeText}>Upgrade</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       )}
 
       <View style={styles.cardsContainer}>
