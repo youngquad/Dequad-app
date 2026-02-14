@@ -844,18 +844,74 @@ class APITester:
         """Test Admin APIs"""
         print("\n👑 Testing Admin APIs...")
         
-        # Test GET /api/admin/stats
+        # Test GET /api/admin/stats with new subscription and university breakdown data
         response = self.make_request("GET", "/admin/stats", token=ADMIN_TOKEN)
         if isinstance(response, tuple):
             self.log_result("admin", "GET /admin/stats", False, error=response[1])
         elif response and response.status_code == 200:
             try:
                 stats = response.json()
-                if ("total_users" in stats and "total_students" in stats and 
-                    "average_risk_score" in stats):
-                    self.log_result("admin", "GET /admin/stats", True)
+                
+                # Check basic fields
+                basic_fields = ["total_users", "total_students", "average_risk_score"]
+                missing_basic = [f for f in basic_fields if f not in stats]
+                
+                # Check new subscription_stats field
+                subscription_stats_valid = False
+                if "subscription_stats" in stats:
+                    sub_stats = stats["subscription_stats"]
+                    required_sub_fields = ["premium_students", "free_students", "premium_percentage"]
+                    if all(field in sub_stats for field in required_sub_fields):
+                        subscription_stats_valid = True
+                        print(f"      ✅ Subscription stats: {sub_stats['premium_students']} premium, {sub_stats['free_students']} free ({sub_stats['premium_percentage']}% premium)")
+                    else:
+                        missing_sub_fields = [f for f in required_sub_fields if f not in sub_stats]
+                        print(f"      ❌ Missing subscription_stats fields: {missing_sub_fields}")
                 else:
-                    self.log_result("admin", "GET /admin/stats", False, response, "Missing required stats fields")
+                    print("      ❌ Missing subscription_stats field")
+                
+                # Check new university_breakdown field
+                university_breakdown_valid = False
+                if "university_breakdown" in stats:
+                    uni_breakdown = stats["university_breakdown"]
+                    if isinstance(uni_breakdown, list):
+                        university_breakdown_valid = True
+                        print(f"      ✅ University breakdown: {len(uni_breakdown)} universities")
+                        
+                        # Check structure of first university entry if available
+                        if uni_breakdown:
+                            first_uni = uni_breakdown[0]
+                            required_uni_fields = ["university", "total_students", "premium_count", "free_count", "premium_percentage"]
+                            missing_uni_fields = [f for f in required_uni_fields if f not in first_uni]
+                            if missing_uni_fields:
+                                print(f"      ❌ Missing university breakdown fields: {missing_uni_fields}")
+                                university_breakdown_valid = False
+                            else:
+                                print(f"      ✅ University structure valid: {first_uni['university']} - {first_uni['total_students']} students")
+                    else:
+                        print(f"      ❌ university_breakdown should be list, got {type(uni_breakdown)}")
+                else:
+                    print("      ❌ Missing university_breakdown field")
+                
+                # Check total_universities field
+                total_universities_valid = False
+                if "total_universities" in stats:
+                    if isinstance(stats["total_universities"], int):
+                        total_universities_valid = True
+                        print(f"      ✅ Total universities: {stats['total_universities']}")
+                    else:
+                        print(f"      ❌ total_universities should be int, got {type(stats['total_universities'])}")
+                else:
+                    print("      ❌ Missing total_universities field")
+                
+                # Overall validation
+                if (not missing_basic and subscription_stats_valid and 
+                    university_breakdown_valid and total_universities_valid):
+                    self.log_result("admin", "GET /admin/stats (with subscription & university data)", True)
+                else:
+                    error_msg = f"Missing/invalid fields - Basic: {missing_basic}, Sub stats: {not subscription_stats_valid}, Uni breakdown: {not university_breakdown_valid}, Total unis: {not total_universities_valid}"
+                    self.log_result("admin", "GET /admin/stats (with subscription & university data)", False, response, error_msg)
+                    
             except json.JSONDecodeError:
                 self.log_result("admin", "GET /admin/stats", False, response, "Invalid JSON response")
         else:
