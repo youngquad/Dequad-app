@@ -1623,4 +1623,104 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
+  // Subscription Stats Styles
+  subscriptionCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 16,
+  },
+  subscriptionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  subscriptionItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  subscriptionValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 8,
+  },
+  subscriptionLabel: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 4,
+  },
+  subscriptionDivider: {
+    width: 1,
+    height: 50,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  // Section Header Row
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  sectionSubcount: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  // University Stats Card Styles
+  universityStatCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 8,
+  },
+  universityStatHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  universityStatIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  universityStatInfo: {
+    flex: 1,
+  },
+  universityStatName: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  universityStatTotal: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 2,
+  },
+  universityStatBar: {
+    height: 6,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  universityStatBarFill: {
+    height: '100%',
+    borderRadius: 3,
+    minWidth: 4,
+  },
+  universityStatFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  universityStatPremium: {
+    fontSize: 11,
+    color: '#F59E0B',
+  },
+  universityStatFree: {
+    fontSize: 11,
+    color: '#6B7280',
+  },
 });
