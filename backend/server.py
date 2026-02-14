@@ -856,6 +856,9 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
     if not match:
         raise HTTPException(status_code=403, detail="Match not found or not accepted")
     
+    # Check for safeguarding concerns in message
+    safeguarding_result = check_safeguarding_content(data.text)
+    
     message = ChatMessage(
         match_id=data.match_id,
         sender_id=current_user.user_id,
@@ -863,6 +866,15 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
     )
     
     await db.chat_messages.insert_one(message.dict())
+    
+    # If safeguarding concern detected, create alert for admin
+    if safeguarding_result["flagged"]:
+        await create_safeguarding_alert(
+            current_user,
+            "chat",
+            data.text,
+            safeguarding_result
+        )
     
     # Send push notification to the other user
     # Determine the recipient (the other person in the match)
@@ -879,7 +891,17 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
         {"match_id": data.match_id, "sender_name": current_user.name}
     )
     
-    return message
+    # Return message with safeguarding info if flagged
+    response = message.dict()
+    if safeguarding_result["flagged"]:
+        response["safeguarding_alert"] = {
+            "flagged": True,
+            "risk_level": safeguarding_result["risk_level"],
+            "resources": safeguarding_result["resources"],
+            "message": "We noticed you may be going through a difficult time. Please know that support is available."
+        }
+    
+    return response
 
 @api_router.get("/chat/{match_id}")
 async def get_messages(match_id: str, current_user: User = Depends(get_current_user)):
