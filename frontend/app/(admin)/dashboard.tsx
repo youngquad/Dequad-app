@@ -77,10 +77,29 @@ interface BulkAnalysisResult {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const { sessionToken, user, logout } = useAuth();
+  const { sessionToken: authSessionToken, user, logout } = useAuth();
+  const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'universities' | 'export'>('overview');
+  
+  // Use local token or auth context token
+  const sessionToken = localSessionToken || authSessionToken;
+  
+  // Load session token from AsyncStorage on mount
+  useEffect(() => {
+    const loadToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('session_token');
+        if (token) {
+          setLocalSessionToken(token);
+        }
+      } catch (error) {
+        console.error('Error loading session token:', error);
+      }
+    };
+    loadToken();
+  }, []);
   
   // Data states
   const [stats, setStats] = useState<any>(null);
