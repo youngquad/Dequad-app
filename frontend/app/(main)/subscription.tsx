@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,15 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
-  Linking,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+
+const STRIPE_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
 
 interface SubscriptionStatus {
   plan: string;
@@ -24,8 +27,9 @@ interface SubscriptionStatus {
   price: string;
 }
 
-export default function SubscriptionScreen() {
+function SubscriptionContent() {
   const { sessionToken, refreshUser } = useAuth();
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [status, setStatus] = useState<SubscriptionStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -45,23 +49,100 @@ export default function SubscriptionScreen() {
     }
   };
 
+  const initializePaymentSheet = async () => {
+    try {
+      // Get payment sheet params from backend
+      const data = await api.post('/subscription/create-payment-sheet', {}, sessionToken);
+      
+      if (!data.paymentIntent) {
+        throw new Error('No payment intent received');
+      }
+
+      // Initialize the payment sheet
+      const { error } = await initPaymentSheet({
+        merchantDisplayName: 'Educare',
+        customerId: data.customer,
+        customerEphemeralKeySecret: data.ephemeralKey,
+        paymentIntentClientSecret: data.paymentIntent,
+        allowsDelayedPaymentMethods: false,
+        defaultBillingDetails: {
+          name: '',
+        },
+        applePay: {
+          merchantCountryCode: 'GB',
+        },
+        googlePay: {
+          merchantCountryCode: 'GB',
+          testEnv: false,
+        },
+        style: 'alwaysDark',
+        returnURL: 'educare://subscription-success',
+      });
+
+      if (error) {
+        console.error('Error initializing payment sheet:', error);
+        throw error;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error setting up payment:', error);
+      return false;
+    }
+  };
+
   const handleSubscribe = async () => {
     setIsProcessing(true);
     try {
-      const data = await api.post('/subscription/create-checkout', {}, sessionToken);
+      // Initialize the payment sheet
+      const initialized = await initializePaymentSheet();
       
-      if (data.checkout_url) {
-        // Open Stripe checkout in browser
-        const canOpen = await Linking.canOpenURL(data.checkout_url);
-        if (canOpen) {
-          await Linking.openURL(data.checkout_url);
+      if (!initialized) {
+        Alert.alert('Error', 'Failed to initialize payment. Please try again.');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Present the payment sheet
+      const { error } = await presentPaymentSheet();
+
+      if (error) {
+        if (error.code === 'Canceled') {
+          // User cancelled - do nothing
+          console.log('Payment cancelled by user');
         } else {
-          Alert.alert('Error', 'Unable to open checkout page');
+          Alert.alert('Payment Failed', error.message);
+        }
+      } else {
+        // Payment successful - confirm with backend
+        try {
+          const result = await api.post('/subscription/confirm-payment', {}, sessionToken);
+          
+          if (result.success) {
+            Alert.alert(
+              '🎉 Welcome to Premium!',
+              'Your subscription is now active. Enjoy unlimited swipes!',
+              [{ text: 'Awesome!', onPress: () => {} }]
+            );
+            await loadSubscriptionStatus();
+            await refreshUser();
+          } else {
+            // Payment succeeded but subscription not active yet - might need to wait for webhook
+            Alert.alert(
+              'Payment Received',
+              'Your payment was successful! Your premium features will be activated shortly.',
+              [{ text: 'OK', onPress: () => loadSubscriptionStatus() }]
+            );
+          }
+        } catch (confirmError) {
+          console.error('Error confirming payment:', confirmError);
+          // Payment succeeded but confirmation failed - refresh status
+          await loadSubscriptionStatus();
         }
       }
     } catch (error) {
-      console.error('Error creating checkout:', error);
-      Alert.alert('Error', 'Failed to start checkout process');
+      console.error('Error processing subscription:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -154,6 +235,31 @@ export default function SubscriptionScreen() {
               <Text style={styles.premiumTitle}>Educare Premium</Text>
               <Text style={styles.premiumPrice}>{status?.price || '£4.99/month'}</Text>
             </View>
+
+            {/* Payment Methods */}
+            {!status?.is_premium && (
+              <View style={styles.paymentMethods}>
+                <Text style={styles.paymentMethodsTitle}>Pay with</Text>
+                <View style={styles.paymentIcons}>
+                  {Platform.OS === 'ios' && (
+                    <View style={styles.paymentIcon}>
+                      <Ionicons name="logo-apple" size={24} color="#fff" />
+                      <Text style={styles.paymentIconText}>Pay</Text>
+                    </View>
+                  )}
+                  {Platform.OS === 'android' && (
+                    <View style={styles.paymentIcon}>
+                      <Ionicons name="logo-google" size={24} color="#fff" />
+                      <Text style={styles.paymentIconText}>Pay</Text>
+                    </View>
+                  )}
+                  <View style={styles.paymentIcon}>
+                    <Ionicons name="card" size={24} color="#fff" />
+                    <Text style={styles.paymentIconText}>Card</Text>
+                  </View>
+                </View>
+              </View>
+            )}
 
             <View style={styles.featuresSection}>
               <Text style={styles.featuresTitle}>Premium Features</Text>
@@ -277,12 +383,26 @@ export default function SubscriptionScreen() {
               • Cancel anytime from this screen
             </Text>
             <Text style={styles.infoText}>
-              • Secure payment via Stripe
+              • Secure in-app payment via Stripe
+            </Text>
+            <Text style={styles.infoText}>
+              • Supports Apple Pay, Google Pay & Cards
             </Text>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+export default function SubscriptionScreen() {
+  return (
+    <StripeProvider
+      publishableKey={STRIPE_PUBLISHABLE_KEY}
+      merchantIdentifier="merchant.com.educare.app"
+    >
+      <SubscriptionContent />
+    </StripeProvider>
   );
 }
 
@@ -370,7 +490,7 @@ const styles = StyleSheet.create({
   },
   premiumHeader: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   premiumTitle: {
     fontSize: 24,
@@ -383,6 +503,38 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#F59E0B',
+  },
+  paymentMethods: {
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
+  },
+  paymentMethodsTitle: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  paymentIcons: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  paymentIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 4,
+  },
+  paymentIconText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   featuresSection: {
     marginBottom: 24,
