@@ -82,20 +82,36 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'universities' | 'export'>('overview');
+  const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
   const sessionToken = localSessionToken || authSessionToken;
   
-  // Load session token from AsyncStorage on mount
+  // Load session token from storage on mount (supports both web and mobile)
   useEffect(() => {
     const loadToken = async () => {
       try {
-        const token = await AsyncStorage.getItem('session_token');
+        let token = null;
+        
+        // On web, try localStorage first
+        if (typeof window !== 'undefined' && window.localStorage) {
+          token = window.localStorage.getItem('session_token');
+          console.log('Web localStorage token:', token ? token.substring(0, 20) + '...' : 'none');
+        }
+        
+        // Fall back to AsyncStorage
+        if (!token) {
+          token = await AsyncStorage.getItem('session_token');
+          console.log('AsyncStorage token:', token ? token.substring(0, 20) + '...' : 'none');
+        }
+        
         if (token) {
           setLocalSessionToken(token);
         }
+        setTokenLoaded(true);
       } catch (error) {
         console.error('Error loading session token:', error);
+        setTokenLoaded(true);
       }
     };
     loadToken();
