@@ -15,11 +15,13 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
     const inAuthGroup = segments[0] === '(auth)';
     const inMainGroup = segments[0] === '(main)';
     const inAdminGroup = segments[0] === '(admin)';
+    const isAdminLogin = inAdminGroup && segments[1] === 'login';
     const isLandingPage = segments.length === 0 || segments[0] === 'index';
 
     if (!isAuthenticated) {
       // If user is not authenticated and trying to access protected routes
-      if (inMainGroup || inAdminGroup) {
+      // ALLOW admin login page without authentication
+      if (inMainGroup || (inAdminGroup && !isAdminLogin)) {
         router.replace('/');
       }
     } else {
@@ -32,8 +34,8 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
           router.replace('/(main)/mood');
         }
       }
-      // Admin-only route protection
-      if (inAdminGroup && userRole !== 'admin') {
+      // Admin-only route protection (but allow admin login for role switching)
+      if (inAdminGroup && !isAdminLogin && userRole !== 'admin') {
         router.replace('/(main)/mood');
       }
     }
