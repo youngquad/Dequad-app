@@ -738,7 +738,7 @@ async def update_profile(data: ProfileUpdate, current_user: User = Depends(get_c
 # ==================== MOOD ENDPOINTS ====================
 
 async def create_safeguarding_alert(user: User, source: str, content: str, safeguarding_result: dict):
-    """Create a safeguarding alert for admin review"""
+    """Create a safeguarding alert for admin review and send email notification"""
     alert = SafeguardingAlert(
         user_id=user.user_id,
         user_name=user.name,
@@ -750,6 +750,23 @@ async def create_safeguarding_alert(user: User, source: str, content: str, safeg
     )
     await db.safeguarding_alerts.insert_one(alert.dict())
     logger.warning(f"SAFEGUARDING ALERT: {safeguarding_result['risk_level']} risk detected for user {user.user_id} in {source}")
+    
+    # Send email notification to all admins (non-blocking)
+    alert_data = {
+        "alert_id": alert.alert_id,
+        "user_id": user.user_id,
+        "user_name": user.name,
+        "user_email": user.email,
+        "source": source,
+        "content": content,
+        "risk_level": safeguarding_result["risk_level"],
+        "matched_keywords": safeguarding_result["matched_keywords"],
+        "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    }
+    
+    # Fire and forget - don't wait for email to send
+    asyncio.create_task(send_safeguarding_email_to_admins(alert_data))
+    
     return alert
 
 @api_router.post("/mood")
