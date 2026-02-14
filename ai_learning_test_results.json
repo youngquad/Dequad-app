@@ -1,0 +1,110 @@
+{
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "success_rate": 100.0
+  },
+  "results": [
+    {
+      "test": "Admin Session Creation",
+      "success": true,
+      "details": "Session token: admin_session_b8f612...",
+      "response_data": null,
+      "timestamp": "2026-02-14T14:08:39.655658+00:00"
+    },
+    {
+      "test": "GET /api/admin/ai-learning/stats",
+      "success": true,
+      "details": "Returned all expected fields: ['keywords', 'alerts', 'insights', 'keyword_coverage', 'learning_active']",
+      "response_data": {
+        "keywords": {
+          "pending": 0,
+          "approved": 0,
+          "rejected": 0
+        },
+        "alerts": {
+          "total_with_feedback": 0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "accuracy_rate": null
+        },
+        "insights": {
+          "total": 0,
+          "unreviewed": 0,
+          "by_type": {}
+        },
+        "keyword_coverage": {
+          "built_in": 23,
+          "learned_approved": 0,
+          "total_active": 23
+        },
+        "learning_active": true
+      },
+      "timestamp": "2026-02-14T14:08:39.813208+00:00"
+    },
+    {
+      "test": "GET /api/admin/ai-learning/keywords",
+      "success": true,
+      "details": "Keywords: 0, Stats: {'pending': 0, 'approved': 0, 'rejected': 0, 'total': 0}",
+      "response_data": {
+        "keywords": [],
+        "stats": {
+          "pending": 0,
+          "approved": 0,
+          "rejected": 0,
+          "total": 0
+        }
+      },
+      "timestamp": "2026-02-14T14:08:39.873861+00:00"
+    },
+    {
+      "test": "GET /api/admin/ai-learning/insights",
+      "success": true,
+      "details": "Insights: 0, Unreviewed: 0",
+      "response_data": {
+        "insights": [],
+        "unreviewed_count": 0
+      },
+      "timestamp": "2026-02-14T14:08:39.945209+00:00"
+    },
+    {
+      "test": "POST /api/admin/ai-learning/trigger-analysis",
+      "success": true,
+      "details": "Analysis triggered: Behavioral analysis completed",
+      "response_data": {
+        "success": true,
+        "message": "Behavioral analysis completed"
+      },
+      "timestamp": "2026-02-14T14:08:40.050819+00:00"
+    },
+    {
+      "test": "POST /api/admin/safeguarding-alerts/{alert_id}/feedback",
+      "success": true,
+      "details": "Feedback recorded: Feedback recorded for AI learning",
+      "response_data": {
+        "success": true,
+        "message": "Feedback recorded for AI learning"
+      },
+      "timestamp": "2026-02-14T14:08:45.094676+00:00"
+    },
+    {
+      "test": "POST /api/admin/safeguarding-alerts/{alert_id}/feedback (false positive)",
+      "success": true,
+      "details": "False positive feedback recorded: Feedback recorded for AI learning",
+      "response_data": {
+        "success": true,
+        "message": "Feedback recorded for AI learning"
+      },
+      "timestamp": "2026-02-14T14:08:45.158997+00:00"
+    },
+    {
+      "test": "Authentication Required Test",
+      "success": true,
+      "details": "Correctly returns 401 without authentication",
+      "response_data": null,
+      "timestamp": "2026-02-14T14:08:45.206486+00:00"
+    }
+  ],
+  "timestamp": "2026-02-14T14:08:45.206777+00:00"
+}
