@@ -1228,16 +1228,27 @@ class APITester:
         
         # Test create-payment-sheet without auth
         response = self.make_request("POST", "/subscription/create-payment-sheet")
-        if response and response.status_code == 401:
+        if isinstance(response, tuple):
+            print(f"      ❌ create-payment-sheet request failed: {response[1]}")
+            auth_protected = False
+        elif response and response.status_code == 401:
             print("      ✅ create-payment-sheet properly protected (401 without auth)")
+            auth_protected = True
         else:
             print(f"      ❌ create-payment-sheet not properly protected (got {response.status_code if response else 'no response'})")
+            auth_protected = False
         
         # Test confirm-payment without auth
         response = self.make_request("POST", "/subscription/confirm-payment")
-        if response and response.status_code == 401:
+        if isinstance(response, tuple):
+            print(f"      ❌ confirm-payment request failed: {response[1]}")
+            auth_protected = False
+        elif response and response.status_code == 401:
             print("      ✅ confirm-payment properly protected (401 without auth)")
-            self.log_result("subscription", "Payment Sheet Authentication Protection", True)
+            if auth_protected:
+                self.log_result("subscription", "Payment Sheet Authentication Protection", True)
+            else:
+                self.log_result("subscription", "Payment Sheet Authentication Protection", False, response, "create-payment-sheet not protected")
         else:
             print(f"      ❌ confirm-payment not properly protected (got {response.status_code if response else 'no response'})")
             self.log_result("subscription", "Payment Sheet Authentication Protection", False, response, "Endpoints not properly protected")
