@@ -261,7 +261,7 @@ export default function AdminDashboard() {
   const runUniversityAnalysis = async (universityName: string) => {
     setIsAnalyzing(true);
     try {
-      const data = await api.post(`/admin/university/${encodeURIComponent(universityName)}/ai-analysis`, {}, sessionToken);
+      const data = await api.post(`/admin/university/${encodeURIComponent(universityName)}/ai-analysis`, {});
       setUniversityAnalysis(data);
       Alert.alert(
         'Analysis Complete',
@@ -282,7 +282,7 @@ export default function AdminDashboard() {
   const runStudentAnalysis = async (userId: string, userName: string) => {
     setAnalyzingStudentId(userId);
     try {
-      const data = await api.get(`/admin/ai-risk-analysis/${userId}`, sessionToken);
+      const data = await api.get(`/admin/ai-risk-analysis/${userId}`);
       setStudentAnalysis(data);
       Alert.alert(
         `Analysis: ${userName}`,
@@ -300,7 +300,7 @@ export default function AdminDashboard() {
     setIsAnalyzing(true);
     try {
       const payload = university ? { limit: 100, university } : { limit: 100 };
-      const data = await api.post('/admin/analytics/bulk-ai-analysis', payload, sessionToken);
+      const data = await api.post('/admin/analytics/bulk-ai-analysis', payload);
       setBulkAnalysis(data.results || []);
       Alert.alert(
         'Analysis Complete',
@@ -316,7 +316,7 @@ export default function AdminDashboard() {
 
   const acknowledgeAlert = async (alertId: string) => {
     try {
-      await api.post(`/admin/safeguarding-alerts/${alertId}/acknowledge`, {}, sessionToken);
+      await api.post(`/admin/safeguarding-alerts/${alertId}/acknowledge`, {});
       loadSafeguardingAlerts();
       Alert.alert('Success', 'Alert acknowledged');
     } catch (error) {
