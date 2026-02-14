@@ -704,6 +704,142 @@ class APITester:
         except Exception as e:
             print(f"Warning: Could not create multiple target users: {e}")
 
+    def test_safeguarding_features(self):
+        """Test Safeguarding Matrix Features"""
+        print("\n🛡️ Testing Safeguarding Matrix Features...")
+        
+        # Test 1: POST /api/mood with safeguarding content
+        print("   Testing mood endpoint with concerning content...")
+        mood_data = {
+            "mood": 2,
+            "notes": "I want to kill myself. I can't take this anymore."
+        }
+        response = self.make_request("POST", "/mood", token=STUDENT_TOKEN, data=mood_data)
+        if isinstance(response, tuple):
+            self.log_result("admin", "Mood Safeguarding Detection", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                data = response.json()
+                if "safeguarding_alert" in data:
+                    alert = data["safeguarding_alert"]
+                    if (alert.get("flagged") == True and 
+                        alert.get("risk_level") in ["medium", "high"] and
+                        "resources" in alert and
+                        "samaritans" in str(alert["resources"]).lower()):
+                        self.log_result("admin", "Mood Safeguarding Detection", True)
+                        print(f"      ✅ Safeguarding alert triggered: {alert.get('risk_level')} risk")
+                        print(f"      ✅ Crisis resources provided including Samaritans (116 123)")
+                    else:
+                        self.log_result("admin", "Mood Safeguarding Detection", False, response, f"Incomplete safeguarding alert: {alert}")
+                else:
+                    self.log_result("admin", "Mood Safeguarding Detection", False, response, "No safeguarding alert found despite concerning content")
+            except json.JSONDecodeError:
+                self.log_result("admin", "Mood Safeguarding Detection", False, response, "Invalid JSON response")
+        else:
+            self.log_result("admin", "Mood Safeguarding Detection", False, response, "Mood safeguarding test failed")
+        
+        # Test 2: POST /api/feedback with safeguarding content
+        print("   Testing feedback endpoint with concerning content...")
+        feedback_data = {
+            "mood": 1,
+            "feedback": "I feel like ending it all. There's no point in continuing.",
+            "lecture_topic": "Psychology 101"
+        }
+        response = self.make_request("POST", "/feedback", token=STUDENT_TOKEN, data=feedback_data)
+        if isinstance(response, tuple):
+            self.log_result("admin", "Feedback Safeguarding Detection", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                data = response.json()
+                # Check that AI analysis is NOT present (admin-only)
+                ai_analysis_hidden = "ai_analysis" not in data or not data.get("ai_analysis")
+                
+                if "safeguarding_alert" in data:
+                    alert = data["safeguarding_alert"]
+                    if (alert.get("flagged") == True and 
+                        alert.get("risk_level") in ["medium", "high"] and
+                        "resources" in alert and ai_analysis_hidden):
+                        self.log_result("admin", "Feedback Safeguarding Detection", True)
+                        print(f"      ✅ Safeguarding alert triggered: {alert.get('risk_level')} risk")
+                        print(f"      ✅ AI analysis properly hidden from user (admin-only)")
+                    else:
+                        self.log_result("admin", "Feedback Safeguarding Detection", False, response, f"Incomplete safeguarding alert or AI analysis visible: {alert}")
+                else:
+                    self.log_result("admin", "Feedback Safeguarding Detection", False, response, "No safeguarding alert found despite concerning content")
+            except json.JSONDecodeError:
+                self.log_result("admin", "Feedback Safeguarding Detection", False, response, "Invalid JSON response")
+        else:
+            self.log_result("admin", "Feedback Safeguarding Detection", False, response, "Feedback safeguarding test failed")
+        
+        # Test 3: GET /api/admin/safeguarding-alerts (requires admin role)
+        print("   Testing admin safeguarding alerts endpoint...")
+        response = self.make_request("GET", "/admin/safeguarding-alerts", token=STUDENT_TOKEN)
+        if isinstance(response, tuple):
+            self.log_result("admin", "Admin Safeguarding Alerts", False, error=response[1])
+        elif response and response.status_code == 403:
+            self.log_result("admin", "Admin Safeguarding Alerts (403 for non-admin)", True)
+            print("      ✅ Correctly returned 403 Forbidden for non-admin user")
+        elif response and response.status_code == 200:
+            try:
+                data = response.json()
+                if ("alerts" in data and "unacknowledged_count" in data and
+                    "high_risk_count" in data and "total_count" in data):
+                    alerts = data["alerts"]
+                    if isinstance(alerts, list):
+                        self.log_result("admin", "Admin Safeguarding Alerts", True)
+                        print(f"      ✅ Retrieved {len(alerts)} safeguarding alerts")
+                        print(f"      ✅ Unacknowledged: {data.get('unacknowledged_count')}, High risk: {data.get('high_risk_count')}")
+                    else:
+                        self.log_result("admin", "Admin Safeguarding Alerts", False, response, "Alerts field is not a list")
+                else:
+                    self.log_result("admin", "Admin Safeguarding Alerts", False, response, "Missing required fields in response")
+            except json.JSONDecodeError:
+                self.log_result("admin", "Admin Safeguarding Alerts", False, response, "Invalid JSON response")
+        else:
+            self.log_result("admin", "Admin Safeguarding Alerts", False, response, "Admin safeguarding alerts test failed")
+        
+        # Test 4: GET /api/admin/ai-risk-analysis/{user_id} (requires admin role)
+        print("   Testing admin AI risk analysis endpoint...")
+        # First get current user ID
+        me_response = self.make_request("GET", "/auth/me", token=STUDENT_TOKEN)
+        if me_response and me_response.status_code == 200:
+            try:
+                user_data = me_response.json()
+                user_id = user_data.get("user_id")
+                
+                if user_id:
+                    response = self.make_request("GET", f"/admin/ai-risk-analysis/{user_id}", token=STUDENT_TOKEN)
+                    if isinstance(response, tuple):
+                        self.log_result("admin", "Admin AI Risk Analysis", False, error=response[1])
+                    elif response and response.status_code == 403:
+                        self.log_result("admin", "Admin AI Risk Analysis (403 for non-admin)", True)
+                        print("      ✅ Correctly returned 403 Forbidden for non-admin user")
+                    elif response and response.status_code == 200:
+                        try:
+                            data = response.json()
+                            if ("user" in data and "ai_analysis" in data and "data_summary" in data):
+                                ai_analysis = data["ai_analysis"]
+                                required_fields = ["overall_risk_score", "risk_level", "key_concerns", "recommendation", "summary"]
+                                if all(field in ai_analysis for field in required_fields):
+                                    self.log_result("admin", "Admin AI Risk Analysis", True)
+                                    print(f"      ✅ AI risk analysis generated: {ai_analysis.get('risk_level')} risk")
+                                    print(f"      ✅ Risk score: {ai_analysis.get('overall_risk_score')}")
+                                else:
+                                    missing_fields = [f for f in required_fields if f not in ai_analysis]
+                                    self.log_result("admin", "Admin AI Risk Analysis", False, response, f"Missing AI analysis fields: {missing_fields}")
+                            else:
+                                self.log_result("admin", "Admin AI Risk Analysis", False, response, "Missing required top-level fields")
+                        except json.JSONDecodeError:
+                            self.log_result("admin", "Admin AI Risk Analysis", False, response, "Invalid JSON response")
+                    else:
+                        self.log_result("admin", "Admin AI Risk Analysis", False, response, "Admin AI risk analysis test failed")
+                else:
+                    self.log_result("admin", "Admin AI Risk Analysis", False, error="Could not extract user_id from auth/me response")
+            except json.JSONDecodeError:
+                self.log_result("admin", "Admin AI Risk Analysis", False, error="Invalid JSON in auth/me response")
+        else:
+            self.log_result("admin", "Admin AI Risk Analysis", False, error="Could not get current user info for AI risk analysis test")
+
     def test_admin_apis(self):
         """Test Admin APIs"""
         print("\n👑 Testing Admin APIs...")
