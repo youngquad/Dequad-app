@@ -710,6 +710,30 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             )}
 
+            {/* Premium Subscription Link */}
+            <TouchableOpacity
+              style={styles.premiumButton}
+              onPress={() => router.push('/(main)/subscription')}
+            >
+              <View style={styles.premiumIconContainer}>
+                <Ionicons name="diamond" size={24} color="#F59E0B" />
+              </View>
+              <View style={styles.premiumInfo}>
+                <Text style={styles.premiumTitle}>Educare Premium</Text>
+                <Text style={styles.premiumSubtitle}>
+                  {user?.plan === 'premium' ? 'Manage your subscription' : 'Upgrade for unlimited swipes'}
+                </Text>
+              </View>
+              {user?.plan === 'premium' ? (
+                <View style={styles.premiumActiveBadge}>
+                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Text style={styles.premiumActiveText}>Active</Text>
+                </View>
+              ) : (
+                <Ionicons name="chevron-forward" size={20} color="#F59E0B" />
+              )}
+            </TouchableOpacity>
+
             {/* Section Tabs */}
             {renderSectionTabs()}
 
