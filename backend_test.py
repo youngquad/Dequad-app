@@ -24,7 +24,8 @@ class APITester:
             "matching": {"passed": 0, "failed": 0, "errors": []},
             "chat": {"passed": 0, "failed": 0, "errors": []},
             "notifications": {"passed": 0, "failed": 0, "errors": []},
-            "admin": {"passed": 0, "failed": 0, "errors": []}
+            "admin": {"passed": 0, "failed": 0, "errors": []},
+            "subscription": {"passed": 0, "failed": 0, "errors": []}
         }
         self.match_id = None
         
