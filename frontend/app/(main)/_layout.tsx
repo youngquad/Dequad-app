@@ -38,6 +38,16 @@ export default function MainLayout() {
         }}
       />
       <Tabs.Screen
+        name="feedback"
+        options={{
+          title: 'Feedback',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbox-outline" size={size} color={color} />
+          ),
+          headerTitle: 'Lecture Feedback',
+        }}
+      />
+      <Tabs.Screen
         name="matches"
         options={{
           title: 'Connect',
@@ -45,16 +55,6 @@ export default function MainLayout() {
             <Ionicons name="people-outline" size={size} color={color} />
           ),
           headerTitle: 'Find Study Partners',
-        }}
-      />
-      <Tabs.Screen
-        name="subscription"
-        options={{
-          title: 'Premium',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="diamond-outline" size={size} color={color} />
-          ),
-          headerTitle: 'Educare Premium',
         }}
       />
       <Tabs.Screen
@@ -78,14 +78,9 @@ export default function MainLayout() {
         }}
       />
       <Tabs.Screen
-        name="feedback"
+        name="subscription"
         options={{
-          title: 'Feedback',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbox-outline" size={size} color={color} />
-          ),
-          headerTitle: 'Lecture Feedback',
-          href: null, // Hide from tab bar but keep accessible
+          href: null, // Hide from tab bar - accessible from Profile
         }}
       />
     </Tabs>
