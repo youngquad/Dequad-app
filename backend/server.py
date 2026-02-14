@@ -351,6 +351,80 @@ async def send_push_notification(user_id: str, title: str, body: str, notificati
 
 # ==================== AUTH ENDPOINTS ====================
 
+# Admin secret code for first-time admin setup
+ADMIN_SECRET_CODE = "EDUCARE_ADMIN_2024"
+
+class AdminLoginRequest(BaseModel):
+    email: str
+    password: str
+    admin_code: Optional[str] = None
+
+@api_router.post("/auth/admin-login")
+async def admin_login(data: AdminLoginRequest):
+    """Admin login endpoint with email/password"""
+    import hashlib
+    
+    # Find user by email
+    user = await db.users.find_one(
+        {"email": data.email.lower()},
+        {"_id": 0}
+    )
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    # Check password (simple hash for demo - use proper hashing in production)
+    stored_password = user.get("admin_password")
+    
+    # If admin_code is provided and matches, allow setting up admin access
+    if data.admin_code == ADMIN_SECRET_CODE:
+        # Upgrade user to admin and set password
+        password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+        await db.users.update_one(
+            {"email": data.email.lower()},
+            {"$set": {
+                "role": "admin",
+                "admin_password": password_hash
+            }}
+        )
+        user["role"] = "admin"
+        stored_password = password_hash
+    
+    # Verify password
+    if not stored_password:
+        raise HTTPException(status_code=401, detail="Admin password not set. Use admin code to set up.")
+    
+    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+    if stored_password != password_hash:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    # Check if user is admin
+    if user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="This account does not have admin privileges")
+    
+    # Create session token
+    session_token = f"admin_session_{uuid.uuid4().hex}"
+    
+    # Store session
+    await db.sessions.insert_one({
+        "session_token": session_token,
+        "user_id": user["user_id"],
+        "created_at": datetime.now(timezone.utc),
+        "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
+        "is_admin_session": True
+    })
+    
+    return {
+        "session_token": session_token,
+        "is_admin": True,
+        "user": {
+            "user_id": user["user_id"],
+            "email": user["email"],
+            "name": user["name"],
+            "role": "admin"
+        }
+    }
+
 @api_router.post("/auth/session")
 async def exchange_session(request: Request, response: Response):
     """Exchange session_id for session_token"""
