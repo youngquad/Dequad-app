@@ -474,13 +474,17 @@ async def get_session_token(request: Request) -> Optional[str]:
     # Check cookie first
     session_token = request.cookies.get("session_token")
     if session_token:
+        logger.info(f"Session token from cookie: {session_token[:20]}...")
         return session_token
     
     # Check Authorization header
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
-        return auth_header[7:]
+        token = auth_header[7:]
+        logger.info(f"Session token from header: {token[:20]}...")
+        return token
     
+    logger.warning("No session token found in request")
     return None
 
 async def get_current_user(request: Request) -> User:
