@@ -2772,23 +2772,38 @@ async def create_checkout_session(data: CreateCheckoutRequest, current_user: Use
                 {"$set": {"stripe_customer_id": stripe_customer_id}}
             )
         
-        # Create checkout session
+        # Create checkout session with multiple payment methods
+        # Apple Pay and Google Pay are automatically available through "card" when enabled in Stripe Dashboard
+        # Using automatic_payment_methods for best coverage across all payment types
         checkout_session = stripe.checkout.Session.create(
             customer=stripe_customer_id,
             mode="subscription",
-            payment_method_types=["card"],
+            payment_method_types=["card", "link"],  # Card includes Apple Pay & Google Pay when enabled
             line_items=[{
                 "price_data": {
                     "currency": STRIPE_PRICE_CURRENCY,
                     "unit_amount": STRIPE_PRICE_AMOUNT,
                     "recurring": {"interval": "month"},
-                    "product_data": {"name": STRIPE_PRODUCT_NAME},
+                    "product_data": {
+                        "name": STRIPE_PRODUCT_NAME,
+                        "description": "Unlimited swipes, priority matching, and premium features"
+                    },
                 },
                 "quantity": 1,
             }],
             success_url=data.success_url or "educare://subscription-success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=data.cancel_url or "educare://subscription-cancel",
             metadata={"user_id": current_user.user_id},
+            # Enable promotional codes if you want to offer discounts
+            allow_promotion_codes=True,
+            # Billing address collection
+            billing_address_collection="auto",
+            # Payment method options for better UX
+            payment_method_options={
+                "card": {
+                    "request_three_d_secure": "automatic"
+                }
+            }
         )
         
         return {
