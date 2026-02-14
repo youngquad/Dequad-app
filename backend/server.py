@@ -467,6 +467,47 @@ class SafeguardingAlert(BaseModel):
     acknowledged_by: Optional[str] = None
     acknowledged_at: Optional[datetime] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    # AI Learning feedback
+    was_true_positive: Optional[bool] = None  # Admin marks if this was a real concern
+    feedback_notes: Optional[str] = None
+
+# ==================== AI LEARNING MODELS ====================
+
+class LearnedKeyword(BaseModel):
+    keyword_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    keyword: str
+    context_examples: List[str] = []  # Anonymized examples of usage
+    suggested_by_ai: bool = True
+    risk_category: str = "medium"  # low, medium, high
+    frequency_score: int = 0  # How often this pattern appears
+    confidence_score: float = 0.0  # AI's confidence in this keyword
+    status: str = "pending"  # pending, approved, rejected
+    approved_by: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class BehavioralPattern(BaseModel):
+    pattern_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    pattern_type: str  # mood_decline, activity_drop, keyword_escalation, time_pattern
+    description: str
+    anonymized_data: dict = {}  # Aggregated, anonymized pattern data
+    detection_count: int = 0  # How many times this pattern was detected
+    alert_threshold: float = 0.7  # When to trigger alerts
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class AILearningInsight(BaseModel):
+    insight_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    insight_type: str  # new_keyword, pattern_detected, risk_adjustment, behavioral_anomaly
+    title: str
+    description: str
+    data: dict = {}
+    severity: str = "info"  # info, warning, critical
+    reviewed: bool = False
+    reviewed_by: Optional[str] = None
+    action_taken: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # ==================== AUTH HELPERS ====================
 
