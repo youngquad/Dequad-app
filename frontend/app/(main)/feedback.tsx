@@ -15,14 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import SafeguardingAlert from '../../src/components/SafeguardingAlert';
 
 interface FeedbackEntry {
   id: string;
   mood: number;
   feedback: string;
   lecture_topic?: string;
-  risk_score?: number;
-  ai_analysis?: string;
   created_at: string;
 }
 
@@ -34,7 +33,8 @@ export default function FeedbackScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackHistory, setFeedbackHistory] = useState<FeedbackEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [lastAnalysis, setLastAnalysis] = useState<FeedbackEntry | null>(null);
+  const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
+  const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
 
   useEffect(() => {
     loadFeedbackHistory();
@@ -69,8 +69,14 @@ export default function FeedbackScreen() {
         sessionToken
       );
       
-      setLastAnalysis(result);
-      Alert.alert('Feedback Submitted', 'Your feedback has been analyzed by our AI!');
+      // Check for safeguarding alert
+      if (result.safeguarding_alert && result.safeguarding_alert.flagged) {
+        setSafeguardingAlert(result.safeguarding_alert);
+        setShowSafeguardingModal(true);
+      } else {
+        Alert.alert('Thank You!', 'Your feedback has been submitted successfully.');
+      }
+      
       setFeedback('');
       setLectureTopic('');
       setMood(5);
@@ -83,25 +89,25 @@ export default function FeedbackScreen() {
     }
   };
 
-  const getRiskColor = (score?: number) => {
-    if (!score) return '#6B7280';
-    if (score < 30) return '#10B981';
-    if (score < 60) return '#F59E0B';
-    return '#EF4444';
+  const getMoodEmoji = (value: number) => {
+    if (value <= 3) return '😔';
+    if (value <= 5) return '😐';
+    if (value <= 7) return '🙂';
+    return '😊';
   };
 
-  const getRiskLabel = (score?: number) => {
-    if (!score) return 'Unknown';
-    if (score < 30) return 'Low Risk';
-    if (score < 60) return 'Moderate Risk';
-    return 'High Risk';
+  const getMoodColor = (value: number) => {
+    if (value <= 3) return '#EF4444';
+    if (value <= 5) return '#F59E0B';
+    if (value <= 7) return '#10B981';
+    return '#6366F1';
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
+    return date.toLocaleDateString('en-GB', {
       day: 'numeric',
+      month: 'short',
       hour: '2-digit',
       minute: '2-digit',
     });
@@ -109,29 +115,41 @@ export default function FeedbackScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Safeguarding Alert Modal */}
+      <SafeguardingAlert
+        visible={showSafeguardingModal}
+        onClose={() => {
+          setShowSafeguardingModal(false);
+          Alert.alert('Feedback Submitted', 'Your feedback has been saved. Remember, support is always available.');
+        }}
+        alertData={safeguardingAlert}
+      />
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           <View style={styles.content}>
+            {/* Header */}
             <View style={styles.headerCard}>
-              <Ionicons name="analytics" size={32} color="#6366F1" />
-              <Text style={styles.headerTitle}>AI-Powered Analysis</Text>
+              <Ionicons name="chatbox-ellipses" size={32} color="#6366F1" />
+              <Text style={styles.headerTitle}>Lecture Feedback</Text>
               <Text style={styles.headerSubtitle}>
-                Submit your lecture feedback and get personalized wellbeing insights
+                Share your thoughts about your lectures to help us improve your experience
               </Text>
             </View>
 
+            {/* Feedback Form */}
             <View style={styles.formSection}>
-              <Text style={styles.sectionTitle}>Your Mood During Lecture</Text>
+              <Text style={styles.sectionTitle}>How did you feel during the lecture?</Text>
               <View style={styles.moodSlider}>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                   <TouchableOpacity
                     key={value}
                     style={[
                       styles.moodDot,
-                      mood === value && styles.moodDotActive,
+                      mood === value && [styles.moodDotActive, { backgroundColor: getMoodColor(value) }],
                     ]}
                     onPress={() => setMood(value)}
                   >
@@ -146,6 +164,12 @@ export default function FeedbackScreen() {
                   </TouchableOpacity>
                 ))}
               </View>
+              <View style={styles.moodIndicator}>
+                <Text style={styles.moodEmoji}>{getMoodEmoji(mood)}</Text>
+                <Text style={[styles.moodLabel, { color: getMoodColor(mood) }]}>
+                  {mood <= 3 ? 'Struggling' : mood <= 5 ? 'Okay' : mood <= 7 ? 'Good' : 'Great'}
+                </Text>
+              </View>
 
               <Text style={styles.inputLabel}>Lecture Topic (Optional)</Text>
               <TextInput
@@ -156,10 +180,10 @@ export default function FeedbackScreen() {
                 onChangeText={setLectureTopic}
               />
 
-              <Text style={styles.inputLabel}>Your Feedback</Text>
+              <Text style={styles.inputLabel}>Your Feedback *</Text>
               <TextInput
                 style={[styles.input, styles.textArea]}
-                placeholder="Share your thoughts about the lecture, how you felt during it, any challenges or concerns..."
+                placeholder="Share your thoughts about the lecture, how you felt, any challenges or suggestions..."
                 placeholderTextColor="#6B7280"
                 multiline
                 numberOfLines={4}
@@ -179,85 +203,55 @@ export default function FeedbackScreen() {
                   <ActivityIndicator color="#fff" />
                 ) : (
                   <>
-                    <Ionicons name="sparkles" size={24} color="#fff" />
-                    <Text style={styles.submitButtonText}>
-                      Analyze with AI
-                    </Text>
+                    <Ionicons name="send" size={20} color="#fff" />
+                    <Text style={styles.submitButtonText}>Submit Feedback</Text>
                   </>
                 )}
               </TouchableOpacity>
             </View>
 
-            {lastAnalysis && (
-              <View style={styles.analysisCard}>
-                <View style={styles.analysisHeader}>
-                  <Ionicons name="bulb" size={24} color="#F59E0B" />
-                  <Text style={styles.analysisTitle}>Latest AI Analysis</Text>
-                </View>
-                <View
-                  style={[
-                    styles.riskBadge,
-                    { backgroundColor: getRiskColor(lastAnalysis.risk_score) + '20' },
-                  ]}
-                >
-                  <Ionicons
-                    name="shield-checkmark"
-                    size={20}
-                    color={getRiskColor(lastAnalysis.risk_score)}
-                  />
-                  <Text
-                    style={[
-                      styles.riskText,
-                      { color: getRiskColor(lastAnalysis.risk_score) },
-                    ]}
-                  >
-                    {getRiskLabel(lastAnalysis.risk_score)} ({lastAnalysis.risk_score}/100)
-                  </Text>
-                </View>
-                <Text style={styles.analysisText}>{lastAnalysis.ai_analysis}</Text>
-              </View>
-            )}
+            {/* Info Box */}
+            <View style={styles.infoBox}>
+              <Ionicons name="information-circle" size={20} color="#6366F1" />
+              <Text style={styles.infoText}>
+                Your feedback helps us understand how you're doing and improve the learning experience. 
+                All feedback is confidential.
+              </Text>
+            </View>
 
+            {/* Feedback History */}
             <View style={styles.historySection}>
-              <Text style={styles.historyTitle}>Feedback History</Text>
+              <Text style={styles.historyTitle}>Your Feedback History</Text>
               {isLoading ? (
                 <ActivityIndicator color="#6366F1" style={{ marginTop: 20 }} />
               ) : feedbackHistory.length === 0 ? (
                 <View style={styles.emptyState}>
                   <Ionicons name="document-text-outline" size={48} color="#4B5563" />
                   <Text style={styles.emptyText}>No feedback submitted yet</Text>
+                  <Text style={styles.emptySubtext}>Your submissions will appear here</Text>
                 </View>
               ) : (
-                feedbackHistory.slice(0, 5).map((entry) => (
+                feedbackHistory.slice(0, 10).map((entry) => (
                   <View key={entry.id} style={styles.historyItem}>
                     <View style={styles.historyHeader}>
-                      <Text style={styles.historyTopic}>
-                        {entry.lecture_topic || 'General Feedback'}
-                      </Text>
+                      <View style={styles.historyTopicRow}>
+                        <Text style={styles.historyMoodEmoji}>{getMoodEmoji(entry.mood)}</Text>
+                        <Text style={styles.historyTopic}>
+                          {entry.lecture_topic || 'General Feedback'}
+                        </Text>
+                      </View>
                       <Text style={styles.historyDate}>
                         {formatDate(entry.created_at)}
                       </Text>
                     </View>
-                    <Text style={styles.historyFeedback} numberOfLines={2}>
+                    <Text style={styles.historyFeedback} numberOfLines={3}>
                       {entry.feedback}
                     </Text>
-                    {entry.risk_score !== undefined && (
-                      <View
-                        style={[
-                          styles.historyRisk,
-                          { backgroundColor: getRiskColor(entry.risk_score) + '20' },
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.historyRiskText,
-                            { color: getRiskColor(entry.risk_score) },
-                          ]}
-                        >
-                          {getRiskLabel(entry.risk_score)}
-                        </Text>
-                      </View>
-                    )}
+                    <View style={[styles.moodBadge, { backgroundColor: getMoodColor(entry.mood) + '20' }]}>
+                      <Text style={[styles.moodBadgeText, { color: getMoodColor(entry.mood) }]}>
+                        Mood: {entry.mood}/10
+                      </Text>
+                    </View>
                   </View>
                 ))
               )}
@@ -291,7 +285,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#fff',
     marginTop: 12,
@@ -301,25 +295,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#9CA3AF',
     textAlign: 'center',
+    lineHeight: 20,
   },
   formSection: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   moodSlider: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 24,
+    marginBottom: 12,
   },
   moodDot: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -328,12 +323,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#6366F1',
   },
   moodDotText: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#9CA3AF',
     fontWeight: '600',
   },
   moodDotTextActive: {
     color: '#fff',
+  },
+  moodIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  moodEmoji: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+  moodLabel: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   inputLabel: {
     fontSize: 14,
@@ -348,6 +357,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   textArea: {
     minHeight: 120,
@@ -360,57 +371,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#6366F1',
     paddingVertical: 16,
     borderRadius: 12,
+    gap: 8,
   },
   submitButtonDisabled: {
     backgroundColor: '#374151',
   },
   submitButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    marginLeft: 8,
   },
-  analysisCard: {
-    backgroundColor: 'rgba(245, 158, 11, 0.1)',
-    borderRadius: 16,
-    padding: 20,
+  infoBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderRadius: 12,
+    padding: 16,
     marginBottom: 24,
   },
-  analysisHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  analysisTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#fff',
-    marginLeft: 8,
-  },
-  riskBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginBottom: 12,
-  },
-  riskText: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginLeft: 6,
-  },
-  analysisText: {
-    fontSize: 14,
-    color: '#D1D5DB',
-    lineHeight: 22,
+  infoText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#9CA3AF',
+    marginLeft: 12,
+    lineHeight: 18,
   },
   historySection: {
     marginBottom: 24,
   },
   historyTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 16,
@@ -418,11 +408,18 @@ const styles = StyleSheet.create({
   emptyState: {
     alignItems: 'center',
     paddingVertical: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: 12,
   },
   emptyText: {
     fontSize: 16,
     color: '#9CA3AF',
     marginTop: 12,
+  },
+  emptySubtext: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginTop: 4,
   },
   historyItem: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -433,31 +430,41 @@ const styles = StyleSheet.create({
   historyHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 8,
   },
+  historyTopicRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  historyMoodEmoji: {
+    fontSize: 18,
+    marginRight: 8,
+  },
   historyTopic: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#fff',
     flex: 1,
   },
   historyDate: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#6B7280',
   },
   historyFeedback: {
     fontSize: 14,
     color: '#9CA3AF',
-    marginBottom: 8,
+    marginBottom: 12,
+    lineHeight: 20,
   },
-  historyRisk: {
+  moodBadge: {
     alignSelf: 'flex-start',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
   },
-  historyRiskText: {
+  moodBadgeText: {
     fontSize: 12,
     fontWeight: '600',
   },
