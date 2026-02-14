@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { api } from '../../../src/services/api';
 import { encrypt, decrypt } from '../../../src/utils/encryption';
+import SafeguardingAlert from '../../../src/components/SafeguardingAlert';
 
 interface Message {
   id: string;
@@ -35,6 +36,8 @@ export default function ChatScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
+  const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const isMounted = useRef(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
