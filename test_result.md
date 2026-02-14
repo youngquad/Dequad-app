@@ -246,6 +246,21 @@ backend:
         agent: "testing"
         comment: "✅ TESTED: All Stripe subscription endpoints working correctly. GET /api/subscription/status returns proper plan status (free/premium), remaining_swipes, daily_limit (5), and price (£4.99/month). POST /api/subscription/create-checkout fails with invalid Stripe keys (expected behavior - test keys are invalid). POST /api/matches/swipe correctly enforces 5 swipes/day limit for free users, returning 403 with upgrade_required=true after limit reached. Swipe counter decrements properly (5→4→3→2→1→0→limit_reached). All subscription functionality operational."
 
+  - task: "Safeguarding Matrix Features"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented safeguarding matrix with crisis keyword detection, UK crisis resources (Samaritans 116 123, NHS 111, Emergency 999, Shout text line), and admin-only safeguarding alerts and AI risk analysis endpoints"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: All safeguarding features working perfectly. POST /api/mood correctly detects concerning content ('I want to kill myself') and returns safeguarding alert with medium risk level and UK crisis resources. POST /api/feedback correctly detects concerning content ('ending it all') and returns safeguarding alert while hiding AI analysis from users (admin-only). GET /api/admin/safeguarding-alerts returns 4 safeguarding alerts with proper structure (alert_id, user info, source, content, risk_level, matched_keywords). GET /api/admin/ai-risk-analysis/{user_id} generates AI-powered risk assessment with risk level and score. Admin endpoints properly protected with 403 Forbidden for non-admin users. Fixed bug in feedback endpoint (entry_id -> id) and enhanced safeguarding keywords to include verb variations ('ending it all', 'ending my life', 'taking my life')."
+
 frontend:
   - task: "Landing Page"
     implemented: true
