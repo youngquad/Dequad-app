@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'https://student-connect-46.preview.emergentagent.com';
 export const API_URL = BACKEND_URL;
 
@@ -6,6 +8,15 @@ class ApiService {
 
   constructor() {
     this.baseUrl = `${BACKEND_URL}/api`;
+  }
+
+  private async getStoredToken(): Promise<string | null> {
+    try {
+      return await AsyncStorage.getItem('session_token');
+    } catch (error) {
+      console.error('Error getting stored token:', error);
+      return null;
+    }
   }
 
   private async request(
@@ -18,8 +29,11 @@ class ApiService {
       'Content-Type': 'application/json',
     };
 
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+    // Use provided token or fall back to stored token
+    const authToken = token ?? await this.getStoredToken();
+    
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`;
     }
 
     try {
