@@ -332,6 +332,99 @@ export default function AdminDashboard() {
     }
   };
 
+  // AI Learning functions
+  const loadAILearningStats = async () => {
+    try {
+      const data = await api.get('/admin/ai-learning/stats');
+      setAiLearningStats(data);
+    } catch (error) {
+      console.error('Error loading AI learning stats:', error);
+    }
+  };
+
+  const loadAIKeywords = async (status?: string) => {
+    setIsLoadingAI(true);
+    try {
+      const endpoint = status ? `/admin/ai-learning/keywords?status=${status}` : '/admin/ai-learning/keywords';
+      const data = await api.get(endpoint);
+      setAiKeywords(data.keywords || []);
+    } catch (error) {
+      console.error('Error loading AI keywords:', error);
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
+
+  const loadAIInsights = async () => {
+    try {
+      const data = await api.get('/admin/ai-learning/insights');
+      setAiInsights(data.insights || []);
+    } catch (error) {
+      console.error('Error loading AI insights:', error);
+    }
+  };
+
+  const handleKeywordAction = async (keywordId: string, action: 'approve' | 'reject', riskCategory?: string) => {
+    try {
+      await api.post(`/admin/ai-learning/keywords/${keywordId}/action`, {
+        action,
+        risk_category: riskCategory
+      });
+      Alert.alert('Success', `Keyword ${action}d successfully`);
+      loadAIKeywords(keywordFilter);
+      loadAILearningStats();
+    } catch (error) {
+      console.error('Error actioning keyword:', error);
+      Alert.alert('Error', `Failed to ${action} keyword`);
+    }
+  };
+
+  const handleAlertFeedback = async (alertId: string, wasTruePositive: boolean) => {
+    try {
+      await api.post(`/admin/safeguarding-alerts/${alertId}/feedback`, {
+        was_true_positive: wasTruePositive,
+        notes: wasTruePositive ? 'Confirmed as genuine concern' : 'Marked as false positive'
+      });
+      Alert.alert('Feedback Recorded', `Alert marked as ${wasTruePositive ? 'True Positive' : 'False Positive'}. This helps improve AI accuracy.`);
+      loadAILearningStats();
+    } catch (error) {
+      console.error('Error recording feedback:', error);
+      Alert.alert('Error', 'Failed to record feedback');
+    }
+  };
+
+  const triggerBehavioralAnalysis = async () => {
+    setIsLoadingAI(true);
+    try {
+      await api.post('/admin/ai-learning/trigger-analysis', {});
+      Alert.alert('Analysis Complete', 'Behavioral anomaly detection completed. Check insights for any new patterns.');
+      loadAIInsights();
+    } catch (error) {
+      console.error('Error triggering analysis:', error);
+      Alert.alert('Error', 'Failed to run behavioral analysis');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
+
+  const reviewInsight = async (insightId: string) => {
+    try {
+      await api.post(`/admin/ai-learning/insights/${insightId}/review`, {});
+      loadAIInsights();
+    } catch (error) {
+      console.error('Error reviewing insight:', error);
+    }
+  };
+
+  // Load AI Learning data when tab is active
+  useEffect(() => {
+    if (activeTab === 'ai-learning' && sessionToken) {
+      loadAILearningStats();
+      loadAIKeywords(keywordFilter);
+      loadAIInsights();
+    }
+  }, [activeTab, keywordFilter, sessionToken]);
+
   const exportData = async (type: string) => {
     const exportUrl = `${backendUrl}/api/admin/export/${type}`;
     Alert.alert(
