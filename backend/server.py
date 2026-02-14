@@ -1204,6 +1204,440 @@ async def get_crisis_resources(admin: User = Depends(require_admin)):
         "keywords": SAFEGUARDING_KEYWORDS
     }
 
+# ==================== DATA EXPORT ENDPOINTS ====================
+
+import csv
+import io
+
+@api_router.get("/admin/export/students")
+async def export_students_csv(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+):
+    """Export all student data as CSV (Admin Only)"""
+    query = {"role": "student"}
+    
+    # Apply date filters if provided
+    if start_date or end_date:
+        query["created_at"] = {}
+        if start_date:
+            query["created_at"]["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        if end_date:
+            query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    students = await db.users.find(query, {"_id": 0, "hashed_password": 0}).to_list(10000)
+    
+    # Create CSV
+    output = io.StringIO()
+    if students:
+        fieldnames = ["user_id", "email", "name", "university", "university_location", "campus_name", 
+                     "course", "age", "gender", "ethnicity", "plan", "created_at"]
+        writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+        writer.writeheader()
+        for student in students:
+            student["created_at"] = str(student.get("created_at", ""))
+            writer.writerow(student)
+    
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=students_export.csv"}
+    )
+
+@api_router.get("/admin/export/mood-history")
+async def export_mood_history_csv(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    user_id: Optional[str] = None
+):
+    """Export mood history as CSV (Admin Only)"""
+    query = {}
+    
+    if user_id:
+        query["user_id"] = user_id
+    
+    if start_date or end_date:
+        query["created_at"] = {}
+        if start_date:
+            query["created_at"]["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        if end_date:
+            query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    mood_entries = await db.mood_entries.find(query, {"_id": 0}).sort("created_at", -1).to_list(50000)
+    
+    # Get user names for enrichment
+    user_ids = list(set(e.get("user_id") for e in mood_entries))
+    users = await db.users.find({"user_id": {"$in": user_ids}}, {"_id": 0, "user_id": 1, "name": 1, "email": 1}).to_list(10000)
+    user_map = {u["user_id"]: u for u in users}
+    
+    output = io.StringIO()
+    fieldnames = ["user_id", "user_name", "user_email", "mood", "notes", "created_at"]
+    writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+    
+    for entry in mood_entries:
+        user_info = user_map.get(entry.get("user_id"), {})
+        row = {
+            "user_id": entry.get("user_id"),
+            "user_name": user_info.get("name", "Unknown"),
+            "user_email": user_info.get("email", "Unknown"),
+            "mood": entry.get("mood"),
+            "notes": entry.get("notes", ""),
+            "created_at": str(entry.get("created_at", ""))
+        }
+        writer.writerow(row)
+    
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=mood_history_export.csv"}
+    )
+
+@api_router.get("/admin/export/feedback-history")
+async def export_feedback_history_csv(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    user_id: Optional[str] = None
+):
+    """Export feedback history as CSV (Admin Only)"""
+    query = {}
+    
+    if user_id:
+        query["user_id"] = user_id
+    
+    if start_date or end_date:
+        query["created_at"] = {}
+        if start_date:
+            query["created_at"]["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        if end_date:
+            query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    feedback_entries = await db.feedback_entries.find(query, {"_id": 0}).sort("created_at", -1).to_list(50000)
+    
+    # Get user names
+    user_ids = list(set(e.get("user_id") for e in feedback_entries))
+    users = await db.users.find({"user_id": {"$in": user_ids}}, {"_id": 0, "user_id": 1, "name": 1, "email": 1}).to_list(10000)
+    user_map = {u["user_id"]: u for u in users}
+    
+    output = io.StringIO()
+    fieldnames = ["user_id", "user_name", "user_email", "mood", "feedback", "lecture_topic", "risk_score", "created_at"]
+    writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+    
+    for entry in feedback_entries:
+        user_info = user_map.get(entry.get("user_id"), {})
+        row = {
+            "user_id": entry.get("user_id"),
+            "user_name": user_info.get("name", "Unknown"),
+            "user_email": user_info.get("email", "Unknown"),
+            "mood": entry.get("mood"),
+            "feedback": entry.get("feedback", ""),
+            "lecture_topic": entry.get("lecture_topic", ""),
+            "risk_score": entry.get("risk_score", 0),
+            "created_at": str(entry.get("created_at", ""))
+        }
+        writer.writerow(row)
+    
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=feedback_history_export.csv"}
+    )
+
+@api_router.get("/admin/export/safeguarding-alerts")
+async def export_safeguarding_alerts_csv(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    risk_level: Optional[str] = None
+):
+    """Export safeguarding alerts as CSV (Admin Only)"""
+    query = {}
+    
+    if risk_level:
+        query["risk_level"] = risk_level
+    
+    if start_date or end_date:
+        query["created_at"] = {}
+        if start_date:
+            query["created_at"]["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        if end_date:
+            query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    alerts = await db.safeguarding_alerts.find(query, {"_id": 0}).sort("created_at", -1).to_list(10000)
+    
+    output = io.StringIO()
+    fieldnames = ["alert_id", "user_id", "user_name", "user_email", "source", "risk_level", 
+                 "matched_keywords", "content", "acknowledged", "acknowledged_by", "created_at"]
+    writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+    
+    for alert in alerts:
+        row = {
+            "alert_id": alert.get("alert_id"),
+            "user_id": alert.get("user_id"),
+            "user_name": alert.get("user_name"),
+            "user_email": alert.get("user_email"),
+            "source": alert.get("source"),
+            "risk_level": alert.get("risk_level"),
+            "matched_keywords": ", ".join(alert.get("matched_keywords", [])),
+            "content": alert.get("content", "")[:500],  # Truncate for CSV
+            "acknowledged": alert.get("acknowledged", False),
+            "acknowledged_by": alert.get("acknowledged_by", ""),
+            "created_at": str(alert.get("created_at", ""))
+        }
+        writer.writerow(row)
+    
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=safeguarding_alerts_export.csv"}
+    )
+
+# ==================== ADVANCED ANALYTICS ENDPOINTS ====================
+
+@api_router.get("/admin/analytics/mood-trends")
+async def get_mood_trends(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    group_by: str = "day"  # day, week, month
+):
+    """Get mood trends over time for charts (Admin Only)"""
+    query = {}
+    
+    # Default to last 30 days if no dates provided
+    if not start_date:
+        start_date = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+    
+    query["created_at"] = {"$gte": datetime.fromisoformat(start_date.replace('Z', '+00:00'))}
+    if end_date:
+        query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    mood_entries = await db.mood_entries.find(query, {"_id": 0}).sort("created_at", 1).to_list(100000)
+    
+    # Group by date
+    trends = {}
+    for entry in mood_entries:
+        created_at = entry.get("created_at")
+        if not created_at:
+            continue
+        
+        if group_by == "day":
+            key = created_at.strftime("%Y-%m-%d")
+        elif group_by == "week":
+            key = created_at.strftime("%Y-W%W")
+        else:  # month
+            key = created_at.strftime("%Y-%m")
+        
+        if key not in trends:
+            trends[key] = {"total_mood": 0, "count": 0}
+        
+        trends[key]["total_mood"] += entry.get("mood", 5)
+        trends[key]["count"] += 1
+    
+    # Calculate averages
+    result = []
+    for date_key, data in sorted(trends.items()):
+        avg_mood = data["total_mood"] / data["count"] if data["count"] > 0 else 0
+        result.append({
+            "date": date_key,
+            "average_mood": round(avg_mood, 2),
+            "entry_count": data["count"]
+        })
+    
+    return {"trends": result, "group_by": group_by}
+
+@api_router.get("/admin/analytics/university-comparison")
+async def get_university_comparison(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+):
+    """Get engagement and mood comparison by university (Admin Only)"""
+    # Get all students grouped by university
+    students = await db.users.find(
+        {"role": "student", "university": {"$exists": True, "$ne": None}},
+        {"_id": 0, "user_id": 1, "university": 1}
+    ).to_list(10000)
+    
+    # Group by university
+    university_users = {}
+    for student in students:
+        uni = student.get("university", "Unknown")
+        if uni not in university_users:
+            university_users[uni] = []
+        university_users[uni].append(student["user_id"])
+    
+    # Build date query
+    date_query = {}
+    if start_date:
+        date_query["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+    if end_date:
+        date_query["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    # Calculate metrics for each university
+    comparison = []
+    for university, user_ids in university_users.items():
+        mood_query = {"user_id": {"$in": user_ids}}
+        if date_query:
+            mood_query["created_at"] = date_query
+        
+        mood_entries = await db.mood_entries.find(mood_query, {"_id": 0, "mood": 1}).to_list(50000)
+        feedback_count = await db.feedback_entries.count_documents(mood_query)
+        
+        avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries) if mood_entries else 0
+        
+        # Count safeguarding alerts
+        alert_query = {"user_id": {"$in": user_ids}}
+        if date_query:
+            alert_query["created_at"] = date_query
+        alert_count = await db.safeguarding_alerts.count_documents(alert_query)
+        
+        comparison.append({
+            "university": university,
+            "student_count": len(user_ids),
+            "average_mood": round(avg_mood, 2),
+            "mood_entries": len(mood_entries),
+            "feedback_entries": feedback_count,
+            "safeguarding_alerts": alert_count,
+            "engagement_rate": round(len(mood_entries) / max(len(user_ids), 1), 2)
+        })
+    
+    # Sort by student count
+    comparison.sort(key=lambda x: x["student_count"], reverse=True)
+    
+    return {"universities": comparison}
+
+@api_router.get("/admin/analytics/risk-distribution")
+async def get_risk_distribution(
+    admin: User = Depends(require_admin),
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+):
+    """Get risk score distribution for charts (Admin Only)"""
+    query = {}
+    
+    if start_date or end_date:
+        query["created_at"] = {}
+        if start_date:
+            query["created_at"]["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        if end_date:
+            query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    
+    # Get risk scores from feedback
+    feedback_entries = await db.feedback_entries.find(query, {"_id": 0, "risk_score": 1}).to_list(50000)
+    
+    # Categorize risk scores
+    distribution = {
+        "low": 0,      # 0-30
+        "medium": 0,   # 31-60
+        "high": 0,     # 61-80
+        "critical": 0  # 81-100
+    }
+    
+    for entry in feedback_entries:
+        score = entry.get("risk_score", 0)
+        if score <= 30:
+            distribution["low"] += 1
+        elif score <= 60:
+            distribution["medium"] += 1
+        elif score <= 80:
+            distribution["high"] += 1
+        else:
+            distribution["critical"] += 1
+    
+    # Get safeguarding alerts distribution
+    alert_query = query.copy()
+    alerts = await db.safeguarding_alerts.find(alert_query, {"_id": 0, "risk_level": 1}).to_list(10000)
+    
+    alert_distribution = {"high": 0, "medium": 0}
+    for alert in alerts:
+        level = alert.get("risk_level", "medium")
+        if level in alert_distribution:
+            alert_distribution[level] += 1
+    
+    return {
+        "risk_score_distribution": distribution,
+        "safeguarding_alert_distribution": alert_distribution,
+        "total_feedback_entries": len(feedback_entries),
+        "total_safeguarding_alerts": len(alerts)
+    }
+
+@api_router.post("/admin/analytics/bulk-ai-analysis")
+async def bulk_ai_analysis(
+    admin: User = Depends(require_admin),
+    university: Optional[str] = None,
+    limit: int = 50
+):
+    """Run AI analysis on multiple students at once (Admin Only)"""
+    # Get students to analyze
+    query = {"role": "student"}
+    if university:
+        query["university"] = university
+    
+    students = await db.users.find(query, {"_id": 0}).limit(limit).to_list(limit)
+    
+    results = []
+    high_risk_count = 0
+    medium_risk_count = 0
+    
+    for student in students:
+        user_id = student.get("user_id")
+        
+        # Get recent mood entries
+        mood_entries = await db.mood_entries.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(20).to_list(20)
+        
+        # Calculate basic risk metrics
+        if mood_entries:
+            avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries)
+            risk_score = max(0, 100 - (avg_mood * 10))
+        else:
+            avg_mood = None
+            risk_score = 50  # Unknown
+        
+        # Check for safeguarding alerts
+        alert_count = await db.safeguarding_alerts.count_documents({"user_id": user_id})
+        
+        # Determine risk level
+        if risk_score > 70 or alert_count > 0:
+            risk_level = "high"
+            high_risk_count += 1
+        elif risk_score > 40:
+            risk_level = "medium"
+            medium_risk_count += 1
+        else:
+            risk_level = "low"
+        
+        results.append({
+            "user_id": user_id,
+            "name": student.get("name"),
+            "email": student.get("email"),
+            "university": student.get("university"),
+            "average_mood": round(avg_mood, 2) if avg_mood else None,
+            "risk_score": round(risk_score),
+            "risk_level": risk_level,
+            "mood_entries_count": len(mood_entries),
+            "safeguarding_alerts": alert_count
+        })
+    
+    # Sort by risk score (highest first)
+    results.sort(key=lambda x: x["risk_score"], reverse=True)
+    
+    return {
+        "students_analyzed": len(results),
+        "high_risk_count": high_risk_count,
+        "medium_risk_count": medium_risk_count,
+        "low_risk_count": len(results) - high_risk_count - medium_risk_count,
+        "results": results
+    }
+
 # ==================== ANALYTICS ENDPOINTS ====================
 
 async def calculate_student_engagement(user_id: str) -> dict:
