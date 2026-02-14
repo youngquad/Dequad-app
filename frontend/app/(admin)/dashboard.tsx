@@ -79,7 +79,7 @@ export default function AdminDashboard() {
   const { sessionToken, user, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'universities' | 'export'>('overview');
   
   // Data states
   const [stats, setStats] = useState<any>(null);
@@ -90,6 +90,13 @@ export default function AdminDashboard() {
   const [riskDistribution, setRiskDistribution] = useState<RiskDistribution | null>(null);
   const [bulkAnalysis, setBulkAnalysis] = useState<BulkAnalysisResult[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // University-specific states
+  const [universities, setUniversities] = useState<{name: string; student_count: number}[]>([]);
+  const [selectedUniversity, setSelectedUniversity] = useState<string | null>(null);
+  const [universityStudents, setUniversityStudents] = useState<any[]>([]);
+  const [universityAnalysis, setUniversityAnalysis] = useState<any>(null);
+  const [isLoadingUniversity, setIsLoadingUniversity] = useState(false);
 
   // Date filters
   const [dateRange, setDateRange] = useState('30'); // days
@@ -109,6 +116,7 @@ export default function AdminDashboard() {
         loadMoodTrends(),
         loadUniversityComparison(),
         loadRiskDistribution(),
+        loadUniversitiesList(),
       ]);
     } catch (error) {
       console.error('Error loading admin data:', error);
@@ -169,14 +177,55 @@ export default function AdminDashboard() {
     }
   };
 
-  const runBulkAnalysis = async () => {
+  const loadUniversitiesList = async () => {
+    try {
+      const data = await api.get('/admin/universities', sessionToken);
+      setUniversities(data.universities || []);
+    } catch (error) {
+      console.error('Error loading universities:', error);
+    }
+  };
+
+  const loadUniversityStudents = async (universityName: string) => {
+    setIsLoadingUniversity(true);
+    setSelectedUniversity(universityName);
+    try {
+      const data = await api.get(`/admin/university/${encodeURIComponent(universityName)}/students`, sessionToken);
+      setUniversityStudents(data.students || []);
+    } catch (error) {
+      console.error('Error loading university students:', error);
+      Alert.alert('Error', 'Failed to load university students');
+    } finally {
+      setIsLoadingUniversity(false);
+    }
+  };
+
+  const runUniversityAnalysis = async (universityName: string) => {
     setIsAnalyzing(true);
     try {
-      const data = await api.post('/admin/analytics/bulk-ai-analysis', { limit: 100 }, sessionToken);
+      const data = await api.post(`/admin/university/${encodeURIComponent(universityName)}/ai-analysis`, {}, sessionToken);
+      setUniversityAnalysis(data);
+      Alert.alert(
+        'Analysis Complete',
+        `${universityName}\n\nWellbeing Score: ${data.ai_analysis?.overall_wellbeing_score || 'N/A'}/100\nTrend: ${data.ai_analysis?.wellbeing_trend || 'N/A'}`
+      );
+    } catch (error) {
+      console.error('Error running university analysis:', error);
+      Alert.alert('Error', 'Failed to run university analysis');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const runBulkAnalysis = async (university?: string) => {
+    setIsAnalyzing(true);
+    try {
+      const payload = university ? { limit: 100, university } : { limit: 100 };
+      const data = await api.post('/admin/analytics/bulk-ai-analysis', payload, sessionToken);
       setBulkAnalysis(data.results || []);
       Alert.alert(
         'Analysis Complete',
-        `Analyzed ${data.students_analyzed} students:\n• High Risk: ${data.high_risk_count}\n• Medium Risk: ${data.medium_risk_count}\n• Low Risk: ${data.low_risk_count}`
+        `Analyzed ${data.students_analyzed} students${university ? ` from ${university}` : ''}:\n• High Risk: ${data.high_risk_count}\n• Medium Risk: ${data.medium_risk_count}\n• Low Risk: ${data.low_risk_count}`
       );
     } catch (error) {
       console.error('Error running bulk analysis:', error);
