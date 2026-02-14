@@ -255,7 +255,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -263,6 +263,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: All safeguarding features working perfectly. POST /api/mood correctly detects concerning content ('I want to kill myself') and returns safeguarding alert with medium risk level and UK crisis resources. POST /api/feedback correctly detects concerning content ('ending it all') and returns safeguarding alert while hiding AI analysis from users (admin-only). GET /api/admin/safeguarding-alerts returns 4 safeguarding alerts with proper structure (alert_id, user info, source, content, risk_level, matched_keywords). GET /api/admin/ai-risk-analysis/{user_id} generates AI-powered risk assessment with risk level and score. Admin endpoints properly protected with 403 Forbidden for non-admin users. Fixed bug in feedback endpoint (entry_id -> id) and enhanced safeguarding keywords to include verb variations ('ending it all', 'ending my life', 'taking my life')."
+      - working: "NA"
+        agent: "main"
+        comment: "Added admin email notification system via SMTP when safeguarding alerts are triggered. New endpoints: GET /api/admin/email-config (check SMTP status), POST /api/admin/test-email (send test notification). Email will be sent to all users with role='admin' when concerning content is detected in mood/feedback/chat."
 
 frontend:
   - task: "Landing Page"
