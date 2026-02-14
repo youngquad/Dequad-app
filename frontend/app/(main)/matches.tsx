@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import { useRouter } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 const SWIPE_THRESHOLD = width * 0.25;
@@ -36,12 +37,20 @@ interface UserProfile {
   match_score?: number;
 }
 
+interface SwipeInfo {
+  remaining_swipes: number | null;
+  is_premium: boolean;
+}
+
 export default function MatchesScreen() {
+  const router = useRouter();
   const { sessionToken } = useAuth();
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [matchAlert, setMatchAlert] = useState<UserProfile | null>(null);
+  const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_swipes: 5, is_premium: false });
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
 
   const position = useRef(new Animated.ValueXY()).current;
   const rotate = position.x.interpolate({
