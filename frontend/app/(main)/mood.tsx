@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import SafeguardingAlert from '../../src/components/SafeguardingAlert';
 
 const MOODS = [
   { value: 1, emoji: 'sad-outline', label: 'Very Bad', color: '#EF4444' },
@@ -41,6 +42,8 @@ export default function MoodScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
+  const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
 
   useEffect(() => {
     loadMoodHistory();
@@ -65,8 +68,16 @@ export default function MoodScreen() {
 
     setIsSubmitting(true);
     try {
-      await api.post('/mood', { mood: selectedMood, notes }, sessionToken);
-      Alert.alert('Success', 'Your mood has been recorded!');
+      const response = await api.post('/mood', { mood: selectedMood, notes }, sessionToken);
+      
+      // Check for safeguarding alert
+      if (response.safeguarding_alert && response.safeguarding_alert.flagged) {
+        setSafeguardingAlert(response.safeguarding_alert);
+        setShowSafeguardingModal(true);
+      } else {
+        Alert.alert('Success', 'Your mood has been recorded!');
+      }
+      
       setSelectedMood(null);
       setNotes('');
       loadMoodHistory();
@@ -94,6 +105,16 @@ export default function MoodScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Safeguarding Alert Modal */}
+      <SafeguardingAlert
+        visible={showSafeguardingModal}
+        onClose={() => {
+          setShowSafeguardingModal(false);
+          Alert.alert('Mood Recorded', 'Your mood has been saved. Remember, support is always available.');
+        }}
+        alertData={safeguardingAlert}
+      />
+
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <Text style={styles.title}>How are you feeling?</Text>
