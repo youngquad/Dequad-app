@@ -104,8 +104,11 @@ export default function AdminDashboard() {
   const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
   useEffect(() => {
-    loadAllData();
-  }, [dateRange]);
+    // Only load data when sessionToken is available
+    if (sessionToken) {
+      loadAllData();
+    }
+  }, [dateRange, sessionToken]);
 
   const loadAllData = async () => {
     setIsLoading(true);
