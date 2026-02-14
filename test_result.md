@@ -429,6 +429,8 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Completed full implementation of Educare platform. All backend APIs and frontend screens are implemented. Please test all backend APIs first. For auth testing, create test user and session manually in MongoDB. For AI prediction testing, check if emergentintegrations library is properly using OpenAI GPT."
+  - agent: "main"
+    message: "Updated admin dashboard Overview tab to display subscription stats (premium/free students, conversion rate) and university breakdown with student counts. The /api/admin/stats endpoint now returns subscription_stats and university_breakdown fields. Please test the endpoint and verify the new data is returned correctly."
   - agent: "testing"
     message: "✅ BACKEND TESTING COMPLETE: All 7 backend API groups tested successfully. Authentication, mood tracking, AI-powered feedback analysis, student matching, encrypted chat, profile management, and admin dashboard APIs are all working correctly. OpenAI GPT integration confirmed via emergentintegrations library with successful LiteLLM API calls. No critical issues found - all core functionality operational."
   - agent: "testing"
