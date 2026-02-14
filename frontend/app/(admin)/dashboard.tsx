@@ -126,9 +126,10 @@ export default function AdminDashboard() {
   useEffect(() => {
     // Only load data when sessionToken is available
     if (sessionToken) {
+      console.log('Loading admin data with token:', sessionToken?.substring(0, 20) + '...');
       loadAllData();
     }
-  }, [dateRange, sessionToken]);
+  }, [dateRange, sessionToken, localSessionToken]);
 
   const loadAllData = async () => {
     setIsLoading(true);
