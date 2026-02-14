@@ -81,7 +81,7 @@ export default function AdminDashboard() {
   const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'universities' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'universities' | 'ai-learning' | 'export'>('overview');
   const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
@@ -133,6 +133,13 @@ export default function AdminDashboard() {
   const [universityStudents, setUniversityStudents] = useState<any[]>([]);
   const [universityAnalysis, setUniversityAnalysis] = useState<any>(null);
   const [isLoadingUniversity, setIsLoadingUniversity] = useState(false);
+
+  // AI Learning states
+  const [aiLearningStats, setAiLearningStats] = useState<any>(null);
+  const [aiKeywords, setAiKeywords] = useState<any[]>([]);
+  const [aiInsights, setAiInsights] = useState<any[]>([]);
+  const [keywordFilter, setKeywordFilter] = useState<string>('pending');
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
 
   // Date filters
   const [dateRange, setDateRange] = useState('30'); // days
