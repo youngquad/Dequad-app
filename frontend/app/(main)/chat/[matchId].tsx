@@ -122,7 +122,7 @@ export default function ChatScreen() {
     const encryptedText = encrypt(inputText.trim());
 
     try {
-      await api.post(
+      const response = await api.post(
         '/chat/send',
         {
           match_id: matchId,
@@ -130,6 +130,13 @@ export default function ChatScreen() {
         },
         sessionToken
       );
+      
+      // Check for safeguarding alert
+      if (response.safeguarding_alert && response.safeguarding_alert.flagged) {
+        setSafeguardingAlert(response.safeguarding_alert);
+        setShowSafeguardingModal(true);
+      }
+      
       setInputText('');
       loadMessages();
     } catch (error) {
