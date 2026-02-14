@@ -40,10 +40,10 @@ FREE_SWIPES_PER_DAY = 5
 # ==================== SAFEGUARDING MATRIX ====================
 # Keywords that indicate potential crisis/self-harm
 SAFEGUARDING_KEYWORDS = [
-    "kill myself", "want to die", "end my life", "suicide",
+    "kill myself", "want to die", "end my life", "ending my life", "suicide",
     "self harm", "self-harm", "cut myself", "hurt myself",
-    "no reason to live", "end it all", "better off dead",
-    "can't go on", "give up on life", "take my life",
+    "no reason to live", "end it all", "ending it all", "better off dead",
+    "can't go on", "give up on life", "take my life", "taking my life",
     "don't want to be here", "want to disappear", "overdose",
     "jump off", "hang myself", "slit my wrists"
 ]
