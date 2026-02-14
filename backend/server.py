@@ -24,6 +24,19 @@ db = client[os.environ['DB_NAME']]
 # Emergent LLM Key
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 
+# Stripe Configuration
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+stripe.api_key = STRIPE_SECRET_KEY
+
+# Stripe Price Configuration (£4.99/month)
+STRIPE_PRICE_AMOUNT = 499  # in pence
+STRIPE_PRICE_CURRENCY = "gbp"
+STRIPE_PRODUCT_NAME = "Educare Premium"
+
+# Swipe limits
+FREE_SWIPES_PER_DAY = 5
+
 # Create the main app
 app = FastAPI(title="Educare API")
 
