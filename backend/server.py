@@ -600,6 +600,28 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     if data.action not in ["like", "dislike"]:
         raise HTTPException(status_code=400, detail="Action must be 'like' or 'dislike'")
     
+    # Check swipe limit for free users
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    user_plan = user_doc.get("plan", "free")
+    swipes_today = user_doc.get("swipes_today", 0)
+    last_swipe_date = user_doc.get("last_swipe_date")
+    
+    # Reset swipes if it's a new day
+    if last_swipe_date != today:
+        swipes_today = 0
+    
+    # Check limit for free users
+    if user_plan == "free" and swipes_today >= FREE_SWIPES_PER_DAY:
+        raise HTTPException(
+            status_code=403, 
+            detail={
+                "message": "Daily swipe limit reached",
+                "limit": FREE_SWIPES_PER_DAY,
+                "upgrade_required": True
+            }
+        )
+    
     # Check if target user exists
     target_user = await db.users.find_one({"user_id": data.target_user_id}, {"_id": 0})
     if not target_user:
@@ -613,6 +635,12 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     
     if existing:
         raise HTTPException(status_code=400, detail="Already swiped on this user")
+    
+    # Update swipe count
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {"swipes_today": swipes_today + 1, "last_swipe_date": today}}
+    )
     
     status = "liked" if data.action == "like" else "rejected"
     
@@ -663,10 +691,17 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
                 {"match_user_id": current_user.user_id, "match_user_name": current_user.name}
             )
     
+    # Return remaining swipes info for free users
+    remaining_swipes = None
+    if user_plan == "free":
+        remaining_swipes = FREE_SWIPES_PER_DAY - (swipes_today + 1)
+    
     return {
         "match": match.dict(),
         "is_mutual": mutual_match is not None,
-        "matched_user": mutual_match
+        "matched_user": mutual_match,
+        "remaining_swipes": remaining_swipes,
+        "is_premium": user_plan == "premium"
     }
 
 @api_router.get("/matches/accepted")
