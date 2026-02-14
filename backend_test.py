@@ -840,6 +840,67 @@ class APITester:
         else:
             self.log_result("admin", "Admin AI Risk Analysis", False, error="Could not get current user info for AI risk analysis test")
 
+    def test_admin_email_notification_apis(self):
+        """Test Admin Email Notification APIs"""
+        print("\n📧 Testing Admin Email Notification APIs...")
+        
+        # Test GET /api/admin/email-config
+        response = self.make_request("GET", "/admin/email-config", token=ADMIN_TOKEN)
+        if isinstance(response, tuple):
+            self.log_result("admin", "GET /admin/email-config", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                config_data = response.json()
+                required_fields = ["smtp_configured", "message"]
+                missing_fields = [field for field in required_fields if field not in config_data]
+                
+                if missing_fields:
+                    self.log_result("admin", "GET /admin/email-config", False, response, f"Missing fields: {missing_fields}")
+                elif config_data.get("smtp_configured") == False:
+                    self.log_result("admin", "GET /admin/email-config", True)
+                    print(f"      ✅ SMTP configured: {config_data.get('smtp_configured')}")
+                    print(f"      ✅ Message: {config_data.get('message')}")
+                else:
+                    self.log_result("admin", "GET /admin/email-config", False, response, f"Expected smtp_configured=false, got {config_data.get('smtp_configured')}")
+            except json.JSONDecodeError:
+                self.log_result("admin", "GET /admin/email-config", False, response, "Invalid JSON response")
+        elif response and response.status_code == 401:
+            self.log_result("admin", "GET /admin/email-config", False, response, "Unauthorized - admin token may be invalid")
+        elif response and response.status_code == 403:
+            self.log_result("admin", "GET /admin/email-config", False, response, "Forbidden - user may not have admin privileges")
+        else:
+            self.log_result("admin", "GET /admin/email-config", False, response, "Email config retrieval failed")
+        
+        # Test POST /api/admin/test-email
+        response = self.make_request("POST", "/admin/test-email", token=ADMIN_TOKEN)
+        if isinstance(response, tuple):
+            self.log_result("admin", "POST /admin/test-email", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                test_data = response.json()
+                required_fields = ["success", "message"]
+                missing_fields = [field for field in required_fields if field not in test_data]
+                
+                if missing_fields:
+                    self.log_result("admin", "POST /admin/test-email", False, response, f"Missing fields: {missing_fields}")
+                elif (test_data.get("success") == False and 
+                      "not configured" in test_data.get("message", "").lower()):
+                    self.log_result("admin", "POST /admin/test-email", True)
+                    print(f"      ✅ Success: {test_data.get('success')} (expected)")
+                    print(f"      ✅ Message: {test_data.get('message')}")
+                    if "required_env_vars" in test_data:
+                        print(f"      ✅ Required env vars provided: {len(test_data.get('required_env_vars', []))}")
+                else:
+                    self.log_result("admin", "POST /admin/test-email", False, response, f"Expected success=false with 'not configured' message, got: {test_data}")
+            except json.JSONDecodeError:
+                self.log_result("admin", "POST /admin/test-email", False, response, "Invalid JSON response")
+        elif response and response.status_code == 401:
+            self.log_result("admin", "POST /admin/test-email", False, response, "Unauthorized - admin token may be invalid")
+        elif response and response.status_code == 403:
+            self.log_result("admin", "POST /admin/test-email", False, response, "Forbidden - user may not have admin privileges")
+        else:
+            self.log_result("admin", "POST /admin/test-email", False, response, "Test email endpoint failed")
+
     def test_admin_apis(self):
         """Test Admin APIs"""
         print("\n👑 Testing Admin APIs...")
