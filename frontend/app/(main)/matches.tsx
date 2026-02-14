@@ -80,6 +80,7 @@ export default function MatchesScreen() {
 
   useEffect(() => {
     loadProfiles();
+    loadSwipeStatus();
   }, []);
 
   const loadProfiles = async () => {
@@ -91,6 +92,18 @@ export default function MatchesScreen() {
       console.error('Error loading profiles:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadSwipeStatus = async () => {
+    try {
+      const data = await api.get('/subscription/status', sessionToken);
+      setSwipeInfo({
+        remaining_swipes: data.remaining_swipes,
+        is_premium: data.is_premium
+      });
+    } catch (error) {
+      console.error('Error loading swipe status:', error);
     }
   };
 
@@ -117,7 +130,26 @@ export default function MatchesScreen() {
     }).start();
   };
 
+  const handleSwipeError = (error: any) => {
+    // Check if it's a swipe limit error
+    if (error?.response?.status === 403) {
+      const detail = error?.response?.data?.detail;
+      if (detail?.upgrade_required) {
+        setShowUpgradePrompt(true);
+        return true;
+      }
+    }
+    return false;
+  };
+
   const swipeRight = async () => {
+    // Check if free user has swipes left
+    if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
+      setShowUpgradePrompt(true);
+      resetPosition();
+      return;
+    }
+
     const currentProfile = profiles[currentIndex];
     
     Animated.timing(position, {
@@ -135,15 +167,33 @@ export default function MatchesScreen() {
         if (result.is_mutual) {
           setMatchAlert(result.matched_user);
         }
-      } catch (error) {
-        console.error('Swipe error:', error);
+        
+        // Update swipe info
+        if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
+          setSwipeInfo(prev => ({
+            ...prev,
+            remaining_swipes: result.remaining_swipes
+          }));
+        }
+        
+        goToNext();
+      } catch (error: any) {
+        if (!handleSwipeError(error)) {
+          console.error('Swipe error:', error);
+        }
+        resetPosition();
       }
-      
-      goToNext();
     });
   };
 
   const swipeLeft = async () => {
+    // Check if free user has swipes left
+    if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
+      setShowUpgradePrompt(true);
+      resetPosition();
+      return;
+    }
+
     const currentProfile = profiles[currentIndex];
     
     Animated.timing(position, {
@@ -152,16 +202,27 @@ export default function MatchesScreen() {
       useNativeDriver: false,
     }).start(async () => {
       try {
-        await api.post(
+        const result = await api.post(
           '/matches/swipe',
           { target_user_id: currentProfile.user_id, action: 'dislike' },
           sessionToken
         );
-      } catch (error) {
-        console.error('Swipe error:', error);
+        
+        // Update swipe info
+        if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
+          setSwipeInfo(prev => ({
+            ...prev,
+            remaining_swipes: result.remaining_swipes
+          }));
+        }
+        
+        goToNext();
+      } catch (error: any) {
+        if (!handleSwipeError(error)) {
+          console.error('Swipe error:', error);
+        }
+        resetPosition();
       }
-      
-      goToNext();
     });
   };
 
