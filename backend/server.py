@@ -1709,7 +1709,233 @@ async def bulk_ai_analysis(
         "high_risk_count": high_risk_count,
         "medium_risk_count": medium_risk_count,
         "low_risk_count": len(results) - high_risk_count - medium_risk_count,
+        "university_filter": university,
         "results": results
+    }
+
+@api_router.get("/admin/universities")
+async def get_universities_list(admin: User = Depends(require_admin)):
+    """Get list of all universities with student counts (Admin Only)"""
+    # Aggregate universities
+    pipeline = [
+        {"$match": {"role": "student", "university": {"$exists": True, "$ne": None, "$ne": ""}}},
+        {"$group": {
+            "_id": "$university",
+            "student_count": {"$sum": 1}
+        }},
+        {"$sort": {"student_count": -1}}
+    ]
+    
+    universities = await db.users.aggregate(pipeline).to_list(100)
+    
+    result = []
+    for uni in universities:
+        if uni["_id"]:
+            result.append({
+                "name": uni["_id"],
+                "student_count": uni["student_count"]
+            })
+    
+    return {
+        "universities": result,
+        "total_universities": len(result)
+    }
+
+@api_router.get("/admin/university/{university_name}/students")
+async def get_university_students(
+    university_name: str,
+    admin: User = Depends(require_admin)
+):
+    """Get all students from a specific university with their risk data (Admin Only)"""
+    import urllib.parse
+    university_decoded = urllib.parse.unquote(university_name)
+    
+    students = await db.users.find(
+        {"role": "student", "university": {"$regex": f"^{university_decoded}$", "$options": "i"}},
+        {"_id": 0, "admin_password": 0}
+    ).to_list(1000)
+    
+    enriched_students = []
+    for student in students:
+        user_id = student.get("user_id")
+        
+        # Get mood stats
+        mood_entries = await db.mood_entries.find(
+            {"user_id": user_id},
+            {"_id": 0, "mood": 1}
+        ).sort("created_at", -1).limit(30).to_list(30)
+        
+        avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries) if mood_entries else None
+        
+        # Get alert count
+        alert_count = await db.safeguarding_alerts.count_documents({"user_id": user_id})
+        
+        # Calculate risk
+        if avg_mood:
+            risk_score = max(0, 100 - (avg_mood * 10))
+        else:
+            risk_score = 50
+        
+        if alert_count > 0 or risk_score > 70:
+            risk_level = "high"
+        elif risk_score > 40:
+            risk_level = "medium"
+        else:
+            risk_level = "low"
+        
+        enriched_students.append({
+            "user_id": user_id,
+            "name": student.get("name"),
+            "email": student.get("email"),
+            "course": student.get("course"),
+            "campus_name": student.get("campus_name"),
+            "average_mood": round(avg_mood, 2) if avg_mood else None,
+            "mood_entries_count": len(mood_entries),
+            "safeguarding_alerts": alert_count,
+            "risk_score": round(risk_score),
+            "risk_level": risk_level,
+            "created_at": str(student.get("created_at", ""))
+        })
+    
+    # Sort by risk score (highest first)
+    enriched_students.sort(key=lambda x: x["risk_score"], reverse=True)
+    
+    high_risk = len([s for s in enriched_students if s["risk_level"] == "high"])
+    medium_risk = len([s for s in enriched_students if s["risk_level"] == "medium"])
+    
+    return {
+        "university": university_decoded,
+        "total_students": len(enriched_students),
+        "high_risk_count": high_risk,
+        "medium_risk_count": medium_risk,
+        "low_risk_count": len(enriched_students) - high_risk - medium_risk,
+        "students": enriched_students
+    }
+
+@api_router.post("/admin/university/{university_name}/ai-analysis")
+async def university_ai_analysis(
+    university_name: str,
+    admin: User = Depends(require_admin)
+):
+    """Run comprehensive AI analysis for all students in a university (Admin Only)"""
+    import urllib.parse
+    university_decoded = urllib.parse.unquote(university_name)
+    
+    # Get all students from university
+    students = await db.users.find(
+        {"role": "student", "university": {"$regex": f"^{university_decoded}$", "$options": "i"}},
+        {"_id": 0}
+    ).to_list(500)
+    
+    if not students:
+        raise HTTPException(status_code=404, detail="No students found for this university")
+    
+    # Gather all mood and feedback data
+    all_mood_data = []
+    all_feedback_data = []
+    student_summaries = []
+    
+    for student in students:
+        user_id = student.get("user_id")
+        
+        mood_entries = await db.mood_entries.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(30).to_list(30)
+        
+        feedback_entries = await db.feedback_entries.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(20).to_list(20)
+        
+        alert_count = await db.safeguarding_alerts.count_documents({"user_id": user_id})
+        
+        avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries) if mood_entries else None
+        
+        all_mood_data.extend(mood_entries)
+        all_feedback_data.extend(feedback_entries)
+        
+        student_summaries.append({
+            "name": student.get("name"),
+            "course": student.get("course"),
+            "avg_mood": round(avg_mood, 1) if avg_mood else "N/A",
+            "mood_count": len(mood_entries),
+            "alerts": alert_count
+        })
+    
+    # Calculate university-wide stats
+    total_moods = [e.get("mood", 5) for e in all_mood_data]
+    university_avg_mood = sum(total_moods) / len(total_moods) if total_moods else 0
+    
+    # Run AI analysis
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"uni_analysis_{uuid.uuid4().hex[:8]}",
+            system_message="""You are a university student wellbeing analyst. Analyze the aggregated data for a university and provide insights.
+
+Provide your response in JSON format:
+{
+    "overall_wellbeing_score": 0-100,
+    "wellbeing_trend": "improving" | "stable" | "declining",
+    "key_concerns": ["concern1", "concern2", "concern3"],
+    "positive_aspects": ["positive1", "positive2"],
+    "recommendations": ["recommendation1", "recommendation2", "recommendation3"],
+    "priority_interventions": ["intervention1", "intervention2"],
+    "summary": "2-3 sentence executive summary"
+}"""
+        ).with_model("openai", "gpt-4o")
+        
+        analysis_prompt = f"""University: {university_decoded}
+Total Students: {len(students)}
+University Average Mood: {university_avg_mood:.1f}/10
+Total Mood Entries: {len(all_mood_data)}
+Total Feedback Entries: {len(all_feedback_data)}
+
+Student Summaries (sample):
+{student_summaries[:20]}
+
+Recent Feedback Comments (sample):
+{[f.get('feedback', '')[:100] for f in all_feedback_data[:10]]}
+"""
+        
+        response = await chat.send_message(UserMessage(text=analysis_prompt))
+        
+        import json
+        try:
+            ai_analysis = json.loads(response)
+        except json.JSONDecodeError:
+            ai_analysis = {
+                "overall_wellbeing_score": round(university_avg_mood * 10),
+                "wellbeing_trend": "stable",
+                "key_concerns": ["Unable to parse AI response"],
+                "positive_aspects": [],
+                "recommendations": [response[:500]],
+                "priority_interventions": [],
+                "summary": "AI analysis returned non-JSON response"
+            }
+    except Exception as e:
+        logger.error(f"University AI analysis error: {e}")
+        ai_analysis = {
+            "overall_wellbeing_score": round(university_avg_mood * 10),
+            "wellbeing_trend": "stable",
+            "key_concerns": ["AI analysis unavailable"],
+            "positive_aspects": [],
+            "recommendations": ["Manual review recommended"],
+            "priority_interventions": [],
+            "summary": f"Basic analysis: Average mood {university_avg_mood:.1f}/10 across {len(students)} students"
+        }
+    
+    return {
+        "university": university_decoded,
+        "analysis_timestamp": datetime.now(timezone.utc).isoformat(),
+        "stats": {
+            "total_students": len(students),
+            "average_mood": round(university_avg_mood, 2),
+            "total_mood_entries": len(all_mood_data),
+            "total_feedback_entries": len(all_feedback_data)
+        },
+        "ai_analysis": ai_analysis
     }
 
 # ==================== ANALYTICS ENDPOINTS ====================
