@@ -1055,6 +1055,155 @@ async def make_admin(user_id: str, admin: User = Depends(require_admin)):
     
     return {"message": "User promoted to admin", "user_id": user_id}
 
+# ==================== ADMIN SAFEGUARDING ENDPOINTS ====================
+
+@api_router.get("/admin/safeguarding-alerts")
+async def get_safeguarding_alerts(admin: User = Depends(require_admin)):
+    """Get all safeguarding alerts (Admin Only)"""
+    alerts = await db.safeguarding_alerts.find(
+        {},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(500)
+    
+    return {
+        "alerts": alerts,
+        "unacknowledged_count": len([a for a in alerts if not a.get("acknowledged", False)]),
+        "high_risk_count": len([a for a in alerts if a.get("risk_level") == "high"]),
+        "total_count": len(alerts)
+    }
+
+@api_router.post("/admin/safeguarding-alerts/{alert_id}/acknowledge")
+async def acknowledge_alert(alert_id: str, admin: User = Depends(require_admin)):
+    """Acknowledge a safeguarding alert (Admin Only)"""
+    result = await db.safeguarding_alerts.update_one(
+        {"alert_id": alert_id},
+        {"$set": {
+            "acknowledged": True,
+            "acknowledged_by": admin.user_id,
+            "acknowledged_at": datetime.now(timezone.utc)
+        }}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Alert not found")
+    
+    return {"message": "Alert acknowledged", "alert_id": alert_id}
+
+@api_router.get("/admin/ai-risk-analysis/{user_id}")
+async def admin_ai_risk_analysis(user_id: str, admin: User = Depends(require_admin)):
+    """Get AI-powered risk analysis for a specific student (Admin Only)"""
+    # Get user info
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Get user's mood entries and feedback
+    mood_entries = await db.mood_entries.find(
+        {"user_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(50)
+    
+    feedback_entries = await db.feedback_entries.find(
+        {"user_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(50)
+    
+    # Prepare data for AI analysis
+    mood_data = [{"mood": e.get("mood"), "notes": e.get("notes"), "date": str(e.get("created_at"))} for e in mood_entries]
+    feedback_data = [{"mood": e.get("mood"), "feedback": e.get("feedback"), "topic": e.get("lecture_topic"), "date": str(e.get("created_at"))} for e in feedback_entries]
+    
+    # Get AI risk analysis
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"admin_risk_{user_id}_{uuid.uuid4().hex[:8]}",
+            system_message="""You are a student wellbeing AI assistant helping university administrators assess student risk levels.
+            
+            Analyze the student's mood entries and feedback to provide a comprehensive risk assessment.
+            
+            Provide your response in JSON format with:
+            {
+                "overall_risk_score": 0-100,
+                "risk_level": "low" | "medium" | "high" | "critical",
+                "key_concerns": ["concern1", "concern2"],
+                "positive_indicators": ["indicator1", "indicator2"],
+                "recommendation": "brief recommendation for admin",
+                "summary": "2-3 sentence summary of overall wellbeing"
+            }
+            
+            Consider factors like:
+            - Mood trends (declining = higher risk)
+            - Concerning language in notes/feedback
+            - Engagement levels
+            - Signs of stress, isolation, or disengagement"""
+        ).with_model("openai", "gpt-4o")
+        
+        user_message = UserMessage(
+            text=f"""Student: {user.get('name', 'Unknown')}
+University: {user.get('university', 'Not specified')}
+Course: {user.get('course', 'Not specified')}
+
+Mood Entries (last 50):
+{mood_data}
+
+Feedback Entries (last 50):
+{feedback_data}"""
+        )
+        
+        response = await chat.send_message(user_message)
+        
+        import json
+        try:
+            ai_result = json.loads(response)
+        except json.JSONDecodeError:
+            ai_result = {
+                "overall_risk_score": 50,
+                "risk_level": "medium",
+                "key_concerns": ["Unable to parse AI response"],
+                "positive_indicators": [],
+                "recommendation": response[:500],
+                "summary": "AI analysis returned non-JSON response"
+            }
+            
+    except Exception as e:
+        logger.error(f"Admin AI analysis error: {e}")
+        # Calculate basic risk score
+        avg_mood = sum(e.get("mood", 5) for e in mood_entries) / max(len(mood_entries), 1) if mood_entries else 5
+        basic_risk = max(0, 100 - (avg_mood * 10))
+        
+        ai_result = {
+            "overall_risk_score": round(basic_risk),
+            "risk_level": "high" if basic_risk > 70 else "medium" if basic_risk > 40 else "low",
+            "key_concerns": ["AI analysis unavailable - using basic scoring"],
+            "positive_indicators": [],
+            "recommendation": "Review student's data manually",
+            "summary": f"Basic risk assessment based on average mood: {avg_mood:.1f}/10"
+        }
+    
+    return {
+        "user": {
+            "user_id": user.get("user_id"),
+            "name": user.get("name"),
+            "email": user.get("email"),
+            "university": user.get("university"),
+            "course": user.get("course")
+        },
+        "ai_analysis": ai_result,
+        "data_summary": {
+            "total_mood_entries": len(mood_entries),
+            "total_feedback_entries": len(feedback_entries),
+            "average_mood": sum(e.get("mood", 5) for e in mood_entries) / max(len(mood_entries), 1) if mood_entries else None
+        }
+    }
+
+@api_router.get("/admin/crisis-resources")
+async def get_crisis_resources(admin: User = Depends(require_admin)):
+    """Get crisis resources configuration (Admin Only)"""
+    return {
+        "resources": CRISIS_RESOURCES,
+        "keywords": SAFEGUARDING_KEYWORDS
+    }
+
 # ==================== ANALYTICS ENDPOINTS ====================
 
 async def calculate_student_engagement(user_id: str) -> dict:
