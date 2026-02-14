@@ -255,7 +255,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -266,6 +266,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Added admin email notification system via SMTP when safeguarding alerts are triggered. New endpoints: GET /api/admin/email-config (check SMTP status), POST /api/admin/test-email (send test notification). Email will be sent to all users with role='admin' when concerning content is detected in mood/feedback/chat."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Admin email notification endpoints working perfectly. GET /api/admin/email-config returns smtp_configured=false and proper configuration message as expected (SMTP not configured). POST /api/admin/test-email returns success=false with detailed message about missing SMTP configuration and provides required_env_vars array with 6 environment variables needed. POST /api/mood with safeguarding keywords ('I want to end it all') successfully creates mood entry, triggers medium risk safeguarding alert, provides UK crisis resources, and gracefully skips email notification (SMTP not configured). Backend logs confirm: 'SAFEGUARDING ALERT: medium risk detected' and 'SMTP not configured - email notification skipped'. All endpoints handle unconfigured SMTP gracefully without errors. Email notification system ready for production when SMTP credentials are added to .env file."
 
 frontend:
   - task: "Landing Page"
