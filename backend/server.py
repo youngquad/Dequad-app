@@ -37,6 +37,73 @@ STRIPE_PRODUCT_NAME = "Educare Premium"
 # Swipe limits
 FREE_SWIPES_PER_DAY = 5
 
+# ==================== SAFEGUARDING MATRIX ====================
+# Keywords that indicate potential crisis/self-harm
+SAFEGUARDING_KEYWORDS = [
+    "kill myself", "want to die", "end my life", "suicide",
+    "self harm", "self-harm", "cut myself", "hurt myself",
+    "no reason to live", "end it all", "better off dead",
+    "can't go on", "give up on life", "take my life",
+    "don't want to be here", "want to disappear", "overdose",
+    "jump off", "hang myself", "slit my wrists"
+]
+
+# UK Crisis Resources
+CRISIS_RESOURCES = {
+    "samaritans": {
+        "name": "Samaritans",
+        "phone": "116 123",
+        "description": "Free 24/7 support - Talk to someone who cares",
+        "available": "24 hours a day, 7 days a week"
+    },
+    "nhs_111": {
+        "name": "NHS 111",
+        "phone": "111",
+        "description": "Non-emergency medical help",
+        "available": "24 hours a day"
+    },
+    "emergency": {
+        "name": "Emergency Services",
+        "phone": "999",
+        "description": "For immediate danger to life",
+        "available": "24 hours a day"
+    },
+    "shout": {
+        "name": "Shout Crisis Text Line",
+        "phone": "Text SHOUT to 85258",
+        "description": "Free, confidential text support",
+        "available": "24/7"
+    }
+}
+
+def check_safeguarding_content(text: str) -> dict:
+    """
+    Check text for safeguarding concerns and return risk level with resources
+    """
+    if not text:
+        return {"flagged": False, "risk_level": "none", "matched_keywords": []}
+    
+    text_lower = text.lower()
+    matched_keywords = []
+    
+    for keyword in SAFEGUARDING_KEYWORDS:
+        if keyword in text_lower:
+            matched_keywords.append(keyword)
+    
+    if len(matched_keywords) >= 2:
+        risk_level = "high"
+    elif len(matched_keywords) == 1:
+        risk_level = "medium"
+    else:
+        risk_level = "none"
+    
+    return {
+        "flagged": len(matched_keywords) > 0,
+        "risk_level": risk_level,
+        "matched_keywords": matched_keywords,
+        "resources": CRISIS_RESOURCES if matched_keywords else None
+    }
+
 # Create the main app
 app = FastAPI(title="Educare API")
 
