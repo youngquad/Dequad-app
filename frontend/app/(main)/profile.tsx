@@ -714,6 +714,7 @@ export default function ProfileScreen() {
             {renderSectionTabs()}
 
             {/* Section Content */}
+            {activeSection === 'photos' && renderPhotosSection()}
             {activeSection === 'basic' && renderBasicSection()}
             {activeSection === 'preferences' && renderPreferencesSection()}
             {activeSection === 'interests' && renderInterestsSection()}
