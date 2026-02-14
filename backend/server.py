@@ -41,6 +41,208 @@ STRIPE_PRODUCT_NAME = "Educare Premium"
 # Swipe limits
 FREE_SWIPES_PER_DAY = 5
 
+# ==================== SMTP EMAIL CONFIGURATION ====================
+# SMTP Configuration for Admin Email Notifications
+# Configure these in your .env file when ready:
+# SMTP_HOST=smtp.gmail.com (or your SMTP server)
+# SMTP_PORT=587
+# SMTP_USERNAME=your-email@gmail.com
+# SMTP_PASSWORD=your-app-password
+# SMTP_FROM_EMAIL=noreply@educare.com
+# SMTP_FROM_NAME=Educare Safeguarding
+
+SMTP_HOST = os.environ.get('SMTP_HOST', '')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_USERNAME = os.environ.get('SMTP_USERNAME', '')
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@educare.com')
+SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Educare Safeguarding')
+
+def is_smtp_configured() -> bool:
+    """Check if SMTP is properly configured"""
+    return bool(SMTP_HOST and SMTP_USERNAME and SMTP_PASSWORD)
+
+def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+    """
+    Send email via SMTP (synchronous version for threading)
+    """
+    if not is_smtp_configured():
+        logger.warning("SMTP not configured - email notification skipped")
+        return False
+    
+    if not to_emails:
+        logger.warning("No recipient emails provided")
+        return False
+    
+    try:
+        # Create message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
+        msg['To'] = ', '.join(to_emails)
+        
+        # Attach plain text and HTML versions
+        if text_body:
+            part1 = MIMEText(text_body, 'plain')
+            msg.attach(part1)
+        
+        part2 = MIMEText(html_body, 'html')
+        msg.attach(part2)
+        
+        # Connect and send
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.sendmail(SMTP_FROM_EMAIL, to_emails, msg.as_string())
+        
+        logger.info(f"Email sent successfully to {len(to_emails)} recipients")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to send email: {e}")
+        return False
+
+async def send_email_async(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+    """
+    Send email via SMTP (async wrapper)
+    """
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, send_email_sync, to_emails, subject, html_body, text_body)
+
+async def get_admin_emails() -> List[str]:
+    """
+    Get all admin user emails from the database
+    """
+    admins = await db.users.find(
+        {"role": "admin"},
+        {"_id": 0, "email": 1}
+    ).to_list(100)
+    
+    return [admin["email"] for admin in admins if admin.get("email")]
+
+def create_safeguarding_email_html(alert_data: dict) -> str:
+    """
+    Create HTML email body for safeguarding alert
+    """
+    risk_color = "#EF4444" if alert_data["risk_level"] == "high" else "#F59E0B"
+    
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+            .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: #111827; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }}
+            .alert-badge {{ display: inline-block; background: {risk_color}; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-transform: uppercase; }}
+            .content {{ background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; }}
+            .info-row {{ margin: 10px 0; padding: 10px; background: white; border-radius: 4px; }}
+            .label {{ font-weight: bold; color: #6b7280; }}
+            .keywords {{ background: #fef2f2; border: 1px solid #fecaca; padding: 10px; border-radius: 4px; margin: 10px 0; }}
+            .keyword-tag {{ display: inline-block; background: #EF4444; color: white; padding: 4px 8px; border-radius: 4px; margin: 2px; font-size: 12px; }}
+            .content-box {{ background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 4px; margin: 15px 0; }}
+            .action-btn {{ display: inline-block; background: #6366F1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 15px; }}
+            .footer {{ text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🛡️ Educare Safeguarding Alert</h1>
+                <div class="alert-badge">{alert_data["risk_level"]} RISK</div>
+            </div>
+            <div class="content">
+                <p>A safeguarding concern has been detected and requires your attention.</p>
+                
+                <div class="info-row">
+                    <span class="label">Student:</span> {alert_data["user_name"]}
+                </div>
+                <div class="info-row">
+                    <span class="label">Email:</span> {alert_data["user_email"]}
+                </div>
+                <div class="info-row">
+                    <span class="label">Source:</span> {alert_data["source"].replace('_', ' ').title()}
+                </div>
+                <div class="info-row">
+                    <span class="label">Time:</span> {alert_data["created_at"]}
+                </div>
+                
+                <div class="keywords">
+                    <span class="label">Matched Keywords:</span><br>
+                    {"".join([f'<span class="keyword-tag">{kw}</span>' for kw in alert_data["matched_keywords"]])}
+                </div>
+                
+                <div class="content-box">
+                    <span class="label">Content:</span><br>
+                    <p>{alert_data["content"][:500]}{"..." if len(alert_data["content"]) > 500 else ""}</p>
+                </div>
+                
+                <p><strong>Recommended Action:</strong> Please review this alert in the admin dashboard and follow your institution's safeguarding procedures.</p>
+            </div>
+            <div class="footer">
+                <p>This is an automated notification from Educare Safeguarding System.<br>
+                Please do not reply to this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html
+
+def create_safeguarding_email_text(alert_data: dict) -> str:
+    """
+    Create plain text email body for safeguarding alert
+    """
+    text = f"""
+EDUCARE SAFEGUARDING ALERT - {alert_data["risk_level"].upper()} RISK
+
+A safeguarding concern has been detected and requires your attention.
+
+Student: {alert_data["user_name"]}
+Email: {alert_data["user_email"]}
+Source: {alert_data["source"].replace('_', ' ').title()}
+Time: {alert_data["created_at"]}
+
+Matched Keywords: {', '.join(alert_data["matched_keywords"])}
+
+Content:
+{alert_data["content"][:500]}{"..." if len(alert_data["content"]) > 500 else ""}
+
+Recommended Action: Please review this alert in the admin dashboard and follow your institution's safeguarding procedures.
+
+---
+This is an automated notification from Educare Safeguarding System.
+    """
+    return text
+
+async def send_safeguarding_email_to_admins(alert_data: dict):
+    """
+    Send safeguarding alert email to all admin users
+    """
+    try:
+        # Get all admin emails
+        admin_emails = await get_admin_emails()
+        
+        if not admin_emails:
+            logger.warning("No admin users found to send safeguarding email")
+            return
+        
+        # Create email content
+        subject = f"🚨 Safeguarding Alert [{alert_data['risk_level'].upper()}] - {alert_data['user_name']}"
+        html_body = create_safeguarding_email_html(alert_data)
+        text_body = create_safeguarding_email_text(alert_data)
+        
+        # Send email
+        success = await send_email_async(admin_emails, subject, html_body, text_body)
+        
+        if success:
+            logger.info(f"Safeguarding email sent to {len(admin_emails)} admins for alert {alert_data.get('alert_id', 'unknown')}")
+        else:
+            logger.warning(f"Failed to send safeguarding email for alert {alert_data.get('alert_id', 'unknown')}")
+            
+    except Exception as e:
+        logger.error(f"Error sending safeguarding email: {e}")
+
 # ==================== SAFEGUARDING MATRIX ====================
 # Keywords that indicate potential crisis/self-harm
 SAFEGUARDING_KEYWORDS = [
