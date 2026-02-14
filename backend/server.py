@@ -1350,7 +1350,7 @@ Platform Data (Last 30 days):
         import json
         try:
             insights = json.loads(response)
-        except:
+        except json.JSONDecodeError:
             insights = {
                 "summary": response,
                 "retention_insights": [],
