@@ -285,6 +285,7 @@ CRISIS_RESOURCES = {
 def check_safeguarding_content(text: str) -> dict:
     """
     Check text for safeguarding concerns and return risk level with resources
+    Uses both built-in keywords and AI-learned keywords
     """
     if not text:
         return {"flagged": False, "risk_level": "none", "matched_keywords": []}
@@ -292,9 +293,15 @@ def check_safeguarding_content(text: str) -> dict:
     text_lower = text.lower()
     matched_keywords = []
     
+    # Check built-in keywords
     for keyword in SAFEGUARDING_KEYWORDS:
         if keyword in text_lower:
             matched_keywords.append(keyword)
+    
+    # Check AI-learned keywords
+    for keyword in AI_LEARNED_KEYWORDS:
+        if keyword in text_lower and keyword not in matched_keywords:
+            matched_keywords.append(f"[AI] {keyword}")
     
     if len(matched_keywords) >= 2:
         risk_level = "high"
@@ -309,6 +316,9 @@ def check_safeguarding_content(text: str) -> dict:
         "matched_keywords": matched_keywords,
         "resources": CRISIS_RESOURCES if matched_keywords else None
     }
+
+# Initialize AI learned keywords set
+AI_LEARNED_KEYWORDS = set()
 
 # Create the main app
 app = FastAPI(title="Educare API")
