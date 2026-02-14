@@ -1021,6 +1021,11 @@ async def create_mood(data: MoodCreate, current_user: User = Depends(get_current
             safeguarding_result
         )
     
+    # Trigger AI pattern learning in background (for low mood or concerning content)
+    if data.notes and (data.mood <= 3 or len(data.notes) > 50):
+        import asyncio
+        asyncio.create_task(analyze_text_for_new_patterns(data.notes, "mood"))
+    
     # Return mood entry with safeguarding info if flagged
     response = mood_entry.dict()
     if safeguarding_result["flagged"]:
