@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AdminLoginScreen() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { setAdminSession } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [adminCode, setAdminCode] = useState('');
@@ -52,9 +52,13 @@ export default function AdminLoginScreen() {
         return;
       }
 
-      // Store the session
-      await AsyncStorage.setItem('sessionToken', authResponse.session_token);
-      await AsyncStorage.setItem('user', JSON.stringify(authResponse.user));
+      // Store session in AsyncStorage with correct key
+      await AsyncStorage.setItem('session_token', authResponse.session_token);
+      
+      // Update AuthContext state
+      if (setAdminSession) {
+        setAdminSession(authResponse.session_token, authResponse.user);
+      }
       
       // Navigate to admin dashboard
       router.replace('/(admin)/dashboard');
