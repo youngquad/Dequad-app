@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Build Educare - AI-powered student wellbeing platform with mood tracking, AI risk prediction (OpenAI GPT), student matching (Tinder-style swipe), encrypted chat, Google OAuth authentication, and admin dashboard"
+user_problem_statement: "Build Educare - AI-powered student wellbeing platform with mood tracking, AI risk prediction (OpenAI GPT), student matching (Tinder-style swipe), encrypted chat, Google OAuth authentication, admin dashboard, and Stripe billing for Premium subscriptions"
 
 backend:
   - task: "Authentication API (Emergent Google OAuth)"
@@ -230,6 +230,18 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: GET /api/admin/stats returns comprehensive dashboard statistics including user counts, risk scores, and metrics. GET /api/admin/reports retrieves all reports. GET /api/admin/users lists all users. All admin endpoints require proper admin role validation."
+
+  - task: "Stripe Subscription API"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Stripe billing endpoints: POST /api/subscription/create-checkout creates Stripe checkout session for £4.99/month premium subscription. GET /api/subscription/status returns user's plan status and remaining swipes. POST /api/subscription/cancel cancels premium subscription. POST /api/subscription/webhook handles Stripe webhook events for auto upgrade/downgrade. Swipe limit (5/day) enforced for free users in POST /api/matches/swipe."
 
 frontend:
   - task: "Landing Page"
