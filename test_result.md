@@ -248,6 +248,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: All Stripe subscription endpoints working correctly. GET /api/subscription/status returns proper plan status (free/premium), remaining_swipes, daily_limit (5), and price (£4.99/month). POST /api/subscription/create-checkout fails with invalid Stripe keys (expected behavior - test keys are invalid). POST /api/matches/swipe correctly enforces 5 swipes/day limit for free users, returning 403 with upgrade_required=true after limit reached. Swipe counter decrements properly (5→4→3→2→1→0→limit_reached). All subscription functionality operational."
+      - working: true
+        agent: "testing"
+        comment: "✅ LIVE STRIPE KEYS VERIFIED: Comprehensive testing confirms Stripe is now configured with LIVE keys. GET /api/subscription/status working perfectly - returns plan: free, remaining_swipes: 4, daily_limit: 5, price: £4.99/month. POST /api/subscription/create-checkout successfully creates LIVE Stripe checkout sessions with valid checkout.stripe.com URLs and cs_live_ session IDs. Backend logs show successful Stripe API calls to live endpoints (customers, checkout/sessions). All requested test steps completed successfully - Stripe integration is fully operational with live keys."
 
   - task: "Safeguarding Matrix Features"
     implemented: true
