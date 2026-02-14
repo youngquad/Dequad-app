@@ -136,10 +136,19 @@ export default function MatchesScreen() {
       const detail = error?.response?.data?.detail;
       if (detail?.upgrade_required) {
         setShowUpgradePrompt(true);
-        return true;
+        return { shouldReset: true, shouldMoveNext: false };
       }
     }
-    return false;
+    
+    // Check if it's an "already swiped" error - move to next card
+    if (error?.response?.status === 400) {
+      const detail = error?.response?.data?.detail;
+      if (detail && (detail.includes('Already swiped') || detail.includes('already swiped'))) {
+        return { shouldReset: false, shouldMoveNext: true };
+      }
+    }
+    
+    return { shouldReset: true, shouldMoveNext: false };
   };
 
   const swipeRight = async () => {
@@ -151,6 +160,10 @@ export default function MatchesScreen() {
     }
 
     const currentProfile = profiles[currentIndex];
+    if (!currentProfile) {
+      resetPosition();
+      return;
+    }
     
     Animated.timing(position, {
       toValue: { x: width + 100, y: 0 },
@@ -178,10 +191,14 @@ export default function MatchesScreen() {
         
         goToNext();
       } catch (error: any) {
-        if (!handleSwipeError(error)) {
-          console.error('Swipe error:', error);
+        const { shouldReset, shouldMoveNext } = handleSwipeError(error);
+        if (shouldMoveNext) {
+          // Already swiped - just move to next
+          goToNext();
+        } else if (shouldReset) {
+          resetPosition();
         }
-        resetPosition();
+        console.error('Swipe error:', error?.response?.data || error);
       }
     });
   };
@@ -195,6 +212,10 @@ export default function MatchesScreen() {
     }
 
     const currentProfile = profiles[currentIndex];
+    if (!currentProfile) {
+      resetPosition();
+      return;
+    }
     
     Animated.timing(position, {
       toValue: { x: -width - 100, y: 0 },
@@ -218,10 +239,14 @@ export default function MatchesScreen() {
         
         goToNext();
       } catch (error: any) {
-        if (!handleSwipeError(error)) {
-          console.error('Swipe error:', error);
+        const { shouldReset, shouldMoveNext } = handleSwipeError(error);
+        if (shouldMoveNext) {
+          // Already swiped - just move to next
+          goToNext();
+        } else if (shouldReset) {
+          resetPosition();
         }
-        resetPosition();
+        console.error('Swipe error:', error?.response?.data || error);
       }
     });
   };
