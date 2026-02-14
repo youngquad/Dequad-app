@@ -524,55 +524,16 @@ async def get_mood_history(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/feedback")
 async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get_current_user)):
-    """Submit lecture feedback and get AI risk analysis"""
+    """Submit lecture feedback with safeguarding check (AI analysis is admin-only)"""
     if data.mood < 1 or data.mood > 10:
         raise HTTPException(status_code=400, detail="Mood must be between 1 and 10")
     
-    # Get AI risk analysis
-    risk_score = 0
-    ai_analysis = ""
+    # Check for safeguarding concerns in feedback
+    safeguarding_result = check_safeguarding_content(data.feedback)
     
-    try:
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=f"risk_{current_user.user_id}_{uuid.uuid4().hex[:8]}",
-            system_message="""You are a student wellbeing AI assistant. Analyze student mood and feedback to assess their mental health risk level.
-            
-            Based on the mood score (1-10, where 1 is very poor and 10 is excellent) and feedback content, provide:
-            1. A risk score from 0-100 (0 = no risk, 100 = high risk)
-            2. A brief analysis (2-3 sentences) explaining your assessment and any concerns.
-            
-            Consider factors like:
-            - Low mood scores (1-3) indicate higher risk
-            - Negative sentiment in feedback
-            - Signs of stress, anxiety, or disengagement
-            - Positive indicators that reduce risk
-            
-            Respond in JSON format: {"risk_score": number, "analysis": "string"}"""
-        ).with_model("openai", "gpt-4o")
-        
-        user_message = UserMessage(
-            text=f"Student mood score: {data.mood}/10\nLecture topic: {data.lecture_topic or 'Not specified'}\nFeedback: {data.feedback}"
-        )
-        
-        response = await chat.send_message(user_message)
-        
-        # Parse AI response
-        import json
-        try:
-            ai_result = json.loads(response)
-            risk_score = ai_result.get("risk_score", 0)
-            ai_analysis = ai_result.get("analysis", "")
-        except json.JSONDecodeError:
-            # If not valid JSON, use basic scoring
-            risk_score = max(0, 100 - (data.mood * 10))
-            ai_analysis = response
-            
-    except Exception as e:
-        logger.error(f"AI analysis error: {e}")
-        # Fallback to basic risk scoring
-        risk_score = max(0, 100 - (data.mood * 10))
-        ai_analysis = f"Basic risk assessment based on mood score: {data.mood}/10"
+    # Basic risk scoring (no AI for regular users - AI analysis is admin-only)
+    risk_score = max(0, 100 - (data.mood * 10))
+    ai_analysis = ""  # AI analysis only shown to admins
     
     feedback_entry = FeedbackEntry(
         user_id=current_user.user_id,
@@ -585,7 +546,7 @@ async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get
     
     await db.feedback_entries.insert_one(feedback_entry.dict())
     
-    # Also log to risk_scores for admin dashboard
+    # Log to risk_scores for admin dashboard
     await db.risk_scores.insert_one({
         "user_id": current_user.user_id,
         "user_name": current_user.name,
@@ -593,7 +554,35 @@ async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get
         "created_at": datetime.now(timezone.utc)
     })
     
-    return feedback_entry
+    # If safeguarding concern detected, create alert for admin
+    if safeguarding_result["flagged"]:
+        await create_safeguarding_alert(
+            current_user,
+            "feedback",
+            data.feedback,
+            safeguarding_result
+        )
+    
+    # Return feedback WITHOUT AI analysis (users don't see risk scores)
+    response = {
+        "entry_id": feedback_entry.entry_id,
+        "mood": feedback_entry.mood,
+        "feedback": feedback_entry.feedback,
+        "lecture_topic": feedback_entry.lecture_topic,
+        "created_at": feedback_entry.created_at,
+        "message": "Thank you for your feedback!"
+    }
+    
+    # Add safeguarding info if flagged
+    if safeguarding_result["flagged"]:
+        response["safeguarding_alert"] = {
+            "flagged": True,
+            "risk_level": safeguarding_result["risk_level"],
+            "resources": safeguarding_result["resources"],
+            "message": "We noticed you may be going through a difficult time. Please know that support is available."
+        }
+    
+    return response
 
 @api_router.get("/feedback", response_model=List[FeedbackEntry])
 async def get_feedback_history(current_user: User = Depends(get_current_user)):
