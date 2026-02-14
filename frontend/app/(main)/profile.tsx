@@ -284,6 +284,14 @@ export default function ProfileScreen() {
   const renderSectionTabs = () => (
     <View style={styles.sectionTabs}>
       <TouchableOpacity
+        style={[styles.sectionTab, activeSection === 'photos' && styles.activeTab]}
+        onPress={() => setActiveSection('photos')}
+      >
+        <Text style={[styles.sectionTabText, activeSection === 'photos' && styles.activeTabText]}>
+          Photos
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
         style={[styles.sectionTab, activeSection === 'basic' && styles.activeTab]}
         onPress={() => setActiveSection('basic')}
       >
@@ -307,6 +315,56 @@ export default function ProfileScreen() {
           Interests
         </Text>
       </TouchableOpacity>
+    </View>
+  );
+
+  const renderPhotosSection = () => (
+    <View style={styles.section}>
+      <Text style={styles.fieldLabel}>Profile Photos (Up to 3)</Text>
+      <Text style={styles.photoHint}>Add photos to show in your profile card when matching</Text>
+      <View style={styles.photosGrid}>
+        {[0, 1, 2].map((index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.photoSlot}
+            onPress={() => isEditing && pickImage(index)}
+            disabled={!isEditing}
+          >
+            {photos[index] ? (
+              <View style={styles.photoContainer}>
+                <Image
+                  source={{ uri: photos[index] }}
+                  style={styles.photoImage}
+                />
+                {isEditing && (
+                  <TouchableOpacity
+                    style={styles.removePhotoButton}
+                    onPress={() => removePhoto(index)}
+                  >
+                    <Ionicons name="close-circle" size={24} color="#EF4444" />
+                  </TouchableOpacity>
+                )}
+                {index === 0 && (
+                  <View style={styles.mainPhotoBadge}>
+                    <Text style={styles.mainPhotoBadgeText}>Main</Text>
+                  </View>
+                )}
+              </View>
+            ) : (
+              <View style={styles.emptyPhotoSlot}>
+                <Ionicons
+                  name={isEditing ? "add-circle" : "image-outline"}
+                  size={32}
+                  color={isEditing ? "#6366F1" : "#4B5563"}
+                />
+                <Text style={styles.addPhotoText}>
+                  {isEditing ? "Add Photo" : "No Photo"}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 
