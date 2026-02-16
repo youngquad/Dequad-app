@@ -62,93 +62,90 @@ class MatchNotificationTester:
             return None, str(e)
     
     def setup_test_users(self):
-        """Create two test users for match testing"""
+        """Use existing valid sessions and create test users"""
         print("\n🔧 Setting up test users...")
         
-        # Create user A and user B in database
+        # Get existing valid sessions
         try:
             import subprocess
             
-            # Create user A
-            result_a = subprocess.run([
+            # Get valid sessions
+            result = subprocess.run([
                 "mongosh", "test_database", "--eval",
                 """
-                // Remove existing test users
-                db.users.deleteMany({user_id: {$in: ['user_match_a', 'user_match_b']}});
-                db.user_sessions.deleteMany({user_id: {$in: ['user_match_a', 'user_match_b']}});
-                db.matches.deleteMany({$or: [
-                    {user_id: {$in: ['user_match_a', 'user_match_b']}},
-                    {matched_user_id: {$in: ['user_match_a', 'user_match_b']}}
-                ]});
-                db.notifications.deleteMany({user_id: {$in: ['user_match_a', 'user_match_b']}});
-                
-                // Create user A
-                db.users.insertOne({
-                  user_id: 'user_match_a',
-                  email: 'user_a@test.com',
-                  name: 'Alice Test',
-                  picture: 'https://example.com/alice.jpg',
-                  role: 'student',
-                  interests: ['Art', 'Music'],
-                  university: 'Harvard',
-                  gender: 'woman',
-                  interested_in: ['men'],
-                  notifications_enabled: true,
-                  created_at: new Date()
-                });
-                
-                // Create session for user A
-                db.user_sessions.insertOne({
-                  user_id: 'user_match_a',
-                  session_token: 'token_user_a_123',
-                  expires_at: new Date(Date.now() + 7*24*60*60*1000),
-                  created_at: new Date()
-                });
-                
-                print('User A created successfully');
+                var sessions = db.user_sessions.find({expires_at: {$gt: new Date()}}).limit(2).toArray();
+                if (sessions.length >= 2) {
+                    print('SESSION_A:' + sessions[0].user_id + ':' + sessions[0].session_token);
+                    print('SESSION_B:' + sessions[1].user_id + ':' + sessions[1].session_token);
+                } else {
+                    print('ERROR: Not enough valid sessions found');
+                }
                 """
-            ], capture_output=True, text=True, timeout=15)
+            ], capture_output=True, text=True, timeout=10)
             
-            # Create user B
-            result_b = subprocess.run([
-                "mongosh", "test_database", "--eval",
-                """
-                // Create user B
-                db.users.insertOne({
-                  user_id: 'user_match_b',
-                  email: 'user_b@test.com',
-                  name: 'Bob Test',
-                  picture: 'https://example.com/bob.jpg',
-                  role: 'student',
-                  interests: ['Art', 'Sports'],
-                  university: 'Harvard',
-                  gender: 'man',
-                  interested_in: ['women'],
-                  notifications_enabled: true,
-                  created_at: new Date()
-                });
+            if result.returncode == 0 and "SESSION_A:" in result.stdout:
+                lines = result.stdout.strip().split('\n')
+                session_a_line = [l for l in lines if l.startswith('SESSION_A:')][0]
+                session_b_line = [l for l in lines if l.startswith('SESSION_B:')][0]
                 
-                // Create session for user B
-                db.user_sessions.insertOne({
-                  user_id: 'user_match_b',
-                  session_token: 'token_user_b_123',
-                  expires_at: new Date(Date.now() + 7*24*60*60*1000),
-                  created_at: new Date()
-                });
+                # Parse session A
+                _, self.user_a_id, self.user_a_token = session_a_line.split(':', 2)
+                # Parse session B  
+                _, self.user_b_id, self.user_b_token = session_b_line.split(':', 2)
                 
-                print('User B created successfully');
-                """
-            ], capture_output=True, text=True, timeout=15)
-            
-            if result_a.returncode == 0 and result_b.returncode == 0:
-                self.user_a_token = "token_user_a_123"
-                self.user_b_token = "token_user_b_123"
-                self.user_a_id = "user_match_a"
-                self.user_b_id = "user_match_b"
-                print("✅ Test users created successfully")
-                return True
+                print(f"✅ Using existing sessions:")
+                print(f"   User A: {self.user_a_id}")
+                print(f"   User B: {self.user_b_id}")
+                
+                # Update users to have proper matching preferences and pictures
+                update_result = subprocess.run([
+                    "mongosh", "test_database", "--eval",
+                    f"""
+                    // Update user A for matching
+                    db.users.updateOne(
+                        {{user_id: '{self.user_a_id}'}},
+                        {{$set: {{
+                            role: 'student',
+                            gender: 'woman',
+                            interested_in: ['men'],
+                            notifications_enabled: true,
+                            picture: 'https://example.com/alice.jpg',
+                            name: 'Alice Test'
+                        }}}}
+                    );
+                    
+                    // Update user B for matching
+                    db.users.updateOne(
+                        {{user_id: '{self.user_b_id}'}},
+                        {{$set: {{
+                            role: 'student', 
+                            gender: 'man',
+                            interested_in: ['women'],
+                            notifications_enabled: true,
+                            picture: 'https://example.com/bob.jpg',
+                            name: 'Bob Test'
+                        }}}}
+                    );
+                    
+                    // Clear existing matches and notifications for these users
+                    db.matches.deleteMany({{$or: [
+                        {{user_id: {{$in: ['{self.user_a_id}', '{self.user_b_id}']}}}},
+                        {{matched_user_id: {{$in: ['{self.user_a_id}', '{self.user_b_id}']}}}}
+                    ]}});
+                    db.notifications.deleteMany({{user_id: {{$in: ['{self.user_a_id}', '{self.user_b_id}']}}}});
+                    
+                    print('Users updated for matching test');
+                    """
+                ], capture_output=True, text=True, timeout=10)
+                
+                if update_result.returncode == 0:
+                    print("✅ Test users configured successfully")
+                    return True
+                else:
+                    print(f"❌ Failed to update users: {update_result.stderr}")
+                    return False
             else:
-                print(f"❌ Failed to create test users: {result_a.stderr} {result_b.stderr}")
+                print(f"❌ Failed to get valid sessions: {result.stderr}")
                 return False
                 
         except Exception as e:
