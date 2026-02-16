@@ -35,14 +35,16 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ]
       }
     },
     "android": {
       "package": "com.educare.wellbeing",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
@@ -95,17 +97,15 @@
     "experiments": {
       "typedRoutes": true
     },
-    "extra": {
-      "eas": {
-        "projectId": "your-project-id-here"
-      }
-    },
-    "owner": "your-expo-username",
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "updates": {
-      "url": "https://u.expo.dev/your-project-id-here"
-    }
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "0ad6a13c-845f-4ab4-9177-ba5031d2462d"
+      }
+    },
+    "owner": "youngquad"
   }
 }
