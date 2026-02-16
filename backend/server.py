@@ -246,39 +246,79 @@ async def send_safeguarding_email_to_admins(alert_data: dict):
 # ==================== SAFEGUARDING MATRIX ====================
 # Keywords that indicate potential crisis/self-harm
 SAFEGUARDING_KEYWORDS = [
+    # Suicide-related
     "kill myself", "want to die", "end my life", "ending my life", "suicide",
-    "self harm", "self-harm", "cut myself", "hurt myself",
+    "suicidal", "end it", "take my life", "taking my life",
     "no reason to live", "end it all", "ending it all", "better off dead",
-    "can't go on", "give up on life", "take my life", "taking my life",
-    "don't want to be here", "want to disappear", "overdose",
-    "jump off", "hang myself", "slit my wrists"
+    "can't go on", "give up on life", "don't want to be here", "want to disappear",
+    "not worth living", "life isn't worth", "no point living", "rather be dead",
+    "wish i was dead", "wish i were dead", "wanna die", "i want to die",
+    
+    # Self-harm related
+    "self harm", "self-harm", "selfharm", "cut myself", "cutting myself",
+    "hurt myself", "hurting myself", "harm myself", "harming myself",
+    "slit my wrists", "overdose", "take pills", "jump off", "hang myself",
+    
+    # Harm to others
+    "kill someone", "hurt someone", "harm someone", "want to hurt",
+    "going to hurt", "attack someone", "violent thoughts",
+    
+    # Severe distress indicators
+    "can't take it anymore", "cant take it anymore", "no way out",
+    "hopeless", "no hope", "nobody cares", "no one cares",
+    "nobody would miss me", "no one would miss me", "better without me",
+    "world would be better", "everyone hates me"
 ]
 
-# UK Crisis Resources
+# UK Crisis Resources - Comprehensive list for students
 CRISIS_RESOURCES = {
     "samaritans": {
         "name": "Samaritans",
         "phone": "116 123",
-        "description": "Free 24/7 support - Talk to someone who cares",
-        "available": "24 hours a day, 7 days a week"
-    },
-    "nhs_111": {
-        "name": "NHS 111",
-        "phone": "111",
-        "description": "Non-emergency medical help",
-        "available": "24 hours a day"
-    },
-    "emergency": {
-        "name": "Emergency Services",
-        "phone": "999",
-        "description": "For immediate danger to life",
-        "available": "24 hours a day"
+        "description": "Free 24/7 emotional support - Someone to listen without judgement",
+        "available": "24 hours a day, 7 days a week",
+        "website": "https://www.samaritans.org"
     },
     "shout": {
         "name": "Shout Crisis Text Line",
         "phone": "Text SHOUT to 85258",
-        "description": "Free, confidential text support",
-        "available": "24/7"
+        "description": "Free, confidential text support for when you can't talk",
+        "available": "24/7",
+        "website": "https://giveusashout.org"
+    },
+    "papyrus": {
+        "name": "PAPYRUS HOPELineUK",
+        "phone": "0800 068 4141",
+        "description": "For young people under 35 - Text 07860 039967",
+        "available": "9am-midnight every day",
+        "website": "https://www.papyrus-uk.org"
+    },
+    "student_minds": {
+        "name": "Student Minds",
+        "phone": "Visit website",
+        "description": "UK's student mental health charity - Resources & peer support",
+        "available": "Online resources 24/7",
+        "website": "https://www.studentminds.org.uk"
+    },
+    "nhs_111": {
+        "name": "NHS 111",
+        "phone": "111",
+        "description": "Non-emergency medical help and mental health support",
+        "available": "24 hours a day",
+        "website": "https://111.nhs.uk"
+    },
+    "emergency": {
+        "name": "Emergency Services",
+        "phone": "999",
+        "description": "For immediate danger to life - Call or go to A&E",
+        "available": "24 hours a day"
+    },
+    "calm": {
+        "name": "CALM (Campaign Against Living Miserably)",
+        "phone": "0800 58 58 58",
+        "description": "For men who need to talk - Webchat also available",
+        "available": "5pm-midnight every day",
+        "website": "https://www.thecalmzone.net"
     }
 }
 
