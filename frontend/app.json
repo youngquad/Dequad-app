@@ -44,7 +44,7 @@
     },
     "android": {
       "package": "com.educare.wellbeing",
-      "versionCode": 6,
+      "versionCode": 7,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
@@ -92,7 +92,9 @@
             "deploymentTarget": "15.1"
           }
         }
-      ]
+      ],
+      "@stripe/stripe-react-native",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
