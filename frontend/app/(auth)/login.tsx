@@ -198,15 +198,6 @@ export default function LoginScreen() {
             </View>
           </View>
 
-          {/* Admin Access Link */}
-          <TouchableOpacity
-            style={styles.adminLink}
-            onPress={() => router.push('/(admin)/login')}
-          >
-            <Ionicons name="shield" size={15} color="#F59E0B" />
-            <Text style={styles.adminLinkText}>Admin Access</Text>
-          </TouchableOpacity>
-
           {/* Terms */}
           <Text style={styles.terms}>
             By continuing, you agree to our Terms of Service and Privacy Policy
