@@ -57,13 +57,22 @@ export default function AdminLoginScreen() {
       const token = authResponse.session_token;
       console.log('Storing session token:', token?.substring(0, 30) + '...');
 
-      // Store session using the API service's setToken method (works on both web and mobile)
+      // Store session in multiple places for web compatibility
+      // 1. localStorage (for web)
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('session_token', token);
+        window.localStorage.setItem('admin_session_token', token);
+        console.log('Stored in localStorage');
+      }
+      
+      // 2. AsyncStorage (for mobile)
+      await AsyncStorage.setItem('session_token', token);
+      await AsyncStorage.setItem('admin_session_token', token);
+      
+      // 3. API service token
       await api.setToken(token);
       
-      // Also store in AsyncStorage for backup
-      await AsyncStorage.setItem('session_token', token);
-      
-      // Verify it was stored
+      // Verify storage
       const storedToken = await AsyncStorage.getItem('session_token');
       console.log('Verified stored token:', storedToken?.substring(0, 30) + '...');
       
@@ -73,7 +82,7 @@ export default function AdminLoginScreen() {
       }
       
       // Small delay to ensure state is updated
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 300));
       
       // Navigate to admin dashboard
       router.replace('/(admin)/dashboard');
