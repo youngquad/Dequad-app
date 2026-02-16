@@ -373,7 +373,7 @@ frontend:
     file: "/app/frontend/app/(main)/matches.tsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -384,6 +384,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "✅ ROUTE PROTECTION VERIFIED: Direct access to /(main)/matches properly redirects unauthenticated users to landing page. Authentication routing working correctly."
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed match pictures display - improved photo fallback logic to check for valid URLs. Now prioritizes: 1) Uploaded photos (if non-empty array with valid URL), 2) Google profile picture (if non-empty string), 3) Initials as fallback. Added trim() check to prevent empty string URLs from being rendered."
 
   - task: "Chat Screens"
     implemented: true
