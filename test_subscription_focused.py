@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://student-connect-46.preview.emergentagent.com/api"
+BASE_URL = "https://github-retriever-1.preview.emergentagent.com/api"
 STUDENT_TOKEN = "test_session_token_123"
 
 def make_request(method, endpoint, token=None, data=None):
