@@ -903,7 +903,12 @@ async def admin_login(data: AdminLoginRequest):
 @api_router.post("/auth/session")
 async def exchange_session(request: Request, response: Response):
     """Exchange session_id for session_token"""
-    data = await request.json()
+    try:
+        data = await request.json()
+    except Exception as e:
+        logger.error(f"Failed to parse request body: {e}")
+        raise HTTPException(status_code=400, detail="Invalid request body")
+    
     session_id = data.get("session_id")
     
     if not session_id:
@@ -933,36 +938,48 @@ async def exchange_session(request: Request, response: Response):
         logger.error(f"Auth API response parse error: {e}")
         raise HTTPException(status_code=500, detail="Authentication failed")
     
-    session_data = SessionDataResponse(**user_data)
+    try:
+        session_data = SessionDataResponse(**user_data)
+    except Exception as e:
+        logger.error(f"Session data validation error: {e}")
+        raise HTTPException(status_code=500, detail="Invalid session data")
     
-    # Check if user exists
-    existing_user = await db.users.find_one({"email": session_data.email}, {"_id": 0})
+    # Check if user exists - with DB error handling
+    try:
+        existing_user = await db.users.find_one({"email": session_data.email}, {"_id": 0})
+    except Exception as e:
+        logger.error(f"Database error checking user: {e}")
+        raise HTTPException(status_code=500, detail="Database error")
     
-    if not existing_user:
-        # Create new user
-        user_id = f"user_{uuid.uuid4().hex[:12]}"
-        new_user = {
-            "user_id": user_id,
-            "email": session_data.email,
-            "name": session_data.name,
-            "picture": session_data.picture,
-            "role": "student",
-            "interests": [],
-            "created_at": datetime.now(timezone.utc)
-        }
-        await db.users.insert_one(new_user)
-    else:
-        user_id = existing_user["user_id"]
-        # Update picture if Google provides one and user hasn't uploaded custom photos
-        if session_data.picture:
-            update_fields = {"picture": session_data.picture}
-            # Also update name if it changed
-            if session_data.name and session_data.name != existing_user.get("name"):
-                update_fields["name"] = session_data.name
-            await db.users.update_one(
-                {"user_id": user_id},
-                {"$set": update_fields}
-            )
+    try:
+        if not existing_user:
+            # Create new user
+            user_id = f"user_{uuid.uuid4().hex[:12]}"
+            new_user = {
+                "user_id": user_id,
+                "email": session_data.email,
+                "name": session_data.name,
+                "picture": session_data.picture,
+                "role": "student",
+                "interests": [],
+                "created_at": datetime.now(timezone.utc)
+            }
+            await db.users.insert_one(new_user)
+        else:
+            user_id = existing_user["user_id"]
+            # Update picture if Google provides one
+            if session_data.picture:
+                update_fields = {"picture": session_data.picture}
+                # Also update name if it changed
+                if session_data.name and session_data.name != existing_user.get("name"):
+                    update_fields["name"] = session_data.name
+                await db.users.update_one(
+                    {"user_id": user_id},
+                    {"$set": update_fields}
+                )
+    except Exception as e:
+        logger.error(f"Database error creating/updating user: {e}")
+        raise HTTPException(status_code=500, detail="Failed to process user")
     
     # Store session
     session_doc = {
@@ -972,9 +989,13 @@ async def exchange_session(request: Request, response: Response):
         "created_at": datetime.now(timezone.utc)
     }
     
-    # Remove old sessions for this user
-    await db.user_sessions.delete_many({"user_id": user_id})
-    await db.user_sessions.insert_one(session_doc)
+    try:
+        # Remove old sessions for this user
+        await db.user_sessions.delete_many({"user_id": user_id})
+        await db.user_sessions.insert_one(session_doc)
+    except Exception as e:
+        logger.error(f"Database error storing session: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create session")
     
     # Set cookie
     response.set_cookie(
@@ -988,7 +1009,11 @@ async def exchange_session(request: Request, response: Response):
     )
     
     # Get user data
-    user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    try:
+        user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    except Exception as e:
+        logger.error(f"Database error fetching user: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve user")
     
     return {"user": user_doc, "session_token": session_data.session_token}
 
