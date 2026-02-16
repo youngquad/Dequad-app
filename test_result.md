@@ -210,7 +210,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -218,6 +218,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: GET /api/notifications retrieves user notifications correctly. POST /api/notifications/read-all marks all notifications as read successfully. GET /api/notifications/unread-count returns accurate unread count. All notification endpoints working perfectly."
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed notification system - notifications are now stored in database even if user doesn't have push token (previously notifications were skipped entirely). This ensures match notifications appear in the app for both users."
 
   - task: "Admin API"
     implemented: true
