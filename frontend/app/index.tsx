@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Animated,
+  Pressable,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../src/contexts/AuthContext';
@@ -15,17 +17,106 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
+const FEATURES = [
+  { 
+    icon: 'heart-outline', 
+    title: 'Mood Tracking', 
+    description: 'Track your daily emotional wellbeing',
+    gradient: ['#EC4899', '#F472B6'],
+  },
+  { 
+    icon: 'sparkles-outline', 
+    title: 'AI Insights', 
+    description: 'Get personalized wellness tips',
+    gradient: ['#8B5CF6', '#A78BFA'],
+  },
+  { 
+    icon: 'people-outline', 
+    title: 'Find Friends', 
+    description: 'Connect with like-minded students',
+    gradient: ['#06B6D4', '#22D3EE'],
+  },
+  { 
+    icon: 'chatbubbles-outline', 
+    title: 'Safe Chat', 
+    description: 'End-to-end encrypted messaging',
+    gradient: ['#10B981', '#34D399'],
+  },
+];
+
 export default function LandingScreen() {
   const router = useRouter();
   const { isLoading } = useAuth();
+  
+  // Animations
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current;
+  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+  const buttonScale = useRef(new Animated.Value(1)).current;
+  const featureAnims = useRef(FEATURES.map(() => new Animated.Value(0))).current;
 
-  // Route protection is handled in _layout.tsx
+  useEffect(() => {
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        tension: 20,
+        friction: 7,
+      }),
+    ]).start();
+
+    // Staggered feature animations
+    featureAnims.forEach((anim, index) => {
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 500,
+        delay: 400 + (index * 100),
+        useNativeDriver: true,
+      }).start();
+    });
+  }, []);
+
+  const handlePressIn = () => {
+    Animated.spring(buttonScale, {
+      toValue: 0.95,
+      useNativeDriver: true,
+      speed: 50,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(buttonScale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 50,
+    }).start();
+  };
 
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6366F1" />
-        <Text style={styles.loadingText}>Loading...</Text>
+        <LinearGradient
+          colors={['#0F172A', '#1E293B']}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={styles.loadingContent}>
+          <View style={styles.loadingLogo}>
+            <Ionicons name="school" size={48} color="#6366F1" />
+          </View>
+          <ActivityIndicator size="large" color="#6366F1" style={{ marginTop: 20 }} />
+          <Text style={styles.loadingText}>Loading Educare...</Text>
+        </View>
       </View>
     );
   }
@@ -33,183 +124,281 @@ export default function LandingScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#111827', '#1F2937', '#374151']}
+        colors={['#0F172A', '#1E293B', '#0F172A']}
         style={styles.gradient}
+        locations={[0, 0.5, 1]}
       >
-        <View style={styles.content}>
+        {/* Decorative circles */}
+        <View style={styles.decorativeCircle1} />
+        <View style={styles.decorativeCircle2} />
+        
+        <Animated.View 
+          style={[
+            styles.content,
+            {
+              opacity: fadeAnim,
+              transform: [
+                { translateY: slideAnim },
+                { scale: scaleAnim },
+              ],
+            },
+          ]}
+        >
+          {/* Logo Section */}
           <View style={styles.logoContainer}>
-            <View style={styles.iconCircle}>
-              <Ionicons name="school" size={60} color="#6366F1" />
-            </View>
+            <LinearGradient
+              colors={['rgba(99, 102, 241, 0.2)', 'rgba(139, 92, 246, 0.1)']}
+              style={styles.iconCircle}
+            >
+              <Ionicons name="school" size={56} color="#818CF8" />
+            </LinearGradient>
             <Text style={styles.title}>Educare</Text>
             <Text style={styles.subtitle}>
-              AI-Powered Student Wellbeing Platform
+              Your wellbeing companion for university life
             </Text>
           </View>
 
+          {/* Features Grid */}
           <View style={styles.featuresContainer}>
-            <FeatureItem
-              icon="happy-outline"
-              title="Mood Tracking"
-              description="Track your daily mood and emotional wellbeing"
-            />
-            <FeatureItem
-              icon="analytics-outline"
-              title="AI Risk Analysis"
-              description="Get personalized insights powered by AI"
-            />
-            <FeatureItem
-              icon="people-outline"
-              title="Student Matching"
-              description="Connect with students who share your interests"
-            />
-            <FeatureItem
-              icon="chatbubbles-outline"
-              title="Secure Chat"
-              description="End-to-end encrypted messaging"
-            />
+            {FEATURES.map((feature, index) => (
+              <Animated.View
+                key={feature.title}
+                style={[
+                  styles.featureCard,
+                  {
+                    opacity: featureAnims[index],
+                    transform: [{
+                      translateY: featureAnims[index].interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [20, 0],
+                      }),
+                    }],
+                  },
+                ]}
+              >
+                <LinearGradient
+                  colors={feature.gradient}
+                  style={styles.featureIconBg}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Ionicons name={feature.icon as any} size={22} color="#fff" />
+                </LinearGradient>
+                <View style={styles.featureText}>
+                  <Text style={styles.featureTitle}>{feature.title}</Text>
+                  <Text style={styles.featureDescription}>{feature.description}</Text>
+                </View>
+              </Animated.View>
+            ))}
           </View>
 
-          <TouchableOpacity
-            style={styles.loginButton}
+          {/* CTA Button */}
+          <Pressable
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
             onPress={() => router.push('/(auth)/login')}
           >
-            <Ionicons name="logo-google" size={24} color="#fff" />
-            <Text style={styles.loginButtonText}>Continue with Google</Text>
-          </TouchableOpacity>
+            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+              <LinearGradient
+                colors={['#6366F1', '#8B5CF6']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.loginButton}
+              >
+                <Ionicons name="logo-google" size={22} color="#fff" />
+                <Text style={styles.loginButtonText}>Continue with Google</Text>
+                <Ionicons name="arrow-forward" size={20} color="#fff" />
+              </LinearGradient>
+            </Animated.View>
+          </Pressable>
+
+          {/* Stats/Trust badges */}
+          <View style={styles.trustBadges}>
+            <View style={styles.trustBadge}>
+              <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+              <Text style={styles.trustText}>Secure</Text>
+            </View>
+            <View style={styles.trustDivider} />
+            <View style={styles.trustBadge}>
+              <Ionicons name="lock-closed" size={16} color="#6366F1" />
+              <Text style={styles.trustText}>Private</Text>
+            </View>
+            <View style={styles.trustDivider} />
+            <View style={styles.trustBadge}>
+              <Ionicons name="heart" size={16} color="#EC4899" />
+              <Text style={styles.trustText}>Student-focused</Text>
+            </View>
+          </View>
 
           <Text style={styles.footerText}>
-            Your wellbeing matters. Let's grow together.
+            Built with ❤️ for students everywhere
           </Text>
-        </View>
+        </Animated.View>
       </LinearGradient>
     </SafeAreaView>
-  );
-}
-
-function FeatureItem({
-  icon,
-  title,
-  description,
-}: {
-  icon: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <View style={styles.featureItem}>
-      <View style={styles.featureIcon}>
-        <Ionicons name={icon as any} size={24} color="#6366F1" />
-      </View>
-      <View style={styles.featureText}>
-        <Text style={styles.featureTitle}>{title}</Text>
-        <Text style={styles.featureDescription}>{description}</Text>
-      </View>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#0F172A',
   },
   gradient: {
     flex: 1,
+  },
+  decorativeCircle1: {
+    position: 'absolute',
+    top: -100,
+    right: -100,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: 'rgba(99, 102, 241, 0.08)',
+  },
+  decorativeCircle2: {
+    position: 'absolute',
+    bottom: -50,
+    left: -100,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(139, 92, 246, 0.06)',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#111827',
+  },
+  loadingContent: {
+    alignItems: 'center',
+  },
+  loadingLogo: {
+    width: 80,
+    height: 80,
+    borderRadius: 24,
+    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
-    color: '#9CA3AF',
+    color: '#94A3B8',
     fontSize: 16,
-    marginTop: 12,
+    marginTop: 16,
+    fontWeight: '500',
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-    paddingBottom: 24,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
     justifyContent: 'space-between',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   iconCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    width: 100,
+    height: 100,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
   title: {
-    fontSize: 42,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontSize: 40,
+    fontWeight: '800',
+    color: '#F8FAFC',
+    letterSpacing: -1,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: '#94A3B8',
     textAlign: 'center',
+    maxWidth: 280,
+    lineHeight: 24,
   },
   featuresContainer: {
-    marginBottom: 24,
-  },
-  featureItem: {
     flexDirection: 'row',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginBottom: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
-    padding: 16,
   },
-  featureIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+  featureCard: {
+    width: '48%',
+    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.1)',
+  },
+  featureIconBg: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginBottom: 10,
   },
   featureText: {
     flex: 1,
   },
   featureTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#F1F5F9',
     marginBottom: 4,
   },
   featureDescription: {
-    fontSize: 14,
-    color: '#9CA3AF',
+    fontSize: 12,
+    color: '#94A3B8',
+    lineHeight: 18,
   },
   loginButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6366F1',
     paddingVertical: 16,
-    borderRadius: 12,
-    marginBottom: 16,
+    paddingHorizontal: 24,
+    borderRadius: 14,
+    gap: 10,
   },
   loginButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
-    marginLeft: 12,
+    flex: 1,
+    textAlign: 'center',
+  },
+  trustBadges: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 8,
+  },
+  trustBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  trustText: {
+    fontSize: 13,
+    color: '#94A3B8',
+    fontWeight: '500',
+  },
+  trustDivider: {
+    width: 1,
+    height: 16,
+    backgroundColor: 'rgba(148, 163, 184, 0.3)',
+    marginHorizontal: 14,
   },
   footerText: {
-    color: '#6B7280',
-    fontSize: 14,
+    color: '#64748B',
+    fontSize: 13,
     textAlign: 'center',
   },
 });
