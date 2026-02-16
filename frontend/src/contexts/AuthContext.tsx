@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const processSessionId = async (sessionId: string) => {
     try {
       console.log('Processing session_id:', sessionId);
-      const response = await api.post('/auth/session', { session_id: sessionId });
+      const response = await api.post('/auth/exchange-token', { session_id: sessionId });
       
       if (response.user && response.session_token) {
         setUser(response.user);
