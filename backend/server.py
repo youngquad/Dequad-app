@@ -941,6 +941,16 @@ async def exchange_session(request: Request, response: Response):
         await db.users.insert_one(new_user)
     else:
         user_id = existing_user["user_id"]
+        # Update picture if Google provides one and user hasn't uploaded custom photos
+        if session_data.picture:
+            update_fields = {"picture": session_data.picture}
+            # Also update name if it changed
+            if session_data.name and session_data.name != existing_user.get("name"):
+                update_fields["name"] = session_data.name
+            await db.users.update_one(
+                {"user_id": user_id},
+                {"$set": update_fields}
+            )
     
     # Store session
     session_doc = {
