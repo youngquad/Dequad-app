@@ -302,8 +302,8 @@ export default function MatchesScreen() {
           },
         ];
 
-    // Get profile photo or use gradient avatar
-    const hasPhoto = profile.photos && profile.photos.length > 0;
+    // Get profile photo - check for valid photos array with non-empty URLs
+    const hasPhoto = profile.photos && profile.photos.length > 0 && profile.photos[0] && profile.photos[0].trim() !== '';
 
     return (
       <Animated.View
