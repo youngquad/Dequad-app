@@ -156,7 +156,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -167,6 +167,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ RE-TESTED (Enhanced Preferences): GET /api/matches/discover now properly respects interested_in preferences and gender filtering. Match scoring system operational. Preference filtering working correctly for dating compatibility."
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed match notification issue - notifications are now stored in database even if user doesn't have push token. Updated notification message to 'You have a new match with [Name]!'. Both matched users will now receive in-app notifications when a match occurs."
 
   - task: "Chat API (Encrypted)"
     implemented: true
