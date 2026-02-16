@@ -721,6 +721,15 @@ def create_password_reset_email_html(name: str, reset_url: str) -> str:
     </html>
     """
 
+@api_router.post("/auth/test-route")
+async def test_route(request: Request):
+    """Test route for debugging 520 errors"""
+    try:
+        data = await request.json()
+        return {"status": "ok", "received": data}
+    except:
+        return {"status": "ok", "received": None}
+
 @api_router.post("/auth/forgot-password")
 async def forgot_password(data: ForgotPasswordRequest):
     """Request password reset for admin account"""
