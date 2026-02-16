@@ -467,12 +467,18 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Student Matching API - test match notifications"
+    - "Notifications API - test notification storage without push token"
+    - "Auth Flow (Login Screen) - verify admin link removed"
+    - "Student Matching (Swipe) Screen - test photo display"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
+  - agent: "main"
+    message: "Fixed 3 user-reported issues: 1) Match pictures not displaying - improved photo fallback logic to check for valid URLs (uploaded photos > Google picture > initials), also updated backend to sync Google profile picture on login for existing users. 2) Match notifications not working - fixed the send_push_notification function to ALWAYS store in-app notifications in database, even if user doesn't have a push token. Previously notifications were skipped entirely if no push token. Updated notification message to 'You have a new match with [Name]!' 3) Admin access link removed from login page - deleted the admin link from login.tsx, admin dashboard now only accessible via direct URL /admin/login. Please test: a) POST /api/matches/swipe creates mutual match and both users get notifications in GET /api/notifications, b) Login page no longer shows admin access link, c) /api/matches/discover returns users with picture field."
   - agent: "main"
     message: "Completed full implementation of Educare platform. All backend APIs and frontend screens are implemented. Please test all backend APIs first. For auth testing, create test user and session manually in MongoDB. For AI prediction testing, check if emergentintegrations library is properly using OpenAI GPT."
   - agent: "main"
