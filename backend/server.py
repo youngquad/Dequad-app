@@ -910,7 +910,7 @@ async def exchange_session(request: Request, response: Response):
         raise HTTPException(status_code=400, detail="session_id required")
     
     # Call Emergent Auth API
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         try:
             auth_response = await client.get(
                 "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
@@ -920,6 +920,9 @@ async def exchange_session(request: Request, response: Response):
                 raise HTTPException(status_code=401, detail="Invalid session_id")
             
             user_data = auth_response.json()
+        except httpx.TimeoutException:
+            logger.error("Auth API timeout")
+            raise HTTPException(status_code=504, detail="Authentication service timeout")
         except Exception as e:
             logger.error(f"Auth API error: {e}")
             raise HTTPException(status_code=500, detail="Authentication failed")
