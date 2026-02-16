@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,24 +8,29 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
+  Animated,
+  Pressable,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import SafeguardingAlert from '../../src/components/SafeguardingAlert';
+import { MoodCardSkeleton } from '../../src/components/SkeletonLoader';
 
 const MOODS = [
-  { value: 1, emoji: 'sad-outline', label: 'Very Bad', color: '#EF4444' },
-  { value: 2, emoji: 'sad-outline', label: 'Bad', color: '#F97316' },
-  { value: 3, emoji: 'sad-outline', label: 'Poor', color: '#F59E0B' },
-  { value: 4, emoji: 'remove-outline', label: 'Below Avg', color: '#EAB308' },
-  { value: 5, emoji: 'remove-outline', label: 'Average', color: '#84CC16' },
-  { value: 6, emoji: 'remove-outline', label: 'Okay', color: '#22C55E' },
-  { value: 7, emoji: 'happy-outline', label: 'Good', color: '#10B981' },
-  { value: 8, emoji: 'happy-outline', label: 'Great', color: '#14B8A6' },
-  { value: 9, emoji: 'happy-outline', label: 'Excellent', color: '#06B6D4' },
-  { value: 10, emoji: 'happy-outline', label: 'Amazing', color: '#6366F1' },
+  { value: 1, emoji: '😢', label: 'Awful', color: '#EF4444', gradient: ['#EF4444', '#F87171'] },
+  { value: 2, emoji: '😞', label: 'Bad', color: '#F97316', gradient: ['#F97316', '#FB923C'] },
+  { value: 3, emoji: '😔', label: 'Down', color: '#F59E0B', gradient: ['#F59E0B', '#FBBF24'] },
+  { value: 4, emoji: '😕', label: 'Meh', color: '#EAB308', gradient: ['#EAB308', '#FACC15'] },
+  { value: 5, emoji: '😐', label: 'Okay', color: '#84CC16', gradient: ['#84CC16', '#A3E635'] },
+  { value: 6, emoji: '🙂', label: 'Fine', color: '#22C55E', gradient: ['#22C55E', '#4ADE80'] },
+  { value: 7, emoji: '😊', label: 'Good', color: '#10B981', gradient: ['#10B981', '#34D399'] },
+  { value: 8, emoji: '😄', label: 'Great', color: '#14B8A6', gradient: ['#14B8A6', '#2DD4BF'] },
+  { value: 9, emoji: '😁', label: 'Amazing', color: '#06B6D4', gradient: ['#06B6D4', '#22D3EE'] },
+  { value: 10, emoji: '🤩', label: 'Perfect', color: '#6366F1', gradient: ['#6366F1', '#818CF8'] },
 ];
 
 interface MoodEntry {
@@ -35,6 +40,76 @@ interface MoodEntry {
   created_at: string;
 }
 
+function AnimatedMoodButton({ mood, isSelected, onPress }: { mood: typeof MOODS[0], isSelected: boolean, onPress: () => void }) {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const bounceAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (isSelected) {
+      Animated.sequence([
+        Animated.spring(scaleAnim, {
+          toValue: 1.15,
+          useNativeDriver: true,
+          speed: 50,
+          bounciness: 15,
+        }),
+        Animated.spring(scaleAnim, {
+          toValue: 1.08,
+          useNativeDriver: true,
+          speed: 50,
+        }),
+      ]).start();
+
+      // Continuous gentle bounce
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(bounceAnim, {
+            toValue: -4,
+            duration: 400,
+            useNativeDriver: true,
+          }),
+          Animated.timing(bounceAnim, {
+            toValue: 0,
+            duration: 400,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    } else {
+      scaleAnim.setValue(1);
+      bounceAnim.setValue(0);
+    }
+  }, [isSelected]);
+
+  return (
+    <Pressable onPress={onPress}>
+      <Animated.View
+        style={[
+          styles.moodItem,
+          isSelected && { 
+            backgroundColor: mood.color + '25',
+            borderColor: mood.color,
+          },
+          {
+            transform: [
+              { scale: scaleAnim },
+              { translateY: isSelected ? bounceAnim : 0 },
+            ],
+          },
+        ]}
+      >
+        <Text style={styles.moodEmoji}>{mood.emoji}</Text>
+        <Text style={[styles.moodValue, isSelected && { color: mood.color }]}>
+          {mood.value}
+        </Text>
+        <Text style={[styles.moodLabel, isSelected && { color: mood.color }]}>
+          {mood.label}
+        </Text>
+      </Animated.View>
+    </Pressable>
+  );
+}
+
 export default function MoodScreen() {
   const { sessionToken } = useAuth();
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
@@ -42,11 +117,24 @@ export default function MoodScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Animations
+  const buttonScale = useRef(new Animated.Value(1)).current;
+  const successAnim = useRef(new Animated.Value(0)).current;
+  const headerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     loadMoodHistory();
+    // Header entrance animation
+    Animated.timing(headerAnim, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: true,
+    }).start();
   }, []);
 
   const loadMoodHistory = async () => {
@@ -57,7 +145,13 @@ export default function MoodScreen() {
       console.error('Error loading mood history:', error);
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
+  };
+
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    loadMoodHistory();
   };
 
   const handleSubmit = async () => {
@@ -70,12 +164,26 @@ export default function MoodScreen() {
     try {
       const response = await api.post('/mood', { mood: selectedMood, notes }, sessionToken);
       
-      // Check for safeguarding alert
       if (response.safeguarding_alert && response.safeguarding_alert.flagged) {
         setSafeguardingAlert(response.safeguarding_alert);
         setShowSafeguardingModal(true);
       } else {
-        Alert.alert('Success', 'Your mood has been recorded!');
+        // Show success animation
+        setShowSuccess(true);
+        Animated.sequence([
+          Animated.spring(successAnim, {
+            toValue: 1,
+            useNativeDriver: true,
+            speed: 20,
+            bounciness: 12,
+          }),
+          Animated.delay(1500),
+          Animated.timing(successAnim, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+        ]).start(() => setShowSuccess(false));
       }
       
       setSelectedMood(null);
@@ -95,16 +203,42 @@ export default function MoodScreen() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    const now = new Date();
+    const diffTime = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return date.toLocaleDateString('en-US', { weekday: 'short' });
+    }
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
+
+  const selectedMoodInfo = selectedMood ? getMoodInfo(selectedMood) : null;
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Success Animation Overlay */}
+      {showSuccess && (
+        <Animated.View
+          style={[
+            styles.successOverlay,
+            {
+              opacity: successAnim,
+              transform: [{ scale: successAnim }],
+            },
+          ]}
+        >
+          <View style={styles.successContent}>
+            <Text style={styles.successEmoji}>✨</Text>
+            <Text style={styles.successText}>Mood Logged!</Text>
+          </View>
+        </Animated.View>
+      )}
+
       {/* Safeguarding Alert Modal */}
       <SafeguardingAlert
         visible={showSafeguardingModal}
@@ -115,130 +249,200 @@ export default function MoodScreen() {
         alertData={safeguardingAlert}
       />
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
-          <Text style={styles.title}>How are you feeling?</Text>
-          <Text style={styles.subtitle}>
-            Select your current mood on a scale of 1-10
-          </Text>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            tintColor="#6366F1"
+            colors={['#6366F1']}
+          />
+        }
+      >
+        <Animated.View 
+          style={[
+            styles.content,
+            {
+              opacity: headerAnim,
+              transform: [{
+                translateY: headerAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              }],
+            },
+          ]}
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.title}>How are you feeling?</Text>
+            <Text style={styles.subtitle}>
+              Take a moment to check in with yourself
+            </Text>
+          </View>
 
-          <View style={styles.moodGrid}>
-            {MOODS.map((mood) => (
-              <TouchableOpacity
-                key={mood.value}
-                style={[
-                  styles.moodItem,
-                  selectedMood === mood.value && {
-                    backgroundColor: mood.color + '30',
-                    borderColor: mood.color,
-                  },
-                ]}
-                onPress={() => setSelectedMood(mood.value)}
-              >
-                <Ionicons
-                  name={mood.emoji as any}
-                  size={28}
-                  color={selectedMood === mood.value ? mood.color : '#9CA3AF'}
+          {/* Selected Mood Display */}
+          {selectedMoodInfo && (
+            <LinearGradient
+              colors={selectedMoodInfo.gradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.selectedDisplay}
+            >
+              <Text style={styles.selectedEmoji}>{selectedMoodInfo.emoji}</Text>
+              <View>
+                <Text style={styles.selectedLabel}>Feeling {selectedMoodInfo.label}</Text>
+                <Text style={styles.selectedValue}>{selectedMoodInfo.value}/10</Text>
+              </View>
+            </LinearGradient>
+          )}
+
+          {/* Mood Grid - Scrollable Horizontal */}
+          <View style={styles.moodSection}>
+            <Text style={styles.sectionLabel}>Select your mood</Text>
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.moodScrollContent}
+            >
+              {MOODS.map((mood) => (
+                <AnimatedMoodButton
+                  key={mood.value}
+                  mood={mood}
+                  isSelected={selectedMood === mood.value}
+                  onPress={() => setSelectedMood(mood.value)}
                 />
-                <Text
-                  style={[
-                    styles.moodValue,
-                    selectedMood === mood.value && { color: mood.color },
-                  ]}
-                >
-                  {mood.value}
-                </Text>
-                <Text
-                  style={[
-                    styles.moodLabel,
-                    selectedMood === mood.value && { color: mood.color },
-                  ]}
-                >
-                  {mood.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+              ))}
+            </ScrollView>
           </View>
 
+          {/* Notes Input */}
           <View style={styles.notesContainer}>
-            <Text style={styles.notesLabel}>Add a note (optional)</Text>
-            <TextInput
-              style={styles.notesInput}
-              placeholder="How's your day going?"
-              placeholderTextColor="#6B7280"
-              multiline
-              numberOfLines={3}
-              value={notes}
-              onChangeText={setNotes}
-            />
+            <Text style={styles.sectionLabel}>Add a note (optional)</Text>
+            <View style={styles.notesInputContainer}>
+              <TextInput
+                style={styles.notesInput}
+                placeholder="What's on your mind today?"
+                placeholderTextColor="#64748B"
+                multiline
+                numberOfLines={3}
+                value={notes}
+                onChangeText={setNotes}
+              />
+              {notes.length > 0 && (
+                <Text style={styles.charCount}>{notes.length}/500</Text>
+              )}
+            </View>
           </View>
 
-          <TouchableOpacity
-            style={[
-              styles.submitButton,
-              !selectedMood && styles.submitButtonDisabled,
-            ]}
+          {/* Submit Button */}
+          <Pressable
+            onPressIn={() => {
+              Animated.spring(buttonScale, {
+                toValue: 0.96,
+                useNativeDriver: true,
+              }).start();
+            }}
+            onPressOut={() => {
+              Animated.spring(buttonScale, {
+                toValue: 1,
+                useNativeDriver: true,
+              }).start();
+            }}
             onPress={handleSubmit}
             disabled={!selectedMood || isSubmitting}
           >
-            {isSubmitting ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <>
-                <Ionicons name="checkmark-circle" size={24} color="#fff" />
-                <Text style={styles.submitButtonText}>Log Mood</Text>
-              </>
-            )}
-          </TouchableOpacity>
+            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+              <LinearGradient
+                colors={selectedMood ? ['#6366F1', '#8B5CF6'] : ['#374151', '#4B5563']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.submitButton}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="checkmark-circle" size={22} color="#fff" />
+                    <Text style={styles.submitButtonText}>Log My Mood</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </Animated.View>
+          </Pressable>
 
+          {/* History Section */}
           <View style={styles.historySection}>
-            <Text style={styles.historyTitle}>Recent Moods</Text>
+            <View style={styles.historyHeader}>
+              <Text style={styles.historyTitle}>Recent Entries</Text>
+              {moodHistory.length > 5 && (
+                <TouchableOpacity>
+                  <Text style={styles.viewAllText}>View All</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
             {isLoading ? (
-              <ActivityIndicator color="#6366F1" style={{ marginTop: 20 }} />
+              <View>
+                {[1, 2, 3].map((i) => (
+                  <MoodCardSkeleton key={i} />
+                ))}
+              </View>
             ) : moodHistory.length === 0 ? (
               <View style={styles.emptyState}>
-                <Ionicons name="analytics-outline" size={48} color="#4B5563" />
+                <View style={styles.emptyIcon}>
+                  <Ionicons name="analytics-outline" size={40} color="#64748B" />
+                </View>
                 <Text style={styles.emptyText}>No mood entries yet</Text>
                 <Text style={styles.emptySubtext}>
-                  Start tracking to see your history
+                  Start tracking to see your emotional journey
                 </Text>
               </View>
             ) : (
-              moodHistory.slice(0, 5).map((entry) => {
+              moodHistory.slice(0, 5).map((entry, index) => {
                 const moodInfo = getMoodInfo(entry.mood);
                 return (
-                  <View key={entry.id} style={styles.historyItem}>
-                    <View
-                      style={[
-                        styles.historyIcon,
-                        { backgroundColor: moodInfo.color + '20' },
-                      ]}
+                  <Animated.View 
+                    key={entry.id} 
+                    style={[
+                      styles.historyItem,
+                      { opacity: 1 },
+                    ]}
+                  >
+                    <LinearGradient
+                      colors={moodInfo.gradient}
+                      style={styles.historyIconBg}
                     >
-                      <Ionicons
-                        name={moodInfo.emoji as any}
-                        size={24}
-                        color={moodInfo.color}
-                      />
-                    </View>
+                      <Text style={styles.historyEmoji}>{moodInfo.emoji}</Text>
+                    </LinearGradient>
                     <View style={styles.historyContent}>
-                      <View style={styles.historyHeader}>
+                      <View style={styles.historyHeaderRow}>
                         <Text style={styles.historyMood}>
-                          {moodInfo.label} ({entry.mood}/10)
+                          {moodInfo.label}
                         </Text>
-                        <Text style={styles.historyDate}>
-                          {formatDate(entry.created_at)}
-                        </Text>
+                        <View style={styles.moodBadge}>
+                          <Text style={[styles.moodBadgeText, { color: moodInfo.color }]}>
+                            {entry.mood}/10
+                          </Text>
+                        </View>
                       </View>
+                      <Text style={styles.historyDate}>
+                        {formatDate(entry.created_at)}
+                      </Text>
                       {entry.notes && (
-                        <Text style={styles.historyNotes}>{entry.notes}</Text>
+                        <Text style={styles.historyNotes} numberOfLines={2}>
+                          {entry.notes}
+                        </Text>
                       )}
                     </View>
-                  </View>
+                  </Animated.View>
                 );
               })
             )}
           </View>
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -247,7 +451,7 @@ export default function MoodScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#0F172A',
   },
   scrollView: {
     flex: 1,
@@ -255,144 +459,237 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
   },
+  header: {
+    marginBottom: 20,
+  },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
-    marginBottom: 8,
+    fontWeight: '800',
+    color: '#F8FAFC',
+    marginBottom: 6,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#9CA3AF',
-    textAlign: 'center',
+    fontSize: 15,
+    color: '#94A3B8',
+  },
+  selectedDisplay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 24,
+    gap: 16,
+  },
+  selectedEmoji: {
+    fontSize: 44,
+  },
+  selectedLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  selectedValue: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.8)',
+  },
+  moodSection: {
     marginBottom: 24,
   },
-  moodGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 24,
+  sectionLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#94A3B8',
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  moodScrollContent: {
+    paddingVertical: 8,
+    gap: 8,
   },
   moodItem: {
-    width: '18%',
-    aspectRatio: 0.8,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
+    width: 72,
+    height: 96,
+    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    borderRadius: 16,
     borderWidth: 2,
     borderColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-    padding: 4,
+    marginRight: 8,
+  },
+  moodEmoji: {
+    fontSize: 28,
+    marginBottom: 4,
   },
   moodValue: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#9CA3AF',
-    marginTop: 4,
+    fontWeight: '700',
+    color: '#F1F5F9',
   },
   moodLabel: {
-    fontSize: 9,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginTop: 2,
+    fontSize: 10,
+    color: '#64748B',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   notesContainer: {
     marginBottom: 24,
   },
-  notesLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 8,
+  notesInputContainer: {
+    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.1)',
   },
   notesInput: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
     padding: 16,
-    color: '#fff',
-    fontSize: 16,
+    color: '#F1F5F9',
+    fontSize: 15,
     minHeight: 100,
     textAlignVertical: 'top',
+  },
+  charCount: {
+    position: 'absolute',
+    bottom: 8,
+    right: 12,
+    fontSize: 12,
+    color: '#64748B',
   },
   submitButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6366F1',
     paddingVertical: 16,
-    borderRadius: 12,
+    borderRadius: 14,
+    gap: 10,
     marginBottom: 32,
-  },
-  submitButtonDisabled: {
-    backgroundColor: '#374151',
   },
   submitButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
-    marginLeft: 8,
   },
   historySection: {
     marginBottom: 24,
-  },
-  historyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 16,
-  },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 32,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#9CA3AF',
-    marginTop: 12,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginTop: 4,
-  },
-  historyItem: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  historyIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  historyContent: {
-    flex: 1,
   },
   historyHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 16,
+  },
+  historyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#F8FAFC',
+  },
+  viewAllText: {
+    fontSize: 14,
+    color: '#6366F1',
+    fontWeight: '600',
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: 40,
+    backgroundColor: 'rgba(30, 41, 59, 0.5)',
+    borderRadius: 16,
+  },
+  emptyIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(100, 116, 139, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#94A3B8',
     marginBottom: 4,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: '#64748B',
+  },
+  historyItem: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(30, 41, 59, 0.6)',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.08)',
+  },
+  historyIconBg: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  historyEmoji: {
+    fontSize: 24,
+  },
+  historyContent: {
+    flex: 1,
+  },
+  historyHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 2,
   },
   historyMood: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: '#F1F5F9',
+  },
+  moodBadge: {
+    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  moodBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   historyDate: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#64748B',
+    marginBottom: 4,
   },
   historyNotes: {
-    fontSize: 14,
-    color: '#9CA3AF',
+    fontSize: 13,
+    color: '#94A3B8',
+    lineHeight: 18,
     marginTop: 4,
+  },
+  successOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  successContent: {
+    alignItems: 'center',
+  },
+  successEmoji: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
+  successText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#F8FAFC',
   },
 });
