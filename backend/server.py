@@ -900,7 +900,7 @@ async def admin_login(data: AdminLoginRequest):
         }
     }
 
-@api_router.post("/auth/session")
+@api_router.post("/auth/exchange-token")
 async def exchange_session(request: Request, response: Response):
     """Exchange session_id for session_token"""
     try:
