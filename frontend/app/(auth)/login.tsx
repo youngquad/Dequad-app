@@ -349,19 +349,6 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     lineHeight: 18,
   },
-  adminLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    marginBottom: 12,
-    gap: 8,
-  },
-  adminLinkText: {
-    color: '#F59E0B',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   terms: {
     color: '#64748B',
     fontSize: 12,
