@@ -156,7 +156,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -170,6 +170,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Fixed match notification issue - notifications are now stored in database even if user doesn't have push token. Updated notification message to 'You have a new match with [Name]!'. Both matched users will now receive in-app notifications when a match occurs."
+      - working: true
+        agent: "testing"
+        comment: "✅ PICTURE FIELD VERIFIED: Confirmed GET /api/matches/discover includes 'picture' field in user profiles. Database contains users with picture URLs (e.g., Google OAuth profile pictures, custom uploaded photos). The discover endpoint properly returns user data including the picture field when matches are available. Match notification fix confirmed - notifications are stored in database even without push tokens, ensuring in-app notifications work for both users in a mutual match."
 
   - task: "Chat API (Encrypted)"
     implemented: true
