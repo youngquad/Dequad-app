@@ -916,16 +916,22 @@ async def exchange_session(request: Request, response: Response):
                 "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
                 headers={"X-Session-ID": session_id}
             )
-            if auth_response.status_code != 200:
-                raise HTTPException(status_code=401, detail="Invalid session_id")
-            
-            user_data = auth_response.json()
         except httpx.TimeoutException:
             logger.error("Auth API timeout")
             raise HTTPException(status_code=504, detail="Authentication service timeout")
         except Exception as e:
-            logger.error(f"Auth API error: {e}")
-            raise HTTPException(status_code=500, detail="Authentication failed")
+            logger.error(f"Auth API connection error: {e}")
+            raise HTTPException(status_code=500, detail="Authentication service unavailable")
+    
+    if auth_response.status_code != 200:
+        logger.error(f"Auth API returned {auth_response.status_code}")
+        raise HTTPException(status_code=401, detail="Invalid session_id")
+    
+    try:
+        user_data = auth_response.json()
+    except Exception as e:
+        logger.error(f"Auth API response parse error: {e}")
+        raise HTTPException(status_code=500, detail="Authentication failed")
     
     session_data = SessionDataResponse(**user_data)
     
