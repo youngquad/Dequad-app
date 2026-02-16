@@ -322,7 +322,7 @@ frontend:
     file: "/app/frontend/app/(auth)/login.tsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -330,6 +330,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: Login screen loads correctly with 'Welcome Back' title. Security info boxes present ('Safe & Secure' and 'Privacy First'). Google OAuth button functional. Navigation from landing page works. Dark theme consistent. Mobile layout responsive."
+      - working: "NA"
+        agent: "main"
+        comment: "Removed 'Admin Access' link from login screen. Admin dashboard is now only accessible via direct URL /admin/login. This improves security by hiding admin access from regular users."
 
   - task: "Mood Tracking Screen"
     implemented: true
