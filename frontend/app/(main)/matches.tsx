@@ -333,11 +333,11 @@ export default function MatchesScreen() {
         )}
 
         <View style={styles.cardContent}>
-          {/* Avatar */}
+          {/* Avatar - Priority: uploaded photos > Google picture > initials */}
           <View style={styles.avatarContainer}>
             {hasPhoto ? (
               <Image source={{ uri: profile.photos![0] }} style={styles.avatarImage} />
-            ) : profile.picture ? (
+            ) : profile.picture && profile.picture.trim() !== '' ? (
               <Image source={{ uri: profile.picture }} style={styles.avatarImage} />
             ) : (
               <LinearGradient colors={getAvatarGradient(profile.name)} style={styles.avatarGradient}>
