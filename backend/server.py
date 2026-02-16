@@ -621,12 +621,10 @@ async def require_admin(current_user: User = Depends(get_current_user)) -> User:
 # ==================== NOTIFICATION HELPERS ====================
 
 async def send_push_notification(user_id: str, title: str, body: str, notification_type: str, data: dict = {}):
-    """Send push notification to user via Expo Push Service"""
+    """Send push notification to user via Expo Push Service and store in-app notification"""
     user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
-    if not user or not user.get("push_token") or not user.get("notifications_enabled", True):
-        return None
     
-    # Store notification in database
+    # Always store notification in database for in-app notification display
     notification = Notification(
         user_id=user_id,
         title=title,
@@ -635,6 +633,11 @@ async def send_push_notification(user_id: str, title: str, body: str, notificati
         data=data
     )
     await db.notifications.insert_one(notification.dict())
+    
+    # If user doesn't exist, has no push token, or has notifications disabled, skip push notification
+    if not user or not user.get("push_token") or not user.get("notifications_enabled", True):
+        logger.info(f"In-app notification stored for user {user_id}, skipping push notification")
+        return notification
     
     # Send via Expo Push API
     push_token = user.get("push_token")
