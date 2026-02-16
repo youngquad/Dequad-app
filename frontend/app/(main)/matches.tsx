@@ -337,6 +337,8 @@ export default function MatchesScreen() {
           <View style={styles.avatarContainer}>
             {hasPhoto ? (
               <Image source={{ uri: profile.photos![0] }} style={styles.avatarImage} />
+            ) : profile.picture ? (
+              <Image source={{ uri: profile.picture }} style={styles.avatarImage} />
             ) : (
               <LinearGradient colors={getAvatarGradient(profile.name)} style={styles.avatarGradient}>
                 <Text style={styles.avatarText}>{getInitials(profile.name)}</Text>
