@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Animated,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -16,6 +18,44 @@ export default function LoginScreen() {
   const router = useRouter();
   const { login, isLoading } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
+
+  // Animations
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
+  const buttonScale = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    // Entrance animation
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Pulse animation for icon
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.05,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
 
   const handleLogin = async () => {
     setIsSigningIn(true);
@@ -31,69 +71,128 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#111827', '#1F2937', '#374151']}
+        colors={['#0F172A', '#1E293B', '#0F172A']}
         style={styles.gradient}
+        locations={[0, 0.5, 1]}
       >
-        <TouchableOpacity
+        {/* Decorative elements */}
+        <View style={styles.decorativeCircle1} />
+        <View style={styles.decorativeCircle2} />
+
+        {/* Back Button */}
+        <Pressable
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
+          <Ionicons name="arrow-back" size={22} color="#F8FAFC" />
+        </Pressable>
 
-        <View style={styles.content}>
+        <Animated.View 
+          style={[
+            styles.content,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            },
+          ]}
+        >
+          {/* Logo Section */}
           <View style={styles.logoContainer}>
-            <View style={styles.iconCircle}>
-              <Ionicons name="school" size={60} color="#6366F1" />
-            </View>
+            <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+              <LinearGradient
+                colors={['rgba(99, 102, 241, 0.2)', 'rgba(139, 92, 246, 0.1)']}
+                style={styles.iconCircle}
+              >
+                <Ionicons name="school" size={52} color="#818CF8" />
+              </LinearGradient>
+            </Animated.View>
             <Text style={styles.title}>Welcome Back</Text>
             <Text style={styles.subtitle}>
-              Sign in to access your Educare account
+              Sign in to continue your wellbeing journey
             </Text>
           </View>
 
+          {/* Login Form */}
           <View style={styles.formContainer}>
-            <TouchableOpacity
-              style={styles.googleButton}
+            {/* Google Sign In Button */}
+            <Pressable
+              onPressIn={() => {
+                Animated.spring(buttonScale, {
+                  toValue: 0.96,
+                  useNativeDriver: true,
+                }).start();
+              }}
+              onPressOut={() => {
+                Animated.spring(buttonScale, {
+                  toValue: 1,
+                  useNativeDriver: true,
+                }).start();
+              }}
               onPress={handleLogin}
               disabled={isSigningIn || isLoading}
             >
-              {isSigningIn || isLoading ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <>
-                  <Ionicons name="logo-google" size={24} color="#fff" />
-                  <Text style={styles.googleButtonText}>
-                    Continue with Google
-                  </Text>
-                </>
-              )}
-            </TouchableOpacity>
+              <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                <LinearGradient
+                  colors={['#6366F1', '#8B5CF6']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.googleButton}
+                >
+                  {isSigningIn || isLoading ? (
+                    <ActivityIndicator color="#fff" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="logo-google" size={22} color="#fff" />
+                      <Text style={styles.googleButtonText}>
+                        Continue with Google
+                      </Text>
+                      <Ionicons name="arrow-forward" size={20} color="#fff" />
+                    </>
+                  )}
+                </LinearGradient>
+              </Animated.View>
+            </Pressable>
 
+            {/* Divider */}
             <View style={styles.divider}>
               <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>Secure Authentication</Text>
+              <Text style={styles.dividerText}>University Email</Text>
               <View style={styles.dividerLine} />
             </View>
 
-            <View style={styles.infoBox}>
-              <Ionicons name="shield-checkmark" size={24} color="#10B981" />
-              <View style={styles.infoText}>
+            {/* Info Cards */}
+            <View style={styles.infoCard}>
+              <View style={styles.infoIconContainer}>
+                <Ionicons name="shield-checkmark" size={22} color="#10B981" />
+              </View>
+              <View style={styles.infoTextContainer}>
                 <Text style={styles.infoTitle}>Safe & Secure</Text>
                 <Text style={styles.infoDescription}>
-                  Your data is protected with enterprise-grade security. We never
-                  share your information.
+                  Your data is protected with enterprise-grade security
                 </Text>
               </View>
             </View>
 
-            <View style={styles.infoBox}>
-              <Ionicons name="lock-closed" size={24} color="#6366F1" />
-              <View style={styles.infoText}>
+            <View style={styles.infoCard}>
+              <View style={styles.infoIconContainer}>
+                <Ionicons name="lock-closed" size={22} color="#6366F1" />
+              </View>
+              <View style={styles.infoTextContainer}>
                 <Text style={styles.infoTitle}>Privacy First</Text>
                 <Text style={styles.infoDescription}>
-                  End-to-end encryption for all your conversations and personal
-                  data.
+                  End-to-end encryption for all your conversations
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.infoCard}>
+              <View style={styles.infoIconContainer}>
+                <Ionicons name="people" size={22} color="#EC4899" />
+              </View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoTitle}>Student Community</Text>
+                <Text style={styles.infoDescription}>
+                  Connect with verified university students only
                 </Text>
               </View>
             </View>
@@ -104,14 +203,15 @@ export default function LoginScreen() {
             style={styles.adminLink}
             onPress={() => router.push('/(admin)/login')}
           >
-            <Ionicons name="shield" size={16} color="#F59E0B" />
+            <Ionicons name="shield" size={15} color="#F59E0B" />
             <Text style={styles.adminLinkText}>Admin Access</Text>
           </TouchableOpacity>
 
+          {/* Terms */}
           <Text style={styles.terms}>
             By continuing, you agree to our Terms of Service and Privacy Policy
           </Text>
-        </View>
+        </Animated.View>
       </LinearGradient>
     </SafeAreaView>
   );
@@ -120,10 +220,28 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#0F172A',
   },
   gradient: {
     flex: 1,
+  },
+  decorativeCircle1: {
+    position: 'absolute',
+    top: -80,
+    right: -80,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(99, 102, 241, 0.08)',
+  },
+  decorativeCircle2: {
+    position: 'absolute',
+    bottom: 100,
+    left: -100,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(139, 92, 246, 0.06)',
   },
   backButton: {
     position: 'absolute',
@@ -132,10 +250,12 @@ const styles = StyleSheet.create({
     zIndex: 10,
     width: 44,
     height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 14,
+    backgroundColor: 'rgba(30, 41, 59, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.1)',
   },
   content: {
     flex: 1,
@@ -146,27 +266,27 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 24,
   },
   iconCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    width: 96,
+    height: 96,
+    borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: '800',
+    color: '#F8FAFC',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: '#94A3B8',
     textAlign: 'center',
+    maxWidth: 280,
   },
   formContainer: {
     flex: 1,
@@ -176,17 +296,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6366F1',
     paddingVertical: 16,
-    borderRadius: 12,
+    borderRadius: 14,
     marginBottom: 24,
     minHeight: 56,
+    gap: 10,
   },
   googleButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
-    marginLeft: 12,
+    flex: 1,
+    textAlign: 'center',
   },
   divider: {
     flexDirection: 'row',
@@ -196,51 +317,62 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#374151',
+    backgroundColor: 'rgba(148, 163, 184, 0.15)',
   },
   dividerText: {
-    color: '#6B7280',
-    fontSize: 14,
-    marginHorizontal: 12,
+    color: '#64748B',
+    fontSize: 13,
+    marginHorizontal: 14,
+    fontWeight: '500',
+  },
+  infoCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(30, 41, 59, 0.6)',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.08)',
+  },
+  infoIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  infoTextContainer: {
+    flex: 1,
+  },
+  infoTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#F1F5F9',
+    marginBottom: 3,
+  },
+  infoDescription: {
+    fontSize: 13,
+    color: '#94A3B8',
+    lineHeight: 18,
   },
   adminLink: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    marginBottom: 16,
+    marginBottom: 12,
+    gap: 8,
   },
   adminLinkText: {
     color: '#F59E0B',
     fontSize: 14,
     fontWeight: '600',
-    marginLeft: 8,
-  },
-  infoBox: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-  infoText: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  infoDescription: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    lineHeight: 20,
   },
   terms: {
-    color: '#6B7280',
+    color: '#64748B',
     fontSize: 12,
     textAlign: 'center',
     lineHeight: 18,
