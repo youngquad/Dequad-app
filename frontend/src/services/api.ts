@@ -65,19 +65,27 @@ class ApiService {
     let authToken = token;
     if (!authToken) {
       authToken = await this.getStoredToken();
-      console.log(`API ${method} ${endpoint} - Using stored token:`, authToken ? authToken.substring(0, 20) + '...' : 'none');
+    }
+    
+    // Also check for admin_session_token if regular token not found
+    if (!authToken && Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+      authToken = window.localStorage.getItem('admin_session_token');
     }
     
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
+      console.log(`API ${method} ${endpoint} - Token:`, authToken.substring(0, 25) + '...');
     }
 
     try {
+      // Don't include credentials for admin endpoints to avoid cookie conflicts
+      const isAdminEndpoint = endpoint.startsWith('/admin');
+      
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method,
         headers,
         body: data ? JSON.stringify(data) : undefined,
-        credentials: 'include',
+        credentials: isAdminEndpoint ? 'omit' : 'include',
       });
 
       if (!response.ok) {
