@@ -1364,18 +1364,18 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
             )
             mutual_match = target_user
             
-            # Send push notifications to both users about the match
+            # Send notifications to both users about the match
             await send_push_notification(
                 current_user.user_id,
-                "New Match!",
-                f"You matched with {target_user.get('name', 'someone')}! Start chatting now.",
+                "New Match! 🎉",
+                f"You have a new match with {target_user.get('name', 'someone')}!",
                 "new_match",
                 {"match_user_id": data.target_user_id, "match_user_name": target_user.get("name")}
             )
             await send_push_notification(
                 data.target_user_id,
-                "New Match!",
-                f"You matched with {current_user.name}! Start chatting now.",
+                "New Match! 🎉",
+                f"You have a new match with {current_user.name}!",
                 "new_match",
                 {"match_user_id": current_user.user_id, "match_user_name": current_user.name}
             )
