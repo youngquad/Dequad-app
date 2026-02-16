@@ -12,56 +12,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#0F172A"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.educare.wellbeing",
-      "buildNumber": "1",
-      "infoPlist": {
-        "NSCameraUsageDescription": "Educare needs camera access to take profile photos and share moments with your study partners.",
-        "NSPhotoLibraryUsageDescription": "Educare needs photo library access to select profile photos and share images.",
-        "NSPhotoLibraryAddUsageDescription": "Educare needs permission to save photos to your library.",
-        "NSContactsUsageDescription": "Educare can help you find friends from your contacts who are also students.",
-        "NSLocationWhenInUseUsageDescription": "Educare uses your location to find nearby students at your university.",
-        "NSUserTrackingUsageDescription": "This helps us provide a better experience and relevant recommendations.",
-        "ITSAppUsesNonExemptEncryption": false
-      },
-      "config": {
-        "usesNonExemptEncryption": false
-      },
-      "privacyManifests": {
-        "NSPrivacyAccessedAPITypes": [
-          {
-            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": [
-              "CA92.1"
-            ]
-          }
-        ]
-      }
+      "buildNumber": "1"
     },
     "android": {
       "package": "com.educare.wellbeing",
-      "versionCode": 7,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
-      },
-      "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "RECEIVE_BOOT_COMPLETED",
-        "VIBRATE",
-        "ACCESS_NETWORK_STATE",
-        "INTERNET"
-      ],
-      "blockedPermissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ]
+      }
     },
     "web": {
       "bundler": "metro",
@@ -70,44 +33,10 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-image.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#0F172A"
-        }
-      ],
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdkVersion": 34,
-            "targetSdkVersion": 34,
-            "buildToolsVersion": "34.0.0"
-          },
-          "ios": {
-            "deploymentTarget": "15.1"
-          }
-        }
-      ],
-      "@stripe/stripe-react-native",
-      "expo-font"
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "0ad6a13c-845f-4ab4-9177-ba5031d2462d"
-      }
-    },
-    "owner": "youngquad"
+    }
   }
 }
