@@ -4,10 +4,10 @@ Backend API Testing for Educare - Hinge-style Matching Interface
 Testing the NEW implementation with like_type, like_content, comment fields
 """
 
-import asyncio
-import httpx
+import requests
 import json
 import uuid
+import subprocess
 from datetime import datetime, timezone
 import os
 from dotenv import load_dotenv
@@ -25,15 +25,52 @@ class EducareAPITester:
     def __init__(self):
         self.session_tokens = {}
         self.test_users = {}
-        self.client = httpx.AsyncClient(timeout=30.0)
         
-    async def close(self):
-        await self.client.aclose()
-    
-    async def create_test_user_session(self, user_name: str, email: str) -> str:
-        """Create a test user session directly in the database simulation"""
+    def create_test_user_session(self, user_name: str, email: str) -> str:
+        """Create a test user session directly in the database"""
         user_id = f"test_user_{uuid.uuid4().hex[:8]}"
         session_token = f"test_session_{uuid.uuid4().hex}"
+        
+        try:
+            # Create user in database
+            subprocess.run([
+                "mongosh", "test_database", "--eval",
+                f"""
+                db.users.insertOne({{
+                  user_id: '{user_id}',
+                  email: '{email}',
+                  name: '{user_name}',
+                  picture: null,
+                  role: 'student',
+                  interests: [],
+                  prompts: [],
+                  university: null,
+                  age: null,
+                  gender: null,
+                  interested_in: [],
+                  notifications_enabled: true,
+                  plan: 'free',
+                  swipes_today: 0,
+                  created_at: new Date()
+                }});
+                """
+            ], capture_output=True, text=True, timeout=10)
+            
+            # Create session in database
+            subprocess.run([
+                "mongosh", "test_database", "--eval",
+                f"""
+                db.user_sessions.insertOne({{
+                  user_id: '{user_id}',
+                  session_token: '{session_token}',
+                  expires_at: new Date(Date.now() + 7*24*60*60*1000),
+                  created_at: new Date()
+                }});
+                """
+            ], capture_output=True, text=True, timeout=10)
+            
+        except Exception as e:
+            print(f"Warning: Could not create user/session in database: {e}")
         
         # Store test user info
         self.test_users[user_name] = {
