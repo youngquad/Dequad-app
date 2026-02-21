@@ -84,7 +84,7 @@ class EducareAPITester:
         print(f"✅ Created test user session: {user_name} ({user_id})")
         return session_token
     
-    async def make_request(self, method: str, endpoint: str, data=None, user_name=None, expect_error=False):
+    def make_request(self, method: str, endpoint: str, data=None, user_name=None, expect_error=False):
         """Make authenticated API request"""
         url = f"{API_BASE}{endpoint}"
         headers = {"Content-Type": "application/json"}
@@ -94,11 +94,11 @@ class EducareAPITester:
         
         try:
             if method.upper() == "GET":
-                response = await self.client.get(url, headers=headers)
+                response = requests.get(url, headers=headers, timeout=30)
             elif method.upper() == "POST":
-                response = await self.client.post(url, headers=headers, json=data)
+                response = requests.post(url, headers=headers, json=data, timeout=30)
             elif method.upper() == "PUT":
-                response = await self.client.put(url, headers=headers, json=data)
+                response = requests.put(url, headers=headers, json=data, timeout=30)
             else:
                 raise ValueError(f"Unsupported method: {method}")
             
@@ -113,12 +113,12 @@ class EducareAPITester:
             print(f"❌ Request error: {method} {endpoint} - {e}")
             return None
     
-    async def test_profile_prompts_field(self):
+    def test_profile_prompts_field(self):
         """Test that profile endpoints support prompts field"""
         print("\n🧪 Testing Profile Prompts Field Support...")
         
         # Create test user
-        await self.create_test_user_session("alice_prompts", "alice.prompts@test.com")
+        self.create_test_user_session("alice_prompts", "alice.prompts@test.com")
         
         # Test 1: Update profile with prompts
         print("📝 Test 1: PUT /api/profile with prompts field")
@@ -131,7 +131,7 @@ class EducareAPITester:
             "name": "Alice Prompts"
         }
         
-        response = await self.make_request("PUT", "/profile", prompts_data, "alice_prompts")
+        response = self.make_request("PUT", "/profile", prompts_data, "alice_prompts")
         if response and response.status_code == 200:
             profile_data = response.json()
             if "prompts" in profile_data and len(profile_data["prompts"]) == 2:
@@ -146,7 +146,7 @@ class EducareAPITester:
         
         # Test 2: Get profile and verify prompts are returned
         print("📝 Test 2: GET /api/auth/me returns prompts field")
-        response = await self.make_request("GET", "/auth/me", user_name="alice_prompts")
+        response = self.make_request("GET", "/auth/me", user_name="alice_prompts")
         if response and response.status_code == 200:
             user_data = response.json()
             if "prompts" in user_data and len(user_data["prompts"]) == 2:
@@ -161,12 +161,12 @@ class EducareAPITester:
         
         return True
     
-    async def test_discover_university_and_prompts(self):
+    def test_discover_university_and_prompts(self):
         """Test that discover endpoint returns university and prompts fields"""
         print("\n🧪 Testing Discover Endpoint Fields...")
         
         # Create test users with university and prompts
-        await self.create_test_user_session("bob_discover", "bob.discover@test.com")
+        self.create_test_user_session("bob_discover", "bob.discover@test.com")
         
         # Set up bob's profile
         bob_profile = {
@@ -181,14 +181,14 @@ class EducareAPITester:
             "interested_in": ["women"]
         }
         
-        response = await self.make_request("PUT", "/profile", bob_profile, "bob_discover")
+        response = self.make_request("PUT", "/profile", bob_profile, "bob_discover")
         if not response or response.status_code != 200:
             print("❌ Failed to set up bob's profile")
             return False
         
         # Test discover endpoint
         print("📝 Test: GET /api/matches/discover returns university and prompts")
-        response = await self.make_request("GET", "/matches/discover", user_name="alice_prompts")
+        response = self.make_request("GET", "/matches/discover", user_name="alice_prompts")
         if response and response.status_code == 200:
             users = response.json()
             print(f"   Found {len(users)} potential matches")
