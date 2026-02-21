@@ -393,6 +393,7 @@ class User(BaseModel):
     ethnicity: Optional[str] = None
     interested_in: List[str] = []  # men, women, non-binary, everyone
     gender: Optional[str] = None  # man, woman, non-binary
+    prompts: List[dict] = []  # Hinge-style prompts [{question: str, answer: str}]
     push_token: Optional[str] = None
     notifications_enabled: bool = True
     # Subscription fields
