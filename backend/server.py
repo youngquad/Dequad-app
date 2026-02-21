@@ -1473,10 +1473,21 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     if user_plan == "free":
         remaining_swipes = FREE_SWIPES_PER_DAY - (swipes_today + 1)
     
+    # Prepare matched_user response without any MongoDB _id
+    matched_user_response = None
+    if mutual_match is not None:
+        matched_user_response = {
+            "user_id": mutual_match.get("user_id"),
+            "name": mutual_match.get("name"),
+            "email": mutual_match.get("email"),
+            "picture": mutual_match.get("picture"),
+            "university": mutual_match.get("university"),
+        }
+    
     return {
-        "match": match_data,
+        "match": match_response,
         "is_mutual": mutual_match is not None,
-        "matched_user": mutual_match,
+        "matched_user": matched_user_response,
         "remaining_swipes": remaining_swipes,
         "is_premium": user_plan == "premium"
     }
