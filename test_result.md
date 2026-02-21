@@ -152,9 +152,9 @@ backend:
 
   - task: "Student Matching API"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -173,6 +173,12 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ PICTURE FIELD VERIFIED: Confirmed GET /api/matches/discover includes 'picture' field in user profiles. Database contains users with picture URLs (e.g., Google OAuth profile pictures, custom uploaded photos). The discover endpoint properly returns user data including the picture field when matches are available. Match notification fix confirmed - notifications are stored in database even without push tokens, ensuring in-app notifications work for both users in a mutual match."
+      - working: "NA"
+        agent: "main"
+        comment: "MAJOR UPDATE: Redesigned matching interface from Tinder-style swipe to Hinge-style tap interface. Added like_type, like_content, and comment fields to swipe endpoint. Added prompts field to user profiles. Updated discover endpoint to return university and prompts fields. Added new_like notification type."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL BUG FOUND: Hinge-style swipe endpoint (POST /api/matches/swipe) failing with 500 Internal Server Error due to ObjectId serialization issue. Root cause: line 1436 in server.py sets mutual_match = target_user, but target_user contains MongoDB ObjectId fields that can't be JSON serialized. ✅ PARTIAL SUCCESS: Profile prompts field working correctly - PUT /api/profile accepts prompts array, GET /api/auth/me returns prompts. GET /api/matches/discover correctly returns university and prompts fields. Notifications endpoint working. ❌ BLOCKING ISSUE: Swipe endpoint with Hinge-style fields (like_type, like_content, comment) cannot be tested due to serialization error."
 
   - task: "Chat API (Encrypted)"
     implemented: true
