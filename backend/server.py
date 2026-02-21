@@ -1370,18 +1370,50 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     
     status = "liked" if data.action == "like" else "rejected"
     
-    match = Match(
-        user_id=current_user.user_id,
-        matched_user_id=data.target_user_id,
-        status=status,
-        score=calculate_match_score(current_user.dict(), target_user)
-    )
+    # Create match record with Hinge-style like details
+    match_data = {
+        "id": f"match_{int(datetime.now(timezone.utc).timestamp() * 1000)}",
+        "user_id": current_user.user_id,
+        "matched_user_id": data.target_user_id,
+        "status": status,
+        "score": calculate_match_score(current_user.dict(), target_user),
+        "created_at": datetime.now(timezone.utc),
+    }
     
-    await db.matches.insert_one(match.dict())
+    # Add Hinge-style like details if present
+    if data.action == "like":
+        match_data["like_type"] = data.like_type or "profile"
+        match_data["like_content"] = data.like_content or ""
+        match_data["comment"] = data.comment or ""
+    
+    await db.matches.insert_one(match_data)
     
     # Check for mutual match
     mutual_match = None
     if data.action == "like":
+        # Send notification to target user about the like (Hinge-style)
+        like_message = f"{current_user.name} liked your profile"
+        if data.like_type == "photo":
+            like_message = f"{current_user.name} liked your photo"
+        elif data.like_type == "prompt" and data.like_content:
+            like_message = f"{current_user.name} liked your answer"
+        
+        if data.comment:
+            like_message += f': "{data.comment[:50]}..."' if len(data.comment) > 50 else f': "{data.comment}"'
+        
+        await send_push_notification(
+            data.target_user_id,
+            "Someone likes you! 💕",
+            like_message,
+            "new_like",
+            {
+                "from_user_id": current_user.user_id, 
+                "from_user_name": current_user.name,
+                "like_type": data.like_type or "profile",
+                "comment": data.comment or ""
+            }
+        )
+        
         reverse_match = await db.matches.find_one({
             "user_id": data.target_user_id,
             "matched_user_id": current_user.user_id,
