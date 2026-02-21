@@ -492,6 +492,7 @@ class ProfileUpdate(BaseModel):
     push_token: Optional[str] = None
     notifications_enabled: Optional[bool] = None
     photos: Optional[List[str]] = None  # Up to 3 photos in base64
+    prompts: Optional[List[dict]] = None  # Hinge-style prompts [{question: str, answer: str}]
 
 class SwipeAction(BaseModel):
     target_user_id: str
