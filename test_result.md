@@ -483,7 +483,8 @@ test_plan:
     - "Hinge-style matching interface - NEW IMPLEMENTATION"
     - "Student Matching API - test new like_type, like_content, comment fields"
     - "Notifications API - test new_like notification type"
-  stuck_tasks: []
+  stuck_tasks:
+    - "Student Matching API - Hinge-style swipe endpoint ObjectId serialization error"
   test_all: false
   test_priority: "high_first"
 
