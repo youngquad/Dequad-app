@@ -1457,7 +1457,7 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
         remaining_swipes = FREE_SWIPES_PER_DAY - (swipes_today + 1)
     
     return {
-        "match": match.dict(),
+        "match": match_data,
         "is_mutual": mutual_match is not None,
         "matched_user": mutual_match,
         "remaining_swipes": remaining_swipes,
