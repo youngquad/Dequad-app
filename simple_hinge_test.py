@@ -8,7 +8,7 @@ import json
 
 # Configuration
 BASE_URL = "https://studentmatch-fix.preview.emergentagent.com/api"
-STUDENT_TOKEN = "test_session_token_123"
+STUDENT_TOKEN = "00af097StFShlz6lrx-CEg2l1ITj5_9TCJiSCjZ4oF0"  # Valid session token from database
 
 def test_hinge_swipe_with_existing_users():
     """Test Hinge-style swipe using existing test users"""
