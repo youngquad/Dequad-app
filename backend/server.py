@@ -1379,7 +1379,7 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
         "matched_user_id": data.target_user_id,
         "status": status,
         "score": calculate_match_score(current_user.dict(), target_user),
-        "created_at": datetime.now(timezone.utc),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     }
     
     # Add Hinge-style like details if present
