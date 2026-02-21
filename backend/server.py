@@ -1373,22 +1373,39 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     status = "liked" if data.action == "like" else "rejected"
     
     # Create match record with Hinge-style like details
-    match_data = {
-        "id": f"match_{int(datetime.now(timezone.utc).timestamp() * 1000)}",
+    match_id = f"match_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+    created_at_str = datetime.now(timezone.utc).isoformat()
+    
+    match_doc = {
+        "id": match_id,
         "user_id": current_user.user_id,
         "matched_user_id": data.target_user_id,
         "status": status,
         "score": calculate_match_score(current_user.dict(), target_user),
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": created_at_str,
     }
     
     # Add Hinge-style like details if present
     if data.action == "like":
-        match_data["like_type"] = data.like_type or "profile"
-        match_data["like_content"] = data.like_content or ""
-        match_data["comment"] = data.comment or ""
+        match_doc["like_type"] = data.like_type or "profile"
+        match_doc["like_content"] = data.like_content or ""
+        match_doc["comment"] = data.comment or ""
     
-    await db.matches.insert_one(match_data)
+    await db.matches.insert_one(match_doc)
+    
+    # Create response data without MongoDB _id
+    match_response = {
+        "id": match_id,
+        "user_id": current_user.user_id,
+        "matched_user_id": data.target_user_id,
+        "status": status,
+        "score": match_doc.get("score", 0.5),
+        "created_at": created_at_str,
+    }
+    if data.action == "like":
+        match_response["like_type"] = data.like_type or "profile"
+        match_response["like_content"] = data.like_content or ""
+        match_response["comment"] = data.comment or ""
     
     # Check for mutual match
     mutual_match = None
