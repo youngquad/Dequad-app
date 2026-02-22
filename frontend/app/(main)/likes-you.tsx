@@ -263,7 +263,7 @@ export default function LikesYouScreen() {
             </TouchableOpacity>
 
             <Pressable 
-              onPress={() => handleLikeBack(like)}
+              onPress={() => handleLikeBack(like, false)}
               disabled={isResponding}
             >
               <LinearGradient
@@ -275,7 +275,26 @@ export default function LikesYouScreen() {
                 ) : (
                   <>
                     <Ionicons name="heart" size={20} color="#fff" />
-                    <Text style={styles.likeBackButtonText}>Like Back</Text>
+                    <Text style={styles.likeBackButtonText}>Like</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </Pressable>
+
+            <Pressable 
+              onPress={() => handleLikeBack(like, true)}
+              disabled={isResponding}
+            >
+              <LinearGradient
+                colors={['#6366F1', '#8B5CF6']}
+                style={styles.messageButton}
+              >
+                {isResponding ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="chatbubble" size={18} color="#fff" />
+                    <Text style={styles.messageButtonText}>Message</Text>
                   </>
                 )}
               </LinearGradient>
