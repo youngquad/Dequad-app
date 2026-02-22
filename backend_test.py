@@ -14,39 +14,50 @@ BASE_URL = "https://5888b71c-e2f0-406e-bddc-c8c11971bcea.preview.emergentagent.c
 ADMIN_EMAIL = "yusufquadri83@gmail.com"
 ADMIN_PASSWORD = "Oluwatobi11@"
 
-class APITester:
+class EducareAPITester:
     def __init__(self):
-        self.results = {
-            "auth": {"passed": 0, "failed": 0, "errors": []},
-            "mood": {"passed": 0, "failed": 0, "errors": []},
-            "feedback": {"passed": 0, "failed": 0, "errors": []},
-            "profile": {"passed": 0, "failed": 0, "errors": []},
-            "matching": {"passed": 0, "failed": 0, "errors": []},
-            "chat": {"passed": 0, "failed": 0, "errors": []},
-            "notifications": {"passed": 0, "failed": 0, "errors": []},
-            "admin": {"passed": 0, "failed": 0, "errors": []},
-            "subscription": {"passed": 0, "failed": 0, "errors": []}
-        }
-        self.match_id = None
+        self.admin_token = None
+        self.tests_run = 0
+        self.tests_passed = 0
+        self.test_results = []
         
-    def log_result(self, category, test_name, success, response=None, error=None):
+    def log_test(self, name, success, details=""):
         """Log test result"""
+        self.tests_run += 1
         if success:
-            self.results[category]["passed"] += 1
-            print(f"✅ {test_name}")
+            self.tests_passed += 1
+            print(f"✅ {name}")
         else:
-            self.results[category]["failed"] += 1
-            error_msg = f"❌ {test_name}: {error}"
-            if response:
-                error_msg += f" (Status: {response.status_code}, Response: {response.text[:200]})"
-            print(error_msg)
-            self.results[category]["errors"].append(error_msg)
+            print(f"❌ {name} - {details}")
+        
+        self.test_results.append({
+            "test": name,
+            "success": success,
+            "details": details
+        })
     
-    def make_request(self, method, endpoint, token=None, data=None):
+    def make_request(self, method, endpoint, data=None, token=None):
         """Make HTTP request with proper headers"""
         headers = {"Content-Type": "application/json"}
         if token:
             headers["Authorization"] = f"Bearer {token}"
+        
+        url = f"{BASE_URL}/{endpoint}"
+        
+        try:
+            if method == "GET":
+                response = requests.get(url, headers=headers, timeout=10)
+            elif method == "POST":
+                response = requests.post(url, json=data, headers=headers, timeout=10)
+            elif method == "PUT":
+                response = requests.put(url, json=data, headers=headers, timeout=10)
+            else:
+                raise ValueError(f"Unsupported method: {method}")
+            
+            return response
+        except Exception as e:
+            print(f"Request failed: {e}")
+            return None
         
         url = f"{BASE_URL}{endpoint}"
         
