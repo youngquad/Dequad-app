@@ -748,7 +748,7 @@ async def forgot_password(data: ForgotPasswordRequest):
     })
     
     # Create reset URL (frontend will handle this route)
-    reset_url = f"https://github-projects.preview.emergentagent.com/admin/reset-password?token={reset_token}"
+    reset_url = f"https://github-retriever-1.preview.emergentagent.com/admin/reset-password?token={reset_token}"
     
     # Send email
     if is_smtp_configured():
