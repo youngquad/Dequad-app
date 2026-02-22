@@ -3867,6 +3867,7 @@ async def seed_admin_and_test_users():
             "name": "Emma Wilson",
             "age": 21,
             "gender": "female",
+            "interested_in": ["male", "female", "non-binary"],
             "university": "University of Manchester",
             "campus_name": "Main Campus",
             "course": "Computer Science",
@@ -3875,7 +3876,7 @@ async def seed_admin_and_test_users():
             "interests": ["Programming", "AI", "Gaming", "Music", "Coffee"],
             "photos": ["https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop"],
             "picture": "https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop",
-            "role": "user",
+            "role": "student",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
             "subscription_status": "free"
@@ -3886,6 +3887,7 @@ async def seed_admin_and_test_users():
             "name": "James Chen",
             "age": 22,
             "gender": "male",
+            "interested_in": ["male", "female", "non-binary"],
             "university": "University of Birmingham",
             "campus_name": "Edgbaston",
             "course": "Data Science",
@@ -3894,7 +3896,7 @@ async def seed_admin_and_test_users():
             "interests": ["Data Science", "Philosophy", "Gaming", "Hiking", "Photography"],
             "photos": ["https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop"],
             "picture": "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop",
-            "role": "user",
+            "role": "student",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
             "subscription_status": "free"
@@ -3905,6 +3907,7 @@ async def seed_admin_and_test_users():
             "name": "Sofia Martinez",
             "age": 20,
             "gender": "female",
+            "interested_in": ["male", "female", "non-binary"],
             "university": "University of Leeds",
             "campus_name": "Main Campus",
             "course": "Psychology",
@@ -3913,7 +3916,7 @@ async def seed_admin_and_test_users():
             "interests": ["Psychology", "Yoga", "Reading", "Art", "Travel"],
             "photos": ["https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop"],
             "picture": "https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop",
-            "role": "user",
+            "role": "student",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
             "subscription_status": "free"
@@ -3924,6 +3927,7 @@ async def seed_admin_and_test_users():
             "name": "Alex Thompson",
             "age": 23,
             "gender": "non-binary",
+            "interested_in": ["male", "female", "non-binary"],
             "university": "University of Bristol",
             "campus_name": "Clifton",
             "course": "Environmental Science",
@@ -3932,7 +3936,7 @@ async def seed_admin_and_test_users():
             "interests": ["Environment", "Sustainability", "Hiking", "Coffee", "Documentaries"],
             "photos": ["https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop"],
             "picture": "https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop",
-            "role": "user",
+            "role": "student",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
             "subscription_status": "free"
@@ -3943,6 +3947,7 @@ async def seed_admin_and_test_users():
             "name": "Priya Patel",
             "age": 21,
             "gender": "female",
+            "interested_in": ["male", "female", "non-binary"],
             "university": "University of Warwick",
             "campus_name": "Main Campus",
             "course": "Business Analytics",
@@ -3951,7 +3956,7 @@ async def seed_admin_and_test_users():
             "interests": ["Business", "Startups", "Finance", "Networking", "Fitness"],
             "photos": ["https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop"],
             "picture": "https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop",
-            "role": "user",
+            "role": "student",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
             "subscription_status": "premium"
@@ -3964,12 +3969,18 @@ async def seed_admin_and_test_users():
             await db.users.insert_one(profile)
             logger.info(f"Test profile created: {profile['name']}")
         else:
-            # Update existing profile with photos
+            # Update existing profile with all fields including role and interested_in
             await db.users.update_one(
                 {"user_id": profile["user_id"]},
-                {"$set": {"photos": profile["photos"], "picture": profile["picture"]}}
+                {"$set": {
+                    "photos": profile["photos"], 
+                    "picture": profile["picture"],
+                    "role": "student",
+                    "interested_in": profile["interested_in"],
+                    "gender": profile["gender"]
+                }}
             )
-            logger.info(f"Test profile updated with photo: {profile['name']}")
+            logger.info(f"Test profile updated: {profile['name']}")
     
     logger.info("Seed data initialization complete")
 
