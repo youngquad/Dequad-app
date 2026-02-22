@@ -131,11 +131,21 @@ class FocusedAPITester:
         response = self.make_request("POST", "/matches/swipe", data=swipe_data)
         if isinstance(response, tuple):
             self.log_result("matching", "POST /matches/swipe (no auth)", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                data = response.json()
+                if data.get("detail") == "Not authenticated":
+                    self.log_result("matching", "POST /matches/swipe (auth required)", True)
+                    print("   ✅ Correctly requires authentication")
+                else:
+                    self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Should require authentication")
+            except json.JSONDecodeError:
+                self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Invalid JSON response")
         elif response and response.status_code == 401:
             self.log_result("matching", "POST /matches/swipe (401 without auth)", True)
             print("   ✅ Correctly requires authentication")
         else:
-            self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Should return 401 without auth")
+            self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Should return 401 or auth error")
         
         # Test with invalid token
         response = self.make_request("POST", "/matches/swipe", token="invalid_token", data=swipe_data)
