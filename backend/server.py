@@ -3785,6 +3785,150 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ==================== STARTUP EVENT: SEED DATA ====================
+
+@app.on_event("startup")
+async def seed_admin_and_test_users():
+    """Seed admin user and test profiles on startup"""
+    import hashlib
+    
+    # Admin credentials
+    admin_email = "yusufquadri83@gmail.com"
+    admin_password = "Oluwatobi11@"
+    admin_password_hash = hashlib.sha256(admin_password.encode()).hexdigest()
+    
+    # Check if admin already exists
+    existing_admin = await db.users.find_one({"email": admin_email})
+    if not existing_admin:
+        admin_user = {
+            "user_id": str(uuid.uuid4()),
+            "email": admin_email,
+            "name": "Yusuf Quadri",
+            "role": "admin",
+            "password_hash": admin_password_hash,
+            "created_at": datetime.now(timezone.utc),
+            "profile_completed": True,
+            "interests": [],
+            "subscription_status": "premium",
+            "is_premium": True
+        }
+        await db.users.insert_one(admin_user)
+        logger.info(f"Admin user created: {admin_email}")
+    else:
+        # Update password hash if admin exists
+        await db.users.update_one(
+            {"email": admin_email},
+            {"$set": {
+                "password_hash": admin_password_hash,
+                "role": "admin",
+                "subscription_status": "premium",
+                "is_premium": True
+            }}
+        )
+        logger.info(f"Admin user updated: {admin_email}")
+    
+    # Create test/dummy profiles for matching
+    test_profiles = [
+        {
+            "user_id": "test-user-001",
+            "email": "emma.wilson@test.edu",
+            "name": "Emma Wilson",
+            "age": 21,
+            "gender": "female",
+            "university": "University of Manchester",
+            "campus_name": "Main Campus",
+            "course": "Computer Science",
+            "study_style": "Visual Learner",
+            "bio": "Passionate about AI and machine learning! Looking for study partners who love coding as much as I do.",
+            "interests": ["Programming", "AI", "Gaming", "Music", "Coffee"],
+            "photos": [],
+            "role": "user",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-002",
+            "email": "james.chen@test.edu",
+            "name": "James Chen",
+            "age": 22,
+            "gender": "male",
+            "university": "University of Birmingham",
+            "campus_name": "Edgbaston",
+            "course": "Data Science",
+            "study_style": "Night Owl",
+            "bio": "Data nerd by day, gamer by night. Always up for deep discussions about tech and philosophy.",
+            "interests": ["Data Science", "Philosophy", "Gaming", "Hiking", "Photography"],
+            "photos": [],
+            "role": "user",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-003",
+            "email": "sofia.martinez@test.edu",
+            "name": "Sofia Martinez",
+            "age": 20,
+            "gender": "female",
+            "university": "University of Leeds",
+            "campus_name": "Main Campus",
+            "course": "Psychology",
+            "study_style": "Early Bird",
+            "bio": "Psychology student fascinated by human behavior. Love yoga, meditation, and meaningful conversations.",
+            "interests": ["Psychology", "Yoga", "Reading", "Art", "Travel"],
+            "photos": [],
+            "role": "user",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-004",
+            "email": "alex.thompson@test.edu",
+            "name": "Alex Thompson",
+            "age": 23,
+            "gender": "non-binary",
+            "university": "University of Bristol",
+            "campus_name": "Clifton",
+            "course": "Environmental Science",
+            "study_style": "Group Study",
+            "bio": "Eco-warrior saving the planet one study session at a time! Let's discuss climate change over coffee.",
+            "interests": ["Environment", "Sustainability", "Hiking", "Coffee", "Documentaries"],
+            "photos": [],
+            "role": "user",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-005",
+            "email": "priya.patel@test.edu",
+            "name": "Priya Patel",
+            "age": 21,
+            "gender": "female",
+            "university": "University of Warwick",
+            "campus_name": "Main Campus",
+            "course": "Business Analytics",
+            "study_style": "Visual Learner",
+            "bio": "Future entrepreneur building the next big thing! Love networking and brainstorming sessions.",
+            "interests": ["Business", "Startups", "Finance", "Networking", "Fitness"],
+            "photos": [],
+            "role": "user",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "premium"
+        }
+    ]
+    
+    for profile in test_profiles:
+        existing = await db.users.find_one({"user_id": profile["user_id"]})
+        if not existing:
+            await db.users.insert_one(profile)
+            logger.info(f"Test profile created: {profile['name']}")
+    
+    logger.info("Seed data initialization complete")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
