@@ -11,6 +11,10 @@ import {
   Image,
   ScrollView,
   FlatList,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -46,6 +50,12 @@ interface SwipeInfo {
   is_premium: boolean;
 }
 
+interface CommentModalData {
+  profile: UserProfile;
+  section: string;
+  sectionLabel: string;
+}
+
 export default function MatchesScreen() {
   const router = useRouter();
   const { sessionToken } = useAuth();
@@ -56,6 +66,9 @@ export default function MatchesScreen() {
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_swipes: 5, is_premium: false });
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [likingSection, setLikingSection] = useState<string | null>(null);
+  const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
+  const [comment, setComment] = useState('');
+  const [isSending, setIsSending] = useState(false);
   
   const scrollRef = useRef<FlatList>(null);
 
@@ -88,18 +101,46 @@ export default function MatchesScreen() {
     }
   };
 
-  const handleLike = async (profile: UserProfile, section: string) => {
+  const getSectionLabel = (section: string): string => {
+    const labels: Record<string, string> = {
+      'photo': 'their photo',
+      'photo2': 'their photo',
+      'photo3': 'their photo',
+      'course': 'their studies',
+      'bio': 'their bio',
+      'interests': 'their interests',
+    };
+    return labels[section] || section;
+  };
+
+  const openCommentModal = (profile: UserProfile, section: string) => {
     if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
       setShowUpgradePrompt(true);
       return;
     }
+    
+    setCommentModal({
+      profile,
+      section,
+      sectionLabel: getSectionLabel(section)
+    });
+    setComment('');
+  };
 
-    setLikingSection(section);
+  const handleSendLike = async (withComment: boolean) => {
+    if (!commentModal) return;
+    
+    setIsSending(true);
     
     try {
       const result = await api.post(
         '/matches/swipe',
-        { target_user_id: profile.user_id, action: 'like' },
+        { 
+          target_user_id: commentModal.profile.user_id, 
+          action: 'like',
+          comment: withComment ? comment.trim() : null,
+          liked_section: commentModal.section
+        },
         sessionToken
       );
       
@@ -114,15 +155,17 @@ export default function MatchesScreen() {
         }));
       }
       
-      // Move to next profile
+      setCommentModal(null);
+      setComment('');
       goToNext();
     } catch (error: any) {
       if (error?.message?.includes('Already swiped')) {
+        setCommentModal(null);
         goToNext();
       }
       console.error('Like error:', error);
     } finally {
-      setLikingSection(null);
+      setIsSending(false);
     }
   };
 
@@ -159,7 +202,6 @@ export default function MatchesScreen() {
     const nextIndex = currentIndex + 1;
     setCurrentIndex(nextIndex);
     
-    // Scroll to next profile
     if (scrollRef.current && nextIndex < profiles.length) {
       scrollRef.current.scrollToIndex({ index: nextIndex, animated: true });
     }
@@ -186,20 +228,16 @@ export default function MatchesScreen() {
     return gradients[index];
   };
 
-  const LikeButton = ({ onPress, section, disabled }: { onPress: () => void; section: string; disabled?: boolean }) => (
+  const LikeButton = ({ onPress, section, disabled, profile }: { onPress: () => void; section: string; disabled?: boolean; profile: UserProfile }) => (
     <Pressable 
-      onPress={onPress}
+      onPress={() => openCommentModal(profile, section)}
       disabled={disabled}
       style={({ pressed }) => [
         styles.likeButton,
         pressed && styles.likeButtonPressed,
       ]}
     >
-      {likingSection === section ? (
-        <ActivityIndicator size="small" color="#EC4899" />
-      ) : (
-        <Ionicons name="heart" size={20} color="#EC4899" />
-      )}
+      <Ionicons name="heart" size={20} color="#EC4899" />
     </Pressable>
   );
 
@@ -223,6 +261,10 @@ export default function MatchesScreen() {
                 <Text style={styles.mainPhotoInitials}>{getInitials(profile.name)}</Text>
               </LinearGradient>
             )}
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.7)']}
+              style={styles.photoGradient}
+            />
             <View style={styles.photoOverlay}>
               <View style={styles.nameContainer}>
                 <Text style={styles.profileName}>{profile.name}</Text>
@@ -236,9 +278,10 @@ export default function MatchesScreen() {
               )}
             </View>
             <LikeButton 
-              onPress={() => handleLike(profile, 'photo')} 
+              onPress={() => {}} 
               section="photo"
               disabled={!isCurrentProfile}
+              profile={profile}
             />
           </View>
 
@@ -257,9 +300,10 @@ export default function MatchesScreen() {
                 </View>
               </View>
               <LikeButton 
-                onPress={() => handleLike(profile, 'course')} 
+                onPress={() => {}} 
                 section="course"
                 disabled={!isCurrentProfile}
+                profile={profile}
               />
             </View>
           )}
@@ -275,9 +319,10 @@ export default function MatchesScreen() {
                 </View>
               </View>
               <LikeButton 
-                onPress={() => handleLike(profile, 'bio')} 
+                onPress={() => {}} 
                 section="bio"
                 disabled={!isCurrentProfile}
+                profile={profile}
               />
             </View>
           )}
@@ -299,9 +344,10 @@ export default function MatchesScreen() {
                 </View>
               </View>
               <LikeButton 
-                onPress={() => handleLike(profile, 'interests')} 
+                onPress={() => {}} 
                 section="interests"
                 disabled={!isCurrentProfile}
+                profile={profile}
               />
             </View>
           )}
@@ -329,9 +375,10 @@ export default function MatchesScreen() {
                 <View key={i} style={styles.additionalPhotoContainer}>
                   <Image source={{ uri: photo }} style={styles.additionalPhoto} />
                   <LikeButton 
-                    onPress={() => handleLike(profile, `photo${i+2}`)} 
+                    onPress={() => {}} 
                     section={`photo${i+2}`}
                     disabled={!isCurrentProfile}
+                    profile={profile}
                   />
                 </View>
               ))}
@@ -367,6 +414,101 @@ export default function MatchesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Comment Modal */}
+      <Modal
+        visible={commentModal !== null}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setCommentModal(null)}
+      >
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalContainer}
+        >
+          <Pressable style={styles.modalBackdrop} onPress={() => setCommentModal(null)} />
+          <View style={styles.commentModalContent}>
+            <View style={styles.commentModalHandle} />
+            
+            {commentModal && (
+              <>
+                <View style={styles.commentModalHeader}>
+                  <View style={styles.commentModalAvatar}>
+                    {commentModal.profile.photos?.[0] ? (
+                      <Image 
+                        source={{ uri: commentModal.profile.photos[0] }} 
+                        style={styles.commentModalAvatarImage} 
+                      />
+                    ) : (
+                      <LinearGradient 
+                        colors={getAvatarGradient(commentModal.profile.name)} 
+                        style={styles.commentModalAvatarImage}
+                      >
+                        <Text style={styles.commentModalAvatarText}>
+                          {getInitials(commentModal.profile.name)}
+                        </Text>
+                      </LinearGradient>
+                    )}
+                  </View>
+                  <View style={styles.commentModalInfo}>
+                    <Text style={styles.commentModalName}>{commentModal.profile.name}</Text>
+                    <Text style={styles.commentModalSection}>
+                      You liked {commentModal.sectionLabel}
+                    </Text>
+                  </View>
+                </View>
+
+                <Text style={styles.commentPrompt}>
+                  Add a comment to stand out! (optional)
+                </Text>
+
+                <View style={styles.commentInputContainer}>
+                  <TextInput
+                    style={styles.commentInput}
+                    placeholder="Say something nice..."
+                    placeholderTextColor="#64748B"
+                    value={comment}
+                    onChangeText={setComment}
+                    multiline
+                    maxLength={200}
+                    autoFocus
+                  />
+                  <Text style={styles.commentCounter}>{comment.length}/200</Text>
+                </View>
+
+                <View style={styles.commentActions}>
+                  <TouchableOpacity 
+                    style={styles.sendWithoutComment}
+                    onPress={() => handleSendLike(false)}
+                    disabled={isSending}
+                  >
+                    <Text style={styles.sendWithoutCommentText}>Send without comment</Text>
+                  </TouchableOpacity>
+                  
+                  <Pressable 
+                    onPress={() => handleSendLike(true)}
+                    disabled={isSending || !comment.trim()}
+                  >
+                    <LinearGradient
+                      colors={comment.trim() ? ['#EC4899', '#F472B6'] : ['#4B5563', '#6B7280']}
+                      style={styles.sendWithCommentButton}
+                    >
+                      {isSending ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                      ) : (
+                        <>
+                          <Ionicons name="heart" size={18} color="#fff" />
+                          <Text style={styles.sendWithCommentText}>Send with comment</Text>
+                        </>
+                      )}
+                    </LinearGradient>
+                  </Pressable>
+                </View>
+              </>
+            )}
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
       {/* Upgrade Prompt Modal */}
       {showUpgradePrompt && (
         <View style={styles.modalOverlay}>
@@ -548,6 +690,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
   },
+  photoGradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 150,
+  },
   photoOverlay: {
     position: 'absolute',
     bottom: 0,
@@ -555,7 +704,6 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20,
     paddingBottom: 24,
-    background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
   },
   nameContainer: {
     flexDirection: 'row',
@@ -727,6 +875,114 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: 100,
   },
+  // Comment Modal Styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  commentModalContent: {
+    backgroundColor: '#1E293B',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 20,
+    paddingBottom: 40,
+  },
+  commentModalHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#4B5563',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  commentModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  commentModalAvatar: {
+    marginRight: 12,
+  },
+  commentModalAvatarImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  commentModalAvatarText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  commentModalInfo: {
+    flex: 1,
+  },
+  commentModalName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#F8FAFC',
+  },
+  commentModalSection: {
+    fontSize: 14,
+    color: '#EC4899',
+    marginTop: 2,
+  },
+  commentPrompt: {
+    fontSize: 15,
+    color: '#94A3B8',
+    marginBottom: 12,
+  },
+  commentInputContainer: {
+    backgroundColor: '#0F172A',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.2)',
+    padding: 16,
+    marginBottom: 20,
+  },
+  commentInput: {
+    color: '#F8FAFC',
+    fontSize: 16,
+    minHeight: 80,
+    textAlignVertical: 'top',
+  },
+  commentCounter: {
+    color: '#64748B',
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 8,
+  },
+  commentActions: {
+    gap: 12,
+  },
+  sendWithoutComment: {
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  sendWithoutCommentText: {
+    color: '#94A3B8',
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  sendWithCommentButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 14,
+    gap: 8,
+  },
+  sendWithCommentText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  // Other modals
   emptyState: {
     flex: 1,
     alignItems: 'center',
