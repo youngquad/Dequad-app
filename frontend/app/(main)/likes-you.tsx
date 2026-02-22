@@ -69,7 +69,7 @@ export default function LikesYouScreen() {
     loadLikes();
   };
 
-  const handleLikeBack = async (like: LikeData) => {
+  const handleLikeBack = async (like: LikeData, andMessage: boolean = false) => {
     setRespondingTo(like.like_id);
     try {
       const result = await api.post(
@@ -87,8 +87,15 @@ export default function LikesYouScreen() {
       setLikes(prev => prev.filter(l => l.like_id !== like.like_id));
       
       if (result.is_mutual) {
-        // Show match alert or navigate to chat
-        alert(`It's a match with ${like.user.name}! 🎉`);
+        if (andMessage) {
+          // Navigate directly to chat with this person
+          router.push({
+            pathname: '/(main)/chat',
+            params: { matchId: result.match_id, userName: like.user.name }
+          });
+        } else {
+          alert(`It's a match with ${like.user.name}! 🎉`);
+        }
       }
     } catch (error) {
       console.error('Error liking back:', error);
