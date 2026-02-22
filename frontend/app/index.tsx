@@ -202,7 +202,8 @@ export default function LandingScreen() {
           <Pressable
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
-            onPress={() => router.push('/(auth)/login')}
+            onPress={handleLogin}
+            disabled={isSigningIn || isLoading}
           >
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
               <LinearGradient
@@ -211,9 +212,15 @@ export default function LandingScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.loginButton}
               >
-                <Ionicons name="logo-google" size={22} color="#fff" />
-                <Text style={styles.loginButtonText}>Continue with Google</Text>
-                <Ionicons name="arrow-forward" size={20} color="#fff" />
+                {isSigningIn || isLoading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Ionicons name="logo-google" size={22} color="#fff" />
+                    <Text style={styles.loginButtonText}>Continue with Google</Text>
+                    <Ionicons name="arrow-forward" size={20} color="#fff" />
+                  </>
+                )}
               </LinearGradient>
             </Animated.View>
           </Pressable>
