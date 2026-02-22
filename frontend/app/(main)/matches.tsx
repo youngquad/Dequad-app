@@ -582,35 +582,57 @@ export default function MatchesScreen() {
         </View>
       )}
 
-      {/* Swipe Counter Banner */}
-      {!swipeInfo.is_premium && (
+      {/* Top Banner with Likes You & Swipe Counter */}
+      <View style={styles.topBanner}>
+        {/* Likes You Button */}
         <TouchableOpacity 
-          style={styles.swipeBanner}
-          onPress={() => router.push('/(main)/subscription')}
+          style={styles.likesYouButton}
+          onPress={() => router.push('/(main)/likes-you')}
           activeOpacity={0.8}
         >
-          <View style={styles.swipeCounter}>
-            <View style={styles.swipeDotsContainer}>
-              {[...Array(5)].map((_, i) => (
-                <View 
-                  key={i} 
-                  style={[
-                    styles.swipeDot,
-                    i < (swipeInfo.remaining_swipes || 0) && styles.swipeDotActive
-                  ]} 
-                />
-              ))}
-            </View>
-            <Text style={styles.swipeCounterText}>
-              {swipeInfo.remaining_swipes || 0} likes left today
-            </Text>
-          </View>
-          <View style={styles.upgradeBadge}>
-            <Ionicons name="diamond" size={14} color="#F59E0B" />
-            <Text style={styles.upgradeBadgeText}>Go Premium</Text>
-          </View>
+          <LinearGradient
+            colors={['rgba(236, 72, 153, 0.2)', 'rgba(244, 114, 182, 0.1)']}
+            style={styles.likesYouGradient}
+          >
+            <Ionicons name="heart" size={18} color="#EC4899" />
+            <Text style={styles.likesYouText}>Likes You</Text>
+            {likesCount > 0 && (
+              <View style={styles.likesCountBadge}>
+                <Text style={styles.likesCountText}>{likesCount}</Text>
+              </View>
+            )}
+          </LinearGradient>
         </TouchableOpacity>
-      )}
+
+        {/* Swipe Counter */}
+        {!swipeInfo.is_premium && (
+          <TouchableOpacity 
+            style={styles.swipeBanner}
+            onPress={() => router.push('/(main)/subscription')}
+            activeOpacity={0.8}
+          >
+            <View style={styles.swipeCounter}>
+              <View style={styles.swipeDotsContainer}>
+                {[...Array(5)].map((_, i) => (
+                  <View 
+                    key={i} 
+                    style={[
+                      styles.swipeDot,
+                      i < (swipeInfo.remaining_swipes || 0) && styles.swipeDotActive
+                    ]} 
+                  />
+                ))}
+              </View>
+              <Text style={styles.swipeCounterText}>
+                {swipeInfo.remaining_swipes || 0} left
+              </Text>
+            </View>
+            <View style={styles.upgradeBadge}>
+              <Ionicons name="diamond" size={14} color="#F59E0B" />
+            </View>
+          </TouchableOpacity>
+        )}
+      </View>
 
       {/* Profiles List */}
       {currentIndex >= profiles.length ? (
