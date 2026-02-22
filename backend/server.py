@@ -1407,7 +1407,47 @@ async def get_accepted_matches(current_user: User = Depends(get_current_user)):
         if user:
             result.append({
                 "match_id": match["id"],
-                "user": user
+                "user": user,
+                "comment": match.get("comment"),
+                "liked_section": match.get("liked_section")
+            })
+    
+    return result
+
+@api_router.get("/matches/likes-received")
+async def get_likes_received(current_user: User = Depends(get_current_user)):
+    """Get list of users who liked you (with their comments) - Hinge-style"""
+    likes = await db.matches.find(
+        {
+            "matched_user_id": current_user.user_id,
+            "status": "liked"
+        },
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    # Get the users who liked current user
+    result = []
+    for like in likes:
+        # Check if current user has already responded to this like
+        response = await db.matches.find_one({
+            "user_id": current_user.user_id,
+            "matched_user_id": like["user_id"]
+        })
+        
+        if response:
+            continue  # Already responded, skip
+        
+        user = await db.users.find_one(
+            {"user_id": like["user_id"]},
+            {"_id": 0}
+        )
+        if user:
+            result.append({
+                "like_id": like["id"],
+                "user": user,
+                "comment": like.get("comment"),
+                "liked_section": like.get("liked_section"),
+                "created_at": like.get("created_at")
             })
     
     return result
