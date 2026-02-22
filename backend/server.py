@@ -3829,7 +3829,7 @@ async def seed_admin_and_test_users():
         )
         logger.info(f"Admin user updated: {admin_email}")
     
-    # Create test/dummy profiles for matching
+    # Create test/dummy profiles for matching with photos
     test_profiles = [
         {
             "user_id": "test-user-001",
@@ -3843,7 +3843,8 @@ async def seed_admin_and_test_users():
             "study_style": "Visual Learner",
             "bio": "Passionate about AI and machine learning! Looking for study partners who love coding as much as I do.",
             "interests": ["Programming", "AI", "Gaming", "Music", "Coffee"],
-            "photos": [],
+            "photos": ["https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop",
             "role": "user",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
@@ -3861,7 +3862,8 @@ async def seed_admin_and_test_users():
             "study_style": "Night Owl",
             "bio": "Data nerd by day, gamer by night. Always up for deep discussions about tech and philosophy.",
             "interests": ["Data Science", "Philosophy", "Gaming", "Hiking", "Photography"],
-            "photos": [],
+            "photos": ["https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop",
             "role": "user",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
@@ -3879,7 +3881,8 @@ async def seed_admin_and_test_users():
             "study_style": "Early Bird",
             "bio": "Psychology student fascinated by human behavior. Love yoga, meditation, and meaningful conversations.",
             "interests": ["Psychology", "Yoga", "Reading", "Art", "Travel"],
-            "photos": [],
+            "photos": ["https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop",
             "role": "user",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
@@ -3897,7 +3900,8 @@ async def seed_admin_and_test_users():
             "study_style": "Group Study",
             "bio": "Eco-warrior saving the planet one study session at a time! Let's discuss climate change over coffee.",
             "interests": ["Environment", "Sustainability", "Hiking", "Coffee", "Documentaries"],
-            "photos": [],
+            "photos": ["https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop"],
+            "picture": "https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop",
             "role": "user",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
@@ -3915,7 +3919,8 @@ async def seed_admin_and_test_users():
             "study_style": "Visual Learner",
             "bio": "Future entrepreneur building the next big thing! Love networking and brainstorming sessions.",
             "interests": ["Business", "Startups", "Finance", "Networking", "Fitness"],
-            "photos": [],
+            "photos": ["https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop"],
+            "picture": "https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop",
             "role": "user",
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
@@ -3928,6 +3933,13 @@ async def seed_admin_and_test_users():
         if not existing:
             await db.users.insert_one(profile)
             logger.info(f"Test profile created: {profile['name']}")
+        else:
+            # Update existing profile with photos
+            await db.users.update_one(
+                {"user_id": profile["user_id"]},
+                {"$set": {"photos": profile["photos"], "picture": profile["picture"]}}
+            )
+            logger.info(f"Test profile updated with photo: {profile['name']}")
     
     logger.info("Seed data initialization complete")
 
