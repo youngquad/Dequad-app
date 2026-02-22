@@ -50,7 +50,8 @@ class FocusedAPITester:
             
             return response
         except requests.exceptions.RequestException as e:
-            return None, str(e)
+            print(f"Request exception: {e}")
+            return None
     
     def test_matches_discover_api(self):
         """Test GET /api/matches/discover endpoint"""
