@@ -1357,20 +1357,35 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
             )
             mutual_match = target_user
             
+            # Get the original like comment if it exists
+            original_like = await db.matches.find_one({
+                "user_id": data.target_user_id,
+                "matched_user_id": current_user.user_id,
+                "status": "liked"
+            })
+            like_comment = original_like.get("comment") if original_like else None
+            
             # Send push notifications to both users about the match
+            match_msg_to_current = f"You matched with {target_user.get('name', 'someone')}! Start chatting now."
+            match_msg_to_target = f"You matched with {current_user.name}!"
+            if data.comment:
+                match_msg_to_target += f' They said: "{data.comment[:50]}{"..." if len(data.comment) > 50 else ""}"'
+            else:
+                match_msg_to_target += " Start chatting now."
+            
             await send_push_notification(
                 current_user.user_id,
-                "New Match!",
-                f"You matched with {target_user.get('name', 'someone')}! Start chatting now.",
+                "New Match! 💕",
+                match_msg_to_current,
                 "new_match",
-                {"match_user_id": data.target_user_id, "match_user_name": target_user.get("name")}
+                {"match_user_id": data.target_user_id, "match_user_name": target_user.get("name"), "comment": like_comment}
             )
             await send_push_notification(
                 data.target_user_id,
-                "New Match!",
-                f"You matched with {current_user.name}! Start chatting now.",
+                "New Match! 💕",
+                match_msg_to_target,
                 "new_match",
-                {"match_user_id": current_user.user_id, "match_user_name": current_user.name}
+                {"match_user_id": current_user.user_id, "match_user_name": current_user.name, "comment": data.comment}
             )
     
     # Return remaining swipes info for free users
