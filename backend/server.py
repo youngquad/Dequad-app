@@ -1338,6 +1338,21 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     # Check for mutual match
     mutual_match = None
     if data.action == "like":
+        # Send notification that someone liked them (with comment if provided)
+        like_notification_body = f"{current_user.name} liked your profile!"
+        if data.comment:
+            like_notification_body = f'{current_user.name} liked {data.liked_section or "your profile"}: "{data.comment[:60]}{"..." if len(data.comment) > 60 else ""}"'
+        elif data.liked_section:
+            like_notification_body = f"{current_user.name} liked {data.liked_section}!"
+        
+        await send_push_notification(
+            data.target_user_id,
+            "Someone likes you! ❤️",
+            like_notification_body,
+            "new_like",
+            {"from_user_id": current_user.user_id, "from_user_name": current_user.name, "comment": data.comment, "liked_section": data.liked_section}
+        )
+        
         reverse_match = await db.matches.find_one({
             "user_id": data.target_user_id,
             "matched_user_id": current_user.user_id,
