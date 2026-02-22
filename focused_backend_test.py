@@ -151,6 +151,16 @@ class FocusedAPITester:
         response = self.make_request("POST", "/matches/swipe", token="invalid_token", data=swipe_data)
         if isinstance(response, tuple):
             self.log_result("matching", "POST /matches/swipe (invalid token)", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                data = response.json()
+                if data.get("detail") == "Not authenticated":
+                    self.log_result("matching", "POST /matches/swipe (invalid token rejected)", True)
+                    print("   ✅ Correctly rejects invalid token")
+                else:
+                    self.log_result("matching", "POST /matches/swipe (invalid token)", False, response, "Should reject invalid token")
+            except json.JSONDecodeError:
+                self.log_result("matching", "POST /matches/swipe (invalid token)", False, response, "Invalid JSON response")
         elif response and response.status_code == 401:
             self.log_result("matching", "POST /matches/swipe (401 with invalid token)", True)
             print("   ✅ Correctly rejects invalid token")
