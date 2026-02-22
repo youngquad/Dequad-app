@@ -79,29 +79,23 @@ class FocusedAPITester:
         
         # Test endpoint accessibility (we expect auth error since we don't have valid auth)
         response = self.make_request("GET", "/matches/discover", token="test_token")
-        if isinstance(response, tuple):
-            self.log_result("matching", "GET /matches/discover (endpoint check)", False, error=response[1])
-        elif response:
-            if response.status_code == 200:
-                try:
-                    data = response.json()
-                    if data.get("detail") == "Not authenticated":
-                        self.log_result("matching", "GET /matches/discover (endpoint accessible)", True)
-                        print("   ✅ Endpoint is accessible and properly secured")
-                    elif isinstance(data, list):
-                        self.log_result("matching", "GET /matches/discover (successful response)", True)
-                        print(f"   ✅ Returned {len(data)} potential matches")
-                    else:
-                        self.log_result("matching", "GET /matches/discover", False, response, "Unexpected response format")
-                except json.JSONDecodeError:
-                    self.log_result("matching", "GET /matches/discover", False, response, "Invalid JSON response")
-            elif response.status_code == 401:
-                self.log_result("matching", "GET /matches/discover (endpoint accessible)", True)
-                print("   ✅ Endpoint is accessible and properly secured")
-            else:
-                self.log_result("matching", "GET /matches/discover", False, response, f"Unexpected status code: {response.status_code}")
+        if response is None:
+            self.log_result("matching", "GET /matches/discover (endpoint check)", False, error="No response received")
+        elif response.status_code == 401:
+            self.log_result("matching", "GET /matches/discover (endpoint accessible)", True)
+            print("   ✅ Endpoint is accessible and properly secured")
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_result("matching", "GET /matches/discover (successful response)", True)
+                    print(f"   ✅ Returned {len(data)} potential matches")
+                else:
+                    self.log_result("matching", "GET /matches/discover", False, response, "Unexpected response format")
+            except json.JSONDecodeError:
+                self.log_result("matching", "GET /matches/discover", False, response, "Invalid JSON response")
         else:
-            self.log_result("matching", "GET /matches/discover", False, error="No response received")
+            self.log_result("matching", "GET /matches/discover", False, response, f"Unexpected status code: {response.status_code}")
     
     def test_matches_swipe_api(self):
         """Test POST /api/matches/swipe endpoint"""
