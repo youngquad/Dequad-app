@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Educare Backend API Testing Suite - Stripe Payment Sheet Focus
-Testing the new Stripe Payment Sheet endpoints for in-app purchases
+Educare Backend API Testing Suite - Admin Login & Matching Features Focus
+Testing admin login, test profiles, likes-received endpoint, and comment functionality
 """
 
 import requests
@@ -11,8 +11,8 @@ from datetime import datetime
 
 # Configuration
 BASE_URL = "https://5888b71c-e2f0-406e-bddc-c8c11971bcea.preview.emergentagent.com/api"
-STUDENT_TOKEN = "test_session_token_123"
-ADMIN_TOKEN = "admin_session_token_123"
+ADMIN_EMAIL = "yusufquadri83@gmail.com"
+ADMIN_PASSWORD = "Oluwatobi11@"
 
 class APITester:
     def __init__(self):
