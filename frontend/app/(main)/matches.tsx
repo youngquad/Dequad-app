@@ -5,12 +5,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Alert,
   ActivityIndicator,
   Animated,
-  PanResponder,
   Pressable,
   Image,
+  ScrollView,
+  FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,7 +21,6 @@ import { useRouter } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 
 const { width, height } = Dimensions.get('window');
-const SWIPE_THRESHOLD = width * 0.25;
 
 interface UserProfile {
   user_id: string;
@@ -56,34 +55,9 @@ export default function MatchesScreen() {
   const [matchAlert, setMatchAlert] = useState<UserProfile | null>(null);
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_swipes: 5, is_premium: false });
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
-
-  const position = useRef(new Animated.ValueXY()).current;
-  const buttonScale = useRef(new Animated.Value(1)).current;
-
-  const rotate = position.x.interpolate({
-    inputRange: [-width / 2, 0, width / 2],
-    outputRange: ['-12deg', '0deg', '12deg'],
-  });
-
-  const likeOpacity = position.x.interpolate({
-    inputRange: [0, width / 4],
-    outputRange: [0, 1],
-  });
-
-  const dislikeOpacity = position.x.interpolate({
-    inputRange: [-width / 4, 0],
-    outputRange: [1, 0],
-  });
-
-  const nextCardOpacity = position.x.interpolate({
-    inputRange: [-width / 2, 0, width / 2],
-    outputRange: [1, 0.6, 1],
-  });
-
-  const nextCardScale = position.x.interpolate({
-    inputRange: [-width / 2, 0, width / 2],
-    outputRange: [1, 0.92, 1],
-  });
+  const [likingSection, setLikingSection] = useState<string | null>(null);
+  
+  const scrollRef = useRef<FlatList>(null);
 
   useEffect(() => {
     loadProfiles();
@@ -114,147 +88,81 @@ export default function MatchesScreen() {
     }
   };
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      position.setValue({ x: gesture.dx, y: gesture.dy });
-    },
-    onPanResponderRelease: (_, gesture) => {
-      if (gesture.dx > SWIPE_THRESHOLD) {
-        swipeRight();
-      } else if (gesture.dx < -SWIPE_THRESHOLD) {
-        swipeLeft();
-      } else {
-        resetPosition();
-      }
-    },
-  });
-
-  const resetPosition = () => {
-    Animated.spring(position, {
-      toValue: { x: 0, y: 0 },
-      useNativeDriver: false,
-      tension: 40,
-      friction: 7,
-    }).start();
-  };
-
-  const handleSwipeError = (error: any) => {
-    if (error?.response?.status === 403) {
-      const detail = error?.response?.data?.detail;
-      if (detail?.upgrade_required) {
-        setShowUpgradePrompt(true);
-        return { shouldReset: true, shouldMoveNext: false };
-      }
-    }
-    
-    if (error?.response?.status === 400) {
-      const detail = error?.response?.data?.detail;
-      if (detail && (detail.includes('Already swiped') || detail.includes('already swiped'))) {
-        return { shouldReset: false, shouldMoveNext: true };
-      }
-    }
-    
-    return { shouldReset: true, shouldMoveNext: false };
-  };
-
-  const swipeRight = async () => {
+  const handleLike = async (profile: UserProfile, section: string) => {
     if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
       setShowUpgradePrompt(true);
-      resetPosition();
       return;
     }
 
-    const currentProfile = profiles[currentIndex];
-    if (!currentProfile) {
-      resetPosition();
-      return;
-    }
+    setLikingSection(section);
     
-    Animated.timing(position, {
-      toValue: { x: width + 100, y: 0 },
-      duration: 250,
-      useNativeDriver: false,
-    }).start(async () => {
-      try {
-        const result = await api.post(
-          '/matches/swipe',
-          { target_user_id: currentProfile.user_id, action: 'like' },
-          sessionToken
-        );
-        
-        if (result.is_mutual) {
-          setMatchAlert(result.matched_user);
-        }
-        
-        if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
-          setSwipeInfo(prev => ({
-            ...prev,
-            remaining_swipes: result.remaining_swipes
-          }));
-        }
-        
-        goToNext();
-      } catch (error: any) {
-        const { shouldReset, shouldMoveNext } = handleSwipeError(error);
-        if (shouldMoveNext) {
-          goToNext();
-        } else if (shouldReset) {
-          resetPosition();
-        }
-        console.error('Swipe error:', error?.response?.data || error);
+    try {
+      const result = await api.post(
+        '/matches/swipe',
+        { target_user_id: profile.user_id, action: 'like' },
+        sessionToken
+      );
+      
+      if (result.is_mutual) {
+        setMatchAlert(result.matched_user);
       }
-    });
+      
+      if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
+        setSwipeInfo(prev => ({
+          ...prev,
+          remaining_swipes: result.remaining_swipes
+        }));
+      }
+      
+      // Move to next profile
+      goToNext();
+    } catch (error: any) {
+      if (error?.message?.includes('Already swiped')) {
+        goToNext();
+      }
+      console.error('Like error:', error);
+    } finally {
+      setLikingSection(null);
+    }
   };
 
-  const swipeLeft = async () => {
+  const handleSkip = async (profile: UserProfile) => {
     if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
       setShowUpgradePrompt(true);
-      resetPosition();
       return;
     }
 
-    const currentProfile = profiles[currentIndex];
-    if (!currentProfile) {
-      resetPosition();
-      return;
-    }
-    
-    Animated.timing(position, {
-      toValue: { x: -width - 100, y: 0 },
-      duration: 250,
-      useNativeDriver: false,
-    }).start(async () => {
-      try {
-        const result = await api.post(
-          '/matches/swipe',
-          { target_user_id: currentProfile.user_id, action: 'dislike' },
-          sessionToken
-        );
-        
-        if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
-          setSwipeInfo(prev => ({
-            ...prev,
-            remaining_swipes: result.remaining_swipes
-          }));
-        }
-        
-        goToNext();
-      } catch (error: any) {
-        const { shouldReset, shouldMoveNext } = handleSwipeError(error);
-        if (shouldMoveNext) {
-          goToNext();
-        } else if (shouldReset) {
-          resetPosition();
-        }
-        console.error('Swipe error:', error?.response?.data || error);
+    try {
+      const result = await api.post(
+        '/matches/swipe',
+        { target_user_id: profile.user_id, action: 'dislike' },
+        sessionToken
+      );
+      
+      if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
+        setSwipeInfo(prev => ({
+          ...prev,
+          remaining_swipes: result.remaining_swipes
+        }));
       }
-    });
+      
+      goToNext();
+    } catch (error: any) {
+      if (error?.message?.includes('Already swiped')) {
+        goToNext();
+      }
+      console.error('Skip error:', error);
+    }
   };
 
   const goToNext = () => {
-    position.setValue({ x: 0, y: 0 });
-    setCurrentIndex((prev) => prev + 1);
+    const nextIndex = currentIndex + 1;
+    setCurrentIndex(nextIndex);
+    
+    // Scroll to next profile
+    if (scrollRef.current && nextIndex < profiles.length) {
+      scrollRef.current.scrollToIndex({ index: nextIndex, animated: true });
+    }
   };
 
   const getInitials = (name: string) => {
@@ -278,137 +186,171 @@ export default function MatchesScreen() {
     return gradients[index];
   };
 
-  const renderCard = (profile: UserProfile, index: number) => {
-    if (index < currentIndex) return null;
+  const LikeButton = ({ onPress, section, disabled }: { onPress: () => void; section: string; disabled?: boolean }) => (
+    <Pressable 
+      onPress={onPress}
+      disabled={disabled}
+      style={({ pressed }) => [
+        styles.likeButton,
+        pressed && styles.likeButtonPressed,
+      ]}
+    >
+      {likingSection === section ? (
+        <ActivityIndicator size="small" color="#EC4899" />
+      ) : (
+        <Ionicons name="heart" size={20} color="#EC4899" />
+      )}
+    </Pressable>
+  );
 
-    const isFirst = index === currentIndex;
-    const cardStyle = isFirst
-      ? [
-          styles.card,
-          {
-            transform: [
-              { translateX: position.x },
-              { translateY: position.y },
-              { rotate },
-            ],
-          },
-        ]
-      : [
-          styles.card,
-          styles.nextCard,
-          {
-            opacity: nextCardOpacity,
-            transform: [{ scale: nextCardScale }],
-          },
-        ];
-
-    // Get profile photo or use gradient avatar
+  const renderProfile = ({ item: profile, index }: { item: UserProfile; index: number }) => {
     const hasPhoto = profile.photos && profile.photos.length > 0;
+    const isCurrentProfile = index === currentIndex;
 
     return (
-      <Animated.View
-        key={profile.user_id}
-        style={cardStyle}
-        {...(isFirst ? panResponder.panHandlers : {})}
-      >
-        {/* Card Background */}
-        <LinearGradient
-          colors={['#1E293B', '#0F172A']}
-          style={StyleSheet.absoluteFill}
-        />
-
-        {isFirst && (
-          <>
-            <Animated.View style={[styles.likeLabel, { opacity: likeOpacity }]}>
-              <LinearGradient colors={['#10B981', '#34D399']} style={styles.labelGradient}>
-                <Text style={styles.labelText}>LIKE 💚</Text>
-              </LinearGradient>
-            </Animated.View>
-            <Animated.View style={[styles.nopeLabel, { opacity: dislikeOpacity }]}>
-              <LinearGradient colors={['#EF4444', '#F87171']} style={styles.labelGradient}>
-                <Text style={styles.labelText}>NOPE ✕</Text>
-              </LinearGradient>
-            </Animated.View>
-          </>
-        )}
-
-        <View style={styles.cardContent}>
-          {/* Avatar */}
-          <View style={styles.avatarContainer}>
+      <View style={styles.profileContainer}>
+        <ScrollView 
+          style={styles.profileScroll}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.profileScrollContent}
+        >
+          {/* Main Photo Section */}
+          <View style={styles.photoSection}>
             {hasPhoto ? (
-              <Image source={{ uri: profile.photos![0] }} style={styles.avatarImage} />
+              <Image source={{ uri: profile.photos![0] }} style={styles.mainPhoto} />
             ) : (
-              <LinearGradient colors={getAvatarGradient(profile.name)} style={styles.avatarGradient}>
-                <Text style={styles.avatarText}>{getInitials(profile.name)}</Text>
+              <LinearGradient colors={getAvatarGradient(profile.name)} style={styles.mainPhotoPlaceholder}>
+                <Text style={styles.mainPhotoInitials}>{getInitials(profile.name)}</Text>
               </LinearGradient>
             )}
+            <View style={styles.photoOverlay}>
+              <View style={styles.nameContainer}>
+                <Text style={styles.profileName}>{profile.name}</Text>
+                {profile.age && <Text style={styles.profileAge}>, {profile.age}</Text>}
+              </View>
+              {profile.university && (
+                <View style={styles.universityBadge}>
+                  <Ionicons name="school" size={14} color="#fff" />
+                  <Text style={styles.universityText}>{profile.university}</Text>
+                </View>
+              )}
+            </View>
+            <LikeButton 
+              onPress={() => handleLike(profile, 'photo')} 
+              section="photo"
+              disabled={!isCurrentProfile}
+            />
           </View>
 
-          {/* Name & Age */}
-          <View style={styles.nameRow}>
-            <Text style={styles.cardName}>{profile.name}</Text>
-            {profile.age && <Text style={styles.cardAge}>, {profile.age}</Text>}
-          </View>
-
-          {/* Course & University */}
-          {profile.course && (
-            <View style={styles.infoRow}>
-              <Ionicons name="school" size={15} color="#94A3B8" />
-              <Text style={styles.infoText}>{profile.course}</Text>
+          {/* Course & Study Style Section */}
+          {(profile.course || profile.study_style) && (
+            <View style={styles.infoSection}>
+              <View style={styles.infoContent}>
+                <Ionicons name="book" size={20} color="#6366F1" />
+                <View style={styles.infoTextContainer}>
+                  {profile.course && (
+                    <Text style={styles.infoTitle}>{profile.course}</Text>
+                  )}
+                  {profile.study_style && (
+                    <Text style={styles.infoSubtitle}>Study style: {profile.study_style}</Text>
+                  )}
+                </View>
+              </View>
+              <LikeButton 
+                onPress={() => handleLike(profile, 'course')} 
+                section="course"
+                disabled={!isCurrentProfile}
+              />
             </View>
           )}
 
-          {profile.university && (
-            <View style={styles.infoRow}>
-              <Ionicons name="location" size={15} color="#94A3B8" />
-              <Text style={styles.infoText}>
-                {profile.university}
-                {profile.campus_name && ` • ${profile.campus_name}`}
-              </Text>
+          {/* Bio Section */}
+          {profile.bio && (
+            <View style={styles.infoSection}>
+              <View style={styles.infoContent}>
+                <Ionicons name="chatbubble-ellipses" size={20} color="#10B981" />
+                <View style={styles.infoTextContainer}>
+                  <Text style={styles.infoTitle}>About me</Text>
+                  <Text style={styles.bioText}>"{profile.bio}"</Text>
+                </View>
+              </View>
+              <LikeButton 
+                onPress={() => handleLike(profile, 'bio')} 
+                section="bio"
+                disabled={!isCurrentProfile}
+              />
+            </View>
+          )}
+
+          {/* Interests Section */}
+          {profile.interests && profile.interests.length > 0 && (
+            <View style={styles.infoSection}>
+              <View style={styles.infoContent}>
+                <Ionicons name="sparkles" size={20} color="#F59E0B" />
+                <View style={styles.infoTextContainer}>
+                  <Text style={styles.infoTitle}>Interests</Text>
+                  <View style={styles.interestTags}>
+                    {profile.interests.map((interest, i) => (
+                      <View key={i} style={styles.interestTag}>
+                        <Text style={styles.interestTagText}>{interest}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </View>
+              <LikeButton 
+                onPress={() => handleLike(profile, 'interests')} 
+                section="interests"
+                disabled={!isCurrentProfile}
+              />
             </View>
           )}
 
           {/* Match Score */}
           {profile.match_score !== undefined && (
-            <View style={styles.matchScoreContainer}>
+            <View style={styles.matchScoreSection}>
               <LinearGradient
-                colors={['rgba(245, 158, 11, 0.2)', 'rgba(251, 191, 36, 0.15)']}
-                style={styles.matchScoreBg}
+                colors={['rgba(245, 158, 11, 0.15)', 'rgba(251, 191, 36, 0.1)']}
+                style={styles.matchScoreCard}
               >
-                <Ionicons name="star" size={14} color="#F59E0B" />
+                <Ionicons name="star" size={24} color="#F59E0B" />
                 <Text style={styles.matchScoreText}>
                   {Math.round(profile.match_score * 100)}% Match
                 </Text>
+                <Text style={styles.matchScoreSubtext}>Based on shared interests & preferences</Text>
               </LinearGradient>
             </View>
           )}
 
-          {/* Interests */}
-          {profile.interests && profile.interests.length > 0 && (
-            <View style={styles.interestsContainer}>
-              <View style={styles.interestTags}>
-                {profile.interests.slice(0, 4).map((interest, i) => (
-                  <View key={i} style={styles.interestTag}>
-                    <Text style={styles.interestTagText}>{interest}</Text>
-                  </View>
-                ))}
-                {profile.interests.length > 4 && (
-                  <View style={styles.interestTagMore}>
-                    <Text style={styles.interestTagMoreText}>+{profile.interests.length - 4}</Text>
-                  </View>
-                )}
-              </View>
+          {/* Additional Photos */}
+          {profile.photos && profile.photos.length > 1 && (
+            <View style={styles.additionalPhotos}>
+              {profile.photos.slice(1, 3).map((photo, i) => (
+                <View key={i} style={styles.additionalPhotoContainer}>
+                  <Image source={{ uri: photo }} style={styles.additionalPhoto} />
+                  <LikeButton 
+                    onPress={() => handleLike(profile, `photo${i+2}`)} 
+                    section={`photo${i+2}`}
+                    disabled={!isCurrentProfile}
+                  />
+                </View>
+              ))}
             </View>
           )}
 
-          {/* Bio */}
-          {profile.bio && (
-            <Text style={styles.bio} numberOfLines={2}>
-              "{profile.bio}"
-            </Text>
-          )}
-        </View>
-      </Animated.View>
+          {/* Skip Button */}
+          <TouchableOpacity 
+            style={styles.skipButton}
+            onPress={() => handleSkip(profile)}
+            disabled={!isCurrentProfile}
+          >
+            <Ionicons name="close" size={24} color="#64748B" />
+            <Text style={styles.skipButtonText}>Skip</Text>
+          </TouchableOpacity>
+
+          <View style={styles.bottomSpacer} />
+        </ScrollView>
+      </View>
     );
   };
 
@@ -428,7 +370,7 @@ export default function MatchesScreen() {
       {/* Upgrade Prompt Modal */}
       {showUpgradePrompt && (
         <View style={styles.modalOverlay}>
-          <Animated.View style={styles.upgradeModal}>
+          <View style={styles.upgradeModal}>
             <LinearGradient
               colors={['rgba(245, 158, 11, 0.2)', 'transparent']}
               style={styles.upgradeGlow}
@@ -438,7 +380,7 @@ export default function MatchesScreen() {
             </View>
             <Text style={styles.upgradeTitle}>Daily Limit Reached</Text>
             <Text style={styles.upgradeSubtitle}>
-              You've used all 5 swipes for today.{'\n'}Upgrade to Premium for unlimited connections!
+              You've used all 5 likes for today.{'\n'}Upgrade to Premium for unlimited connections!
             </Text>
             <Pressable
               onPress={() => {
@@ -460,7 +402,7 @@ export default function MatchesScreen() {
             >
               <Text style={styles.laterButtonText}>Maybe Later</Text>
             </TouchableOpacity>
-          </Animated.View>
+          </View>
         </View>
       )}
 
@@ -480,7 +422,7 @@ export default function MatchesScreen() {
                 colors={['#EC4899', '#F472B6']}
                 style={styles.matchButton}
               >
-                <Text style={styles.matchButtonText}>Keep Swiping</Text>
+                <Text style={styles.matchButtonText}>Keep Browsing</Text>
               </LinearGradient>
             </Pressable>
           </View>
@@ -507,7 +449,7 @@ export default function MatchesScreen() {
               ))}
             </View>
             <Text style={styles.swipeCounterText}>
-              {swipeInfo.remaining_swipes || 0} swipes left
+              {swipeInfo.remaining_swipes || 0} likes left today
             </Text>
           </View>
           <View style={styles.upgradeBadge}>
@@ -517,69 +459,43 @@ export default function MatchesScreen() {
         </TouchableOpacity>
       )}
 
-      {/* Cards Container */}
-      <View style={styles.cardsContainer}>
-        {currentIndex >= profiles.length ? (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIcon}>
-              <Ionicons name="search" size={48} color="#64748B" />
-            </View>
-            <Text style={styles.emptyTitle}>No More Profiles</Text>
-            <Text style={styles.emptySubtitle}>
-              Check back later for new study partners
-            </Text>
-            <Pressable onPress={loadProfiles}>
-              <LinearGradient
-                colors={['#6366F1', '#8B5CF6']}
-                style={styles.refreshButton}
-              >
-                <Ionicons name="refresh" size={18} color="#fff" />
-                <Text style={styles.refreshButtonText}>Refresh</Text>
-              </LinearGradient>
-            </Pressable>
+      {/* Profiles List */}
+      {currentIndex >= profiles.length ? (
+        <View style={styles.emptyState}>
+          <View style={styles.emptyIcon}>
+            <Ionicons name="search" size={48} color="#64748B" />
           </View>
-        ) : (
-          <>
-            {profiles
-              .slice(currentIndex, currentIndex + 2)
-              .reverse()
-              .map((profile, index) =>
-                renderCard(profile, currentIndex + (1 - index))
-              )}
-          </>
-        )}
-      </View>
-
-      {/* Action Buttons */}
-      {currentIndex < profiles.length && (
-        <View style={styles.buttonsContainer}>
-          <Pressable
-            onPressIn={() => {
-              Animated.spring(buttonScale, { toValue: 0.9, useNativeDriver: true }).start();
-            }}
-            onPressOut={() => {
-              Animated.spring(buttonScale, { toValue: 1, useNativeDriver: true }).start();
-            }}
-            onPress={swipeLeft}
-          >
-            <Animated.View style={[styles.actionButton, styles.dislikeButton, { transform: [{ scale: buttonScale }] }]}>
-              <Ionicons name="close" size={32} color="#EF4444" />
-            </Animated.View>
-          </Pressable>
-          <Pressable
-            onPressIn={() => {
-              Animated.spring(buttonScale, { toValue: 0.9, useNativeDriver: true }).start();
-            }}
-            onPressOut={() => {
-              Animated.spring(buttonScale, { toValue: 1, useNativeDriver: true }).start();
-            }}
-            onPress={swipeRight}
-          >
-            <Animated.View style={[styles.actionButton, styles.likeButton, { transform: [{ scale: buttonScale }] }]}>
-              <Ionicons name="heart" size={30} color="#10B981" />
-            </Animated.View>
+          <Text style={styles.emptyTitle}>No More Profiles</Text>
+          <Text style={styles.emptySubtitle}>
+            Check back later for new study partners
+          </Text>
+          <Pressable onPress={loadProfiles}>
+            <LinearGradient
+              colors={['#6366F1', '#8B5CF6']}
+              style={styles.refreshButton}
+            >
+              <Ionicons name="refresh" size={18} color="#fff" />
+              <Text style={styles.refreshButtonText}>Refresh</Text>
+            </LinearGradient>
           </Pressable>
         </View>
+      ) : (
+        <FlatList
+          ref={scrollRef}
+          data={profiles}
+          renderItem={renderProfile}
+          keyExtractor={(item) => item.user_id}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={false}
+          getItemLayout={(data, index) => ({
+            length: width,
+            offset: width * index,
+            index,
+          })}
+          initialScrollIndex={currentIndex}
+        />
       )}
     </SafeAreaView>
   );
@@ -602,181 +518,219 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontWeight: '500',
   },
-  cardsContainer: {
+  profileContainer: {
+    width: width,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
   },
-  card: {
-    position: 'absolute',
-    width: width - 32,
-    height: height * 0.58,
-    borderRadius: 24,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.1)',
-  },
-  nextCard: {
-    top: 10,
-  },
-  cardContent: {
+  profileScroll: {
     flex: 1,
-    padding: 20,
-    alignItems: 'center',
   },
-  avatarContainer: {
-    marginBottom: 16,
+  profileScrollContent: {
+    paddingBottom: 100,
   },
-  avatarGradient: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  photoSection: {
+    width: width,
+    height: height * 0.5,
+    position: 'relative',
+  },
+  mainPhoto: {
+    width: '100%',
+    height: '100%',
+  },
+  mainPhotoPlaceholder: {
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatarImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  avatarText: {
-    fontSize: 36,
+  mainPhotoInitials: {
+    fontSize: 72,
     fontWeight: '700',
     color: '#fff',
   },
-  nameRow: {
+  photoOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
+    paddingBottom: 24,
+    background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+  },
+  nameContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: 8,
   },
-  cardName: {
-    fontSize: 26,
+  profileName: {
+    fontSize: 32,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  cardAge: {
-    fontSize: 22,
-    color: '#94A3B8',
+  profileAge: {
+    fontSize: 26,
+    color: '#fff',
     fontWeight: '400',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  infoRow: {
+  universityBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginTop: 8,
+    alignSelf: 'flex-start',
     gap: 6,
   },
-  infoText: {
+  universityText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  likeButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#1E293B',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#EC4899',
+    shadowColor: '#EC4899',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  likeButtonPressed: {
+    transform: [{ scale: 0.95 }],
+    backgroundColor: 'rgba(236, 72, 153, 0.2)',
+  },
+  infoSection: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#1E293B',
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.1)',
+  },
+  infoContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  infoTextContainer: {
+    flex: 1,
+  },
+  infoTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#F8FAFC',
+    marginBottom: 4,
+  },
+  infoSubtitle: {
     fontSize: 14,
     color: '#94A3B8',
   },
-  matchScoreContainer: {
-    marginTop: 12,
-    marginBottom: 12,
-  },
-  matchScoreBg: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    gap: 6,
-  },
-  matchScoreText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#F59E0B',
-  },
-  interestsContainer: {
-    width: '100%',
-    alignItems: 'center',
+  bioText: {
+    fontSize: 15,
+    color: '#CBD5E1',
+    fontStyle: 'italic',
+    lineHeight: 22,
+    marginTop: 4,
   },
   interestTags: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 6,
+    gap: 8,
+    marginTop: 8,
   },
   interestTag: {
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: 'rgba(99, 102, 241, 0.2)',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 14,
+    borderRadius: 16,
   },
   interestTagText: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#818CF8',
     fontWeight: '500',
   },
-  interestTagMore: {
-    backgroundColor: 'rgba(148, 163, 184, 0.15)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 14,
+  matchScoreSection: {
+    marginHorizontal: 16,
+    marginTop: 16,
   },
-  interestTagMoreText: {
-    fontSize: 12,
-    color: '#94A3B8',
-    fontWeight: '500',
-  },
-  bio: {
-    fontSize: 14,
-    color: '#94A3B8',
-    textAlign: 'center',
-    marginTop: 14,
-    lineHeight: 20,
-    fontStyle: 'italic',
-  },
-  likeLabel: {
-    position: 'absolute',
-    top: 40,
-    left: 16,
-    zIndex: 10,
-    transform: [{ rotate: '-15deg' }],
-  },
-  nopeLabel: {
-    position: 'absolute',
-    top: 40,
-    right: 16,
-    zIndex: 10,
-    transform: [{ rotate: '15deg' }],
-  },
-  labelGradient: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  labelText: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#fff',
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    paddingBottom: 90,
-    gap: 40,
-  },
-  actionButton: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: 'center',
+  matchScoreCard: {
     alignItems: 'center',
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(245, 158, 11, 0.3)',
   },
-  dislikeButton: {
-    backgroundColor: 'rgba(239, 68, 68, 0.12)',
-    borderWidth: 2,
-    borderColor: '#EF4444',
+  matchScoreText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#F59E0B',
+    marginTop: 8,
   },
-  likeButton: {
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-    borderWidth: 2,
-    borderColor: '#10B981',
+  matchScoreSubtext: {
+    fontSize: 13,
+    color: '#94A3B8',
+    marginTop: 4,
+  },
+  additionalPhotos: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    marginTop: 16,
+    gap: 12,
+  },
+  additionalPhotoContainer: {
+    flex: 1,
+    height: 200,
+    borderRadius: 16,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  additionalPhoto: {
+    width: '100%',
+    height: '100%',
+  },
+  skipButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+    marginTop: 24,
+    paddingVertical: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(100, 116, 139, 0.15)',
+    gap: 8,
+  },
+  skipButtonText: {
+    fontSize: 16,
+    color: '#64748B',
+    fontWeight: '600',
+  },
+  bottomSpacer: {
+    height: 100,
   },
   emptyState: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   emptyIcon: {
     width: 100,
@@ -947,7 +901,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(148, 163, 184, 0.3)',
   },
   swipeDotActive: {
-    backgroundColor: '#6366F1',
+    backgroundColor: '#EC4899',
   },
   swipeCounterText: {
     color: '#94A3B8',
