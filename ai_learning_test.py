@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from typing import Dict, Any
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://github-retriever-1.preview.emergentagent.com')
+BACKEND_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://github-projects.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 
 class TestResults:
