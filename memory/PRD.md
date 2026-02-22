@@ -40,3 +40,10 @@ Build Educare - AI-powered student wellbeing platform with mood tracking, AI ris
 ### P2 (Future)
 - Calendar integration
 - Study reminders
+
+## Latest Update (Feb 22, 2026) - Comment on Like Feature
+Added Hinge-style "comment on like" feature:
+- Users can add an optional comment when liking someone's profile section
+- Comment modal shows which section was liked (photo, bio, interests, course)
+- Backend stores comment and liked_section with the match
+- New endpoint: GET /api/matches/likes-received - see who liked you with their comments
