@@ -69,13 +69,24 @@ export default function MatchesScreen() {
   const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
   const [comment, setComment] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
   
   const scrollRef = useRef<FlatList>(null);
 
   useEffect(() => {
     loadProfiles();
     loadSwipeStatus();
+    loadLikesCount();
   }, []);
+
+  const loadLikesCount = async () => {
+    try {
+      const data = await api.get('/matches/likes-received', sessionToken);
+      setLikesCount(data.length);
+    } catch (error) {
+      console.error('Error loading likes count:', error);
+    }
+  };
 
   const loadProfiles = async () => {
     try {
