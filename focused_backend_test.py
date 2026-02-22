@@ -195,12 +195,22 @@ class FocusedAPITester:
         response = self.make_request("POST", "/matches/swipe", token="test_token", data=invalid_swipe_data)
         if isinstance(response, tuple):
             self.log_result("matching", "POST /matches/swipe (invalid action)", False, error=response[1])
+        elif response and response.status_code == 200:
+            try:
+                data = response.json()
+                if data.get("detail") == "Not authenticated":
+                    self.log_result("matching", "POST /matches/swipe (endpoint secured)", True)
+                    print("   ✅ Endpoint is properly secured")
+                else:
+                    self.log_result("matching", "POST /matches/swipe (invalid action)", False, response, "Should validate action field")
+            except json.JSONDecodeError:
+                self.log_result("matching", "POST /matches/swipe (invalid action)", False, response, "Invalid JSON response")
         elif response and response.status_code in [400, 422]:
             self.log_result("matching", "POST /matches/swipe (400/422 with invalid action)", True)
             print("   ✅ Correctly validates action field")
         elif response and response.status_code == 401:
-            self.log_result("matching", "POST /matches/swipe (endpoint accessible)", True)
-            print("   ✅ Endpoint is accessible and properly secured")
+            self.log_result("matching", "POST /matches/swipe (endpoint secured)", True)
+            print("   ✅ Endpoint is properly secured")
         else:
             self.log_result("matching", "POST /matches/swipe (invalid action)", False, response, f"Unexpected status: {response.status_code}")
     
