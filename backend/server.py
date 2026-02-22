@@ -1328,7 +1328,9 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
         user_id=current_user.user_id,
         matched_user_id=data.target_user_id,
         status=status,
-        score=calculate_match_score(current_user.dict(), target_user)
+        score=calculate_match_score(current_user.dict(), target_user),
+        comment=data.comment if data.action == "like" else None,
+        liked_section=data.liked_section if data.action == "like" else None
     )
     
     await db.matches.insert_one(match.dict())
