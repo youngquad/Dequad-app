@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Dimensions,
   ActivityIndicator,
   Animated,
@@ -25,12 +24,6 @@ const FEATURES = [
     gradient: ['#EC4899', '#F472B6'],
   },
   { 
-    icon: 'sparkles-outline', 
-    title: 'AI Insights', 
-    description: 'Get personalized wellness tips',
-    gradient: ['#8B5CF6', '#A78BFA'],
-  },
-  { 
     icon: 'people-outline', 
     title: 'Find Friends', 
     description: 'Connect with like-minded students',
@@ -42,11 +35,18 @@ const FEATURES = [
     description: 'End-to-end encrypted messaging',
     gradient: ['#10B981', '#34D399'],
   },
+  { 
+    icon: 'shield-checkmark-outline', 
+    title: 'Wellbeing Support', 
+    description: 'Resources when you need them',
+    gradient: ['#8B5CF6', '#A78BFA'],
+  },
 ];
 
 export default function LandingScreen() {
   const router = useRouter();
-  const { isLoading } = useAuth();
+  const { login, isLoading } = useAuth();
+  const [isSigningIn, setIsSigningIn] = useState(false);
   
   // Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -101,6 +101,17 @@ export default function LandingScreen() {
       useNativeDriver: true,
       speed: 50,
     }).start();
+  };
+
+  const handleLogin = async () => {
+    setIsSigningIn(true);
+    try {
+      await login();
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      setIsSigningIn(false);
+    }
   };
 
   if (isLoading) {
@@ -192,11 +203,12 @@ export default function LandingScreen() {
             ))}
           </View>
 
-          {/* CTA Button */}
+          {/* Login Button - Direct Login */}
           <Pressable
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
-            onPress={() => router.push('/(auth)/login')}
+            onPress={handleLogin}
+            disabled={isSigningIn}
           >
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
               <LinearGradient
@@ -205,9 +217,15 @@ export default function LandingScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.loginButton}
               >
-                <Ionicons name="logo-google" size={22} color="#fff" />
-                <Text style={styles.loginButtonText}>Continue with Google</Text>
-                <Ionicons name="arrow-forward" size={20} color="#fff" />
+                {isSigningIn ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Ionicons name="logo-google" size={22} color="#fff" />
+                    <Text style={styles.loginButtonText}>Continue with Google</Text>
+                    <Ionicons name="arrow-forward" size={20} color="#fff" />
+                  </>
+                )}
               </LinearGradient>
             </Animated.View>
           </Pressable>
@@ -229,6 +247,10 @@ export default function LandingScreen() {
               <Text style={styles.trustText}>Student-focused</Text>
             </View>
           </View>
+
+          <Text style={styles.terms}>
+            By continuing, you agree to our Terms of Service and Privacy Policy
+          </Text>
 
           <Text style={styles.footerText}>
             Built with ❤️ for students everywhere
@@ -365,6 +387,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 14,
     gap: 10,
+    minHeight: 56,
   },
   loginButtonText: {
     color: '#fff',
@@ -395,6 +418,13 @@ const styles = StyleSheet.create({
     height: 16,
     backgroundColor: 'rgba(148, 163, 184, 0.3)',
     marginHorizontal: 14,
+  },
+  terms: {
+    color: '#64748B',
+    fontSize: 12,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: 8,
   },
   footerText: {
     color: '#64748B',
