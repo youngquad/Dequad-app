@@ -495,6 +495,8 @@ class ProfileUpdate(BaseModel):
 class SwipeAction(BaseModel):
     target_user_id: str
     action: str  # like, dislike
+    comment: Optional[str] = None  # Optional comment when liking (Hinge-style)
+    liked_section: Optional[str] = None  # Which section was liked (photo, bio, interests, course)
 
 class SendMessage(BaseModel):
     match_id: str
