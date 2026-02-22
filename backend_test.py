@@ -277,17 +277,6 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-        feedback_data = {
-            "mood": 5,
-            "feedback": "The lecture was okay but I felt a bit stressed",
-            "lecture_topic": "Psychology 101"
-        }
-        response = self.make_request("POST", "/feedback", token=STUDENT_TOKEN, data=feedback_data)
-        if isinstance(response, tuple):
-            self.log_result("feedback", "POST /feedback", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                feedback_response = response.json()
                 if (feedback_response.get("mood") == 5 and 
                     "risk_score" in feedback_response and 
                     "ai_analysis" in feedback_response):
