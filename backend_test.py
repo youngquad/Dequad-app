@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://github-projects.preview.emergentagent.com/api"
+BASE_URL = "https://5888b71c-e2f0-406e-bddc-c8c11971bcea.preview.emergentagent.com/api"
 STUDENT_TOKEN = "test_session_token_123"
 ADMIN_TOKEN = "admin_session_token_123"
 
