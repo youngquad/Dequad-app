@@ -25,12 +25,6 @@ const FEATURES = [
     gradient: ['#EC4899', '#F472B6'],
   },
   { 
-    icon: 'sparkles-outline', 
-    title: 'AI Insights', 
-    description: 'Get personalized wellness tips',
-    gradient: ['#8B5CF6', '#A78BFA'],
-  },
-  { 
     icon: 'people-outline', 
     title: 'Find Friends', 
     description: 'Connect with like-minded students',
