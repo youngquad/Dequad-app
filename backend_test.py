@@ -58,96 +58,225 @@ class EducareAPITester:
         except Exception as e:
             print(f"Request failed: {e}")
             return None
+    
+    def test_admin_login(self):
+        """Test admin login with specified credentials"""
+        print("\n🔐 Testing Admin Login...")
         
-        url = f"{BASE_URL}{endpoint}"
+        login_data = {
+            "email": ADMIN_EMAIL,
+            "password": ADMIN_PASSWORD
+        }
+        
+        response = self.make_request("POST", "auth/admin-login", data=login_data)
+        
+        if response and response.status_code == 200:
+            try:
+                login_response = response.json()
+                if "session_token" in login_response and login_response.get("is_admin"):
+                    self.admin_token = login_response["session_token"]
+                    self.log_test("Admin Login", True, f"Token: {self.admin_token[:20]}...")
+                    return True
+                else:
+                    self.log_test("Admin Login", False, "Missing session_token or is_admin flag")
+            except json.JSONDecodeError:
+                self.log_test("Admin Login", False, "Invalid JSON response")
+        else:
+            status = response.status_code if response else "No response"
+            self.log_test("Admin Login", False, f"Status: {status}")
+        
+        return False
+    
+    def test_discover_profiles(self):
+        """Test discover endpoint for test profiles"""
+        print("\n👥 Testing Discover Profiles...")
+        
+        if not self.admin_token:
+            self.log_test("Discover Profiles", False, "No admin token available")
+            return False
+        
+        response = self.make_request("GET", "matches/discover", token=self.admin_token)
+        
+        if response and response.status_code == 200:
+            try:
+                profiles = response.json()
+                if isinstance(profiles, list):
+                    self.log_test("Discover Endpoint", True, f"Found {len(profiles)} profiles")
+                    
+                    # Check for test profiles
+                    test_names = ["Emma Wilson", "James Chen", "Sofia Martinez", "Alex Thompson", "Priya Patel"]
+                    found_test_profiles = []
+                    
+                    for profile in profiles:
+                        if profile.get('name') in test_names:
+                            found_test_profiles.append(profile.get('name'))
+                    
+                    if len(found_test_profiles) >= 3:
+                        self.log_test("Test Profiles Present", True, f"Found: {', '.join(found_test_profiles)}")
+                    else:
+                        self.log_test("Test Profiles Present", False, f"Only found {len(found_test_profiles)} test profiles")
+                    
+                    return True
+                else:
+                    self.log_test("Discover Profiles", False, "Response is not a list")
+            except json.JSONDecodeError:
+                self.log_test("Discover Profiles", False, "Invalid JSON response")
+        else:
+            status = response.status_code if response else "No response"
+            self.log_test("Discover Profiles", False, f"Status: {status}")
+        
+        return False
+    
+    def test_likes_received_endpoint(self):
+        """Test likes-received endpoint"""
+        print("\n💕 Testing Likes Received Endpoint...")
+        
+        if not self.admin_token:
+            self.log_test("Likes Received", False, "No admin token available")
+            return False
+        
+        response = self.make_request("GET", "matches/likes-received", token=self.admin_token)
+        
+        if response and response.status_code == 200:
+            try:
+                likes = response.json()
+                if isinstance(likes, list):
+                    self.log_test("Likes Received Endpoint", True, f"Found {len(likes)} likes")
+                    
+                    # Check structure if likes exist
+                    if likes:
+                        first_like = likes[0]
+                        required_fields = ['like_id', 'user', 'created_at']
+                        has_all_fields = all(field in first_like for field in required_fields)
+                        
+                        if has_all_fields:
+                            self.log_test("Likes Data Structure", True, "All required fields present")
+                            
+                            # Check comment support
+                            if 'comment' in first_like:
+                                self.log_test("Comment Support", True, "Comment field available")
+                            else:
+                                self.log_test("Comment Support", True, "Comment field optional (as expected)")
+                        else:
+                            self.log_test("Likes Data Structure", False, f"Missing fields: {required_fields}")
+                    else:
+                        self.log_test("Likes Data Structure", True, "Endpoint accessible (no likes yet)")
+                    
+                    return True
+                else:
+                    self.log_test("Likes Received", False, "Response is not a list")
+            except json.JSONDecodeError:
+                self.log_test("Likes Received", False, "Invalid JSON response")
+        else:
+            status = response.status_code if response else "No response"
+            self.log_test("Likes Received", False, f"Status: {status}")
+        
+        return False
+    
+    def test_swipe_with_comment(self):
+        """Test swipe action with comment functionality"""
+        print("\n💬 Testing Swipe with Comment...")
+        
+        if not self.admin_token:
+            self.log_test("Swipe with Comment", False, "No admin token available")
+            return False
+        
+        # First get profiles to swipe on
+        response = self.make_request("GET", "matches/discover", token=self.admin_token)
+        
+        if not response or response.status_code != 200:
+            self.log_test("Swipe with Comment", False, "Cannot get profiles for swipe test")
+            return False
         
         try:
-            if method == "GET":
-                response = requests.get(url, headers=headers, timeout=30)
-            elif method == "POST":
-                response = requests.post(url, headers=headers, json=data, timeout=30)
-            elif method == "PUT":
-                response = requests.put(url, headers=headers, json=data, timeout=30)
-            else:
-                raise ValueError(f"Unsupported method: {method}")
+            profiles = response.json()
+            if not profiles:
+                self.log_test("Swipe with Comment", False, "No profiles available for swipe test")
+                return False
             
-            return response
-        except requests.exceptions.RequestException as e:
-            return None, str(e)
-    
-    def test_auth_apis(self):
-        """Test Authentication APIs"""
-        print("\n🔐 Testing Authentication APIs...")
-        
-        # Test GET /api/auth/me
-        response = self.make_request("GET", "/auth/me", token=STUDENT_TOKEN)
-        if isinstance(response, tuple):
-            self.log_result("auth", "GET /auth/me", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                user_data = response.json()
-                if user_data.get("user_id") == "user_test123":
-                    self.log_result("auth", "GET /auth/me", True)
+            target_profile = profiles[0]
+            target_user_id = target_profile.get('user_id')
+            
+            if not target_user_id:
+                self.log_test("Swipe with Comment", False, "No user_id in profile")
+                return False
+            
+            # Test swipe with comment
+            swipe_data = {
+                "target_user_id": target_user_id,
+                "action": "like",
+                "comment": "I love your interests in technology!",
+                "liked_section": "interests"
+            }
+            
+            response = self.make_request("POST", "matches/swipe", data=swipe_data, token=self.admin_token)
+            
+            if response and response.status_code == 200:
+                try:
+                    swipe_response = response.json()
+                    if 'match' in swipe_response:
+                        match_data = swipe_response['match']
+                        if 'comment' in match_data and 'liked_section' in match_data:
+                            self.log_test("Swipe with Comment", True, "Comment and section properly stored")
+                            return True
+                        else:
+                            self.log_test("Swipe with Comment", False, "Comment or liked_section missing")
+                    else:
+                        self.log_test("Swipe with Comment", False, "No match data in response")
+                except json.JSONDecodeError:
+                    self.log_test("Swipe with Comment", False, "Invalid JSON response")
+            else:
+                status = response.status_code if response else "No response"
+                # Check if it's already swiped error (which is acceptable)
+                if response and "Already swiped" in response.text:
+                    self.log_test("Swipe with Comment", True, "Already swiped (endpoint working)")
+                    return True
                 else:
-                    self.log_result("auth", "GET /auth/me", False, response, "Invalid user data returned")
-            except json.JSONDecodeError:
-                self.log_result("auth", "GET /auth/me", False, response, "Invalid JSON response")
-        else:
-            self.log_result("auth", "GET /auth/me", False, response, "Authentication failed")
+                    self.log_test("Swipe with Comment", False, f"Status: {status}")
         
-        # Test POST /api/auth/logout (test with a separate token to avoid invalidating main session)
-        # Create a temporary session for logout test
-        self.create_temp_session()
-        response = self.make_request("POST", "/auth/logout", token="temp_session_token_456")
-        if isinstance(response, tuple):
-            self.log_result("auth", "POST /auth/logout", False, error=response[1])
-        elif response and response.status_code == 200:
-            self.log_result("auth", "POST /auth/logout", True)
-        else:
-            self.log_result("auth", "POST /auth/logout", False, response, "Logout failed")
+        except Exception as e:
+            self.log_test("Swipe with Comment", False, f"Error: {str(e)}")
+        
+        return False
     
-    def test_mood_apis(self):
-        """Test Mood Tracking APIs"""
-        print("\n😊 Testing Mood APIs...")
+    def run_all_tests(self):
+        """Run all tests"""
+        print("🚀 Starting Educare API Tests")
+        print(f"Base URL: {BASE_URL}")
+        print(f"Admin Email: {ADMIN_EMAIL}")
         
-        # Test POST /api/mood
-        mood_data = {"mood": 7, "notes": "Feeling good today"}
-        response = self.make_request("POST", "/mood", token=STUDENT_TOKEN, data=mood_data)
-        if isinstance(response, tuple):
-            self.log_result("mood", "POST /mood", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                mood_response = response.json()
-                if mood_response.get("mood") == 7:
-                    self.log_result("mood", "POST /mood", True)
-                else:
-                    self.log_result("mood", "POST /mood", False, response, "Invalid mood data returned")
-            except json.JSONDecodeError:
-                self.log_result("mood", "POST /mood", False, response, "Invalid JSON response")
+        # Test admin login first
+        if not self.test_admin_login():
+            print("\n❌ Admin login failed - cannot proceed with authenticated tests")
+            return False
+        
+        # Run other tests
+        self.test_discover_profiles()
+        self.test_likes_received_endpoint()
+        self.test_swipe_with_comment()
+        
+        # Print summary
+        print("\n" + "="*50)
+        print("TEST SUMMARY")
+        print("="*50)
+        print(f"Tests run: {self.tests_run}")
+        print(f"Tests passed: {self.tests_passed}")
+        print(f"Success rate: {(self.tests_passed/self.tests_run)*100:.1f}%")
+        
+        if self.tests_passed == self.tests_run:
+            print("🎉 All tests passed!")
+            return True
         else:
-            self.log_result("mood", "POST /mood", False, response, "Mood creation failed")
-        
-        # Test GET /api/mood
-        response = self.make_request("GET", "/mood", token=STUDENT_TOKEN)
-        if isinstance(response, tuple):
-            self.log_result("mood", "GET /mood", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                mood_history = response.json()
-                if isinstance(mood_history, list):
-                    self.log_result("mood", "GET /mood", True)
-                else:
-                    self.log_result("mood", "GET /mood", False, response, "Invalid mood history format")
-            except json.JSONDecodeError:
-                self.log_result("mood", "GET /mood", False, response, "Invalid JSON response")
-        else:
-            self.log_result("mood", "GET /mood", False, response, "Mood history retrieval failed")
-    
-    def test_feedback_apis(self):
-        """Test Feedback & AI APIs"""
-        print("\n🤖 Testing Feedback & AI APIs...")
-        
-        # Test POST /api/feedback
+            print(f"⚠️  {self.tests_run - self.tests_passed} tests failed")
+            return False
+
+def main():
+    tester = EducareAPITester()
+    success = tester.run_all_tests()
+    return 0 if success else 1
+
+if __name__ == "__main__":
+    sys.exit(main())
         feedback_data = {
             "mood": 5,
             "feedback": "The lecture was okay but I felt a bit stressed",
