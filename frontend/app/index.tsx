@@ -40,7 +40,8 @@ const FEATURES = [
 
 export default function LandingScreen() {
   const router = useRouter();
-  const { isLoading } = useAuth();
+  const { isLoading, login } = useAuth();
+  const [isSigningIn, setIsSigningIn] = React.useState(false);
   
   // Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -95,6 +96,17 @@ export default function LandingScreen() {
       useNativeDriver: true,
       speed: 50,
     }).start();
+  };
+
+  const handleLogin = async () => {
+    setIsSigningIn(true);
+    try {
+      await login();
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      setIsSigningIn(false);
+    }
   };
 
   if (isLoading) {
