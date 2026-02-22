@@ -3805,6 +3805,7 @@ async def seed_admin_and_test_users():
             "email": admin_email,
             "name": "Yusuf Quadri",
             "role": "admin",
+            "admin_password": admin_password_hash,
             "password_hash": admin_password_hash,
             "created_at": datetime.now(timezone.utc),
             "profile_completed": True,
@@ -3819,6 +3820,7 @@ async def seed_admin_and_test_users():
         await db.users.update_one(
             {"email": admin_email},
             {"$set": {
+                "admin_password": admin_password_hash,
                 "password_hash": admin_password_hash,
                 "role": "admin",
                 "subscription_status": "premium",
