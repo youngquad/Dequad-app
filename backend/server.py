@@ -431,6 +431,8 @@ class Match(BaseModel):
     matched_user_id: str
     status: str = "pending"  # pending, accepted, rejected
     score: float = 0.0
+    comment: Optional[str] = None  # Optional comment when liking (Hinge-style)
+    liked_section: Optional[str] = None  # Which section was liked
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ChatMessage(BaseModel):
