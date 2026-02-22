@@ -104,88 +104,48 @@ class FocusedAPITester:
         # Test without authentication
         swipe_data = {"target_user_id": "test_user", "action": "like"}
         response = self.make_request("POST", "/matches/swipe", data=swipe_data)
-        if isinstance(response, tuple):
-            self.log_result("matching", "POST /matches/swipe (no auth)", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                data = response.json()
-                if data.get("detail") == "Not authenticated":
-                    self.log_result("matching", "POST /matches/swipe (auth required)", True)
-                    print("   ✅ Correctly requires authentication")
-                else:
-                    self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Should require authentication")
-            except json.JSONDecodeError:
-                self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Invalid JSON response")
-        elif response and response.status_code == 401:
+        if response is None:
+            self.log_result("matching", "POST /matches/swipe (no auth)", False, error="No response received")
+        elif response.status_code == 401:
             self.log_result("matching", "POST /matches/swipe (401 without auth)", True)
             print("   ✅ Correctly requires authentication")
         else:
-            self.log_result("matching", "POST /matches/swipe (no auth)", False, response, "Should return 401 or auth error")
+            self.log_result("matching", "POST /matches/swipe (no auth)", False, response, f"Expected 401, got {response.status_code}")
         
         # Test with invalid token
         response = self.make_request("POST", "/matches/swipe", token="invalid_token", data=swipe_data)
-        if isinstance(response, tuple):
-            self.log_result("matching", "POST /matches/swipe (invalid token)", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                data = response.json()
-                if data.get("detail") == "Not authenticated":
-                    self.log_result("matching", "POST /matches/swipe (invalid token rejected)", True)
-                    print("   ✅ Correctly rejects invalid token")
-                else:
-                    self.log_result("matching", "POST /matches/swipe (invalid token)", False, response, "Should reject invalid token")
-            except json.JSONDecodeError:
-                self.log_result("matching", "POST /matches/swipe (invalid token)", False, response, "Invalid JSON response")
-        elif response and response.status_code == 401:
+        if response is None:
+            self.log_result("matching", "POST /matches/swipe (invalid token)", False, error="No response received")
+        elif response.status_code == 401:
             self.log_result("matching", "POST /matches/swipe (401 with invalid token)", True)
             print("   ✅ Correctly rejects invalid token")
         else:
-            self.log_result("matching", "POST /matches/swipe (invalid token)", False, response, "Should return 401 with invalid token")
+            self.log_result("matching", "POST /matches/swipe (invalid token)", False, response, f"Expected 401, got {response.status_code}")
         
         # Test with missing data
         response = self.make_request("POST", "/matches/swipe", token="test_token", data={})
-        if isinstance(response, tuple):
-            self.log_result("matching", "POST /matches/swipe (missing data)", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                data = response.json()
-                if data.get("detail") == "Not authenticated":
-                    self.log_result("matching", "POST /matches/swipe (endpoint accessible)", True)
-                    print("   ✅ Endpoint is accessible and properly secured")
-                else:
-                    self.log_result("matching", "POST /matches/swipe (missing data)", False, response, "Should validate required fields")
-            except json.JSONDecodeError:
-                self.log_result("matching", "POST /matches/swipe (missing data)", False, response, "Invalid JSON response")
-        elif response and response.status_code in [400, 422]:
-            self.log_result("matching", "POST /matches/swipe (400/422 with missing data)", True)
-            print("   ✅ Correctly validates required fields")
-        elif response and response.status_code == 401:
+        if response is None:
+            self.log_result("matching", "POST /matches/swipe (missing data)", False, error="No response received")
+        elif response.status_code == 401:
             self.log_result("matching", "POST /matches/swipe (endpoint accessible)", True)
             print("   ✅ Endpoint is accessible and properly secured")
+        elif response.status_code in [400, 422]:
+            self.log_result("matching", "POST /matches/swipe (400/422 with missing data)", True)
+            print("   ✅ Correctly validates required fields")
         else:
             self.log_result("matching", "POST /matches/swipe (missing data)", False, response, f"Unexpected status: {response.status_code}")
         
         # Test with invalid action
         invalid_swipe_data = {"target_user_id": "test_user", "action": "invalid_action"}
         response = self.make_request("POST", "/matches/swipe", token="test_token", data=invalid_swipe_data)
-        if isinstance(response, tuple):
-            self.log_result("matching", "POST /matches/swipe (invalid action)", False, error=response[1])
-        elif response and response.status_code == 200:
-            try:
-                data = response.json()
-                if data.get("detail") == "Not authenticated":
-                    self.log_result("matching", "POST /matches/swipe (endpoint secured)", True)
-                    print("   ✅ Endpoint is properly secured")
-                else:
-                    self.log_result("matching", "POST /matches/swipe (invalid action)", False, response, "Should validate action field")
-            except json.JSONDecodeError:
-                self.log_result("matching", "POST /matches/swipe (invalid action)", False, response, "Invalid JSON response")
-        elif response and response.status_code in [400, 422]:
-            self.log_result("matching", "POST /matches/swipe (400/422 with invalid action)", True)
-            print("   ✅ Correctly validates action field")
-        elif response and response.status_code == 401:
+        if response is None:
+            self.log_result("matching", "POST /matches/swipe (invalid action)", False, error="No response received")
+        elif response.status_code == 401:
             self.log_result("matching", "POST /matches/swipe (endpoint secured)", True)
             print("   ✅ Endpoint is properly secured")
+        elif response.status_code in [400, 422]:
+            self.log_result("matching", "POST /matches/swipe (400/422 with invalid action)", True)
+            print("   ✅ Correctly validates action field")
         else:
             self.log_result("matching", "POST /matches/swipe (invalid action)", False, response, f"Unexpected status: {response.status_code}")
     
