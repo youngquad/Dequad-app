@@ -85,6 +85,12 @@ export default function MainLayout() {
           href: null, // Hide from tab bar - accessible from Profile
         }}
       />
+      <Tabs.Screen
+        name="likes-you"
+        options={{
+          href: null, // Hide from tab bar - accessible from Connect screen
+        }}
+      />
     </Tabs>
   );
 }
