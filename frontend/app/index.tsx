@@ -121,11 +121,13 @@ export default function LandingScreen() {
           style={StyleSheet.absoluteFill}
         />
         <View style={styles.loadingContent}>
-          <View style={styles.loadingLogo}>
-            <Ionicons name="school" size={48} color="#6366F1" />
-          </View>
-          <ActivityIndicator size="large" color="#6366F1" style={{ marginTop: 20 }} />
-          <Text style={styles.loadingText}>Loading Educare...</Text>
+          <Image 
+            source={{ uri: EDUCARE_LOGO }} 
+            style={styles.loadingLogoImage}
+            resizeMode="contain"
+          />
+          <ActivityIndicator size="large" color="#5B9BD5" style={{ marginTop: 20 }} />
+          <Text style={styles.loadingText}>Loading...</Text>
         </View>
       </View>
     );
@@ -134,7 +136,7 @@ export default function LandingScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#0F172A', '#1E293B', '#0F172A']}
+        colors={['#FFFFFF', '#F8FAFC', '#FFFFFF']}
         style={styles.gradient}
         locations={[0, 0.5, 1]}
       >
@@ -156,13 +158,11 @@ export default function LandingScreen() {
         >
           {/* Logo Section */}
           <View style={styles.logoContainer}>
-            <LinearGradient
-              colors={['rgba(99, 102, 241, 0.2)', 'rgba(139, 92, 246, 0.1)']}
-              style={styles.iconCircle}
-            >
-              <Ionicons name="school" size={56} color="#818CF8" />
-            </LinearGradient>
-            <Text style={styles.title}>Educare</Text>
+            <Image 
+              source={{ uri: EDUCARE_LOGO }} 
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
             <Text style={styles.subtitle}>
               Your wellbeing companion for university life
             </Text>
