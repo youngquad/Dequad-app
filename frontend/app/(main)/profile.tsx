@@ -259,6 +259,21 @@ export default function ProfileScreen() {
   };
 
   const handleLogout = async () => {
+    // Web doesn't support Alert.alert, use confirm instead
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm('Are you sure you want to logout?');
+      if (confirmed) {
+        try {
+          await logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          window.location.href = '/';
+        }
+      }
+      return;
+    }
+    
+    // Native platforms use Alert
     Alert.alert('Logout', 'Are you sure you want to logout?', [
       { text: 'Cancel', style: 'cancel' },
       {
