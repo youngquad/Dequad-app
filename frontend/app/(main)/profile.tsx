@@ -1226,6 +1226,27 @@ const styles = StyleSheet.create({
   toggleKnobActive: {
     alignSelf: 'flex-end',
   },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    gap: 10,
+  },
+  toggleSwitch: {
+    width: 44,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#374151',
+    padding: 2,
+    justifyContent: 'center',
+  },
+  toggleSwitchActive: {
+    backgroundColor: '#5B9BD5',
+  },
+  toggleLabel: {
+    color: '#9CA3AF',
+    fontSize: 14,
+  },
   interestsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
