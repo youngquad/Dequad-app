@@ -62,7 +62,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkExistingSession = async () => {
     try {
-      const token = await AsyncStorage.getItem('session_token');
+      let token = await AsyncStorage.getItem('session_token');
+      
+      // On web, also check localStorage
+      if (!token && Platform.OS === 'web' && typeof window !== 'undefined') {
+        token = localStorage.getItem('session_token');
+      }
+      
       if (token) {
         setSessionToken(token);
         const userData = await api.get('/auth/me', token);
@@ -72,6 +78,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Session check error:', error);
       await AsyncStorage.removeItem('session_token');
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        localStorage.removeItem('session_token');
+      }
       setSessionToken(null);
       setUser(null);
     }
