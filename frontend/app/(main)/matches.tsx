@@ -292,6 +292,11 @@ export default function MatchesScreen() {
               <View style={styles.nameContainer}>
                 <Text style={styles.profileName}>{profile.name}</Text>
                 {profile.age && <Text style={styles.profileAge}>, {profile.age}</Text>}
+                {profile.pronouns && profile.show_pronouns !== false && (
+                  <View style={styles.pronounsBadge}>
+                    <Text style={styles.pronounsText}>{profile.pronouns}</Text>
+                  </View>
+                )}
               </View>
               {profile.university && (
                 <View style={styles.universityBadge}>
