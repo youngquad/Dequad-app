@@ -490,6 +490,8 @@ class ProfileUpdate(BaseModel):
     study_style: Optional[str] = None
     bio: Optional[str] = None
     ethnicity: Optional[str] = None
+    pronouns: Optional[str] = None
+    show_pronouns: Optional[bool] = None
     interested_in: Optional[List[str]] = None
     gender: Optional[str] = None
     push_token: Optional[str] = None
