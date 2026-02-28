@@ -85,8 +85,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         sessionId = url.split('session_id=')[1]?.split('&')[0];
       }
       
+      console.log('Parsed session_id:', sessionId);
+      
       if (sessionId) {
+        setIsLoading(true);
         await processSessionId(sessionId);
+        setIsLoading(false);
       }
     };
 
@@ -98,15 +102,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // Web platform check
+    // Web platform check - run immediately on mount
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const fullUrl = window.location.href;
       const hash = window.location.hash;
       const search = window.location.search;
       
-      if (hash.includes('session_id=') || search.includes('session_id=')) {
-        handleUrl(window.location.href);
-        // Clean URL
-        window.history.replaceState({}, document.title, window.location.pathname);
+      console.log('Web URL check - Full URL:', fullUrl);
+      console.log('Hash:', hash, 'Search:', search);
+      
+      if (hash.includes('session_id=') || search.includes('session_id=') || fullUrl.includes('session_id=')) {
+        handleUrl(fullUrl).then(() => {
+          // Clean URL after processing
+          window.history.replaceState({}, document.title, window.location.pathname);
+        });
       }
     }
 
