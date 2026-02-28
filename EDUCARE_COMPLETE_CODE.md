@@ -2360,3 +2360,514 @@ const styles = StyleSheet.create({
 
 ---
 
+
+## Frontend - Auth Context
+**File: `/app/frontend/src/contexts/AuthContext.tsx`**
+
+```tsx
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
+import { api, API_URL } from '../services/api';
+
+interface User {
+  user_id: string;
+  email: string;
+  name: string;
+  picture?: string;
+  role: string;
+  interests: string[];
+  university?: string;
+  age?: number;
+  study_style?: string;
+  bio?: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
+  sessionToken: string | null;
+  setAdminSession: (token: string, userData: User) => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const processSessionId = async (sessionId: string) => {
+    try {
+      console.log('Processing session_id:', sessionId);
+      const response = await api.post('/auth/session', { session_id: sessionId });
+      
+      if (response.user && response.session_token) {
+        setUser(response.user);
+        setSessionToken(response.session_token);
+        await AsyncStorage.setItem('session_token', response.session_token);
+        console.log('Auth successful, user:', response.user.name);
+      }
+    } catch (error) {
+      console.error('Session exchange error:', error);
+    }
+  };
+
+  const checkExistingSession = async () => {
+    try {
+      const token = await AsyncStorage.getItem('session_token');
+      if (token) {
+        setSessionToken(token);
+        const userData = await api.get('/auth/me', token);
+        setUser(userData);
+        console.log('Restored session for:', userData.name);
+      }
+    } catch (error) {
+      console.error('Session check error:', error);
+      await AsyncStorage.removeItem('session_token');
+      setSessionToken(null);
+      setUser(null);
+    }
+  };
+
+  // Handle URL callback
+  useEffect(() => {
+    const handleUrl = async (url: string) => {
+      console.log('Handling URL:', url);
+      
+      // Parse session_id from hash or query
+      let sessionId = null;
+      
+      if (url.includes('#session_id=')) {
+        sessionId = url.split('#session_id=')[1]?.split('&')[0];
+      } else if (url.includes('?session_id=')) {
+        sessionId = url.split('?session_id=')[1]?.split('&')[0];
+      } else if (url.includes('session_id=')) {
+        sessionId = url.split('session_id=')[1]?.split('&')[0];
+      }
+      
+      if (sessionId) {
+        await processSessionId(sessionId);
+      }
+    };
+
+    // Cold start check
+    const checkInitialUrl = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      if (initialUrl) {
+        await handleUrl(initialUrl);
+      }
+    };
+
+    // Web platform check
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      const search = window.location.search;
+      
+      if (hash.includes('session_id=') || search.includes('session_id=')) {
+        handleUrl(window.location.href);
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+
+    checkInitialUrl();
+
+    // Listen for URL events
+    const subscription = Linking.addEventListener('url', (event) => {
+      handleUrl(event.url);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  // Check existing session on mount
+  useEffect(() => {
+    const init = async () => {
+      setIsLoading(true);
+      await checkExistingSession();
+      setIsLoading(false);
+    };
+    init();
+  }, []);
+
+  const login = async () => {
+    try {
+      const redirectUrl = Platform.OS === 'web'
+        ? `${API_URL}/`
+        : Linking.createURL('/');
+      
+      const authUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+      
+      if (Platform.OS === 'web') {
+        window.location.href = authUrl;
+      } else {
+        const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
+        
+        if (result.type === 'success' && result.url) {
+          // Parse session_id from result URL
+          let sessionId = null;
+          const url = result.url;
+          
+          if (url.includes('#session_id=')) {
+            sessionId = url.split('#session_id=')[1]?.split('&')[0];
+          } else if (url.includes('?session_id=')) {
+            sessionId = url.split('?session_id=')[1]?.split('&')[0];
+          } else if (url.includes('session_id=')) {
+            sessionId = url.split('session_id=')[1]?.split('&')[0];
+          }
+          
+          if (sessionId) {
+            await processSessionId(sessionId);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+  };
+
+  const logout = async () => {
+    // Clear state first before API call to ensure immediate UI update
+    setUser(null);
+    setSessionToken(null);
+    await AsyncStorage.removeItem('session_token');
+    
+    // Then try to invalidate session on backend (non-blocking)
+    try {
+      if (sessionToken) {
+        await api.post('/auth/logout', {}, sessionToken);
+      }
+    } catch (error) {
+      console.error('Logout API error:', error);
+      // Ignore API errors - user is already logged out locally
+    }
+  };
+
+  const refreshUser = async () => {
+    if (sessionToken) {
+      try {
+        const userData = await api.get('/auth/me', sessionToken);
+        setUser(userData);
+      } catch (error) {
+        console.error('Refresh user error:', error);
+      }
+    }
+  };
+
+  const setAdminSession = (token: string, userData: User) => {
+    setSessionToken(token);
+    setUser(userData);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        isAuthenticated: !!user,
+        login,
+        logout,
+        refreshUser,
+        sessionToken,
+        setAdminSession,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
+```
+
+---
+
+## Frontend - API Service
+**File: `/app/frontend/src/services/api.ts`**
+
+```typescript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || 'https://5888b71c-e2f0-406e-bddc-c8c11971bcea.preview.emergentagent.com';
+export const API_URL = BACKEND_URL;
+
+class ApiService {
+  private baseUrl: string;
+
+  constructor() {
+    this.baseUrl = `${BACKEND_URL}/api`;
+  }
+
+  private async getStoredToken(): Promise<string | null> {
+    try {
+      // On web, try localStorage first as it's more reliable
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        const webToken = window.localStorage.getItem('session_token');
+        if (webToken) {
+          return webToken;
+        }
+      }
+      // Fall back to AsyncStorage
+      return await AsyncStorage.getItem('session_token');
+    } catch (error) {
+      console.error('Error getting stored token:', error);
+      return null;
+    }
+  }
+
+  async setToken(token: string): Promise<void> {
+    try {
+      // Store in both localStorage (for web) and AsyncStorage (for mobile)
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('session_token', token);
+      }
+      await AsyncStorage.setItem('session_token', token);
+    } catch (error) {
+      console.error('Error storing token:', error);
+    }
+  }
+
+  async clearToken(): Promise<void> {
+    try {
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem('session_token');
+      }
+      await AsyncStorage.removeItem('session_token');
+    } catch (error) {
+      console.error('Error clearing token:', error);
+    }
+  }
+
+  private async request(
+    method: string,
+    endpoint: string,
+    data?: any,
+    token?: string | null
+  ) {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Use provided token or fall back to stored token
+    let authToken = token;
+    if (!authToken) {
+      authToken = await this.getStoredToken();
+    }
+    
+    // Also check for admin_session_token if regular token not found
+    if (!authToken && Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+      authToken = window.localStorage.getItem('admin_session_token');
+    }
+    
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`;
+      console.log(`API ${method} ${endpoint} - Token:`, authToken.substring(0, 25) + '...');
+    }
+
+    try {
+      // Don't include credentials for admin endpoints to avoid cookie conflicts
+      const isAdminEndpoint = endpoint.startsWith('/admin');
+      
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        method,
+        headers,
+        body: data ? JSON.stringify(data) : undefined,
+        credentials: isAdminEndpoint ? 'omit' : 'include',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`API ${method} ${endpoint} error:`, error);
+      throw error;
+    }
+  }
+
+  async get(endpoint: string, token?: string | null) {
+    return this.request('GET', endpoint, undefined, token);
+  }
+
+  async post(endpoint: string, data: any, token?: string | null) {
+    return this.request('POST', endpoint, data, token);
+  }
+
+  async put(endpoint: string, data: any, token?: string | null) {
+    return this.request('PUT', endpoint, data, token);
+  }
+
+  async delete(endpoint: string, token?: string | null) {
+    return this.request('DELETE', endpoint, undefined, token);
+  }
+}
+
+export const api = new ApiService();
+```
+
+---
+
+## Frontend - Tab Navigation Layout
+**File: `/app/frontend/app/(main)/_layout.tsx`**
+
+```tsx
+import React from 'react';
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { View, StyleSheet, Platform } from 'react-native';
+import { BlurView } from 'expo-blur';
+
+// Custom Tab Bar Icon with indicator
+function TabIcon({ name, focused, color }: { name: string; focused: boolean; color: string }) {
+  return (
+    <View style={styles.tabIconContainer}>
+      {focused && <View style={[styles.activeIndicator, { backgroundColor: color }]} />}
+      <Ionicons name={name as any} size={24} color={color} />
+    </View>
+  );
+}
+
+export default function MainLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: '#6366F1',
+        tabBarInactiveTintColor: '#64748B',
+        tabBarShowLabel: true,
+        tabBarLabelStyle: styles.tabLabel,
+        headerStyle: styles.header,
+        headerTintColor: '#F8FAFC',
+        headerTitleStyle: styles.headerTitle,
+        headerShadowVisible: false,
+      }}
+    >
+      <Tabs.Screen
+        name="mood"
+        options={{
+          title: 'Mood',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'heart' : 'heart-outline'} focused={focused} color={color} />
+          ),
+          headerTitle: 'Mood Tracker',
+        }}
+      />
+      <Tabs.Screen
+        name="feedback"
+        options={{
+          title: 'Feedback',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'chatbox' : 'chatbox-outline'} focused={focused} color={color} />
+          ),
+          headerTitle: 'Lecture Feedback',
+        }}
+      />
+      <Tabs.Screen
+        name="matches"
+        options={{
+          title: 'Connect',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'people' : 'people-outline'} focused={focused} color={color} />
+          ),
+          headerTitle: 'Find Friends',
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'chatbubbles' : 'chatbubbles-outline'} focused={focused} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'person' : 'person-outline'} focused={focused} color={color} />
+          ),
+          headerTitle: 'My Profile',
+        }}
+      />
+      <Tabs.Screen
+        name="subscription"
+        options={{
+          href: null, // Hide from tab bar - accessible from Profile
+        }}
+      />
+      <Tabs.Screen
+        name="likes-you"
+        options={{
+          href: null, // Hide from tab bar - accessible from Connect screen
+        }}
+      />
+    </Tabs>
+  );
+}
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(148, 163, 184, 0.1)',
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+    height: Platform.OS === 'ios' ? 88 : 70,
+    position: 'absolute',
+    elevation: 0,
+  },
+  tabLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  tabIconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  activeIndicator: {
+    position: 'absolute',
+    top: -8,
+    width: 24,
+    height: 3,
+    borderRadius: 2,
+  },
+  header: {
+    backgroundColor: '#0F172A',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(148, 163, 184, 0.1)',
+  },
+  headerTitle: {
+    fontWeight: '700',
+    fontSize: 18,
+    color: '#F8FAFC',
+  },
+});
+```
+
+---
+
