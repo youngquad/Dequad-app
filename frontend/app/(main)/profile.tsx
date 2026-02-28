@@ -53,6 +53,16 @@ const GENDERS = [
   { value: 'non-binary', label: 'Non-binary' },
 ];
 
+const PRONOUNS = [
+  { value: 'he/him', label: 'He/Him' },
+  { value: 'she/her', label: 'She/Her' },
+  { value: 'they/them', label: 'They/Them' },
+  { value: 'he/they', label: 'He/They' },
+  { value: 'she/they', label: 'She/They' },
+  { value: 'any', label: 'Any Pronouns' },
+  { value: 'prefer-not-to-say', label: 'Prefer not to say' },
+];
+
 const INTERESTED_IN_OPTIONS = [
   { value: 'men', label: 'Men' },
   { value: 'women', label: 'Women' },
