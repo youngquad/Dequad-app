@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#94A3B8',
+    color: '#64748B',
     textAlign: 'center',
     maxWidth: 280,
     lineHeight: 24,
@@ -339,12 +339,17 @@ const styles = StyleSheet.create({
   },
   featureCard: {
     width: '48%',
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.1)',
+    borderColor: 'rgba(91, 155, 213, 0.2)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
   featureIconBg: {
     width: 40,
@@ -360,12 +365,12 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#F1F5F9',
+    color: '#1E293B',
     marginBottom: 4,
   },
   featureDescription: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#64748B',
     lineHeight: 18,
   },
   loginButton: {
