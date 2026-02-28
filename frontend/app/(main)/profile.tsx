@@ -440,6 +440,41 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.field}>
+        <Text style={styles.fieldLabel}>Pronouns</Text>
+        {isEditing ? (
+          <>
+            <View style={styles.optionGrid}>
+              {PRONOUNS.map((p) => (
+                <TouchableOpacity
+                  key={p.value}
+                  style={[styles.optionButton, pronouns === p.value && styles.optionSelected]}
+                  onPress={() => setPronouns(p.value)}
+                >
+                  <Text style={[styles.optionText, pronouns === p.value && styles.optionTextSelected]}>
+                    {p.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <TouchableOpacity 
+              style={styles.toggleRow}
+              onPress={() => setShowPronouns(!showPronouns)}
+            >
+              <View style={[styles.toggleSwitch, showPronouns && styles.toggleSwitchActive]}>
+                <View style={[styles.toggleKnob, showPronouns && styles.toggleKnobActive]} />
+              </View>
+              <Text style={styles.toggleLabel}>Show pronouns on my profile</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <Text style={styles.fieldValue}>
+            {PRONOUNS.find((p) => p.value === user?.pronouns)?.label || 'Not specified'}
+            {user?.pronouns && !user?.show_pronouns && ' (Hidden)'}
+          </Text>
+        )}
+      </View>
+
+      <View style={styles.field}>
         <Text style={styles.fieldLabel}>Age</Text>
         {isEditing ? (
           <TextInput
