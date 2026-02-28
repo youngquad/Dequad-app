@@ -172,7 +172,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Clear state first before API call to ensure immediate UI update
     setUser(null);
     setSessionToken(null);
-    await AsyncStorage.removeItem('session_token');
+    
+    // Clear storage
+    try {
+      await AsyncStorage.removeItem('session_token');
+      
+      // Also clear localStorage directly for web
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        localStorage.removeItem('session_token');
+        // Clear any other stored data
+        localStorage.clear();
+      }
+    } catch (storageError) {
+      console.error('Storage clear error:', storageError);
+    }
     
     // Then try to invalidate session on backend (non-blocking)
     try {
@@ -182,6 +195,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Logout API error:', error);
       // Ignore API errors - user is already logged out locally
+    }
+    
+    // Force reload on web to ensure clean state
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      window.location.href = '/';
     }
   };
 
