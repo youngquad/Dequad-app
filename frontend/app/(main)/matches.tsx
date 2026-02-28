@@ -42,6 +42,8 @@ interface UserProfile {
   bio?: string;
   ethnicity?: string;
   gender?: string;
+  pronouns?: string;
+  show_pronouns?: boolean;
   match_score?: number;
 }
 
