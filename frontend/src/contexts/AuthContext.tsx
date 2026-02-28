@@ -44,7 +44,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.user && response.session_token) {
         setUser(response.user);
         setSessionToken(response.session_token);
+        
+        // Store in AsyncStorage
         await AsyncStorage.setItem('session_token', response.session_token);
+        
+        // Also store in localStorage for web
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          localStorage.setItem('session_token', response.session_token);
+        }
+        
         console.log('Auth successful, user:', response.user.name);
       }
     } catch (error) {
