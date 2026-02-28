@@ -2871,3 +2871,170 @@ const styles = StyleSheet.create({
 
 ---
 
+
+## Configuration Files
+
+### package.json
+**File: `/app/frontend/package.json`**
+
+```json
+{
+  "name": "frontend",
+  "main": "expo-router/entry",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "expo start --web --port 3000 --lan",
+    "start:mobile": "expo start",
+    "reset-project": "node ./scripts/reset-project.js",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web --port 3000 --lan",
+    "lint": "expo lint"
+  },
+  "dependencies": {
+    "@expo/ngrok": "^4.1.3",
+    "@expo/vector-icons": "^15.0.3",
+    "@expo/webpack-config": "^19.0.1",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-navigation/bottom-tabs": "^7.3.10",
+    "@react-navigation/elements": "^2.3.8",
+    "@react-navigation/native": "^7.1.6",
+    "@shopify/flash-list": "2.0.2",
+    "@stripe/stripe-react-native": "0.50.3",
+    "@types/crypto-js": "^4.2.2",
+    "crypto-js": "^4.2.0",
+    "expo": "^54.0.33",
+    "expo-blur": "~15.0.8",
+    "expo-build-properties": "^1.0.10",
+    "expo-constants": "~18.0.13",
+    "expo-device": "^8.0.10",
+    "expo-font": "~14.0.11",
+    "expo-haptics": "~15.0.8",
+    "expo-image": "~3.0.11",
+    "expo-image-picker": "^17.0.10",
+    "expo-linear-gradient": "^15.0.8",
+    "expo-linking": "^8.0.11",
+    "expo-notifications": "^0.32.16",
+    "expo-router": "~6.0.23",
+    "expo-secure-store": "^15.0.8",
+    "expo-splash-screen": "~31.0.13",
+    "expo-status-bar": "~3.0.9",
+    "expo-symbols": "~1.0.8",
+    "expo-system-ui": "~6.0.9",
+    "expo-web-browser": "^15.0.10",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-deck-swiper": "^1.1.7",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-gifted-charts": "^1.4.71",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "react-native-svg": "15.12.1",
+    "react-native-web": "^0.21.2",
+    "react-native-webview": "13.15.0",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~19.1.10",
+    "eslint": "^9.25.0",
+    "eslint-config-expo": "~10.0.0",
+    "typescript": "~5.9.2"
+  },
+  "private": true,
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}
+```
+
+### requirements.txt
+**File: `/app/backend/requirements.txt`**
+
+```
+fastapi==0.110.1
+uvicorn==0.25.0
+boto3>=1.34.129
+requests-oauthlib>=2.0.0
+cryptography>=42.0.8
+python-dotenv>=1.0.1
+pymongo==4.5.0
+pydantic>=2.6.4
+email-validator>=2.2.0
+pyjwt>=2.10.1
+bcrypt==4.1.3
+passlib>=1.7.4
+tzdata>=2024.2
+motor==3.3.1
+pytest>=8.0.0
+black>=24.1.1
+isort>=5.13.2
+flake8>=7.0.0
+mypy>=1.8.0
+python-jose>=3.3.0
+requests>=2.31.0
+pandas>=2.2.0
+numpy>=1.26.0
+python-multipart>=0.0.9
+jq>=1.6.0
+typer>=0.9.0
+emergentintegrations==0.1.0```
+
+### app.json (Expo Config)
+**File: `/app/frontend/app.json`**
+
+```json
+{
+  "expo": {
+    "name": "Educare",
+    "slug": "educare",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "educare",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/images/splash-image.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F172A"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.educare.wellbeing",
+      "buildNumber": "1"
+    },
+    "android": {
+      "package": "com.educare.wellbeing",
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#0F172A"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "0ad6a13c-845f-4ab4-9177-ba5031d2462d"
+      }
+    }
+  }
+}
+```
+
+---
+
