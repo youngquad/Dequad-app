@@ -391,6 +391,8 @@ class User(BaseModel):
     study_style: Optional[str] = None
     bio: Optional[str] = None
     ethnicity: Optional[str] = None
+    pronouns: Optional[str] = None  # he/him, she/her, they/them, he/they, she/they, any pronouns, prefer not to say
+    show_pronouns: bool = True  # Whether to display pronouns on profile
     interested_in: List[str] = []  # men, women, non-binary, everyone
     gender: Optional[str] = None  # man, woman, non-binary
     push_token: Optional[str] = None
