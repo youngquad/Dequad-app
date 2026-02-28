@@ -3038,3 +3038,60 @@ emergentintegrations==0.1.0```
 
 ---
 
+
+## Backend - server.py
+
+The backend server is 4000+ lines and is available in:
+- **Separate file**: `/app/EDUCARE_BACKEND_SERVER.py`
+- **ZIP archive**: `/app/educare-complete-code.zip`
+
+### Key Backend Endpoints:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/google` | POST | Google OAuth login |
+| `/api/auth/admin-login` | POST | Admin login |
+| `/api/mood` | GET/POST | Mood tracking |
+| `/api/feedback` | GET/POST | Lecture feedback |
+| `/api/matches/discover` | GET | Get profiles to match |
+| `/api/matches/swipe` | POST | Like/dislike with comment |
+| `/api/matches/likes-received` | GET | Who liked you |
+| `/api/chat/send` | POST | Send encrypted message |
+| `/api/subscription/create-checkout` | POST | Stripe checkout |
+| `/api/admin/stats` | GET | Admin dashboard stats |
+| `/api/admin/users` | GET | User management |
+
+### Test Profiles Seeded:
+```python
+test_profiles = [
+    {"name": "Emma Wilson", "university": "Manchester", "course": "Computer Science"},
+    {"name": "James Chen", "university": "Birmingham", "course": "Data Science"},
+    {"name": "Sofia Martinez", "university": "Leeds", "course": "Psychology"},
+    {"name": "Alex Thompson", "university": "Bristol", "course": "Environmental Science"},
+    {"name": "Priya Patel", "university": "Warwick", "course": "Business Analytics"},
+]
+```
+
+---
+
+## Summary
+
+### Files Created:
+1. `/app/EDUCARE_COMPLETE_CODE.md` - This document with frontend code
+2. `/app/EDUCARE_BACKEND_SERVER.py` - Complete backend server
+3. `/app/educare-complete-code.zip` - ZIP archive of entire project
+4. `/app/EDUCARE_CODE_OVERVIEW.md` - Project overview
+
+### To Run Locally:
+```bash
+# Backend
+cd backend
+pip install -r requirements.txt
+uvicorn server:app --reload --port 8001
+
+# Frontend
+cd frontend
+yarn install
+yarn start  # or npx expo start --web
+```
+
