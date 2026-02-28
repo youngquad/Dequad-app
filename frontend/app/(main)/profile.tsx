@@ -105,6 +105,8 @@ export default function ProfileScreen() {
   const [age, setAge] = useState(user?.age?.toString() || '');
   const [bio, setBio] = useState(user?.bio || '');
   const [gender, setGender] = useState(user?.gender || '');
+  const [pronouns, setPronouns] = useState(user?.pronouns || '');
+  const [showPronouns, setShowPronouns] = useState(user?.show_pronouns !== false);
   
   // Preferences
   const [selectedInterests, setSelectedInterests] = useState<string[]>(user?.interests || []);
