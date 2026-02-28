@@ -211,7 +211,7 @@ export default function LandingScreen() {
           >
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
               <LinearGradient
-                colors={['#6366F1', '#8B5CF6']}
+                colors={['#5B9BD5', '#4A90C2']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.loginButton}
@@ -237,7 +237,7 @@ export default function LandingScreen() {
             </View>
             <View style={styles.trustDivider} />
             <View style={styles.trustBadge}>
-              <Ionicons name="lock-closed" size={16} color="#6366F1" />
+              <Ionicons name="lock-closed" size={16} color="#5B9BD5" />
               <Text style={styles.trustText}>Private</Text>
             </View>
             <View style={styles.trustDivider} />
