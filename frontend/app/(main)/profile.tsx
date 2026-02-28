@@ -250,6 +250,8 @@ export default function ProfileScreen() {
           age: age ? parseInt(age) : null,
           bio: bio.trim() || null,
           gender: gender || null,
+          pronouns: pronouns || null,
+          show_pronouns: showPronouns,
           interests: selectedInterests,
           study_style: studyStyle || null,
           ethnicity: ethnicity || null,
@@ -261,10 +263,18 @@ export default function ProfileScreen() {
       );
       await refreshUser();
       setIsEditing(false);
-      Alert.alert('Success', 'Profile updated successfully');
+      if (Platform.OS === 'web') {
+        alert('Profile updated successfully');
+      } else {
+        Alert.alert('Success', 'Profile updated successfully');
+      }
     } catch (error) {
       console.error('Error saving profile:', error);
-      Alert.alert('Error', 'Failed to save profile');
+      if (Platform.OS === 'web') {
+        alert('Failed to save profile');
+      } else {
+        Alert.alert('Error', 'Failed to save profile');
+      }
     } finally {
       setIsSaving(false);
     }
