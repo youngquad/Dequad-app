@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
-import { api, API_URL } from '../services/api';
+import { api } from '../services/api';
 
 interface User {
   user_id: string;
