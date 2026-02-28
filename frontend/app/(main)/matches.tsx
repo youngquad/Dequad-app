@@ -915,8 +915,20 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontWeight: '600',
   },
+  topSkipButton: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
   bottomSpacer: {
-    height: 180,
+    height: 100,
   },
   // Floating Action Bar
   floatingActionBar: {
