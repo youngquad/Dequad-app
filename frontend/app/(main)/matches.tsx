@@ -276,6 +276,16 @@ export default function MatchesScreen() {
               colors={['transparent', 'rgba(0,0,0,0.7)']}
               style={styles.photoGradient}
             />
+            
+            {/* Skip Button - Top Left */}
+            <TouchableOpacity 
+              style={styles.topSkipButton}
+              onPress={() => handleSkip(profile)}
+              disabled={!isCurrentProfile}
+            >
+              <Ionicons name="close" size={28} color="#fff" />
+            </TouchableOpacity>
+            
             <View style={styles.photoOverlay}>
               <View style={styles.nameContainer}>
                 <Text style={styles.profileName}>{profile.name}</Text>
