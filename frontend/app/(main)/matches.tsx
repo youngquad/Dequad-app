@@ -655,50 +655,22 @@ export default function MatchesScreen() {
           </Pressable>
         </View>
       ) : (
-        <>
-          <FlatList
-            ref={scrollRef}
-            data={profiles}
-            renderItem={renderProfile}
-            keyExtractor={(item) => item.user_id}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
-            getItemLayout={(data, index) => ({
-              length: width,
-              offset: width * index,
-              index,
-            })}
-            initialScrollIndex={currentIndex}
-          />
-          
-          {/* Floating Action Bar */}
-          <View style={styles.floatingActionBar}>
-            <TouchableOpacity 
-              style={styles.floatingSkipButton}
-              onPress={() => profiles[currentIndex] && handleSkip(profiles[currentIndex])}
-            >
-              <View style={styles.floatingButtonInner}>
-                <Ionicons name="close" size={32} color="#EF4444" />
-              </View>
-              <Text style={styles.floatingButtonLabel}>Skip</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.floatingLikeButton}
-              onPress={() => profiles[currentIndex] && openCommentModal(profiles[currentIndex], 'profile')}
-            >
-              <LinearGradient
-                colors={['#EC4899', '#F472B6']}
-                style={styles.floatingButtonInnerLike}
-              >
-                <Ionicons name="heart" size={32} color="#fff" />
-              </LinearGradient>
-              <Text style={styles.floatingButtonLabelLike}>Like</Text>
-            </TouchableOpacity>
-          </View>
-        </>
+        <FlatList
+          ref={scrollRef}
+          data={profiles}
+          renderItem={renderProfile}
+          keyExtractor={(item) => item.user_id}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={false}
+          getItemLayout={(data, index) => ({
+            length: width,
+            offset: width * index,
+            index,
+          })}
+          initialScrollIndex={currentIndex}
+        />
       )}
     </SafeAreaView>
   );
