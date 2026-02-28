@@ -403,17 +403,17 @@ const styles = StyleSheet.create({
   },
   trustText: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#64748B',
     fontWeight: '500',
   },
   trustDivider: {
     width: 1,
     height: 16,
-    backgroundColor: 'rgba(148, 163, 184, 0.3)',
+    backgroundColor: 'rgba(100, 116, 139, 0.3)',
     marginHorizontal: 14,
   },
   footerText: {
-    color: '#64748B',
+    color: '#94A3B8',
     fontSize: 13,
     textAlign: 'center',
   },
