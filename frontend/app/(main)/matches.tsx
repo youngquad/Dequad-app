@@ -791,6 +791,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
+  pronounsBadge: {
+    backgroundColor: 'rgba(91, 155, 213, 0.3)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    marginLeft: 8,
+  },
+  pronounsText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
+  },
   likeButton: {
     position: 'absolute',
     bottom: 16,
