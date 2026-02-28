@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Animated,
   Pressable,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../src/contexts/AuthContext';
@@ -16,6 +17,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
+
+// Educare Logo URL
+const EDUCARE_LOGO = 'https://customer-assets.emergentagent.com/job_github-projects/artifacts/sfvx5knn_ChatGPT%20Image%20Jul%2027%2C%202025%20at%2005_25_54%20PM.PNG';
 
 const FEATURES = [
   { 
