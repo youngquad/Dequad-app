@@ -134,8 +134,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async () => {
     try {
+      // For web, use the current origin (user's actual domain)
       const redirectUrl = Platform.OS === 'web'
-        ? `${API_URL}/`
+        ? window.location.origin + '/'
         : Linking.createURL('/');
       
       const authUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
