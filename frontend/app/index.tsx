@@ -259,7 +259,7 @@ export default function LandingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#FFFFFF',
   },
   gradient: {
     flex: 1,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(99, 102, 241, 0.08)',
+    backgroundColor: 'rgba(91, 155, 213, 0.08)',
   },
   decorativeCircle2: {
     position: 'absolute',
@@ -280,26 +280,23 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     borderRadius: 125,
-    backgroundColor: 'rgba(139, 92, 246, 0.06)',
+    backgroundColor: 'rgba(91, 155, 213, 0.06)',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
   },
   loadingContent: {
     alignItems: 'center',
   },
-  loadingLogo: {
-    width: 80,
-    height: 80,
-    borderRadius: 24,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
+  loadingLogoImage: {
+    width: 120,
+    height: 120,
   },
   loadingText: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 16,
     marginTop: 16,
     fontWeight: '500',
@@ -315,18 +312,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  iconCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
+  logoImage: {
+    width: 140,
+    height: 140,
+    marginBottom: 8,
   },
   title: {
     fontSize: 40,
     fontWeight: '800',
-    color: '#F8FAFC',
+    color: '#1E293B',
     letterSpacing: -1,
     marginBottom: 8,
   },
