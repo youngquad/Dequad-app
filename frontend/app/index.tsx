@@ -250,6 +250,15 @@ export default function LandingScreen() {
           <Text style={styles.footerText}>
             Built with ❤️ for students everywhere
           </Text>
+          
+          {/* University Admin Link */}
+          <TouchableOpacity 
+            style={styles.universityLink}
+            onPress={() => router.push('/(auth)/university-subscribe')}
+          >
+            <Ionicons name="school-outline" size={16} color="#6366F1" />
+            <Text style={styles.universityLinkText}>Are you a university? Get dashboard access</Text>
+          </TouchableOpacity>
         </Animated.View>
       </LinearGradient>
     </SafeAreaView>
