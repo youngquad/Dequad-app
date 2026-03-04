@@ -4667,6 +4667,40 @@ async def seed_admin_and_test_users():
             )
             logger.info(f"Test profile updated: {profile['name']}")
     
+    # Seed test university admin
+    uni_admin_email = "admin@manchesteruni.edu"
+    uni_admin_password = "UniAdmin123!"
+    uni_admin_password_hash = hashlib.sha256(uni_admin_password.encode()).hexdigest()
+    
+    existing_uni_admin = await db.users.find_one({"email": uni_admin_email})
+    if not existing_uni_admin:
+        uni_admin = {
+            "user_id": f"uni-admin-{str(uuid.uuid4())[:8]}",
+            "email": uni_admin_email,
+            "name": "Manchester Admin",
+            "role": "university_admin",
+            "university_admin_for": "University of Manchester",
+            "university": "University of Manchester",
+            "admin_password": uni_admin_password_hash,
+            "created_at": datetime.now(timezone.utc),
+            "profile_completed": True,
+            "subscription_type": "university",
+            "subscription_status": "active"
+        }
+        await db.users.insert_one(uni_admin)
+        logger.info(f"University admin created: {uni_admin_email}")
+    else:
+        await db.users.update_one(
+            {"email": uni_admin_email},
+            {"$set": {
+                "admin_password": uni_admin_password_hash,
+                "role": "university_admin",
+                "university_admin_for": "University of Manchester",
+                "subscription_status": "active"
+            }}
+        )
+        logger.info(f"University admin updated: {uni_admin_email}")
+    
     logger.info("Seed data initialization complete")
 
 @app.on_event("shutdown")
