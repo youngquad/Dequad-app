@@ -242,6 +242,17 @@ export default function AdminDashboard() {
     }
   };
 
+  const loadSubscriptionAnalytics = async () => {
+    try {
+      console.log('Loading subscription analytics...');
+      const data = await api.get('/admin/analytics/subscriptions', sessionToken);
+      console.log('Subscription analytics loaded:', data);
+      setSubscriptionAnalytics(data);
+    } catch (error) {
+      console.error('Error loading subscription analytics:', error);
+    }
+  };
+
   const loadUniversitiesList = async () => {
     try {
       console.log('Loading universities list...');
