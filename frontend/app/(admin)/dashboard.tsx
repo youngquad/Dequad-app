@@ -82,7 +82,7 @@ export default function AdminDashboard() {
   const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'universities' | 'ai-learning' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
   const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
