@@ -645,6 +645,19 @@ async def require_admin(current_user: User = Depends(get_current_user)) -> User:
         raise HTTPException(status_code=403, detail="Admin access required")
     return current_user
 
+async def require_university_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in ["admin", "university_admin"]:
+        raise HTTPException(status_code=403, detail="University admin access required")
+    return current_user
+
+async def get_university_admin_university(current_user: User = Depends(get_current_user)) -> str:
+    """Get the university this admin manages"""
+    if current_user.role == "admin":
+        return None  # Super admin can see all
+    if current_user.role == "university_admin":
+        return current_user.university_admin_for
+    raise HTTPException(status_code=403, detail="Admin access required")
+
 # ==================== NOTIFICATION HELPERS ====================
 
 async def send_push_notification(user_id: str, title: str, body: str, notification_type: str, data: dict = {}):
