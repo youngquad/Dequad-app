@@ -426,4 +426,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textAlign: 'center',
   },
+  universityLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.3)',
+  },
+  universityLinkText: {
+    color: '#6366F1',
+    fontSize: 13,
+    fontWeight: '500',
+  },
 });
