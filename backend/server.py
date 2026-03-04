@@ -530,6 +530,18 @@ class SafeguardingAlert(BaseModel):
     was_true_positive: Optional[bool] = None  # Admin marks if this was a real concern
     feedback_notes: Optional[str] = None
 
+# ==================== UNIVERSITY ADMIN MODELS ====================
+
+class UniversityAdminCreate(BaseModel):
+    email: str
+    password: str
+    name: str
+    university: str
+
+class UniversityAdminLogin(BaseModel):
+    email: str
+    password: str
+
 # ==================== AI LEARNING MODELS ====================
 
 class LearnedKeyword(BaseModel):
