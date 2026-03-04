@@ -1987,6 +1987,210 @@ async def delete_university_admin(user_id: str, admin: User = Depends(require_ad
     
     return {"success": True}
 
+# ==================== UNIVERSITY SUBSCRIPTION ENDPOINTS ====================
+
+# University subscription pricing (£49.99/month per university)
+UNIVERSITY_PRICE_AMOUNT = 4999  # in pence
+UNIVERSITY_PRICE_CURRENCY = "gbp"
+UNIVERSITY_PRODUCT_NAME = "Educare University Dashboard"
+
+class UniversitySubscriptionRequest(BaseModel):
+    university_name: str
+    admin_email: str
+    admin_name: str
+    contact_phone: Optional[str] = None
+    expected_students: Optional[int] = None
+    success_url: Optional[str] = None
+    cancel_url: Optional[str] = None
+
+@api_router.post("/university/subscribe")
+async def create_university_subscription(data: UniversitySubscriptionRequest):
+    """Create a Stripe checkout session for university subscription (public endpoint)"""
+    import secrets
+    import hashlib
+    
+    # Check if university already has an admin
+    existing_admin = await db.users.find_one({
+        "role": "university_admin",
+        "university_admin_for": {"$regex": f"^{data.university_name}$", "$options": "i"}
+    })
+    
+    if existing_admin:
+        raise HTTPException(status_code=400, detail="This university already has an admin account. Please contact support if you need access.")
+    
+    # Check if email is already used
+    existing_email = await db.users.find_one({"email": data.admin_email.lower()})
+    if existing_email:
+        raise HTTPException(status_code=400, detail="This email is already registered. Please use a different email.")
+    
+    try:
+        # Create a Stripe customer for the university
+        customer = stripe.Customer.create(
+            email=data.admin_email,
+            name=data.university_name,
+            metadata={
+                "type": "university",
+                "university_name": data.university_name,
+                "admin_name": data.admin_name,
+                "admin_email": data.admin_email
+            }
+        )
+        
+        # Store pending subscription info
+        temp_password = secrets.token_urlsafe(12)
+        pending_id = str(uuid.uuid4())
+        
+        await db.pending_university_subscriptions.insert_one({
+            "pending_id": pending_id,
+            "university_name": data.university_name,
+            "admin_email": data.admin_email.lower(),
+            "admin_name": data.admin_name,
+            "contact_phone": data.contact_phone,
+            "expected_students": data.expected_students,
+            "temp_password": temp_password,  # Will be hashed and stored after payment
+            "stripe_customer_id": customer.id,
+            "status": "pending",
+            "created_at": datetime.now(timezone.utc)
+        })
+        
+        # Create checkout session
+        backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://campus-connect-694.preview.emergentagent.com')
+        
+        checkout_session = stripe.checkout.Session.create(
+            customer=customer.id,
+            mode="subscription",
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": UNIVERSITY_PRICE_CURRENCY,
+                    "unit_amount": UNIVERSITY_PRICE_AMOUNT,
+                    "recurring": {"interval": "month"},
+                    "product_data": {
+                        "name": UNIVERSITY_PRODUCT_NAME,
+                        "description": f"Dashboard access for {data.university_name} - Monitor student wellbeing, analytics, and safeguarding alerts"
+                    },
+                },
+                "quantity": 1,
+            }],
+            success_url=data.success_url or f"{backend_url}/university-subscription-success?pending_id={pending_id}&session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=data.cancel_url or f"{backend_url}/university-subscription-cancel",
+            metadata={
+                "type": "university_subscription",
+                "pending_id": pending_id,
+                "university_name": data.university_name,
+                "admin_email": data.admin_email.lower()
+            },
+            allow_promotion_codes=True,
+            billing_address_collection="required"
+        )
+        
+        return {
+            "checkout_url": checkout_session.url,
+            "session_id": checkout_session.id,
+            "pending_id": pending_id
+        }
+    
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error creating university checkout: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+@api_router.get("/university/subscription-success")
+async def complete_university_subscription(pending_id: str, session_id: str):
+    """Complete university subscription after successful payment"""
+    import hashlib
+    
+    # Verify the checkout session
+    try:
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        
+        if checkout_session.payment_status != "paid":
+            raise HTTPException(status_code=400, detail="Payment not completed")
+        
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error verifying session: {e}")
+        raise HTTPException(status_code=400, detail="Could not verify payment")
+    
+    # Get pending subscription
+    pending = await db.pending_university_subscriptions.find_one({"pending_id": pending_id})
+    
+    if not pending:
+        raise HTTPException(status_code=404, detail="Subscription request not found")
+    
+    if pending.get("status") == "completed":
+        return {
+            "success": True,
+            "message": "Account already created",
+            "admin_email": pending["admin_email"]
+        }
+    
+    # Create the university admin account
+    password_hash = hashlib.sha256(pending["temp_password"].encode()).hexdigest()
+    
+    uni_admin = {
+        "user_id": str(uuid.uuid4()),
+        "email": pending["admin_email"],
+        "name": pending["admin_name"],
+        "role": "university_admin",
+        "university_admin_for": pending["university_name"],
+        "university": pending["university_name"],
+        "admin_password": password_hash,
+        "stripe_customer_id": pending["stripe_customer_id"],
+        "created_at": datetime.now(timezone.utc),
+        "profile_completed": True,
+        "subscription_type": "university",
+        "subscription_status": "active"
+    }
+    
+    await db.users.insert_one(uni_admin)
+    
+    # Update pending status
+    await db.pending_university_subscriptions.update_one(
+        {"pending_id": pending_id},
+        {"$set": {"status": "completed", "completed_at": datetime.now(timezone.utc)}}
+    )
+    
+    # Store subscription record
+    await db.university_subscriptions.insert_one({
+        "subscription_id": str(uuid.uuid4()),
+        "university_name": pending["university_name"],
+        "admin_email": pending["admin_email"],
+        "stripe_customer_id": pending["stripe_customer_id"],
+        "stripe_session_id": session_id,
+        "status": "active",
+        "created_at": datetime.now(timezone.utc)
+    })
+    
+    logger.info(f"University admin created for {pending['university_name']}")
+    
+    return {
+        "success": True,
+        "message": "University subscription activated!",
+        "university": pending["university_name"],
+        "admin_email": pending["admin_email"],
+        "temp_password": pending["temp_password"],  # Only shown once!
+        "login_url": "/university-admin/login"
+    }
+
+@api_router.get("/university/pricing")
+async def get_university_pricing():
+    """Get university subscription pricing info (public endpoint)"""
+    return {
+        "price": UNIVERSITY_PRICE_AMOUNT / 100,
+        "currency": UNIVERSITY_PRICE_CURRENCY.upper(),
+        "currency_symbol": "£",
+        "interval": "month",
+        "formatted_price": f"£{UNIVERSITY_PRICE_AMOUNT / 100:.2f}/month",
+        "features": [
+            "Full dashboard access for your university",
+            "Real-time student wellbeing monitoring",
+            "Safeguarding alerts and notifications",
+            "AI-powered risk analysis",
+            "Student mood trends and analytics",
+            "Data export capabilities",
+            "Priority email support"
+        ]
+    }
+
 # ==================== ADMIN ENDPOINTS ====================
 
 @api_router.get("/admin/stats")
