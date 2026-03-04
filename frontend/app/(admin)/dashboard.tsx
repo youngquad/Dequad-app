@@ -127,6 +127,7 @@ export default function AdminDashboard() {
   const [riskDistribution, setRiskDistribution] = useState<RiskDistribution | null>(null);
   const [bulkAnalysis, setBulkAnalysis] = useState<BulkAnalysisResult[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [subscriptionAnalytics, setSubscriptionAnalytics] = useState<any>(null);
 
   // University-specific states
   const [universities, setUniversities] = useState<{name: string; student_count: number}[]>([]);
