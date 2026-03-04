@@ -2176,6 +2176,129 @@ async def export_safeguarding_alerts_csv(
         headers={"Content-Disposition": "attachment; filename=safeguarding_alerts_export.csv"}
     )
 
+# ==================== SUBSCRIPTION ANALYTICS ====================
+
+@api_router.get("/admin/analytics/subscriptions")
+async def get_subscription_analytics(admin: User = Depends(require_admin)):
+    """Get subscription analytics and revenue data (Admin Only)"""
+    
+    # Get all users with subscription data
+    all_users = await db.users.find({}, {"_id": 0}).to_list(100000)
+    
+    # Count subscription types
+    free_users = 0
+    premium_users = 0
+    premium_monthly = 0
+    total_users = len(all_users)
+    
+    for user in all_users:
+        if user.get("is_premium") or user.get("subscription_status") == "premium":
+            premium_users += 1
+        else:
+            free_users += 1
+    
+    # Get subscription history from stripe_subscriptions collection
+    subscriptions = await db.stripe_subscriptions.find({}, {"_id": 0}).to_list(10000)
+    
+    # Calculate revenue (assuming £4.99/month)
+    monthly_price = 4.99
+    active_subscriptions = sum(1 for s in subscriptions if s.get("status") == "active")
+    monthly_revenue = active_subscriptions * monthly_price
+    
+    # Get subscription trends (last 30 days)
+    thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
+    recent_subscriptions = await db.stripe_subscriptions.find(
+        {"created_at": {"$gte": thirty_days_ago}},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    new_subscriptions_30d = len(recent_subscriptions)
+    
+    # Get cancellations
+    cancellations = await db.stripe_subscriptions.find(
+        {"status": "cancelled"},
+        {"_id": 0}
+    ).to_list(1000)
+    cancelled_count = len(cancellations)
+    
+    # Calculate churn rate
+    churn_rate = (cancelled_count / max(premium_users + cancelled_count, 1)) * 100
+    
+    # Daily breakdown for the last 7 days
+    daily_stats = []
+    for i in range(7):
+        day = datetime.now(timezone.utc) - timedelta(days=i)
+        day_start = day.replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = day_start + timedelta(days=1)
+        
+        day_subs = await db.stripe_subscriptions.count_documents({
+            "created_at": {"$gte": day_start, "$lt": day_end}
+        })
+        
+        daily_stats.append({
+            "date": day_start.strftime("%Y-%m-%d"),
+            "new_subscriptions": day_subs
+        })
+    
+    daily_stats.reverse()  # Oldest first
+    
+    return {
+        "total_users": total_users,
+        "free_users": free_users,
+        "premium_users": premium_users,
+        "conversion_rate": round((premium_users / max(total_users, 1)) * 100, 2),
+        "active_subscriptions": active_subscriptions,
+        "monthly_revenue": round(monthly_revenue, 2),
+        "annual_revenue_estimate": round(monthly_revenue * 12, 2),
+        "new_subscriptions_30d": new_subscriptions_30d,
+        "cancelled_subscriptions": cancelled_count,
+        "churn_rate": round(churn_rate, 2),
+        "daily_stats": daily_stats,
+        "currency": "GBP"
+    }
+
+@api_router.get("/admin/export/subscriptions")
+async def export_subscriptions_csv(admin: User = Depends(require_admin)):
+    """Export subscription data as CSV (Admin Only)"""
+    
+    # Get all users with their subscription info
+    users = await db.users.find({}, {"_id": 0}).to_list(100000)
+    
+    # Get stripe subscription details
+    stripe_subs = await db.stripe_subscriptions.find({}, {"_id": 0}).to_list(10000)
+    stripe_map = {s.get("user_id"): s for s in stripe_subs}
+    
+    output = io.StringIO()
+    fieldnames = [
+        "user_id", "name", "email", "subscription_status", "is_premium",
+        "stripe_customer_id", "subscription_start", "subscription_end",
+        "payment_status", "created_at"
+    ]
+    writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+    
+    for user in users:
+        stripe_info = stripe_map.get(user.get("user_id"), {})
+        row = {
+            "user_id": user.get("user_id"),
+            "name": user.get("name"),
+            "email": user.get("email"),
+            "subscription_status": user.get("subscription_status", "free"),
+            "is_premium": user.get("is_premium", False),
+            "stripe_customer_id": stripe_info.get("stripe_customer_id", ""),
+            "subscription_start": str(stripe_info.get("created_at", "")),
+            "subscription_end": str(stripe_info.get("current_period_end", "")),
+            "payment_status": stripe_info.get("status", ""),
+            "created_at": str(user.get("created_at", ""))
+        }
+        writer.writerow(row)
+    
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=subscriptions_export.csv"}
+    )
+
 # ==================== ADVANCED ANALYTICS ENDPOINTS ====================
 
 @api_router.get("/admin/analytics/mood-trends")
