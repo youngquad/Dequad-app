@@ -1516,6 +1516,17 @@ export default function AdminDashboard() {
               </View>
               <Ionicons name="download-outline" size={24} color="#EF4444" />
             </TouchableOpacity>
+
+            <TouchableOpacity style={styles.exportCard} onPress={() => exportData('subscriptions')}>
+              <View style={styles.exportIcon}>
+                <Ionicons name="card" size={24} color="#8B5CF6" />
+              </View>
+              <View style={styles.exportInfo}>
+                <Text style={styles.exportTitle}>Subscription Data</Text>
+                <Text style={styles.exportDesc}>Export subscription and revenue data</Text>
+              </View>
+              <Ionicons name="download-outline" size={24} color="#8B5CF6" />
+            </TouchableOpacity>
           </View>
         )}
 
