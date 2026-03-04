@@ -381,7 +381,8 @@ class User(BaseModel):
     name: str
     picture: Optional[str] = None
     photos: List[str] = []  # Up to 3 profile photos in base64
-    role: str = "student"  # student, admin
+    role: str = "student"  # student, admin, university_admin
+    university_admin_for: Optional[str] = None  # University name for university admins
     interests: List[str] = []
     university: Optional[str] = None
     university_location: Optional[str] = None
