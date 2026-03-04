@@ -171,6 +171,7 @@ export default function AdminDashboard() {
         loadUniversityComparison(),
         loadRiskDistribution(),
         loadUniversitiesList(),
+        loadSubscriptionAnalytics(),
       ]);
       console.log('All admin data loaded successfully');
     } catch (error) {
