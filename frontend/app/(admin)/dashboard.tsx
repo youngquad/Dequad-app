@@ -2587,4 +2587,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  miniChart: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-around',
+    height: 100,
+    marginTop: 16,
+    paddingHorizontal: 8,
+  },
+  miniChartBar: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  miniChartBarFill: {
+    width: 24,
+    borderRadius: 4,
+    marginBottom: 8,
+    minHeight: 4,
+  },
+  miniChartLabel: {
+    fontSize: 10,
+    color: '#9CA3AF',
+  },
+  exportButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#10B981',
+    paddingVertical: 14,
+    borderRadius: 12,
+    marginTop: 16,
+    gap: 8,
+  },
+  exportButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
