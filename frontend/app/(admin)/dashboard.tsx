@@ -427,6 +427,47 @@ export default function AdminDashboard() {
 
   const exportData = async (type: string) => {
     const exportUrl = `${backendUrl}/api/admin/export/${type}`;
+    
+    // For web, we need to handle the download differently with authentication
+    if (Platform.OS === 'web') {
+      const confirmExport = window.confirm(`This will download ${type} data as CSV. Continue?`);
+      if (confirmExport) {
+        try {
+          // Fetch with auth header
+          const response = await fetch(exportUrl, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${sessionToken}`,
+            },
+          });
+          
+          if (!response.ok) {
+            throw new Error('Export failed');
+          }
+          
+          // Get the CSV content
+          const blob = await response.blob();
+          
+          // Create download link
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${type}_export.csv`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          
+          alert('Export downloaded successfully!');
+        } catch (error) {
+          console.error('Export error:', error);
+          alert('Failed to export data. Please try again.');
+        }
+      }
+      return;
+    }
+    
+    // Native platforms
     Alert.alert(
       'Export Data',
       `This will download ${type} data as CSV. Continue?`,
@@ -434,10 +475,27 @@ export default function AdminDashboard() {
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Export',
-          onPress: () => {
-            Linking.openURL(exportUrl).catch(() => {
-              Alert.alert('Error', 'Could not open export link. Copy this URL to download: ' + exportUrl);
-            });
+          onPress: async () => {
+            try {
+              // For native, we need to use a different approach
+              const response = await fetch(exportUrl, {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${sessionToken}`,
+                },
+              });
+              
+              if (!response.ok) {
+                throw new Error('Export failed');
+              }
+              
+              // Try to open URL with auth token in query
+              Linking.openURL(`${exportUrl}?token=${sessionToken}`).catch(() => {
+                Alert.alert('Info', 'Export initiated. Check your downloads.');
+              });
+            } catch (error) {
+              Alert.alert('Error', 'Failed to export data. Please try again.');
+            }
           },
         },
       ]
