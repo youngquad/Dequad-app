@@ -577,6 +577,12 @@ async def get_session_token(request: Request) -> Optional[str]:
         logger.info(f"Session token from header: {token[:20]}...")
         return token
     
+    # Check query parameter (for export downloads)
+    token_param = request.query_params.get("token")
+    if token_param:
+        logger.info(f"Session token from query param: {token_param[:20]}...")
+        return token_param
+    
     # Fall back to cookie
     session_token = request.cookies.get("session_token")
     if session_token:
