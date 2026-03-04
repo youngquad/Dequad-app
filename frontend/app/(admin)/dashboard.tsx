@@ -896,6 +896,127 @@ export default function AdminDashboard() {
           </View>
         )}
 
+        {/* Subscriptions Tab */}
+        {activeTab === 'subscriptions' && (
+          <View style={styles.content}>
+            <Text style={styles.sectionTitle}>Subscription Analytics</Text>
+            <Text style={styles.sectionSubtitle}>
+              Revenue and subscription metrics
+            </Text>
+
+            {subscriptionAnalytics ? (
+              <>
+                {/* Revenue Stats */}
+                <View style={styles.statsGrid}>
+                  <View style={[styles.statCard, { backgroundColor: '#10B981' }]}>
+                    <Ionicons name="cash-outline" size={28} color="#fff" />
+                    <Text style={styles.statValue}>£{subscriptionAnalytics.monthly_revenue}</Text>
+                    <Text style={styles.statLabel}>Monthly Revenue</Text>
+                  </View>
+                  <View style={[styles.statCard, { backgroundColor: '#6366F1' }]}>
+                    <Ionicons name="diamond-outline" size={28} color="#fff" />
+                    <Text style={styles.statValue}>{subscriptionAnalytics.premium_users}</Text>
+                    <Text style={styles.statLabel}>Premium Users</Text>
+                  </View>
+                  <View style={[styles.statCard, { backgroundColor: '#F59E0B' }]}>
+                    <Ionicons name="trending-up-outline" size={28} color="#fff" />
+                    <Text style={styles.statValue}>{subscriptionAnalytics.conversion_rate}%</Text>
+                    <Text style={styles.statLabel}>Conversion Rate</Text>
+                  </View>
+                  <View style={[styles.statCard, { backgroundColor: '#EF4444' }]}>
+                    <Ionicons name="trending-down-outline" size={28} color="#fff" />
+                    <Text style={styles.statValue}>{subscriptionAnalytics.churn_rate}%</Text>
+                    <Text style={styles.statLabel}>Churn Rate</Text>
+                  </View>
+                </View>
+
+                {/* Detailed Stats */}
+                <View style={styles.detailCard}>
+                  <Text style={styles.detailCardTitle}>Subscription Overview</Text>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Total Users</Text>
+                    <Text style={styles.detailValue}>{subscriptionAnalytics.total_users}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Free Users</Text>
+                    <Text style={styles.detailValue}>{subscriptionAnalytics.free_users}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Premium Users</Text>
+                    <Text style={styles.detailValue}>{subscriptionAnalytics.premium_users}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Active Subscriptions</Text>
+                    <Text style={styles.detailValue}>{subscriptionAnalytics.active_subscriptions}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>New Subs (30 days)</Text>
+                    <Text style={styles.detailValue}>{subscriptionAnalytics.new_subscriptions_30d}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Cancelled</Text>
+                    <Text style={styles.detailValue}>{subscriptionAnalytics.cancelled_subscriptions}</Text>
+                  </View>
+                </View>
+
+                {/* Revenue Projections */}
+                <View style={styles.detailCard}>
+                  <Text style={styles.detailCardTitle}>Revenue Projections</Text>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Monthly Revenue</Text>
+                    <Text style={[styles.detailValue, { color: '#10B981' }]}>£{subscriptionAnalytics.monthly_revenue}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Annual Estimate</Text>
+                    <Text style={[styles.detailValue, { color: '#10B981' }]}>£{subscriptionAnalytics.annual_revenue_estimate}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Price per User</Text>
+                    <Text style={styles.detailValue}>£4.99/month</Text>
+                  </View>
+                </View>
+
+                {/* Daily Subscription Chart */}
+                {subscriptionAnalytics.daily_stats && subscriptionAnalytics.daily_stats.length > 0 && (
+                  <View style={styles.detailCard}>
+                    <Text style={styles.detailCardTitle}>New Subscriptions (Last 7 Days)</Text>
+                    <View style={styles.miniChart}>
+                      {subscriptionAnalytics.daily_stats.map((day: any, index: number) => (
+                        <View key={index} style={styles.miniChartBar}>
+                          <View 
+                            style={[
+                              styles.miniChartBarFill, 
+                              { 
+                                height: Math.max(day.new_subscriptions * 20, 4),
+                                backgroundColor: '#6366F1' 
+                              }
+                            ]} 
+                          />
+                          <Text style={styles.miniChartLabel}>{day.date.slice(5)}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                )}
+
+                {/* Export Button */}
+                <TouchableOpacity 
+                  style={styles.exportButton}
+                  onPress={() => exportData('subscriptions')}
+                >
+                  <Ionicons name="download-outline" size={20} color="#fff" />
+                  <Text style={styles.exportButtonText}>Export Subscription Data</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <View style={styles.emptyState}>
+                <ActivityIndicator size="large" color="#6366F1" />
+                <Text style={styles.emptyStateText}>Loading subscription data...</Text>
+              </View>
+            )}
+          </View>
+        )}
+
         {/* Universities Tab */}
         {activeTab === 'universities' && (
           <View style={styles.content}>
