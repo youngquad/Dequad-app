@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://github-projects.preview.emergentagent.com/api"
+BASE_URL = "https://campus-connect-694.preview.emergentagent.com/api"
 STUDENT_TOKEN = "test_session_token_123"
 
 def test_safeguarding_features():

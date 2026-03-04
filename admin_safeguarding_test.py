@@ -5,7 +5,7 @@ import json
 import sys
 
 # Configuration
-BASE_URL = "https://github-projects.preview.emergentagent.com/api"
+BASE_URL = "https://campus-connect-694.preview.emergentagent.com/api"
 ADMIN_TOKEN = "admin_session_token_123"
 
 def test_admin_safeguarding_endpoints():

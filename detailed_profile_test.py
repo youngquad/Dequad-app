@@ -8,7 +8,7 @@ import json
 import sys
 
 # Configuration
-BASE_URL = "https://5888b71c-e2f0-406e-bddc-c8c11971bcea.preview.emergentagent.com/api"
+BASE_URL = "https://campus-connect-694.preview.emergentagent.com/api"
 ADMIN_EMAIL = "yusufquadri83@gmail.com"
 ADMIN_PASSWORD = "Oluwatobi11@"
 

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || 'https://5888b71c-e2f0-406e-bddc-c8c11971bcea.preview.emergentagent.com';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || 'https://campus-connect-694.preview.emergentagent.com';
 export const API_URL = BACKEND_URL;
 
 class ApiService {
