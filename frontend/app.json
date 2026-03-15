@@ -35,7 +35,9 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ]
       }
@@ -90,7 +92,9 @@
             "deploymentTarget": "15.1"
           }
         }
-      ]
+      ],
+      "@stripe/stripe-react-native",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
