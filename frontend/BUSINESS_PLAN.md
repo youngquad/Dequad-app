@@ -490,8 +490,8 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 
 **Educare**
 
-- Website: www.educare.app
-- Email: investors@educare.app
+- Website: www.dequad.app
+- Email: investors@dequad.app
 - Location: United Kingdom
 
 ---

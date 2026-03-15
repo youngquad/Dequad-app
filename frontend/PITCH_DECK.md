@@ -244,8 +244,8 @@ A mobile-first platform that combines:
 
 **Educare**
 
-📧 Email: hello@educare.app
-🌐 Website: www.educare.app
+📧 Email: hello@dequad.app
+🌐 Website: www.dequad.app
 📱 App: Available on iOS & Android
 
 ---
