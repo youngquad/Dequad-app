@@ -1,8 +1,9 @@
 from pptx import Presentation
-from pptx.util import Inches, Pt
-from pptx.dml.color import RgbColor
+from pptx.util import Inches, Pt, Emu
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.ns import nsmap
+from pptx.oxml import parse_xml
 import os
 
 # Create presentation
@@ -10,11 +11,25 @@ prs = Presentation()
 prs.slide_width = Inches(13.333)
 prs.slide_height = Inches(7.5)
 
-# Define colors
-DARK_BG = RgbColor(15, 23, 42)  # #0F172A
-PURPLE = RgbColor(99, 102, 241)  # #6366F1
-WHITE = RgbColor(255, 255, 255)
-GRAY = RgbColor(148, 163, 184)
+# Define colors as hex strings
+DARK_BG = "0F172A"
+PURPLE = "6366F1"
+WHITE = "FFFFFF"
+GRAY = "94A3B8"
+
+def set_shape_fill(shape, hex_color):
+    """Set shape fill color"""
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = parse_hex_color(hex_color)
+
+def parse_hex_color(hex_str):
+    """Convert hex string to RGBColor"""
+    from pptx.dml.color import RGBColor
+    return RGBColor(int(hex_str[0:2], 16), int(hex_str[2:4], 16), int(hex_str[4:6], 16))
+
+def set_font_color(font, hex_color):
+    """Set font color"""
+    font.color.rgb = parse_hex_color(hex_color)
 
 def add_title_slide(prs, title, subtitle):
     """Add a title slide"""
