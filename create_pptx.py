@@ -214,8 +214,7 @@ slide = prs.slides.add_slide(pricing_slide)
 
 # Background
 background = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-background.fill.solid()
-background.fill.fore_color.rgb = DARK_BG
+set_shape_fill(background, DARK_BG)
 background.line.fill.background()
 
 # Title
@@ -225,7 +224,7 @@ p = tf.paragraphs[0]
 p.text = "Pricing Plans"
 p.font.size = Pt(40)
 p.font.bold = True
-p.font.color.rgb = WHITE
+set_font_color(p.font, WHITE)
 p.alignment = PP_ALIGN.CENTER
 
 # Student Plan
@@ -235,20 +234,20 @@ p = tf.paragraphs[0]
 p.text = "Student Premium"
 p.font.size = Pt(28)
 p.font.bold = True
-p.font.color.rgb = PURPLE
+set_font_color(p.font, PURPLE)
 
 p = tf.add_paragraph()
 p.text = "£4.99/month"
 p.font.size = Pt(36)
 p.font.bold = True
-p.font.color.rgb = WHITE
+set_font_color(p.font, WHITE)
 p.space_before = Pt(12)
 
 for feature in ["Unlimited matches", "Priority support", "Advanced insights", "No ads"]:
     p = tf.add_paragraph()
     p.text = f"• {feature}"
     p.font.size = Pt(18)
-    p.font.color.rgb = GRAY
+    set_font_color(p.font, GRAY)
     p.space_before = Pt(8)
 
 # University Plan
@@ -258,20 +257,20 @@ p = tf.paragraphs[0]
 p.text = "University Dashboard"
 p.font.size = Pt(28)
 p.font.bold = True
-p.font.color.rgb = PURPLE
+set_font_color(p.font, PURPLE)
 
 p = tf.add_paragraph()
 p.text = "£49.99/month"
 p.font.size = Pt(36)
 p.font.bold = True
-p.font.color.rgb = WHITE
+set_font_color(p.font, WHITE)
 p.space_before = Pt(12)
 
 for feature in ["Full dashboard access", "Student monitoring", "Safeguarding alerts", "Data export", "Priority support"]:
     p = tf.add_paragraph()
     p.text = f"• {feature}"
     p.font.size = Pt(18)
-    p.font.color.rgb = GRAY
+    set_font_color(p.font, GRAY)
     p.space_before = Pt(8)
 
 # Slide 9: Contact/End
