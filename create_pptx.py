@@ -102,8 +102,7 @@ def add_features_slide(prs, title, features):
     
     # Background
     background = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    background.fill.solid()
-    background.fill.fore_color.rgb = DARK_BG
+    set_shape_fill(background, DARK_BG)
     background.line.fill.background()
     
     # Title
@@ -113,7 +112,7 @@ def add_features_slide(prs, title, features):
     p.text = title
     p.font.size = Pt(40)
     p.font.bold = True
-    p.font.color.rgb = WHITE
+    set_font_color(p.font, WHITE)
     p.alignment = PP_ALIGN.CENTER
     
     # Features in two columns
@@ -130,7 +129,7 @@ def add_features_slide(prs, title, features):
             p = tf.add_paragraph()
         p.text = f"✓ {feature}"
         p.font.size = Pt(22)
-        p.font.color.rgb = WHITE
+        set_font_color(p.font, WHITE)
         p.space_after = Pt(18)
     
     # Right column
@@ -143,7 +142,7 @@ def add_features_slide(prs, title, features):
             p = tf.add_paragraph()
         p.text = f"✓ {feature}"
         p.font.size = Pt(22)
-        p.font.color.rgb = WHITE
+        set_font_color(p.font, WHITE)
         p.space_after = Pt(18)
     
     return slide
