@@ -69,8 +69,7 @@ def add_content_slide(prs, title, description, image_path, bullets=None):
     
     # Background
     background = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    background.fill.solid()
-    background.fill.fore_color.rgb = DARK_BG
+    set_shape_fill(background, DARK_BG)
     background.line.fill.background()
     
     # Title
@@ -80,7 +79,7 @@ def add_content_slide(prs, title, description, image_path, bullets=None):
     p.text = title
     p.font.size = Pt(36)
     p.font.bold = True
-    p.font.color.rgb = WHITE
+    set_font_color(p.font, WHITE)
     
     # Description
     desc_box = slide.shapes.add_textbox(Inches(0.5), Inches(1), Inches(12.333), Inches(0.5))
@@ -88,7 +87,7 @@ def add_content_slide(prs, title, description, image_path, bullets=None):
     p = tf.paragraphs[0]
     p.text = description
     p.font.size = Pt(16)
-    p.font.color.rgb = GRAY
+    set_font_color(p.font, GRAY)
     
     # Image
     if os.path.exists(image_path):
