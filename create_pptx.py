@@ -38,8 +38,7 @@ def add_title_slide(prs, title, subtitle):
     
     # Background
     background = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    background.fill.solid()
-    background.fill.fore_color.rgb = DARK_BG
+    set_shape_fill(background, DARK_BG)
     background.line.fill.background()
     
     # Title
@@ -49,7 +48,7 @@ def add_title_slide(prs, title, subtitle):
     p.text = title
     p.font.size = Pt(54)
     p.font.bold = True
-    p.font.color.rgb = WHITE
+    set_font_color(p.font, WHITE)
     p.alignment = PP_ALIGN.CENTER
     
     # Subtitle
@@ -58,7 +57,7 @@ def add_title_slide(prs, title, subtitle):
     p = tf.paragraphs[0]
     p.text = subtitle
     p.font.size = Pt(24)
-    p.font.color.rgb = GRAY
+    set_font_color(p.font, GRAY)
     p.alignment = PP_ALIGN.CENTER
     
     return slide
