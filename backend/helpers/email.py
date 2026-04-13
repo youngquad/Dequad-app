@@ -1,0 +1,192 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import asyncio
+import logging
+from typing import List
+from config import SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL, SMTP_FROM_NAME
+from database import db
+
+logger = logging.getLogger(__name__)
+
+
+def is_smtp_configured() -> bool:
+    return bool(SMTP_HOST and SMTP_USERNAME and SMTP_PASSWORD)
+
+
+def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
+        msg["To"] = ", ".join(to_emails)
+
+        if text_body:
+            msg.attach(MIMEText(text_body, "plain"))
+        msg.attach(MIMEText(html_body, "html"))
+
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.sendmail(SMTP_FROM_EMAIL, to_emails, msg.as_string())
+
+        logger.info(f"Email sent successfully to {to_emails}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send email: {e}")
+        return False
+
+
+async def send_email_async(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, send_email_sync, to_emails, subject, html_body, text_body)
+
+
+async def get_admin_emails() -> List[str]:
+    admins = await db.users.find(
+        {"role": "admin"},
+        {"_id": 0, "email": 1}
+    ).to_list(100)
+    return [a["email"] for a in admins if a.get("email")]
+
+
+def create_safeguarding_email_html(alert_data: dict) -> str:
+    risk_color = "#DC2626" if alert_data.get("risk_level") == "high" else "#F59E0B"
+    risk_bg = "#FEE2E2" if alert_data.get("risk_level") == "high" else "#FEF3C7"
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+            .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: {risk_color}; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }}
+            .content {{ background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; }}
+            .alert-box {{ background: {risk_bg}; border: 2px solid {risk_color}; border-radius: 8px; padding: 15px; margin: 15px 0; }}
+            .field {{ margin: 10px 0; }}
+            .label {{ font-weight: bold; color: #374151; }}
+            .footer {{ text-align: center; padding: 15px; color: #6b7280; font-size: 12px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>DEQUAD Safeguarding Alert</h1>
+                <p style="margin: 0; font-size: 18px;">Risk Level: {alert_data.get("risk_level", "unknown").upper()}</p>
+            </div>
+            <div class="content">
+                <div class="alert-box">
+                    <div class="field"><span class="label">Student:</span> {alert_data.get("user_name", "Unknown")}</div>
+                    <div class="field"><span class="label">Email:</span> {alert_data.get("user_email", "Unknown")}</div>
+                    <div class="field"><span class="label">Source:</span> {alert_data.get("source", "Unknown")}</div>
+                    <div class="field"><span class="label">Time:</span> {alert_data.get("created_at", "Unknown")}</div>
+                </div>
+                <div class="field">
+                    <span class="label">Matched Keywords:</span>
+                    <p style="color: {risk_color}; font-weight: bold;">{', '.join(alert_data.get("matched_keywords", []))}</p>
+                </div>
+                <div class="field">
+                    <span class="label">Content:</span>
+                    <p style="background: white; padding: 10px; border-radius: 4px; border: 1px solid #e5e7eb;">
+                        {alert_data.get("content", "No content available")[:500]}
+                    </p>
+                </div>
+                <p style="margin-top: 20px; font-size: 14px; color: #6b7280;">
+                    Please review this alert in the admin dashboard and take appropriate action.
+                </p>
+            </div>
+            <div class="footer">
+                <p>This is an automated notification from DEQUAD Safeguarding System.<br>
+                Please do not reply to this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+
+def create_safeguarding_email_text(alert_data: dict) -> str:
+    return f"""
+DEQUAD SAFEGUARDING ALERT - {alert_data["risk_level"].upper()} RISK
+
+Student: {alert_data.get("user_name", "Unknown")}
+Email: {alert_data.get("user_email", "Unknown")}
+Source: {alert_data.get("source", "Unknown")}
+Time: {alert_data.get("created_at", "Unknown")}
+
+Matched Keywords: {', '.join(alert_data.get("matched_keywords", []))}
+
+Content:
+{alert_data.get("content", "No content available")[:500]}
+
+Please review this alert in the admin dashboard.
+
+This is an automated notification from DEQUAD Safeguarding System.
+"""
+
+
+async def send_safeguarding_email_to_admins(alert_data: dict):
+    if not is_smtp_configured():
+        logger.warning("SMTP not configured - skipping safeguarding email notification")
+        return
+
+    admin_emails = await get_admin_emails()
+    if not admin_emails:
+        logger.warning("No admin emails found for safeguarding notification")
+        return
+
+    risk_emoji = "HIGH" if alert_data.get("risk_level") == "high" else "MEDIUM"
+    subject = f"DEQUAD Safeguarding Alert [{risk_emoji} RISK] - {alert_data.get('user_name', 'Unknown Student')}"
+    html_body = create_safeguarding_email_html(alert_data)
+    text_body = create_safeguarding_email_text(alert_data)
+
+    try:
+        success = await send_email_async(admin_emails, subject, html_body, text_body)
+        if success:
+            logger.info(f"Safeguarding email sent to {len(admin_emails)} admin(s)")
+        else:
+            logger.error("Failed to send safeguarding email")
+    except Exception as e:
+        logger.error(f"Error sending safeguarding email: {e}")
+
+
+def create_password_reset_email_html(name: str, reset_url: str) -> str:
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+            .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: #6366F1; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }}
+            .content {{ background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; }}
+            .button {{ display: inline-block; background: #6366F1; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }}
+            .footer {{ text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }}
+            .warning {{ background: #fef3c7; border: 1px solid #f59e0b; padding: 12px; border-radius: 6px; margin-top: 20px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Password Reset</h1>
+            </div>
+            <div class="content">
+                <p>Hi {name},</p>
+                <p>We received a request to reset your admin password for DEQUAD. Click the button below to set a new password:</p>
+                <div style="text-align: center;">
+                    <a href="{reset_url}" class="button">Reset Password</a>
+                </div>
+                <p>Or copy and paste this link into your browser:</p>
+                <p style="word-break: break-all; background: #e5e7eb; padding: 10px; border-radius: 4px; font-size: 12px;">{reset_url}</p>
+                <div class="warning">
+                    <strong>This link expires in 1 hour.</strong><br>
+                    If you didn't request this reset, please ignore this email.
+                </div>
+            </div>
+            <div class="footer">
+                <p>This is an automated message from DEQUAD.<br>Please do not reply to this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
