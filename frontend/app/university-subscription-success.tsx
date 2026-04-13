@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 
-const EDUCARE_LOGO = 'https://customer-assets.emergentagent.com/job_github-projects/artifacts/sfvx5knn_ChatGPT%20Image%20Jul%2027%2C%202025%20at%2005_25_54%20PM.PNG';
+const DEQUAD_LOGO = 'https://customer-assets.emergentagent.com/job_59531f5e-1846-4934-b8bd-d1cc6c47e021/artifacts/7klvdvmk_1C1CFF62-AD62-45CE-B2AC-A8639289ED95.png';
 
 interface SubscriptionResult {
   success: boolean;
@@ -72,7 +72,7 @@ export default function UniversitySubscriptionSuccessPage() {
       <SafeAreaView style={styles.container}>
         <LinearGradient colors={['#1E293B', '#0F172A']} style={styles.gradient}>
           <View style={styles.loadingContent}>
-            <Image source={{ uri: EDUCARE_LOGO }} style={styles.logo} resizeMode="contain" />
+            <Image source={{ uri: DEQUAD_LOGO }} style={styles.logo} resizeMode="contain" />
             <ActivityIndicator size="large" color="#6366F1" />
             <Text style={styles.loadingText}>Activating your subscription...</Text>
           </View>
@@ -112,7 +112,7 @@ export default function UniversitySubscriptionSuccessPage() {
             <Ionicons name="checkmark-circle" size={80} color="#10B981" />
           </View>
           
-          <Text style={styles.successTitle}>Welcome to Educare!</Text>
+          <Text style={styles.successTitle}>Welcome to DEQUAD!</Text>
           <Text style={styles.successSubtitle}>
             Your university dashboard is ready
           </Text>
@@ -171,7 +171,7 @@ export default function UniversitySubscriptionSuccessPage() {
           
           {/* Help Text */}
           <Text style={styles.helpText}>
-            Need help? Contact support@educare.com
+            Need help? Contact support@dequad.com
           </Text>
         </View>
       </LinearGradient>

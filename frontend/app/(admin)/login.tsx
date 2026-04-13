@@ -134,7 +134,7 @@ export default function AdminLoginScreen() {
                 <Ionicons name="mail-outline" size={20} color="#6B7280" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
-                  placeholder="admin@educare.com"
+                  placeholder="admin@dequad.com"
                   placeholderTextColor="#6B7280"
                   value={email}
                   onChangeText={setEmail}

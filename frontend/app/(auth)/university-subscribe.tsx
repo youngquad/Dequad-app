@@ -17,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 
-const EDUCARE_LOGO = 'https://customer-assets.emergentagent.com/job_github-projects/artifacts/sfvx5knn_ChatGPT%20Image%20Jul%2027%2C%202025%20at%2005_25_54%20PM.PNG';
+const DEQUAD_LOGO = 'https://customer-assets.emergentagent.com/job_59531f5e-1846-4934-b8bd-d1cc6c47e021/artifacts/7klvdvmk_1C1CFF62-AD62-45CE-B2AC-A8639289ED95.png';
 
 interface PricingInfo {
   price: number;
@@ -133,7 +133,7 @@ export default function UniversitySubscribePage() {
             </TouchableOpacity>
             
             <Image 
-              source={{ uri: EDUCARE_LOGO }} 
+              source={{ uri: DEQUAD_LOGO }} 
               style={styles.logo}
               resizeMode="contain"
             />

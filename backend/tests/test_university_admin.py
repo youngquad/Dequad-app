@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://campus-connect-694.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://admin-dashboard-1112.preview.emergentagent.com')
 
 # Test credentials from the review request
 TEST_UNIVERSITY_ADMIN = {

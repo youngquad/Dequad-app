@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://campus-connect-694.preview.emergentagent.com/api"
+BASE_URL = "https://admin-dashboard-1112.preview.emergentagent.com/api"
 
 class FocusedAPITester:
     def __init__(self):

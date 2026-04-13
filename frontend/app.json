@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Educare",
-    "slug": "educare",
+    "name": "DEQUAD",
+    "slug": "dequad",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "educare",
+    "scheme": "dequad",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash-image.png",
@@ -17,11 +17,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.educare.wellbeing",
+      "bundleIdentifier": "com.dequad.wellbeing",
       "buildNumber": "1"
     },
     "android": {
-      "package": "com.educare.wellbeing",
+      "package": "com.dequad.wellbeing",
       "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

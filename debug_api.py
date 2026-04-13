@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import requests
 
-BASE_URL = "https://campus-connect-694.preview.emergentagent.com/api"
+BASE_URL = "https://admin-dashboard-1112.preview.emergentagent.com/api"
 
 def test_api():
     print("Testing API responses...")

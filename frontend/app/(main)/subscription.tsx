@@ -151,7 +151,7 @@ export default function SubscriptionScreen() {
           <View style={styles.premiumCard}>
             <View style={styles.premiumHeader}>
               <Ionicons name="diamond" size={40} color="#F59E0B" />
-              <Text style={styles.premiumTitle}>Educare Premium</Text>
+              <Text style={styles.premiumTitle}>DEQUAD Premium</Text>
               <Text style={styles.premiumPrice}>{status?.price || '£4.99/month'}</Text>
             </View>
 

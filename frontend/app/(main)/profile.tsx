@@ -152,7 +152,7 @@ export default function ProfileScreen() {
       // In Expo Go, this will fail gracefully
       try {
         const token = (await Notifications.getExpoPushTokenAsync({
-          projectId: 'educare-app'
+          projectId: 'dequad-app'
         })).data;
         
         // Save push token to backend
@@ -800,7 +800,7 @@ export default function ProfileScreen() {
                 <Ionicons name="diamond" size={24} color="#F59E0B" />
               </View>
               <View style={styles.premiumInfo}>
-                <Text style={styles.premiumTitle}>Educare Premium</Text>
+                <Text style={styles.premiumTitle}>DEQUAD Premium</Text>
                 <Text style={styles.premiumSubtitle}>
                   {user?.plan === 'premium' ? 'Manage your subscription' : 'Upgrade for unlimited swipes'}
                 </Text>

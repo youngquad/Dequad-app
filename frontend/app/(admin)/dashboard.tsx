@@ -561,7 +561,7 @@ export default function AdminDashboard() {
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>Admin Dashboard</Text>
-          <Text style={styles.headerSubtitle}>Educare Analytics</Text>
+          <Text style={styles.headerSubtitle}>DEQUAD Analytics</Text>
         </View>
         <TouchableOpacity onPress={logout} style={styles.logoutButton}>
           <Ionicons name="log-out-outline" size={24} color="#EF4444" />

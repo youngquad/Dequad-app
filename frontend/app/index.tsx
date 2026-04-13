@@ -18,8 +18,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
-// Educare Logo URL
-const EDUCARE_LOGO = 'https://customer-assets.emergentagent.com/job_github-projects/artifacts/sfvx5knn_ChatGPT%20Image%20Jul%2027%2C%202025%20at%2005_25_54%20PM.PNG';
+// DEQUAD Logo URL
+const DEQUAD_LOGO = 'https://customer-assets.emergentagent.com/job_59531f5e-1846-4934-b8bd-d1cc6c47e021/artifacts/7klvdvmk_1C1CFF62-AD62-45CE-B2AC-A8639289ED95.png';
 
 const FEATURES = [
   { 
@@ -122,7 +122,7 @@ export default function LandingScreen() {
         />
         <View style={styles.loadingContent}>
           <Image 
-            source={{ uri: EDUCARE_LOGO }} 
+            source={{ uri: DEQUAD_LOGO }} 
             style={styles.loadingLogoImage}
             resizeMode="contain"
           />
@@ -159,7 +159,7 @@ export default function LandingScreen() {
           {/* Logo Section */}
           <View style={styles.logoContainer}>
             <Image 
-              source={{ uri: EDUCARE_LOGO }} 
+              source={{ uri: DEQUAD_LOGO }} 
               style={styles.logoImage}
               resizeMode="contain"
             />
@@ -248,7 +248,7 @@ export default function LandingScreen() {
           </View>
 
           <Text style={styles.footerText}>
-            Built with ❤️ for students everywhere
+            Built with care for students everywhere
           </Text>
           
           {/* University Admin Link */}

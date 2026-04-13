@@ -36,7 +36,7 @@ stripe.api_key = STRIPE_SECRET_KEY
 # Stripe Price Configuration (£4.99/month)
 STRIPE_PRICE_AMOUNT = 499  # in pence
 STRIPE_PRICE_CURRENCY = "gbp"
-STRIPE_PRODUCT_NAME = "Educare Premium"
+STRIPE_PRODUCT_NAME = "DEQUAD Premium"
 
 # Swipe limits
 FREE_SWIPES_PER_DAY = 5
@@ -48,15 +48,15 @@ FREE_SWIPES_PER_DAY = 5
 # SMTP_PORT=587
 # SMTP_USERNAME=your-email@gmail.com
 # SMTP_PASSWORD=your-app-password
-# SMTP_FROM_EMAIL=noreply@educare.com
-# SMTP_FROM_NAME=Educare Safeguarding
+# SMTP_FROM_EMAIL=noreply@dequad.com
+# SMTP_FROM_NAME=DEQUAD Safeguarding
 
 SMTP_HOST = os.environ.get('SMTP_HOST', '')
 SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
 SMTP_USERNAME = os.environ.get('SMTP_USERNAME', '')
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
-SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@educare.com')
-SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Educare Safeguarding')
+SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@dequad.com')
+SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'DEQUAD Safeguarding')
 
 def is_smtp_configured() -> bool:
     """Check if SMTP is properly configured"""
@@ -148,7 +148,7 @@ def create_safeguarding_email_html(alert_data: dict) -> str:
     <body>
         <div class="container">
             <div class="header">
-                <h1>🛡️ Educare Safeguarding Alert</h1>
+                <h1>DEQUAD Safeguarding Alert</h1>
                 <div class="alert-badge">{alert_data["risk_level"]} RISK</div>
             </div>
             <div class="content">
@@ -180,7 +180,7 @@ def create_safeguarding_email_html(alert_data: dict) -> str:
                 <p><strong>Recommended Action:</strong> Please review this alert in the admin dashboard and follow your institution's safeguarding procedures.</p>
             </div>
             <div class="footer">
-                <p>This is an automated notification from Educare Safeguarding System.<br>
+                <p>This is an automated notification from DEQUAD Safeguarding System.<br>
                 Please do not reply to this email.</p>
             </div>
         </div>
@@ -194,7 +194,7 @@ def create_safeguarding_email_text(alert_data: dict) -> str:
     Create plain text email body for safeguarding alert
     """
     text = f"""
-EDUCARE SAFEGUARDING ALERT - {alert_data["risk_level"].upper()} RISK
+DEQUAD SAFEGUARDING ALERT - {alert_data["risk_level"].upper()} RISK
 
 A safeguarding concern has been detected and requires your attention.
 
@@ -211,7 +211,7 @@ Content:
 Recommended Action: Please review this alert in the admin dashboard and follow your institution's safeguarding procedures.
 
 ---
-This is an automated notification from Educare Safeguarding System.
+This is an automated notification from DEQUAD Safeguarding System.
     """
     return text
 
@@ -361,7 +361,7 @@ def check_safeguarding_content(text: str) -> dict:
 AI_LEARNED_KEYWORDS = set()
 
 # Create the main app
-app = FastAPI(title="Educare API")
+app = FastAPI(title="DEQUAD API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -699,7 +699,7 @@ async def send_push_notification(user_id: str, title: str, body: str, notificati
 # ==================== AUTH ENDPOINTS ====================
 
 # Admin secret code for first-time admin setup
-ADMIN_SECRET_CODE = "EDUCARE_ADMIN_2024"
+ADMIN_SECRET_CODE = "DEQUAD_ADMIN_2024"
 
 class AdminLoginRequest(BaseModel):
     email: str
@@ -736,7 +736,7 @@ def create_password_reset_email_html(name: str, reset_url: str) -> str:
             </div>
             <div class="content">
                 <p>Hi {name},</p>
-                <p>We received a request to reset your admin password for Educare. Click the button below to set a new password:</p>
+                <p>We received a request to reset your admin password for DEQUAD. Click the button below to set a new password:</p>
                 
                 <div style="text-align: center;">
                     <a href="{reset_url}" class="button">Reset Password</a>
@@ -751,7 +751,7 @@ def create_password_reset_email_html(name: str, reset_url: str) -> str:
                 </div>
             </div>
             <div class="footer">
-                <p>This is an automated message from Educare.<br>Please do not reply to this email.</p>
+                <p>This is an automated message from DEQUAD.<br>Please do not reply to this email.</p>
             </div>
         </div>
     </body>
@@ -788,16 +788,16 @@ async def forgot_password(data: ForgotPasswordRequest):
     })
     
     # Create reset URL (frontend will handle this route)
-    reset_url = f"https://campus-connect-694.preview.emergentagent.com/admin/reset-password?token={reset_token}"
+    reset_url = f"https://admin-dashboard-1112.preview.emergentagent.com/admin/reset-password?token={reset_token}"
     
     # Send email
     if is_smtp_configured():
-        subject = "🔐 Educare Admin Password Reset"
+        subject = "DEQUAD Admin Password Reset"
         html_body = create_password_reset_email_html(user.get("name", "Admin"), reset_url)
         text_body = f"""
 Hi {user.get("name", "Admin")},
 
-We received a request to reset your admin password for Educare.
+We received a request to reset your admin password for DEQUAD.
 
 Click here to reset your password:
 {reset_url}
@@ -806,7 +806,7 @@ This link expires in 1 hour.
 
 If you didn't request this reset, please ignore this email.
 
-- Educare Team
+- DEQUAD Team
         """
         
         await send_email_async([data.email.lower()], subject, html_body, text_body)
@@ -1992,7 +1992,7 @@ async def delete_university_admin(user_id: str, admin: User = Depends(require_ad
 # University subscription pricing (£49.99/month per university)
 UNIVERSITY_PRICE_AMOUNT = 4999  # in pence
 UNIVERSITY_PRICE_CURRENCY = "gbp"
-UNIVERSITY_PRODUCT_NAME = "Educare University Dashboard"
+UNIVERSITY_PRODUCT_NAME = "DEQUAD University Dashboard"
 
 class UniversitySubscriptionRequest(BaseModel):
     university_name: str
@@ -2054,7 +2054,7 @@ async def create_university_subscription(data: UniversitySubscriptionRequest):
         })
         
         # Create checkout session
-        backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://campus-connect-694.preview.emergentagent.com')
+        backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://admin-dashboard-1112.preview.emergentagent.com')
         
         checkout_session = stripe.checkout.Session.create(
             customer=customer.id,
@@ -3974,8 +3974,8 @@ async def create_checkout_session(data: CreateCheckoutRequest, current_user: Use
                 },
                 "quantity": 1,
             }],
-            success_url=data.success_url or "educare://subscription-success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=data.cancel_url or "educare://subscription-cancel",
+            success_url=data.success_url or "dequad://subscription-success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=data.cancel_url or "dequad://subscription-cancel",
             metadata={"user_id": current_user.user_id},
             # Enable promotional codes if you want to offer discounts
             allow_promotion_codes=True,
@@ -4483,7 +4483,20 @@ async def trigger_behavioral_analysis(admin: User = Depends(require_admin)):
 
 @api_router.get("/")
 async def root():
-    return {"message": "Educare API", "status": "running"}
+    return {"message": "DEQUAD API", "status": "running"}
+
+@api_router.get("/download/presentation")
+async def download_presentation():
+    """Download the DEQUAD presentation"""
+    from fastapi.responses import FileResponse
+    file_path = "/app/DEQUAD_Presentation.pptx"
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Presentation not found")
+    return FileResponse(
+        path=file_path,
+        filename="DEQUAD_Presentation.pptx",
+        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    )
 
 @api_router.get("/health")
 async def health():
@@ -4645,6 +4658,146 @@ async def seed_admin_and_test_users():
             "profile_completed": True,
             "created_at": datetime.now(timezone.utc),
             "subscription_status": "premium"
+        },
+        {
+            "user_id": "test-user-006",
+            "email": "oliver.wright@test.edu",
+            "name": "Oliver Wright",
+            "age": 22,
+            "gender": "male",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Manchester",
+            "campus_name": "Main Campus",
+            "course": "Mechanical Engineering",
+            "study_style": "Night Owl",
+            "bio": "Engineering student who loves building things. From drones to furniture, I'm always tinkering. Looking for study buddies and adventure partners!",
+            "interests": ["Engineering", "3D Printing", "Drones", "Football", "Music"],
+            "photos": ["https://images.unsplash.com/photo-1655977237812-ee6beb137203?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1655977237812-ee6beb137203?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-007",
+            "email": "amara.okafor@test.edu",
+            "name": "Amara Okafor",
+            "age": 20,
+            "gender": "female",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Manchester",
+            "campus_name": "Main Campus",
+            "course": "Biomedical Science",
+            "study_style": "Early Bird",
+            "bio": "Future doctor in the making! I love science, cooking Nigerian food, and spontaneous road trips. Let's study and explore together.",
+            "interests": ["Medicine", "Cooking", "Travel", "Dance", "Volunteering"],
+            "photos": ["https://images.unsplash.com/photo-1611877247362-93a1536ad38e?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1611877247362-93a1536ad38e?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "premium"
+        },
+        {
+            "user_id": "test-user-008",
+            "email": "lucas.fernandez@test.edu",
+            "name": "Lucas Fernandez",
+            "age": 23,
+            "gender": "male",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Leeds",
+            "campus_name": "Main Campus",
+            "course": "Architecture",
+            "study_style": "Visual Learner",
+            "bio": "Architecture student with a passion for sustainable design. Sketch pads and coffee are my daily essentials. Let's create something beautiful!",
+            "interests": ["Architecture", "Sketching", "Photography", "Sustainability", "Coffee"],
+            "photos": ["https://images.pexels.com/photos/31367494/pexels-photo-31367494.jpeg?w=400&h=400&fit=crop"],
+            "picture": "https://images.pexels.com/photos/31367494/pexels-photo-31367494.jpeg?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-009",
+            "email": "zara.ahmed@test.edu",
+            "name": "Zara Ahmed",
+            "age": 21,
+            "gender": "female",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Birmingham",
+            "campus_name": "Edgbaston",
+            "course": "Law",
+            "study_style": "Group Study",
+            "bio": "Aspiring barrister who debates for fun. I enjoy mock trials, poetry slams, and weekend hikes. Always up for intellectual conversations!",
+            "interests": ["Law", "Debate", "Poetry", "Hiking", "Theatre"],
+            "photos": ["https://images.unsplash.com/photo-1565564277651-c2e8f8155017?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1565564277651-c2e8f8155017?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-010",
+            "email": "ethan.kim@test.edu",
+            "name": "Ethan Kim",
+            "age": 22,
+            "gender": "male",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Warwick",
+            "campus_name": "Main Campus",
+            "course": "Mathematics",
+            "study_style": "Solo Study",
+            "bio": "Maths geek who finds beauty in equations. Also a competitive chess player and amateur pianist. Let's solve problems together!",
+            "interests": ["Mathematics", "Chess", "Piano", "Coding", "Running"],
+            "photos": ["https://images.unsplash.com/photo-1639654655546-68bc1f21e9e3?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1639654655546-68bc1f21e9e3?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "premium"
+        },
+        {
+            "user_id": "test-user-011",
+            "email": "chloe.williams@test.edu",
+            "name": "Chloe Williams",
+            "age": 20,
+            "gender": "female",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Bristol",
+            "campus_name": "Clifton",
+            "course": "English Literature",
+            "study_style": "Early Bird",
+            "bio": "Bookworm and aspiring writer. You'll find me in the library or at an open mic night. Shakespeare is overrated, fight me!",
+            "interests": ["Literature", "Writing", "Open Mic", "Yoga", "Vintage Fashion"],
+            "photos": ["https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
+        },
+        {
+            "user_id": "test-user-012",
+            "email": "daniel.johnson@test.edu",
+            "name": "Daniel Johnson",
+            "age": 24,
+            "gender": "male",
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "University of Manchester",
+            "campus_name": "Main Campus",
+            "course": "Music Production",
+            "study_style": "Night Owl",
+            "bio": "Producer, DJ, and part-time philosophy student. Making beats by night, questioning existence by day. Let's jam or just chat!",
+            "interests": ["Music Production", "DJing", "Philosophy", "Skateboarding", "Film"],
+            "photos": ["https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop"],
+            "picture": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+            "role": "student",
+            "profile_completed": True,
+            "created_at": datetime.now(timezone.utc),
+            "subscription_status": "free"
         }
     ]
     
@@ -4702,6 +4855,39 @@ async def seed_admin_and_test_users():
         logger.info(f"University admin updated: {uni_admin_email}")
     
     logger.info("Seed data initialization complete")
+    
+    # Seed demo mood entries for richer dashboard data
+    import random
+    mood_count = await db.mood_entries.count_documents({})
+    if mood_count < 20:
+        mood_notes = [
+            "Feeling great after a productive study session!",
+            "A bit stressed about upcoming exams but managing.",
+            "Had an amazing group project meeting today.",
+            "Feeling a bit low, missing home.",
+            "Coffee and good music = great morning!",
+            "Struggling with coursework deadlines.",
+            "Met some awesome people at the society event!",
+            "Good day overall, went for a nice walk.",
+            "Anxious about tomorrow's presentation.",
+            "Feeling motivated after a gym session!",
+            "Had a lovely catch-up with friends.",
+            "Need more sleep, late nights catching up."
+        ]
+        test_user_ids = [f"test-user-{str(i).zfill(3)}" for i in range(1, 13)]
+        for i in range(40):
+            user_id = random.choice(test_user_ids)
+            user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "name": 1, "university": 1})
+            if user:
+                mood_entry = {
+                    "user_id": user_id,
+                    "score": random.randint(3, 10),
+                    "note": random.choice(mood_notes),
+                    "university": user.get("university", ""),
+                    "created_at": datetime.now(timezone.utc) - timedelta(days=random.randint(0, 14), hours=random.randint(0, 12))
+                }
+                await db.mood_entries.insert_one(mood_entry)
+        logger.info("Demo mood entries seeded")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

@@ -1,117 +1,64 @@
-# Educare - AI-Powered Student Wellbeing Platform
+# DEQUAD - AI-Powered Student Wellbeing Platform
 
 ## Original Problem Statement
-Build Educare - AI-powered student wellbeing platform with mood tracking, AI risk prediction, student matching, encrypted chat, Google OAuth, admin dashboard, and Stripe billing.
+Build an AI-powered student wellbeing platform with Google OAuth, admin dashboards, Hinge-style matching, mood tracking, safeguarding alerts, and university subscription management.
 
-## Latest Updates (March 4, 2026)
+## Core Requirements
+- Google OAuth authentication for students
+- Admin email/password authentication
+- Mood tracking (1-10 scale with notes)
+- Hinge-style matching with like/comment system
+- End-to-end encrypted chat
+- Safeguarding alerts with AI risk analysis
+- Super Admin Dashboard (platform-wide analytics)
+- University Admin Dashboard (university-scoped analytics)
+- Stripe subscription integration (student premium + university dashboard)
+- Email notifications for safeguarding alerts
+- Data export (CSV)
 
-### New Feature: University Admin Dashboard
-- **University Subscription**: Universities can subscribe (£49.99/month) to get dashboard access
-- **Auto-credential Creation**: Admin credentials are auto-generated upon successful Stripe payment
-- **Dedicated Dashboard**: University-specific analytics for student wellbeing monitoring
-- **Features included**:
-  - Student overview and list
-  - Safeguarding alerts monitoring
-  - Mood trends and analytics
-  - Data export capabilities
+## Tech Stack
+- **Frontend:** React Native (Expo Web)
+- **Backend:** FastAPI (Python)
+- **Database:** MongoDB
+- **Auth:** Google OAuth (Emergent-managed), Admin email/password
+- **Payments:** Stripe
+- **AI:** OpenAI GPT via Emergent LLM Key
+- **Email:** SMTP (Gmail)
 
-### Previous Session Changes:
-1. Hinge-style matching with scrollable profiles
-2. Comment on like feature
-3. Likes You screen with 3 actions
-4. Pronouns feature on profiles
-5. Subscription analytics in super admin dashboard
-6. All bug fixes completed
+## What's Implemented (Complete)
+- [x] Landing page with DEQUAD branding and Google Sign-In
+- [x] Google OAuth authentication flow
+- [x] Student profile creation and editing
+- [x] Mood tracking with daily scores and notes
+- [x] Hinge-style matching system
+- [x] Comment on likes feature
+- [x] Chat system
+- [x] Safeguarding alerts (keyword detection + AI analysis)
+- [x] Super Admin Dashboard (overview, safeguarding, subscriptions, AI, universities, analytics, export)
+- [x] University Admin Dashboard (students, alerts, trends, data export)
+- [x] University subscription flow via Stripe (GBP 49.99/month)
+- [x] University admin auto-credential generation on subscription
+- [x] University admin login portal
+- [x] Admin password reset with email
+- [x] Stripe student premium subscription
+- [x] Email notifications for safeguarding alerts
+- [x] 12 demo user profiles seeded across 5 universities
+- [x] Demo mood data seeded for dashboard analytics
+- [x] DEQUAD branding (logo, naming) across all screens
+- [x] PowerPoint presentation with screenshots (10 slides, /app/DEQUAD_Presentation.pptx)
+- [x] Presentation download API endpoint
 
-## Architecture
-- **Frontend**: React Native / Expo (TypeScript) - Mobile app with web support
-- **Backend**: FastAPI (Python) with MongoDB
-- **Integrations**: Stripe, OpenAI GPT, Emergent Google OAuth, SMTP Email
+## Backlog / Future Tasks
+- [ ] Calendar integration (P2)
+- [ ] Group study sessions (P2)
+- [ ] iOS/Android deployment via Expo EAS Build
+- [ ] Backend refactoring (break server.py into APIRouter modules)
 
-## Core Features
-- ✅ Google OAuth Authentication
-- ✅ Mood Tracking (1-10 scale)
-- ✅ AI Risk Analysis (GPT-powered)
-- ✅ Hinge-style Matching with comments
-- ✅ Likes You screen with 3 actions (Skip, Like, Message)
-- ✅ Notifications with comments
-- ✅ Encrypted Chat (E2E)
-- ✅ Safeguarding System
-- ✅ Super Admin Dashboard
-- ✅ **University Admin Dashboard (NEW)**
-- ✅ Stripe Premium (£4.99/month for students)
-- ✅ **Stripe University Subscription (£49.99/month) (NEW)**
-
-## Admin Credentials
-
-### Super Admin
-- Email: yusufquadri83@gmail.com
-- Password: Oluwatobi11@
-
-### Test University Admin
-- Email: admin@manchesteruni.edu
-- Password: UniAdmin123!
-- University: University of Manchester
-
-## Test Profiles (with photos)
-1. Emma Wilson - Computer Science, Manchester
-2. James Chen - Data Science, Birmingham  
-3. Sofia Martinez - Psychology, Leeds
-4. Alex Thompson - Environmental Science, Bristol
-5. Priya Patel - Business Analytics, Warwick
-
-## Key API Endpoints
-
-### University Admin Endpoints (NEW)
-- `GET /api/university/pricing` - Get subscription pricing info (public)
-- `POST /api/university/subscribe` - Create Stripe checkout session (public)
-- `GET /api/university/subscription-success` - Complete subscription after payment
-- `POST /api/university-admin/login` - University admin authentication
-- `GET /api/university-admin/stats` - University-specific statistics
-- `GET /api/university-admin/students` - List of students from university
-- `GET /api/university-admin/mood-trends` - Mood analytics
-- `GET /api/university-admin/safeguarding-alerts` - Safeguarding alerts
-- `PUT /api/university-admin/safeguarding-alerts/{id}/acknowledge` - Acknowledge alert
-- `GET /api/university-admin/export/students` - Export student data as CSV
-
-### Existing Endpoints
-- `/api/auth/session` - Validates a session token
-- `/api/auth/admin-login` - Authenticates a super admin
-- `/api/matches/swipe` - Handles user matching
-- `/api/admin/stats` - Platform-wide statistics
-
-## File Structure
-
-```
-/app/
-├── backend/
-│   ├── server.py         # All API endpoints
-│   └── tests/
-│       └── test_university_admin.py
-└── frontend/
-    └── app/
-        ├── (admin)/      # Super admin dashboard
-        ├── (auth)/       
-        │   ├── university-subscribe.tsx    # University subscription page
-        │   └── university-admin-login.tsx  # University admin login
-        ├── (main)/       # Core app screens
-        ├── (university-admin)/
-        │   ├── _layout.tsx
-        │   └── dashboard.tsx              # University admin dashboard
-        ├── university-subscription-success.tsx  # Post-payment success page
-        └── index.tsx     # Landing page with university link
-```
-
-## P0 Completed
-- ✅ University Admin Dashboard feature
-
-## P1 Backlog
-- Chat directly from match notification
-- Read receipts in chat
-- Password change for university admins
-
-## P2 Future
-- Calendar integration
-- Group study sessions
-- Multi-university admin management
-- Refactor server.py into modular APIRouters
+## Key Endpoints
+- `GET /api/` - Health check
+- `POST /api/auth/callback` - Google OAuth callback
+- `POST /api/admin/login` - Admin login
+- `POST /api/university-admin/login` - University admin login
+- `GET /api/university-admin/stats` - University-scoped stats
+- `POST /api/stripe/create-university-checkout` - University subscription
+- `GET /api/download/presentation` - Download DEQUAD presentation
