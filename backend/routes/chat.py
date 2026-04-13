@@ -4,7 +4,7 @@ from typing import List
 from database import db
 from models import User, ChatMessage, SendMessage
 from helpers.auth import get_current_user
-from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert
+from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert, check_language_filter
 from helpers.notifications import send_push_notification
 
 router = APIRouter()
@@ -23,6 +23,11 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
 
     if not match:
         raise HTTPException(status_code=403, detail="Match not found or not accepted")
+
+    # Check for profanity/racist language
+    language_check = check_language_filter(data.text)
+    if language_check["blocked"]:
+        raise HTTPException(status_code=400, detail=language_check["message"])
 
     safeguarding_result = check_safeguarding_content(data.text)
     message = ChatMessage(match_id=data.match_id, sender_id=current_user.user_id, text=data.text)

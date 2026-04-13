@@ -72,6 +72,70 @@ CRISIS_RESOURCES = {
 # AI learned keywords set (loaded on startup)
 AI_LEARNED_KEYWORDS = set()
 
+# Profanity & racist language filter
+PROFANITY_WORDS = [
+    "fuck", "fucking", "fucker", "fck", "f*ck", "fuk",
+    "shit", "shite", "sh1t", "bullshit",
+    "bitch", "b1tch", "biatch",
+    "ass", "asshole", "arsehole", "arse",
+    "bastard", "dick", "dickhead", "cock", "cunt",
+    "wanker", "twat", "piss", "prick", "slut", "whore",
+    "damn", "dammit", "crap", "bollocks",
+]
+
+RACIST_WORDS = [
+    "nigger", "nigga", "n1gger", "n1gga",
+    "chink", "ch1nk", "gook",
+    "spic", "sp1c", "wetback",
+    "kike", "k1ke",
+    "paki", "pak1",
+    "cracker", "honky",
+    "beaner", "coon", "darkie",
+    "jap", "raghead", "towelhead",
+    "wog", "zipperhead", "redskin",
+    "white supremacy", "white power",
+    "heil hitler", "sieg heil",
+]
+
+
+def check_language_filter(text: str) -> dict:
+    """Check text for profanity and racist language. Returns filter result."""
+    if not text:
+        return {"blocked": False, "reason": None, "matched": []}
+
+    text_lower = text.lower()
+    # Normalize common substitutions
+    normalized = text_lower.replace("@", "a").replace("0", "o").replace("1", "i").replace("3", "e").replace("$", "s")
+
+    matched_racist = []
+    for word in RACIST_WORDS:
+        if word in text_lower or word in normalized:
+            matched_racist.append(word)
+
+    if matched_racist:
+        return {
+            "blocked": True,
+            "reason": "racist_language",
+            "message": "Your message contains language that violates our community guidelines. Racist or discriminatory language is not tolerated.",
+            "matched": matched_racist
+        }
+
+    matched_profanity = []
+    words_in_text = text_lower.split()
+    for word in PROFANITY_WORDS:
+        if word in words_in_text or word in normalized.split():
+            matched_profanity.append(word)
+
+    if matched_profanity:
+        return {
+            "blocked": True,
+            "reason": "profanity",
+            "message": "Your message contains inappropriate language. Please keep conversations respectful.",
+            "matched": matched_profanity
+        }
+
+    return {"blocked": False, "reason": None, "matched": []}
+
 
 def check_safeguarding_content(text: str) -> dict:
     if not text:

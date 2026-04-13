@@ -5,6 +5,7 @@ from database import db
 from models import User, Match, SwipeAction
 from helpers.auth import get_current_user
 from helpers.notifications import send_push_notification
+from helpers.safeguarding import check_language_filter
 from config import FREE_SWIPES_PER_DAY
 
 router = APIRouter()
@@ -81,6 +82,12 @@ async def discover_matches(current_user: User = Depends(get_current_user)):
 async def swipe_action(data: SwipeAction, current_user: User = Depends(get_current_user)):
     if data.action not in ["like", "dislike"]:
         raise HTTPException(status_code=400, detail="Action must be 'like' or 'dislike'")
+
+    # Check comment for profanity/racist language
+    if data.comment:
+        language_check = check_language_filter(data.comment)
+        if language_check["blocked"]:
+            raise HTTPException(status_code=400, detail=language_check["message"])
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})

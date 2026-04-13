@@ -264,6 +264,7 @@ export default function MatchesScreen() {
           style={styles.profileScroll}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.profileScrollContent}
+          nestedScrollEnabled={true}
         >
           {/* Main Photo Section */}
           <View style={styles.photoSection}>
@@ -712,7 +713,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: width,
-    flex: 1,
+    height: height - 120,
   },
   profileScroll: {
     flex: 1,

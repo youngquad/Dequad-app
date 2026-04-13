@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="15" time="2.438" timestamp="2026-04-13T08:24:42.890824+00:00" hostname="agent-env-be6761e5-9715-410b-bfe7-a0302e3b224c"><testcase classname="tests.test_language_filter.TestLanguageFilter" name="test_health_check" time="0.234" /><testcase classname="tests.test_language_filter.TestLanguageFilter" name="test_admin_login_works" time="0.150" /><testcase classname="tests.test_language_filter.TestLanguageFilter" name="test_university_admin_login_works" time="0.149" /><testcase classname="tests.test_language_filter.TestLanguageFilter" name="test_admin_stats_endpoint" time="0.159" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_clean_message" time="1.485" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_profanity" time="0.000" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_racist_n_word" time="0.000" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_white_power" time="0.000" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_mixed_case" time="0.000" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_leet_speak" time="0.000" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_empty_string" time="0.000" /><testcase classname="tests.test_language_filter.TestChatLanguageFilter" name="test_language_filter_function_none" time="0.000" /><testcase classname="tests.test_language_filter.TestDemoChatData" name="test_demo_chat_messages_exist" time="0.004" /><testcase classname="tests.test_language_filter.TestDemoChatData" name="test_demo_matches_exist" time="0.001"><failure message="RuntimeError: Event loop is closed">tests/test_language_filter.py:188: in test_demo_matches_exist
+    matches = self.loop.run_until_complete(check_matches())
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_language_filter.py:185: in check_matches
+    }).to_list(10)
+       ^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/core.py:1648: in to_list
+    self.get_io_loop(), self._get_more(), self._to_list, length, the_list, future
+                        ^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/core.py:1411: in _get_more
+    return self._refresh()
+           ^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</failure></testcase><testcase classname="tests.test_language_filter.TestDemoChatData" name="test_chat_messages_have_correct_structure" time="0.001"><failure message="RuntimeError: Event loop is closed">tests/test_language_filter.py:205: in test_chat_messages_have_correct_structure
+    msg = self.loop.run_until_complete(check_structure())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_language_filter.py:202: in check_structure
+    msg = await db.chat_messages.find_one({})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</failure></testcase></testsuite></testsuites>

@@ -197,3 +197,85 @@ async def seed_admin_and_test_users():
                 }
                 await db.mood_entries.insert_one(mood_entry)
         logger.info("Demo mood entries seeded")
+
+    # Seed demo matches and chat messages
+    demo_chat_exists = await db.chat_messages.find_one({"sender_id": "test-user-001"})
+    if not demo_chat_exists:
+        demo_pairs = [
+            ("test-user-001", "test-user-002"),
+            ("test-user-001", "test-user-006"),
+            ("test-user-003", "test-user-004"),
+            ("test-user-005", "test-user-010"),
+            ("test-user-007", "test-user-012"),
+        ]
+
+        for user_a, user_b in demo_pairs:
+            # Check if accepted match already exists
+            existing_match = await db.matches.find_one({
+                "user_id": user_a, "matched_user_id": user_b, "status": "accepted"
+            }, {"_id": 0})
+
+            if existing_match:
+                match_id = existing_match["id"]
+            else:
+                match_id = str(uuid.uuid4())
+                now_m = datetime.now(timezone.utc)
+                for direction in [(user_a, user_b), (user_b, user_a)]:
+                    await db.matches.insert_one({
+                        "id": match_id, "user_id": direction[0], "matched_user_id": direction[1],
+                        "status": "accepted", "score": round(random.uniform(0.5, 0.95), 2),
+                        "comment": None, "liked_section": None,
+                        "created_at": now_m - timedelta(days=random.randint(1, 7))
+                    })
+
+            # Add demo chat messages
+            demo_conversations = [
+                [
+                    (user_a, "Hey! We matched! What are you studying?"),
+                    (user_b, "Hi! Great to connect. I'm really enjoying my course so far."),
+                    (user_a, "That's brilliant! We should study together sometime."),
+                    (user_b, "Absolutely! Library or coffee shop?"),
+                    (user_a, "Coffee shop sounds great! Know any good ones near campus?"),
+                    (user_b, "There's a lovely one on Oxford Road. How about tomorrow at 2?"),
+                ],
+                [
+                    (user_a, "Hey! I noticed we share a lot of the same interests!"),
+                    (user_b, "Yes! That's what caught my eye too. What's your favourite?"),
+                    (user_a, "I'd say hiking. Nothing beats fresh air after a study session."),
+                    (user_b, "Same! Have you tried the Peak District trails?"),
+                    (user_a, "Not yet but it's on my list! We should plan a trip."),
+                ],
+                [
+                    (user_a, "Hi there! How's your week going?"),
+                    (user_b, "Pretty hectic with assignments! But managing. You?"),
+                    (user_a, "Same here. Want to grab coffee and destress?"),
+                    (user_b, "That sounds perfect! When are you free?"),
+                ],
+                [
+                    (user_a, "Hey! Love your bio. The tinkering part resonated with me!"),
+                    (user_b, "Thanks! What do you like to build?"),
+                    (user_a, "Mostly software projects, but I've been getting into 3D printing lately."),
+                    (user_b, "That's awesome! I have a printer we could use for projects."),
+                    (user_a, "No way! Let's collaborate on something."),
+                    (user_b, "Definitely! I have a few ideas. Let's meet up this week?"),
+                ],
+                [
+                    (user_a, "Hi! Another music lover! What do you listen to?"),
+                    (user_b, "A bit of everything really. Lately lots of jazz and neo-soul."),
+                    (user_a, "Great taste! Have you been to any live gigs recently?"),
+                    (user_b, "Yes! There's a jazz night at the student union every Thursday."),
+                    (user_a, "I'll definitely check that out. Want to go together next week?"),
+                ],
+            ]
+
+            convo_idx = demo_pairs.index((user_a, user_b)) % len(demo_conversations)
+            conversation = demo_conversations[convo_idx]
+            now_c = datetime.now(timezone.utc)
+            for i, (sender, text) in enumerate(conversation):
+                await db.chat_messages.insert_one({
+                    "id": str(uuid.uuid4()), "match_id": match_id,
+                    "sender_id": sender, "text": text,
+                    "created_at": now_c - timedelta(hours=len(conversation) - i, minutes=random.randint(0, 30))
+                })
+
+        logger.info("Demo matches and chat messages seeded")
