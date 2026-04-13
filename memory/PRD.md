@@ -59,6 +59,9 @@ Build an AI-powered student wellbeing platform with Google OAuth, admin dashboar
 - [x] Backend modular refactoring (4895 lines → 3135 lines, 19 modules)
 - [x] API rate limiting (100 req/min general, 10 req/min auth endpoints)
 - [x] Request logging middleware (IP, method, path, status, response time)
+- [x] Profanity & racist language filter on chat and match comments
+- [x] 5 demo match pairs with 26 chat messages seeded
+- [x] Fixed vertical scroll on Connect/Matches page
 
 ## Backlog / Future Tasks
 - [ ] iOS/Android deployment via Expo EAS Build (user asked, not yet answered)
