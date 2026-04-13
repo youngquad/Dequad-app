@@ -62,6 +62,9 @@ Build an AI-powered student wellbeing platform with Google OAuth, admin dashboar
 - [x] Profanity & racist language filter on chat and match comments
 - [x] 5 demo match pairs with 26 chat messages seeded
 - [x] Fixed vertical scroll on Connect/Matches page
+- [x] Fixed logout (now clears both user_sessions and sessions collections)
+- [x] Student wellbeing signposting on mood page (Samaritans, Shout, PAPYRUS, Student Minds, CALM, 999)
+- [x] GET /api/wellbeing-resources endpoint for crisis services
 
 ## Backlog / Future Tasks
 - [ ] iOS/Android deployment via Expo EAS Build (user asked, not yet answered)

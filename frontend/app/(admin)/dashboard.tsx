@@ -563,7 +563,7 @@ export default function AdminDashboard() {
           <Text style={styles.headerTitle}>Admin Dashboard</Text>
           <Text style={styles.headerSubtitle}>DEQUAD Analytics</Text>
         </View>
-        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+        <TouchableOpacity onPress={logout} style={styles.logoutButton} data-testid="logout-button">
           <Ionicons name="log-out-outline" size={24} color="#EF4444" />
         </TouchableOpacity>
       </View>
