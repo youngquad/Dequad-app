@@ -25,3 +25,14 @@ async def download_presentation():
 @router.get("/health")
 async def health():
     return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
+
+
+@router.get("/wellbeing-resources")
+async def get_wellbeing_resources():
+    """Student-facing signposting: crisis and wellbeing support resources"""
+    from helpers.safeguarding import CRISIS_RESOURCES
+    return {
+        "resources": CRISIS_RESOURCES,
+        "message": "If you or someone you know is struggling, please reach out. You are not alone.",
+        "emergency_note": "If you are in immediate danger, call 999 or go to your nearest A&E."
+    }

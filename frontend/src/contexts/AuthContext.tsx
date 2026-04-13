@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
-import { api } from '../services/api';
+import { api, API_URL } from '../services/api';
 
 interface User {
   user_id: string;
@@ -196,32 +196,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    // Clear state first before API call to ensure immediate UI update
+    // Capture token before clearing state
+    const currentToken = sessionToken;
+    
+    // Clear state immediately for instant UI update
     setUser(null);
     setSessionToken(null);
     
-    // Clear storage
+    // Clear all stored tokens
     try {
       await AsyncStorage.removeItem('session_token');
-      
-      // Also clear localStorage directly for web
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         localStorage.removeItem('session_token');
-        // Clear any other stored data
+        localStorage.removeItem('admin_session_token');
         localStorage.clear();
       }
     } catch (storageError) {
       console.error('Storage clear error:', storageError);
     }
     
-    // Then try to invalidate session on backend (non-blocking)
+    // Invalidate session on backend using the captured token
     try {
-      if (sessionToken) {
-        await api.post('/auth/logout', {}, sessionToken);
+      if (currentToken) {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentToken}`,
+          },
+          credentials: 'include',
+        });
       }
     } catch (error) {
       console.error('Logout API error:', error);
-      // Ignore API errors - user is already logged out locally
     }
     
     // Force reload on web to ensure clean state

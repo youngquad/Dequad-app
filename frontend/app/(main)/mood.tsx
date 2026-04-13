@@ -442,6 +442,84 @@ export default function MoodScreen() {
               })
             )}
           </View>
+
+          {/* Wellbeing Signposting Section */}
+          <View style={styles.signpostSection} data-testid="wellbeing-signposting">
+            <View style={styles.signpostHeader}>
+              <View style={styles.signpostIconBg}>
+                <Ionicons name="shield-checkmark" size={22} color="#10B981" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.signpostTitle}>Wellbeing Support</Text>
+                <Text style={styles.signpostSubtext}>Help is always available. You are not alone.</Text>
+              </View>
+            </View>
+
+            <View style={styles.signpostCards}>
+              <TouchableOpacity style={styles.signpostCard} data-testid="signpost-samaritans">
+                <View style={[styles.signpostCardIcon, { backgroundColor: 'rgba(239, 68, 68, 0.15)' }]}>
+                  <Ionicons name="call" size={18} color="#EF4444" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.signpostCardTitle}>Samaritans</Text>
+                  <Text style={styles.signpostCardPhone}>116 123</Text>
+                  <Text style={styles.signpostCardDesc}>Free 24/7 emotional support</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.signpostCard} data-testid="signpost-shout">
+                <View style={[styles.signpostCardIcon, { backgroundColor: 'rgba(99, 102, 241, 0.15)' }]}>
+                  <Ionicons name="chatbubble-ellipses" size={18} color="#6366F1" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.signpostCardTitle}>Shout Crisis Text Line</Text>
+                  <Text style={styles.signpostCardPhone}>Text SHOUT to 85258</Text>
+                  <Text style={styles.signpostCardDesc}>Free, confidential text support 24/7</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.signpostCard} data-testid="signpost-papyrus">
+                <View style={[styles.signpostCardIcon, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
+                  <Ionicons name="people" size={18} color="#F59E0B" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.signpostCardTitle}>PAPYRUS HOPELineUK</Text>
+                  <Text style={styles.signpostCardPhone}>0800 068 4141</Text>
+                  <Text style={styles.signpostCardDesc}>For young people under 35</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.signpostCard} data-testid="signpost-student-minds">
+                <View style={[styles.signpostCardIcon, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
+                  <Ionicons name="school" size={18} color="#10B981" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.signpostCardTitle}>Student Minds</Text>
+                  <Text style={styles.signpostCardPhone}>studentminds.org.uk</Text>
+                  <Text style={styles.signpostCardDesc}>UK student mental health charity</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.signpostCard} data-testid="signpost-calm">
+                <View style={[styles.signpostCardIcon, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
+                  <Ionicons name="heart" size={18} color="#06B6D4" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.signpostCardTitle}>CALM</Text>
+                  <Text style={styles.signpostCardPhone}>0800 58 58 58</Text>
+                  <Text style={styles.signpostCardDesc}>5pm-midnight every day</Text>
+                </View>
+              </TouchableOpacity>
+
+              <View style={styles.emergencyCard} data-testid="signpost-emergency">
+                <Ionicons name="warning" size={20} color="#EF4444" />
+                <View style={{ flex: 1, marginLeft: 12 }}>
+                  <Text style={styles.emergencyTitle}>In immediate danger?</Text>
+                  <Text style={styles.emergencyText}>Call 999 or go to your nearest A&E</Text>
+                </View>
+              </View>
+            </View>
+          </View>
         </Animated.View>
       </ScrollView>
     </SafeAreaView>
@@ -691,5 +769,89 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#F8FAFC',
+  },
+  signpostSection: {
+    marginBottom: 40,
+    marginTop: 8,
+  },
+  signpostHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 12,
+  },
+  signpostIconBg: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  signpostTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#F8FAFC',
+  },
+  signpostSubtext: {
+    fontSize: 13,
+    color: '#94A3B8',
+    marginTop: 2,
+  },
+  signpostCards: {
+    gap: 8,
+  },
+  signpostCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(30, 41, 59, 0.6)',
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.08)',
+    gap: 12,
+  },
+  signpostCardIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  signpostCardTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#F1F5F9',
+  },
+  signpostCardPhone: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#6366F1',
+    marginTop: 2,
+  },
+  signpostCardDesc: {
+    fontSize: 12,
+    color: '#64748B',
+    marginTop: 1,
+  },
+  emergencyCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.2)',
+    marginTop: 4,
+  },
+  emergencyTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#EF4444',
+  },
+  emergencyText: {
+    fontSize: 13,
+    color: '#FCA5A5',
+    marginTop: 2,
   },
 });
