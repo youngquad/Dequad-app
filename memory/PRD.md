@@ -65,9 +65,10 @@ Build an AI-powered student wellbeing platform with Google OAuth, admin dashboar
 - [x] Fixed logout (now clears both user_sessions and sessions collections)
 - [x] Student wellbeing signposting on mood page (Samaritans, Shout, PAPYRUS, Student Minds, CALM, 999)
 - [x] GET /api/wellbeing-resources endpoint for crisis services
+- [x] Safeguarding signposting made dynamic-only (static block removed from mood page; modal triggers on keyword detection)
+- [x] iOS/Android deployment guide via Expo EAS Build provided to user
 
 ## Backlog / Future Tasks
-- [ ] iOS/Android deployment via Expo EAS Build (user asked, not yet answered)
 - [ ] Calendar integration (P2)
 - [ ] Group study sessions (P2)
 
