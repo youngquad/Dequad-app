@@ -57,6 +57,8 @@ Build an AI-powered student wellbeing platform with Google OAuth, admin dashboar
 - [x] DEQUAD branding across entire app
 - [x] PowerPoint presentation (/app/DEQUAD_Presentation.pptx, 10 slides)
 - [x] Backend modular refactoring (4895 lines → 3135 lines, 19 modules)
+- [x] API rate limiting (100 req/min general, 10 req/min auth endpoints)
+- [x] Request logging middleware (IP, method, path, status, response time)
 
 ## Backlog / Future Tasks
 - [ ] iOS/Android deployment via Expo EAS Build (user asked, not yet answered)
