@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import re
 from datetime import datetime, timezone
 from database import db
 from models import SafeguardingAlert, LearnedKeyword, AILearningInsight
@@ -98,20 +99,24 @@ RACIST_WORDS = [
 ]
 
 
+def _word_match(word: str, text: str, normalized: str) -> bool:
+    """Match `word` against text using word-boundaries to avoid false positives
+    (e.g. 'paki' should NOT match 'Pakistani', 'spic' should NOT match 'suspicious').
+    Multi-word phrases are matched as a whole (also with word-boundaries)."""
+    pattern = rf"\b{re.escape(word)}\b"
+    return bool(re.search(pattern, text)) or bool(re.search(pattern, normalized))
+
+
 def check_language_filter(text: str) -> dict:
     """Check text for profanity and racist language. Returns filter result."""
     if not text:
         return {"blocked": False, "reason": None, "matched": []}
 
     text_lower = text.lower()
-    # Normalize common substitutions
+    # Normalize common substitutions (leet-speak workarounds)
     normalized = text_lower.replace("@", "a").replace("0", "o").replace("1", "i").replace("3", "e").replace("$", "s")
 
-    matched_racist = []
-    for word in RACIST_WORDS:
-        if word in text_lower or word in normalized:
-            matched_racist.append(word)
-
+    matched_racist = [w for w in RACIST_WORDS if _word_match(w, text_lower, normalized)]
     if matched_racist:
         return {
             "blocked": True,
@@ -120,12 +125,7 @@ def check_language_filter(text: str) -> dict:
             "matched": matched_racist
         }
 
-    matched_profanity = []
-    words_in_text = text_lower.split()
-    for word in PROFANITY_WORDS:
-        if word in words_in_text or word in normalized.split():
-            matched_profanity.append(word)
-
+    matched_profanity = [w for w in PROFANITY_WORDS if _word_match(w, text_lower, normalized)]
     if matched_profanity:
         return {
             "blocked": True,
