@@ -771,7 +771,7 @@ async def forgot_password(data: ForgotPasswordRequest):
     })
     
     # Create reset URL (frontend will handle this route)
-    reset_url = f"https://admin-dashboard-1112.preview.emergentagent.com/admin/reset-password?token={reset_token}"
+    reset_url = f"https://review-extractor-2.preview.emergentagent.com/admin/reset-password?token={reset_token}"
     
     # Send email
     if is_smtp_configured():

@@ -40,7 +40,7 @@ async def forgot_password(data: ForgotPasswordRequest):
         "used": False
     })
 
-    reset_url = f"https://admin-dashboard-1112.preview.emergentagent.com/admin/reset-password?token={reset_token}"
+    reset_url = f"https://review-extractor-2.preview.emergentagent.com/admin/reset-password?token={reset_token}"
 
     if is_smtp_configured():
         subject = "DEQUAD Admin Password Reset"

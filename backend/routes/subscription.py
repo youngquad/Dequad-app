@@ -184,8 +184,8 @@ async def create_university_checkout(data: UniversitySubscriptionRequest):
             line_items=[{"price_data": {"currency": UNIVERSITY_PRICE_CURRENCY, "unit_amount": UNIVERSITY_PRICE_AMOUNT,
                 "recurring": {"interval": "month"}, "product_data": {"name": UNIVERSITY_PRODUCT_NAME,
                     "description": f"Dashboard access for {data.university_name}"}}, "quantity": 1}],
-            success_url=data.success_url or "https://admin-dashboard-1112.preview.emergentagent.com/university-subscription-success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=data.cancel_url or "https://admin-dashboard-1112.preview.emergentagent.com",
+            success_url=data.success_url or "https://review-extractor-2.preview.emergentagent.com/university-subscription-success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=data.cancel_url or "https://review-extractor-2.preview.emergentagent.com",
             metadata={"university": data.university_name, "admin_email": data.admin_email, "admin_name": data.admin_name,
                       "type": "university_subscription"}, allow_promotion_codes=True
         )

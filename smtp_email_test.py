@@ -14,7 +14,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://admin-dashboard-1112.preview.emergentagent.com/api"
+BACKEND_URL = "https://review-extractor-2.preview.emergentagent.com/api"
 ADMIN_TOKEN = "admin_session_token_123"  # Existing admin session token
 USER_TOKEN = "test_session_token_123"    # Existing user session token
 

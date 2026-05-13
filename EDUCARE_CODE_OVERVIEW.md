@@ -66,8 +66,8 @@ ADMIN_EMAIL=yusufquadri83@gmail.com
 
 ### 2. Frontend Environment (.env)
 ```env
-REACT_APP_BACKEND_URL=https://admin-dashboard-1112.preview.emergentagent.com
-EXPO_PUBLIC_BACKEND_URL=https://admin-dashboard-1112.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://review-extractor-2.preview.emergentagent.com
+EXPO_PUBLIC_BACKEND_URL=https://review-extractor-2.preview.emergentagent.com
 EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxx
 ```
 

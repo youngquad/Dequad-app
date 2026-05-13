@@ -11,7 +11,7 @@ import json
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://admin-dashboard-1112.preview.emergentagent.com/api"
+BASE_URL = "https://review-extractor-2.preview.emergentagent.com/api"
 SESSION_TOKEN = "test_session_token_123"
 HEADERS = {
     "Authorization": f"Bearer {SESSION_TOKEN}",
