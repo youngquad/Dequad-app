@@ -728,7 +728,7 @@ export default function ProfileScreen() {
                 <Ionicons name="diamond" size={24} color="#F59E0B" />
               </View>
               <View style={styles.premiumInfo}>
-                <Text style={styles.premiumTitle}>Educare Premium</Text>
+                <Text style={styles.premiumTitle}>Dequad Premium</Text>
                 <Text style={styles.premiumSubtitle}>
                   {user?.plan === 'premium' ? 'Manage your subscription' : 'Upgrade for unlimited swipes'}
                 </Text>

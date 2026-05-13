@@ -126,7 +126,7 @@ export default function LandingScreen() {
             <Ionicons name="school" size={48} color="#6366F1" />
           </View>
           <ActivityIndicator size="large" color="#6366F1" style={{ marginTop: 20 }} />
-          <Text style={styles.loadingText}>Loading Educare...</Text>
+          <Text style={styles.loadingText}>Loading Dequad...</Text>
         </View>
       </View>
     );
@@ -163,7 +163,7 @@ export default function LandingScreen() {
             >
               <Ionicons name="school" size={56} color="#818CF8" />
             </LinearGradient>
-            <Text style={styles.title}>Educare</Text>
+            <Text style={styles.title}>Dequad</Text>
             <Text style={styles.subtitle}>
               Your wellbeing companion for university life
             </Text>

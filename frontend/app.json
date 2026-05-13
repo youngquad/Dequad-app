@@ -93,7 +93,13 @@
           }
         }
       ],
-      "@stripe/stripe-react-native",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.dequad.wellbeing",
+          "enableGooglePay": false
+        }
+      ],
       "expo-font"
     ],
     "experiments": {

@@ -36,7 +36,7 @@ stripe.api_key = STRIPE_SECRET_KEY
 # Stripe Price Configuration (£4.99/month)
 STRIPE_PRICE_AMOUNT = 499  # in pence
 STRIPE_PRICE_CURRENCY = "gbp"
-STRIPE_PRODUCT_NAME = "Educare Premium"
+STRIPE_PRODUCT_NAME = "Dequad Premium"
 
 # Swipe limits
 FREE_SWIPES_PER_DAY = 5
@@ -48,15 +48,15 @@ FREE_SWIPES_PER_DAY = 5
 # SMTP_PORT=587
 # SMTP_USERNAME=your-email@gmail.com
 # SMTP_PASSWORD=your-app-password
-# SMTP_FROM_EMAIL=noreply@educare.com
-# SMTP_FROM_NAME=Educare Safeguarding
+# SMTP_FROM_EMAIL=noreply@dequad.app
+# SMTP_FROM_NAME=Dequad Safeguarding
 
 SMTP_HOST = os.environ.get('SMTP_HOST', '')
 SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
 SMTP_USERNAME = os.environ.get('SMTP_USERNAME', '')
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
-SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@educare.com')
-SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Educare Safeguarding')
+SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@dequad.app')
+SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Dequad Safeguarding')
 
 def is_smtp_configured() -> bool:
     """Check if SMTP is properly configured"""
@@ -148,7 +148,7 @@ def create_safeguarding_email_html(alert_data: dict) -> str:
     <body>
         <div class="container">
             <div class="header">
-                <h1>🛡️ Educare Safeguarding Alert</h1>
+                <h1>🛡️ Dequad Safeguarding Alert</h1>
                 <div class="alert-badge">{alert_data["risk_level"]} RISK</div>
             </div>
             <div class="content">
@@ -180,7 +180,7 @@ def create_safeguarding_email_html(alert_data: dict) -> str:
                 <p><strong>Recommended Action:</strong> Please review this alert in the admin dashboard and follow your institution's safeguarding procedures.</p>
             </div>
             <div class="footer">
-                <p>This is an automated notification from Educare Safeguarding System.<br>
+                <p>This is an automated notification from Dequad Safeguarding System.<br>
                 Please do not reply to this email.</p>
             </div>
         </div>
@@ -194,7 +194,7 @@ def create_safeguarding_email_text(alert_data: dict) -> str:
     Create plain text email body for safeguarding alert
     """
     text = f"""
-EDUCARE SAFEGUARDING ALERT - {alert_data["risk_level"].upper()} RISK
+DEQUAD SAFEGUARDING ALERT - {alert_data["risk_level"].upper()} RISK
 
 A safeguarding concern has been detected and requires your attention.
 
@@ -211,7 +211,7 @@ Content:
 Recommended Action: Please review this alert in the admin dashboard and follow your institution's safeguarding procedures.
 
 ---
-This is an automated notification from Educare Safeguarding System.
+This is an automated notification from Dequad Safeguarding System.
     """
     return text
 
@@ -361,7 +361,7 @@ def check_safeguarding_content(text: str) -> dict:
 AI_LEARNED_KEYWORDS = set()
 
 # Create the main app
-app = FastAPI(title="Educare API")
+app = FastAPI(title="Dequad API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -667,7 +667,9 @@ async def send_push_notification(user_id: str, title: str, body: str, notificati
 # ==================== AUTH ENDPOINTS ====================
 
 # Admin secret code for first-time admin setup
-ADMIN_SECRET_CODE = "EDUCARE_ADMIN_2024"
+# Accepts both the legacy code and the new Dequad code for backwards compatibility
+ADMIN_SECRET_CODE = "DEQUAD_ADMIN_2024"
+LEGACY_ADMIN_SECRET_CODE = "EDUCARE_ADMIN_2024"
 
 class AdminLoginRequest(BaseModel):
     email: str
@@ -704,7 +706,7 @@ def create_password_reset_email_html(name: str, reset_url: str) -> str:
             </div>
             <div class="content">
                 <p>Hi {name},</p>
-                <p>We received a request to reset your admin password for Educare. Click the button below to set a new password:</p>
+                <p>We received a request to reset your admin password for Dequad. Click the button below to set a new password:</p>
                 
                 <div style="text-align: center;">
                     <a href="{reset_url}" class="button">Reset Password</a>
@@ -719,7 +721,7 @@ def create_password_reset_email_html(name: str, reset_url: str) -> str:
                 </div>
             </div>
             <div class="footer">
-                <p>This is an automated message from Educare.<br>Please do not reply to this email.</p>
+                <p>This is an automated message from Dequad.<br>Please do not reply to this email.</p>
             </div>
         </div>
     </body>
@@ -760,12 +762,12 @@ async def forgot_password(data: ForgotPasswordRequest):
     
     # Send email
     if is_smtp_configured():
-        subject = "🔐 Educare Admin Password Reset"
+        subject = "🔐 Dequad Admin Password Reset"
         html_body = create_password_reset_email_html(user.get("name", "Admin"), reset_url)
         text_body = f"""
 Hi {user.get("name", "Admin")},
 
-We received a request to reset your admin password for Educare.
+We received a request to reset your admin password for Dequad.
 
 Click here to reset your password:
 {reset_url}
@@ -774,7 +776,7 @@ This link expires in 1 hour.
 
 If you didn't request this reset, please ignore this email.
 
-- Educare Team
+- Dequad Team
         """
         
         await send_email_async([data.email.lower()], subject, html_body, text_body)
@@ -3834,7 +3836,7 @@ async def trigger_behavioral_analysis(admin: User = Depends(require_admin)):
 
 @api_router.get("/")
 async def root():
-    return {"message": "Educare API", "status": "running"}
+    return {"message": "Dequad API", "status": "running"}
 
 @api_router.get("/health")
 async def health():
