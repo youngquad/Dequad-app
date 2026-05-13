@@ -8,6 +8,7 @@ import logging
 from database import db
 from models import User
 from helpers.auth import get_current_user, require_admin
+from helpers.notifications import send_push_notification
 from helpers.safeguarding import (
     check_language_filter,
     check_safeguarding_content,
@@ -257,4 +258,17 @@ async def admin_send_reply(data: SupportAdminReply, admin: User = Depends(requir
         raise HTTPException(status_code=404, detail="User not found")
 
     msg = await _save_message(data.user_id, "agent", data.text.strip())
+
+    # Notify the student that a human support agent has replied.
+    preview = data.text.strip()
+    if len(preview) > 80:
+        preview = preview[:77] + "..."
+    await send_push_notification(
+        data.user_id,
+        "DEQUAD Support replied",
+        preview,
+        "support_reply",
+        {"message_id": msg["id"], "agent_name": admin.name},
+    )
+
     return {"success": True, "message": msg}
