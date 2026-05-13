@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import { useRouter } from 'expo-router';
+import ReportProfileModal from '../../src/components/ReportProfileModal';
 
 const { width } = Dimensions.get('window');
 
@@ -47,6 +48,7 @@ export default function LikesYouScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [respondingTo, setRespondingTo] = useState<string | null>(null);
+  const [reportTarget, setReportTarget] = useState<LikeData['user'] | null>(null);
 
   useEffect(() => {
     loadLikes();
@@ -195,6 +197,14 @@ export default function LikesYouScreen() {
             <Text style={styles.cardName}>{like.user.name}</Text>
             {like.user.age && <Text style={styles.cardAge}>, {like.user.age}</Text>}
           </View>
+          {/* Report button */}
+          <TouchableOpacity
+            style={styles.cardReportButton}
+            onPress={() => setReportTarget(like.user)}
+            data-testid={`report-like-btn-${like.user.user_id}`}
+          >
+            <Ionicons name="flag" size={16} color="#fff" />
+          </TouchableOpacity>
         </View>
 
         {/* Like Info */}
@@ -318,6 +328,13 @@ export default function LikesYouScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      <ReportProfileModal
+        visible={reportTarget !== null}
+        onClose={() => setReportTarget(null)}
+        reportedUserId={reportTarget?.user_id || ''}
+        reportedUserName={reportTarget?.name || 'this profile'}
+        sessionToken={sessionToken}
+      />
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -471,6 +488,17 @@ const styles = StyleSheet.create({
     left: 16,
     flexDirection: 'row',
     alignItems: 'baseline',
+  },
+  cardReportButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(239, 68, 68, 0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardName: {
     fontSize: 24,

@@ -1,17 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from database import db
-from models import User, Report, ReportCreate
+from models import User
 from helpers.auth import get_current_user
 
 router = APIRouter()
-
-
-@router.post("/reports")
-async def create_report(data: ReportCreate, current_user: User = Depends(get_current_user)):
-    report = Report(reported_user_id=data.reported_user_id, reporter_id=current_user.user_id, reason=data.reason)
-    await db.reports.insert_one(report.dict())
-    return report
 
 
 @router.get("/notifications")

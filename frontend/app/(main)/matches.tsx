@@ -23,6 +23,7 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import { useRouter } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
+import ReportProfileModal from '../../src/components/ReportProfileModal';
 
 const { width, height } = Dimensions.get('window');
 
@@ -72,6 +73,7 @@ export default function MatchesScreen() {
   const [comment, setComment] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
+  const [reportTarget, setReportTarget] = useState<UserProfile | null>(null);
   
   const scrollRef = useRef<FlatList>(null);
 
@@ -288,6 +290,16 @@ export default function MatchesScreen() {
             >
               <Ionicons name="close" size={28} color="#fff" />
             </TouchableOpacity>
+
+            {/* Report Button - Top Right */}
+            <TouchableOpacity
+              style={styles.topReportButton}
+              onPress={() => setReportTarget(profile)}
+              disabled={!isCurrentProfile}
+              data-testid={`report-profile-btn-${profile.user_id}`}
+            >
+              <Ionicons name="flag" size={20} color="#fff" />
+            </TouchableOpacity>
             
             <View style={styles.photoOverlay}>
               <View style={styles.nameContainer}>
@@ -443,6 +455,15 @@ export default function MatchesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Report Profile Modal */}
+      <ReportProfileModal
+        visible={reportTarget !== null}
+        onClose={() => setReportTarget(null)}
+        reportedUserId={reportTarget?.user_id || ''}
+        reportedUserName={reportTarget?.name || 'this profile'}
+        sessionToken={sessionToken}
+      />
+
       {/* Comment Modal */}
       <Modal
         visible={commentModal !== null}
@@ -943,6 +964,18 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  topReportButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(239, 68, 68, 0.75)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,

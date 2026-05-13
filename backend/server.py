@@ -8,7 +8,7 @@ from helpers.safeguarding import load_approved_keywords
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware
 from seed import seed_admin_and_test_users
 
-from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core
+from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core, reports, support
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -50,3 +50,5 @@ app.include_router(notifications.router, prefix="/api")
 app.include_router(university_admin.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(subscription.router, prefix="/api")
+app.include_router(reports.router, prefix="/api")
+app.include_router(support.router, prefix="/api")

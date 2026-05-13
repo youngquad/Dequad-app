@@ -91,6 +91,12 @@ export default function MainLayout() {
           href: null, // Hide from tab bar - accessible from Connect screen
         }}
       />
+      <Tabs.Screen
+        name="support"
+        options={{
+          href: null, // Hide from tab bar - accessible from Profile
+        }}
+      />
     </Tabs>
   );
 }

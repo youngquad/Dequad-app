@@ -1,0 +1,68 @@
+{
+  "summary": "Iteration 8 backend testing complete. All new features (Report a profile, Language Filter, Live Support Chat with AI) work as specified. 24/24 pytest tests passing. One important false-positive bug discovered in the racist language filter (substring matching).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "helpers/safeguarding.py::check_language_filter",
+        "issue": "RACIST_WORDS check uses plain substring match (`word in text_lower`) instead of word-boundary matching. This produces false positives that will block legitimate user input. Verified examples: 'suspicious' is flagged because it contains 'spic'; same will happen for 'Pakistani' (contains 'paki'), 'Hispanic'/'auspicious' (contains 'spic'), 'Japan'/'Japanese' (contains 'jap'), 'crackers'/'nutcracker' (contains 'cracker'), 'wogan' (contains 'wog'). PROFANITY_WORDS correctly uses word-split match, but RACIST_WORDS does not. Recommended fix: use a regex with word boundaries (e.g. `re.search(rf'\\b{re.escape(word)}\\b', text)`), or at minimum split-by-non-alpha and compare. Currently this could prevent students reporting profiles, updating bios, sending support messages, etc. that contain perfectly legitimate words."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "passed_tests": [
+    "Auth sanity: GET /api/auth/me with seeded session_token works; unauth POST /api/reports returns 401",
+    "POST /api/reports - success returns {success, message, report_id}",
+    "POST /api/reports - self-report blocked with 400 'cannot report yourself'",
+    "POST /api/reports - reason containing racist word ('paki') blocked with 400 community guidelines message",
+    "POST /api/reports - duplicate pending report against same user blocked with 400 'pending' message",
+    "GET /api/reports/my - returns user's reports, _id excluded, chronological-desc",
+    "GET /api/admin/reports - admin listing works",
+    "PUT /api/profile - bio containing racist word blocked; clean bio saves successfully",
+    "POST /api/matches/swipe - comment with profanity ('fucking') blocked; comment with racist word ('chink') blocked",
+    "POST /api/support/message - sends user message and returns AI reply via emergentintegrations gpt-4o-mini (real LLM call, ~3-5s)",
+    "POST /api/support/message - empty text rejected; profanity rejected; racism rejected",
+    "POST /api/support/message - crisis text ('I want to kill myself, I can't go on') returns safeguarding_alert; SafeguardingAlert doc created in DB with source='support_chat'",
+    "GET /api/support/messages - returns chronological thread with user + ai senders",
+    "GET /api/support/admin/conversations - admin sees Emma's conversation with name/email/last_message/unread_for_admin",
+    "GET /api/support/admin/messages/{user_id} - admin gets thread; messages marked read_by_admin",
+    "POST /api/support/admin/reply - admin reply appears in user thread as sender='agent'",
+    "POST /api/support/admin/reply - admin reply with racist word blocked with 400",
+    "Regression: GET /api/matches/discover and POST /api/matches/swipe still work"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_reports_support.py",
+    "/app/test_reports/pytest/iter8_results.xml"
+  ],
+  "action_items": [
+    "FIX FALSE POSITIVE in RACIST_WORDS filter: substring matching blocks legitimate words like 'suspicious' (matches 'spic'), 'Pakistani' (matches 'paki'), 'Japanese' (matches 'jap'), 'Hispanic' (matches 'spic'), 'crackers' (matches 'cracker'). Use word-boundary regex (re.search(r'\\b{word}\\b', text, re.IGNORECASE)) for racist terms, same as profanity already does. This affects ALL endpoints using check_language_filter (reports, profile bio/course/university, swipe comments, chat, support). Apply the same fix to the 'normalized' substring check (which currently substitutes 1->i, 0->o, etc. and then does substring search)."
+  ],
+  "critical_code_review_comments": [
+    "BUG: check_language_filter() in /app/backend/helpers/safeguarding.py uses 'word in text_lower' for RACIST_WORDS (substring) instead of word-list lookup used for PROFANITY_WORDS. Causes false positives - real risk of blocking legitimate user input including ethnicity self-descriptions like 'Pakistani' or 'Japanese' (ironically discriminatory).",
+    "OK: Report duplicate-pending check works correctly; self-report check works.",
+    "OK: support.py uses async motor ops correctly, excludes _id from responses, marks read flags atomically with $set.",
+    "OK: emergentintegrations chat properly initialised with session_id per user and gpt-4o-mini; error path returns a graceful fallback message instead of 500.",
+    "OK: server.py registers reports + support routers under /api with no duplicate route conflicts (notifications.py duplicate /reports route already removed per request).",
+    "Minor: SupportMessageCreate and SupportAdminReply are defined inline in routes/support.py rather than in models.py. Acceptable since they're route-local, but inconsistent with project pattern.",
+    "Minor: admin_list_conversations aggregation could return empty conversations array if no support messages exist - handled gracefully by returning {conversations: []}."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_reports_support.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (24/24 tests passed)",
+    "frontend": "N/A - frontend testing skipped per request"
+  },
+  "test_credentials": {
+    "admin": {"email": "yusufquadri83@gmail.com", "password": "Oluwatobi11@"},
+    "students_seeded_sessions": {
+      "emma": {"user_id": "test-user-001", "bearer": "test-session-emma-001"},
+      "james": {"user_id": "test-user-002", "bearer": "test-session-james-002"}
+    }
+  },
+  "seed_data_creation": "Inserted/upserted user_sessions docs for test-user-001 (token test-session-emma-001) and test-user-002 (token test-session-james-002) with 1-day expiry. Cleaned reports/support_messages/safeguarding_alerts for these users before tests run. All done in autouse session fixture.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run `pytest /app/backend/tests/test_reports_support.py -v` to regression-test reports + support + language filter. Test seeds its own user_sessions, so it is idempotent. Note the known false-positive in racist substring matching - tests deliberately use 'paki', 'chink', 'nigga' which match cleanly. Avoid using 'suspicious', 'Pakistani', 'Hispanic' in test reason text. Stripe keys present in backend/.env - do NOT exercise /api/subscription/* endpoints.",
+  "rca_of_issue": "False-positive racism filter: in /app/backend/helpers/safeguarding.py line 111-113, RACIST_WORDS uses `if word in text_lower or word in normalized:` (substring match). PROFANITY_WORDS at line 123-126 correctly tokenises with `text_lower.split()`. Reproduction: POST /api/reports with reason='looks suspicious' returns 400 'racist or discriminatory'. Mitigation: replace with regex word-boundary match `re.search(rf'\\b{re.escape(word)}\\b', text_lower)` (and same against normalized). Apply across all callers automatically since they go through this helper."
+}

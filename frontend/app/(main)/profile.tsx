@@ -815,6 +815,25 @@ export default function ProfileScreen() {
               )}
             </TouchableOpacity>
 
+            {/* Contact Support Button */}
+            <TouchableOpacity
+              style={styles.supportButton}
+              onPress={() => router.push('/(main)/support')}
+              data-testid="contact-support-btn"
+            >
+              <View style={styles.supportIconContainer}>
+                <Ionicons name="headset" size={22} color="#6366F1" />
+              </View>
+              <View style={styles.supportInfo}>
+                <Text style={styles.supportTitle}>Contact Support</Text>
+                <Text style={styles.supportSubtitle}>
+                  Live chat with our team — replies in seconds
+                </Text>
+              </View>
+              <View style={styles.supportLiveDot} />
+              <Ionicons name="chevron-forward" size={20} color="#6366F1" />
+            </TouchableOpacity>
+
             {/* Section Tabs */}
             {renderSectionTabs()}
 
@@ -1003,6 +1022,45 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     marginLeft: 4,
+  },
+  supportButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.3)',
+  },
+  supportIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  supportInfo: {
+    flex: 1,
+  },
+  supportTitle: {
+    color: '#818CF8',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  supportSubtitle: {
+    color: '#9CA3AF',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  supportLiveDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#10B981',
+    marginRight: 6,
   },
   photoHint: {
     fontSize: 14,
