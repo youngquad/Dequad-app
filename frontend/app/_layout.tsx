@@ -12,7 +12,6 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
   useEffect(() => {
     if (isLoading) return;
 
-    const inAuthGroup = segments[0] === '(auth)';
     const inMainGroup = segments[0] === '(main)';
     const inAdminGroup = segments[0] === '(admin)';
     const isAdminLogin = inAdminGroup && segments[1] === 'login';
@@ -31,7 +30,7 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
       }
     } else {
       // If user is authenticated
-      if (isLandingPage || inAuthGroup) {
+      if (isLandingPage) {
         // Redirect to appropriate screen based on role
         if (userRole === 'admin') {
           router.replace('/(admin)/dashboard');
@@ -80,10 +79,6 @@ function RootLayoutNav() {
       >
         <Stack.Screen 
           name="index" 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="(auth)" 
           options={{ headerShown: false }} 
         />
         <Stack.Screen 

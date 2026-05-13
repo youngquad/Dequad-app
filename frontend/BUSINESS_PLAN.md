@@ -1,5 +1,5 @@
-# Educare Business Plan
-## Comprehensive Business Strategy Document
+# Dequad Business Plan
+## Comprehensive Business Strategy — UK Universities
 
 ---
 
@@ -7,90 +7,93 @@
 
 ## Company Overview
 
-**Educare** is a mobile-first student wellbeing platform that combines mood tracking, social connection, and safeguarding features to support university students' mental health and combat loneliness.
+**Dequad** is a UK-built, mobile-first student wellbeing platform that combines mood tracking, social connection, and safeguarding features to support UK university students' mental health and combat loneliness.
 
 ## Mission Statement
-> "To ensure no student feels alone in their university journey by providing proactive wellbeing support and meaningful connections."
+> "To ensure no UK student feels alone in their university journey by providing proactive wellbeing support and meaningful connections."
 
 ## Vision
-To become the global standard for student wellbeing technology, serving millions of students and partnering with thousands of universities worldwide.
+To become the UK standard for student wellbeing technology, serving the majority of UK university students and partnering with every UK higher education institution.
+
+## Geographic Scope
+**UK Universities Only.** International expansion is explicitly out of scope for the planning horizon of this document (Years 1–5). All product, marketing, compliance and partnership efforts focus exclusively on the UK higher education sector.
 
 ## Key Highlights
 
 | Metric | Value |
 |--------|-------|
-| Target Market | 235M university students globally |
-| Initial Focus | UK & US universities |
-| Business Model | B2B (universities) + B2C (premium) |
+| Target Market | 2.86M UK university students (HESA, 2023/24) |
+| Initial Focus | UK universities only |
+| Business Model | B2B (UK universities) + B2C (premium) |
 | Seed Funding Ask | £500,000 |
-| Year 5 Revenue Target | £10M ARR |
+| Year 5 Revenue Target | £3.75M ARR (UK) |
 
 ---
 
 # 1. Problem Statement
 
-## 1.1 The Student Mental Health Crisis
+## 1.1 The UK Student Mental Health Crisis
 
-### Statistics
-- **75%** of mental health conditions develop before age 24
-- **1 in 3** university students report significant mental health issues
-- **50%** of students experience loneliness during their studies
-- **37%** increase in student counseling demand over 5 years
-- **4-6 weeks** average waiting time for university counseling
+### UK Statistics
+- **57%** of UK students report a mental health issue (Student Minds, 2023)
+- **1 in 3** UK undergraduates experience serious psychological distress
+- **50%** of UK students experience loneliness during their studies (ONS)
+- **319%** rise in disclosed mental health conditions across UK HE in the past decade (HESA)
+- **4–6 weeks** average waiting time for UK university counselling
 
 ### Root Causes
-1. **Transition Stress**: Moving away from home, new environment
-2. **Academic Pressure**: Competitive environment, exam stress
-3. **Social Isolation**: Difficulty making friends, especially post-COVID
-4. **Financial Stress**: Rising tuition and living costs
-5. **Lack of Support**: Overwhelmed university services
+1. **Transition stress** — moving away from home, often to a new UK city
+2. **Academic pressure** — UK degree intensity, exam stress
+3. **Social isolation** — post-COVID effects, halls of residence loneliness
+4. **Financial stress** — rising UK tuition fees and cost-of-living crisis
+5. **Overwhelmed welfare services** — UK university counselling capacity
 
-### Current Solutions Fall Short
+### Current UK Solutions Fall Short
 
 | Current Solution | Limitation |
-|-----------------|------------|
-| University Counseling | Long wait times, limited capacity |
-| Generic Dating Apps | Safety concerns, not student-focused |
-| Meditation Apps | No social component, reactive not proactive |
-| Student Forums | Anonymous, lack of meaningful connection |
+|------------------|------------|
+| University counselling services | 4–6 week waits, limited capacity |
+| Generic dating apps | Safety concerns, not student-focused |
+| Meditation apps (Headspace) | No social component, reactive only |
+| TogetherAll / Big White Wall | Text-based, dated UX |
 
 ---
 
-# 2. Solution: Educare Platform
+# 2. Solution: The Dequad Platform
 
 ## 2.1 Product Overview
 
-Educare is a comprehensive mobile application that addresses student wellbeing through three core pillars:
+Dequad addresses UK student wellbeing through three core pillars:
 
 ### Pillar 1: Mood Tracking & Insights
 - Daily mood check-ins with contextual prompts
 - Pattern recognition and trend analysis
-- Personalized wellness recommendations
-- Early warning indicators for welfare teams
+- UK-relevant wellness signposting (NHS, Samaritans, Mind, Shout)
+- Early warning indicators for university welfare teams
 
 ### Pillar 2: Meaningful Connections
 - Hinge-style student matching interface
-- University-verified profiles only
-- Match based on interests, course, and study style
-- Like specific profile elements with comments
+- UK university-verified profiles (`.ac.uk` email)
+- Match by course, interests and study style
+- Like specific prompts with comments
 - End-to-end encrypted messaging
 
 ### Pillar 3: Safeguarding & Support
-- Keyword detection for crisis situations
-- Automatic alerts to university welfare teams
-- In-app crisis resources and helplines
-- Anonymous reporting capabilities
+- Keyword detection aligned to UK welfare frameworks
+- Automatic alerts to designated UK safeguarding leads
+- In-app UK crisis resources (Samaritans 116 123, Shout 85258, NHS 111)
+- Audit trail for OfS B3 condition compliance
 
 ## 2.2 Key Features
 
-| Feature | Description | User Benefit |
-|---------|-------------|-------------|
+| Feature | Description | Student Benefit |
+|---------|-------------|-----------------|
 | Mood Tracking | Daily emotional check-ins | Self-awareness, pattern recognition |
 | Student Matching | Hinge-style profile browsing | Combat loneliness, find friends |
 | Encrypted Chat | Secure messaging | Private, safe communication |
 | Prompts & Questions | Profile conversation starters | Meaningful connections |
 | Safeguarding Alerts | Crisis detection system | Safety net for vulnerable students |
-| University Dashboard | Admin analytics portal | Welfare team insights |
+| University Dashboard | Admin analytics portal | UK welfare team insights |
 
 ## 2.3 Technology Stack
 
@@ -99,72 +102,71 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 | Mobile App | React Native / Expo |
 | Backend | Python / FastAPI |
 | Database | MongoDB |
-| Authentication | Google OAuth / Emergent Auth |
+| Authentication | Google OAuth (`.ac.uk` verified) |
 | Encryption | End-to-end (AES-256) |
-| Hosting | Cloud (AWS/GCP) |
+| Hosting | UK / EU regions (AWS London / GCP eu-west2) |
 | Push Notifications | Expo Push Service |
 
 ---
 
-# 3. Market Analysis
+# 3. Market Analysis (UK)
 
-## 3.1 Market Size
+## 3.1 UK Market Size
 
-### Total Addressable Market (TAM)
-- Global EdTech Market: **$404 billion** by 2025
-- Student Wellness Technology: **$2.4 billion** by 2026
-- University Students Worldwide: **235 million**
+### Total Addressable Market (UK)
+- UK university students: **2.86M** (HESA 2023/24)
+- UK higher education institutions: **285+**
+- UK university sector economic contribution: **£43.9B** (UUK)
+- UK student welfare/wellbeing spend: **~£200M annually**
 
 ### Serviceable Addressable Market (SAM)
-- UK University Students: 2.9 million
-- US College Students: 20 million
-- English-speaking markets: ~30 million students
-- Market Value: **$750 million**
+- UK universities with formal welfare provisions: ~165
+- Russell Group: 24 institutions, ~590K students
+- Post-92 universities: ~75 institutions, ~1.2M students
+- **Total SAM students: 2.86M**
 
 ### Serviceable Obtainable Market (SOM)
-- 5-Year Target: 2 million users
-- Penetration Rate: 6.7% of SAM
-- Revenue Potential: **$10 million ARR**
+- 5-year target: **750,000 UK students** (~26% penetration)
+- Revenue potential: **£3.75M ARR**
 
-## 3.2 Market Trends
+## 3.2 UK Market Trends
 
 ### Growing Demand
-1. **Post-COVID Impact**: Increased focus on mental health
-2. **Gen Z Expectations**: Demand for digital-first solutions
-3. **University Accountability**: Regulatory pressure for student welfare
-4. **Employer Interest**: Graduate mental health affecting workplace
+1. **Post-COVID UK impact**: NHS waiting lists at record highs, students seeking digital alternatives
+2. **Gen Z expectations**: UK students expect mobile-first digital solutions
+3. **OfS B3 Conditions**: Office for Students regulatory pressure on student outcomes & welfare
+4. **UK loneliness epidemic**: Government-recognised public health issue
 
-### Industry Shifts
-- Move from reactive to proactive mental health support
-- Integration of wellbeing into education technology
-- Increased investment in student success platforms
-- Growing acceptance of digital mental health tools
+### UK Industry Shifts
+- Move from reactive to proactive mental health support in UK HE
+- Integration of wellbeing into UK EdTech
+- Increased UK university investment in student success platforms
+- Growing acceptance of digital mental health tools (NHS digital therapeutics framework)
 
-## 3.3 Competitive Landscape
+## 3.3 UK Competitive Landscape
 
-### Direct Competitors
+### Direct UK Competitors
 
 | Competitor | Focus | Weakness |
 |------------|-------|----------|
-| Headspace for Students | Meditation | No social features |
-| Talkspace | Therapy | Expensive, reactive |
-| TogetherAll | Peer support | Text-based, dated UX |
-| Bumble BFF | Friend finding | Not student-verified |
+| TogetherAll (UK) | Peer support | Text-only, dated UX |
+| Unmind | Workplace + uni wellness | B2B-only, no peer connection |
+| Student Space (Student Minds) | Information portal | Not interactive, no matching |
+| Bumble BFF | Friend finding | Not UK-student-verified |
 
-### Indirect Competitors
-- University counseling services
+### Indirect UK Competitors
+- University counselling services
 - Generic dating/social apps
-- Student union social events
-- Mental health hotlines
+- Students' Union social events
+- NHS mental health hotlines
 
 ### Competitive Advantages
-
-1. **Verified Community**: University email verification
-2. **Proactive Approach**: Prevention over treatment
-3. **Dual Focus**: Wellbeing + Social connection
-4. **Institutional Integration**: Safeguarding alerts
+1. **UK-verified community**: `.ac.uk` email verification
+2. **Proactive approach**: Prevention over treatment
+3. **Dual focus**: Wellbeing + social connection
+4. **UK institutional integration**: Safeguarding alerts aligned to OfS / Prevent
 5. **Modern UX**: Hinge-style engaging interface
-6. **Privacy First**: End-to-end encryption
+6. **UK-resident data**: GDPR & UK Data Protection Act 2018 compliant, UK data centres
 
 ---
 
@@ -172,25 +174,26 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 
 ## 4.1 Revenue Streams
 
-### Stream 1: B2B University Partnerships (60% of revenue)
+### Stream 1: B2B UK University Partnerships (60% of revenue)
 
 #### Pricing Tiers
 
-| Tier | Price/Student/Year | Includes |
-|------|-------------------|----------|
+| Tier | Price per Student per Year | Includes |
+|------|----------------------------|----------|
 | Basic | £2 | App access, basic reporting |
-| Standard | £3.50 | + Safeguarding alerts, dashboard |
-| Premium | £5 | + Custom branding, API integration |
+| Standard | £3.50 | + Safeguarding alerts, welfare dashboard |
+| Premium | £5 | + Custom branding, SSO integration |
 
-#### Target Customers
-- University welfare teams
-- Student services departments
-- Student unions
-- University mental health services
+#### Target Customers (UK)
+- UK university welfare teams
+- UK student services departments
+- UK Students' Unions
+- UK university mental health services
 
 ### Stream 2: B2C Premium Subscriptions (35% of revenue)
 
 #### Pricing
+
 | Plan | Price | Features |
 |------|-------|----------|
 | Free | £0 | Basic mood tracking, 5 likes/day |
@@ -204,78 +207,79 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 - Read receipts in chat
 - Detailed compatibility scores
 
-### Stream 3: Additional Revenue (5% of revenue)
-- Sponsored wellness content (from appropriate partners)
-- Career services integration fees
-- Research data licensing (anonymized, with consent)
+### Stream 3: Additional UK Revenue (5%)
+- Sponsored UK wellness content (NHS, Mind, Samaritans)
+- UK careers services integration (Bright Network, Prospects)
+- Anonymised UK research data licensing (with explicit consent)
 
 ## 4.2 Unit Economics
 
 | Metric | Value |
 |--------|-------|
-| Customer Acquisition Cost (CAC) | £2-5 |
-| Lifetime Value (LTV) - B2C | £25-40 |
-| Lifetime Value (LTV) - B2B | £5,000-50,000 |
-| LTV:CAC Ratio | 8:1 |
+| CAC | £2–£5 |
+| LTV (B2C) | £25–£40 |
+| LTV (B2B per university) | £10,000–£75,000 (depending on size) |
+| LTV:CAC | 8:1 |
 | Gross Margin | 80% |
-| Payback Period | 3-4 months |
+| Payback Period | 3–4 months |
 
 ---
 
-# 5. Go-To-Market Strategy
+# 5. Go-To-Market Strategy (UK Only)
 
-## 5.1 Phase 1: Pilot Program (Months 1-6)
+## 5.1 Phase 1: UK Pilot (Months 1–6)
 
 ### Objectives
-- Validate product-market fit
-- Gather user feedback and testimonials
-- Build case studies for sales
+- Validate product-market fit in UK HE
+- Gather UK student feedback and welfare team testimonials
+- Build UK case studies for B2B sales
 
 ### Activities
-- Partner with 3-5 UK universities (free pilot)
-- Deploy to student populations of 5,000-15,000
+- Partner with 3–5 UK universities (free pilot)
+- Mix of Russell Group + post-92 institutions
+- Target student populations 5,000–15,000
 - Weekly check-ins with welfare teams
-- Iterate based on feedback
+- Iterate based on UK student feedback
 
 ### Success Metrics
-- 30% adoption rate among students
+- 30% adoption rate among targeted students
 - 40% 30-day retention
-- NPS score of 40+
+- NPS 40+
 - Positive welfare team feedback
 
-## 5.2 Phase 2: UK Expansion (Months 6-18)
+## 5.2 Phase 2: UK Regional Expansion (Months 6–18)
 
 ### Objectives
-- Convert pilots to paid contracts
-- Expand to 10+ universities
+- Convert UK pilots to paid contracts
+- Expand to 10+ UK universities
 - Achieve £250K ARR
 
 ### Activities
-- Sales outreach to Russell Group universities
-- Student ambassador program
-- Conference presence (AMOSSHE, NASPA)
-- PR and media coverage
+- Direct sales outreach to Russell Group + leading post-92 universities
+- UK student ambassador programme
+- Conference presence (AMOSSHE, UMHAN, UCAS)
+- UK PR & student media coverage
 
-### Marketing Channels
+### Marketing Channels (UK)
+
 | Channel | Strategy | Budget % |
 |---------|----------|----------|
-| Direct Sales | University welfare teams | 40% |
-| Student Ambassadors | Campus influencers | 20% |
-| Social Media | TikTok, Instagram | 20% |
-| Events | Freshers' fairs, conferences | 15% |
-| PR | Student media, press | 5% |
+| Direct Sales | UK university welfare teams | 40% |
+| Student Ambassadors | UK campus influencers | 20% |
+| Social Media | TikTok, Instagram (UK creators) | 20% |
+| Events | UK Freshers' fairs, AMOSSHE | 15% |
+| PR | The Tab, Student Room, BBC student media | 5% |
 
-## 5.3 Phase 3: International Expansion (Months 18-36)
+## 5.3 Phase 3: National UK Scale (Months 18–36)
 
-### Target Markets
-1. **United States**: Largest market, high willingness to pay
-2. **Canada**: Similar to UK, growing demand
-3. **Australia**: English-speaking, high student welfare focus
+### Target
+- All UK universities with >5,000 students (~120 institutions)
+- 300,000 UK students by Month 36
+- Integration with NUS and individual SUs
+- Partnerships with NHS England student mental health programmes
 
-### Localization Requirements
-- US: Title IX compliance, NCAA partnerships
-- Canada: French language option for Quebec
-- Australia: Local crisis helplines integration
+### Out of Scope
+International expansion (US, Canada, Australia, EU) is **not** part of this 5-year plan. Future international expansion may be considered post-Year 5 as a separate strategic decision.
 
 ---
 
@@ -283,105 +287,113 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 
 ## 6.1 Team Structure
 
-### Year 1 Team (8 FTEs)
+### Year 1 Team (8 FTEs, UK-based)
 
 | Role | Count | Responsibility |
-|------|-------|---------------|
-| CEO/Founder | 1 | Strategy, fundraising, BD |
+|------|-------|----------------|
+| CEO/Founder | 1 | Strategy, fundraising, UK BD |
 | CTO | 1 | Technical leadership |
 | Full-stack Developers | 2 | Product development |
 | Product Designer | 1 | UX/UI design |
-| Growth Manager | 1 | Marketing, acquisition |
-| University Success Manager | 1 | Partner relationships |
-| Clinical Advisor (Part-time) | 1 | Safeguarding, content |
+| Growth Manager | 1 | UK marketing, acquisition |
+| University Success Manager | 1 | UK university partner relationships |
+| Clinical Advisor (Part-time) | 1 | UK safeguarding, content |
 
-### Year 3 Team (25 FTEs)
+### Year 3 Team (20 FTEs, UK-based)
 - Leadership: 4
-- Engineering: 8
-- Product & Design: 4
-- Sales & Partnerships: 5
-- Marketing: 3
+- Engineering: 6
+- Product & Design: 3
+- UK Sales & Partnerships: 4
+- Marketing: 2
 - Operations & Support: 1
 
-## 6.2 Key Partnerships
+## 6.2 UK Key Partnerships
 
-### Strategic Partners
-| Partner Type | Value | Examples |
-|--------------|-------|----------|
-| Universities | Distribution, credibility | Russell Group, Ivy League |
-| Student Unions | Grassroots adoption | NUS, individual unions |
-| Mental Health Orgs | Content, expertise | Mind, JED Foundation |
-| Technology | Infrastructure | AWS, Google Cloud |
+### Strategic UK Partners
 
-### Integration Partners
-- University SSO systems (Shibboleth, SAML)
-- Student information systems (Banner, PeopleSoft)
-- LMS platforms (Canvas, Blackboard)
+| Partner Type | Value | UK Examples |
+|--------------|-------|-------------|
+| Universities | Distribution, credibility | Russell Group, post-92 |
+| Students' Unions | Grassroots adoption | NUS, individual SUs |
+| UK Mental Health Orgs | Content, expertise | Mind, Samaritans, Student Minds |
+| NHS | Clinical legitimacy | NHS England Mental Health |
+| Technology | Infrastructure | AWS London, GCP eu-west2 |
 
-## 6.3 Compliance & Safeguarding
+### UK Integration Partners
+- UK university SSO (Shibboleth, UK Federation, Microsoft 365)
+- UK student information systems (SITS, Tribal SITS)
+- UK LMS platforms (Moodle, Canvas UK, Blackboard UK)
 
-### Data Protection
-- GDPR compliant (EU/UK)
-- FERPA compliant (US)
-- Regular security audits
-- Data processing agreements with universities
+## 6.3 UK Compliance & Safeguarding
 
-### Safeguarding Protocol
+### Data Protection (UK)
+- **UK GDPR + Data Protection Act 2018** compliant
+- ICO registered Data Controller
+- Data residency: UK / EU only
+- Regular ISO 27001-aligned security audits
+- Data processing agreements with each UK university partner
+
+### UK Safeguarding Protocol
 1. Keyword detection triggers alert
-2. Alert sent to designated university contact
-3. User shown crisis resources immediately
-4. Audit trail maintained for welfare team
-5. Regular protocol review with clinical advisor
+2. Alert sent to designated university safeguarding lead
+3. User shown UK crisis resources immediately (Samaritans, Shout, NHS 111)
+4. Audit trail maintained for welfare team and OfS B3 compliance
+5. Quarterly protocol review with UK clinical advisor
+
+### Regulatory Alignment
+- **Office for Students (OfS)** B3 conditions on student outcomes
+- **Prevent Duty** guidance (where applicable)
+- **Universities UK** Mental Health Charter alignment
 
 ---
 
-# 7. Financial Plan
+# 7. Financial Plan (UK)
 
-## 7.1 Revenue Projections
+## 7.1 Revenue Projections — UK Only
 
-| Year | Users | B2B Revenue | B2C Revenue | Total Revenue |
-|------|-------|-------------|-------------|---------------|
+| Year | UK Users | B2B Revenue | B2C Revenue | Total ARR |
+|------|----------|-------------|-------------|-----------|
 | 1 | 50K | £150,000 | £100,000 | £250,000 |
-| 2 | 200K | £600,000 | £400,000 | £1,000,000 |
-| 3 | 500K | £1,500,000 | £1,000,000 | £2,500,000 |
-| 4 | 1M | £3,000,000 | £2,000,000 | £5,000,000 |
-| 5 | 2M | £6,000,000 | £4,000,000 | £10,000,000 |
+| 2 | 150K | £450,000 | £300,000 | £750,000 |
+| 3 | 300K | £900,000 | £600,000 | £1,500,000 |
+| 4 | 500K | £1,500,000 | £1,000,000 | £2,500,000 |
+| 5 | 750K | £2,250,000 | £1,500,000 | £3,750,000 |
 
 ## 7.2 Cost Structure
 
-### Year 1 Expenses
+### Year 1 Expenses (UK-based team)
 
 | Category | Amount | % of Total |
 |----------|--------|------------|
-| Personnel | £350,000 | 58% |
-| Technology & Hosting | £60,000 | 10% |
-| Marketing | £100,000 | 17% |
-| Office & Operations | £40,000 | 7% |
-| Legal & Compliance | £30,000 | 5% |
+| Personnel (UK salaries) | £350,000 | 58% |
+| Technology & UK Hosting | £60,000 | 10% |
+| UK Marketing | £100,000 | 17% |
+| Office & Operations (UK) | £40,000 | 7% |
+| Legal & Compliance (UK GDPR, ICO) | £30,000 | 5% |
 | Contingency | £20,000 | 3% |
 | **Total** | **£600,000** | 100% |
 
 ### 5-Year Cost Projection
 
-| Year | Personnel | Tech | Marketing | Ops | Total Costs |
-|------|-----------|------|-----------|-----|-------------|
+| Year | Personnel | Tech | Marketing | Ops | Total |
+|------|-----------|------|-----------|-----|-------|
 | 1 | £350K | £60K | £100K | £90K | £600K |
-| 2 | £700K | £100K | £200K | £100K | £1.1M |
-| 3 | £1.2M | £150K | £350K | £150K | £1.85M |
-| 4 | £2M | £200K | £500K | £200K | £2.9M |
-| 5 | £3M | £300K | £700K | £300K | £4.3M |
+| 2 | £600K | £90K | £150K | £100K | £940K |
+| 3 | £900K | £120K | £250K | £130K | £1.4M |
+| 4 | £1.3M | £160K | £350K | £180K | £1.99M |
+| 5 | £1.7M | £200K | £450K | £200K | £2.55M |
 
 ## 7.3 Profitability Timeline
 
 | Year | Revenue | Costs | Profit/Loss | Margin |
 |------|---------|-------|-------------|--------|
 | 1 | £250K | £600K | -£350K | -140% |
-| 2 | £1M | £1.1M | -£100K | -10% |
-| 3 | £2.5M | £1.85M | +£650K | 26% |
-| 4 | £5M | £2.9M | +£2.1M | 42% |
-| 5 | £10M | £4.3M | +£5.7M | 57% |
+| 2 | £750K | £940K | -£190K | -25% |
+| 3 | £1.5M | £1.4M | +£100K | 7% |
+| 4 | £2.5M | £1.99M | +£510K | 20% |
+| 5 | £3.75M | £2.55M | +£1.2M | 32% |
 
-**Break-even Point**: Month 24-28
+**Break-even Point**: Month 28–32
 
 ## 7.4 Funding Requirements
 
@@ -390,13 +402,13 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 | Use of Funds | Amount | % |
 |--------------|--------|---|
 | Product Development | £200,000 | 40% |
-| Marketing & Growth | £150,000 | 30% |
-| Team Expansion | £100,000 | 20% |
-| Operations & Legal | £50,000 | 10% |
+| UK Marketing & Growth | £150,000 | 30% |
+| Team Expansion (UK hires) | £100,000 | 20% |
+| Operations & UK Legal/Compliance | £50,000 | 10% |
 
-### Future Funding
-- **Series A** (Month 18): £2-3M for international expansion
-- **Series B** (Month 36): £8-10M for market leadership
+### Future Funding (UK-focused)
+- **Series A** (Month 18): £1.5–£2M for UK national scale
+- **Series B** (Month 36): £4–£6M for UK market leadership
 
 ---
 
@@ -406,60 +418,60 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Low user adoption | Medium | High | Strong onboarding, ambassador program |
-| University sales cycle too long | High | Medium | Start with pilots, build case studies |
-| Data breach | Low | Critical | Security audits, encryption, insurance |
-| Competitor entry | Medium | Medium | First-mover advantage, partnerships |
-| Safeguarding incident | Low | High | Clear protocols, clinical oversight |
-| Regulatory changes | Low | Medium | Legal counsel, compliance monitoring |
+| Low UK student adoption | Medium | High | Strong onboarding, UK ambassador programme |
+| UK university sales cycle too long | High | Medium | Start with pilots, build UK case studies |
+| Data breach | Low | Critical | ICO compliance, encryption, cyber insurance |
+| UK competitor entry | Medium | Medium | First-mover advantage, UK university partnerships |
+| Safeguarding incident | Low | High | Clear protocols, UK clinical oversight |
+| UK regulatory changes (OfS) | Medium | Medium | UK legal counsel, continuous compliance monitoring |
 
 ## 8.2 Contingency Plans
 
-### If B2B sales are slow:
-- Pivot to B2C-first model
-- Partner with student unions instead of universities
-- Offer freemium to build user base
+### If B2B UK sales are slow:
+- Pivot to B2C-first UK model
+- Partner with NUS / individual Students' Unions instead of universities directly
+- Offer freemium to build UK user base
 
-### If user retention is low:
+### If UK user retention is low:
 - Gamification features
 - More engagement hooks (streaks, rewards)
-- Community features (groups, events)
+- Community features (UK university-specific groups, events)
 
 ---
 
 # 9. Milestones & Timeline
 
-## 9.1 18-Month Roadmap
+## 9.1 18-Month UK Roadmap
 
-### Q1 (Months 1-3)
-- [ ] Finalize product for pilot launch
-- [ ] Sign 3 pilot university agreements
-- [ ] Hire core team (2-3 people)
-- [ ] Launch pilot programs
+### Q1 (Months 1–3)
+- Finalise product for UK pilot launch
+- Sign 3 UK pilot university agreements
+- Hire core UK team (2–3 people)
+- Launch UK pilot programmes
 
-### Q2 (Months 4-6)
-- [ ] Iterate based on pilot feedback
-- [ ] Achieve 5,000 active users
-- [ ] Develop university dashboard
-- [ ] Begin premium subscription testing
+### Q2 (Months 4–6)
+- Iterate based on UK pilot feedback
+- 5,000 active UK users
+- Develop UK welfare team dashboard
+- Begin UK premium subscription testing
 
-### Q3 (Months 7-9)
-- [ ] Convert 2+ pilots to paid contracts
-- [ ] Launch premium subscriptions
-- [ ] Expand to 5 additional universities
-- [ ] Achieve 15,000 active users
+### Q3 (Months 7–9)
+- Convert 2+ UK pilots to paid contracts
+- Launch UK premium subscriptions
+- Expand to 5 additional UK universities
+- 15,000 active UK users
 
-### Q4 (Months 10-12)
-- [ ] Reach 10 university partners
-- [ ] Achieve £250K ARR
-- [ ] 50,000 registered users
-- [ ] Prepare Series A materials
+### Q4 (Months 10–12)
+- Reach 10 UK university partners
+- £250K ARR
+- 50,000 registered UK users
+- Prepare UK-focused Series A materials
 
-### Q5-Q6 (Months 13-18)
-- [ ] Close Series A funding
-- [ ] Begin US market research
-- [ ] Reach 100,000 users
-- [ ] Achieve £500K ARR
+### Q5–Q6 (Months 13–18)
+- Close UK Series A funding
+- Expand to 20 UK university partners
+- 100,000 active UK users
+- £500K ARR
 
 ---
 
@@ -471,30 +483,35 @@ Educare is a comprehensive mobile application that addresses student wellbeing t
 |------|------------|
 | ARR | Annual Recurring Revenue |
 | CAC | Customer Acquisition Cost |
+| HESA | Higher Education Statistics Agency (UK) |
 | LTV | Lifetime Value |
 | NPS | Net Promoter Score |
-| MAU | Monthly Active Users |
-| DAU | Daily Active Users |
-| B2B | Business to Business |
-| B2C | Business to Consumer |
+| OfS | Office for Students (UK regulator) |
+| UUK | Universities UK |
+| AMOSSHE | UK Student Services Organisation |
+| UMHAN | University Mental Health Advisers Network (UK) |
+| NUS | National Union of Students (UK) |
 
-## 10.2 References
+## 10.2 UK References
 
-1. Student Minds - "University Mental Health Charter" (2019)
-2. IPPR - "Not by Degrees: Improving Student Mental Health" (2017)
-3. AMOSSHE - "Responding to Student Mental Health" (2020)
-4. WHO - "Mental Health of Adolescents" (2021)
-5. McKinsey - "EdTech Market Overview" (2022)
+1. Student Minds — "University Mental Health Charter" (2023)
+2. HESA — UK Higher Education Statistics (2023/24)
+3. Office for Students — "B3 conditions and student outcomes" (2023)
+4. AMOSSHE — "Responding to Student Mental Health" (2023)
+5. ONS — "Coronavirus and the social impacts on students in higher education" (2022)
+6. Universities UK — "Stepchange: Mentally Healthy Universities" (2020)
 
 ## 10.3 Contact Information
 
-**Educare**
+**Dequad**
 
 - Website: www.dequad.app
 - Email: investors@dequad.app
 - Location: United Kingdom
+- Geographic Scope: UK universities only
 
 ---
 
-*Document Version: 1.0*
+*Document Version: 2.0*
 *Last Updated: February 2026*
+*Rebranded from "Educare" to "Dequad" with UK-only market focus.*
