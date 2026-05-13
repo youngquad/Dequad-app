@@ -3,12 +3,15 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime, timezone
 import uuid
+import os
+import asyncio
 import logging
 
 from database import db
 from models import User
 from helpers.auth import get_current_user, require_admin
 from helpers.notifications import send_push_notification
+from helpers.email import send_support_reply_email
 from helpers.safeguarding import (
     check_language_filter,
     check_safeguarding_content,
@@ -253,7 +256,10 @@ async def admin_send_reply(data: SupportAdminReply, admin: User = Depends(requir
     if language_check["blocked"]:
         raise HTTPException(status_code=400, detail=language_check["message"])
 
-    target = await db.users.find_one({"user_id": data.user_id}, {"_id": 0, "user_id": 1})
+    target = await db.users.find_one(
+        {"user_id": data.user_id},
+        {"_id": 0, "user_id": 1, "email": 1, "name": 1, "notifications_enabled": 1},
+    )
     if not target:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -270,5 +276,17 @@ async def admin_send_reply(data: SupportAdminReply, admin: User = Depends(requir
         "support_reply",
         {"message_id": msg["id"], "agent_name": admin.name},
     )
+
+    # Email fallback (fires in background so the API stays snappy).
+    if target.get("notifications_enabled", True) and target.get("email"):
+        app_url = os.environ.get("APP_URL", "https://review-extractor-2.preview.emergentagent.com").rstrip("/")
+        deep_link = f"{app_url}/(main)/support"
+        asyncio.create_task(send_support_reply_email(
+            student_email=target["email"],
+            student_name=target.get("name", ""),
+            agent_name=admin.name,
+            reply_text=data.text.strip(),
+            app_url=deep_link,
+        ))
 
     return {"success": True, "message": msg}

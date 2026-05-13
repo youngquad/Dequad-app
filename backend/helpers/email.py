@@ -150,6 +150,89 @@ async def send_safeguarding_email_to_admins(alert_data: dict):
         logger.error(f"Error sending safeguarding email: {e}")
 
 
+def create_support_reply_email_html(student_name: str, agent_name: str, reply_text: str, app_url: str) -> str:
+    import html as _html
+    safe_reply = _html.escape(reply_text).replace("\n", "<br>")
+    safe_name = _html.escape(student_name or "there")
+    safe_agent = _html.escape(agent_name or "DEQUAD Support")
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #f9fafb; margin: 0; padding: 0; }}
+            .container {{ max-width: 560px; margin: 0 auto; padding: 24px; }}
+            .header {{ background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white; padding: 24px; text-align: center; border-radius: 12px 12px 0 0; }}
+            .header h1 {{ margin: 0; font-size: 22px; }}
+            .content {{ background: white; padding: 28px; border: 1px solid #e5e7eb; border-top: none; }}
+            .agent-row {{ display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }}
+            .agent-badge {{ background: #10B981; color: white; font-size: 11px; padding: 4px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }}
+            .agent-name {{ font-weight: 700; color: #111827; }}
+            .reply-box {{ background: #F3F4F6; border-left: 4px solid #6366F1; padding: 16px 18px; border-radius: 8px; color: #1f2937; font-size: 15px; margin: 4px 0 20px 0; }}
+            .button {{ display: inline-block; background: #6366F1; color: white !important; padding: 12px 22px; text-decoration: none; border-radius: 8px; margin: 8px 0 4px 0; font-weight: 600; }}
+            .footer {{ text-align: center; padding: 18px; color: #6b7280; font-size: 12px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>You have a reply from DEQUAD Support</h1>
+            </div>
+            <div class="content">
+                <p>Hi {safe_name},</p>
+                <div class="agent-row">
+                    <span class="agent-badge">Human Agent</span>
+                    <span class="agent-name">{safe_agent}</span>
+                </div>
+                <div class="reply-box">{safe_reply}</div>
+                <div style="text-align: center;">
+                    <a href="{app_url}" class="button">Open the conversation</a>
+                </div>
+                <p style="margin-top: 22px; color: #6b7280; font-size: 13px;">
+                    We're here whenever you need us — feel free to reply directly in the app.
+                </p>
+            </div>
+            <div class="footer">
+                <p>You're receiving this because a DEQUAD support agent replied to your conversation.<br>
+                You can turn off these emails from <strong>Profile → Push Notifications</strong> in the app.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+
+def create_support_reply_email_text(student_name: str, agent_name: str, reply_text: str, app_url: str) -> str:
+    return f"""Hi {student_name or 'there'},
+
+You have a new reply from DEQUAD Support ({agent_name or 'Human Agent'}):
+
+---
+{reply_text}
+---
+
+Open the conversation: {app_url}
+
+You can turn off these emails from Profile -> Push Notifications in the app.
+"""
+
+
+async def send_support_reply_email(student_email: str, student_name: str, agent_name: str, reply_text: str, app_url: str) -> bool:
+    if not is_smtp_configured():
+        logger.warning("SMTP not configured - skipping support reply email")
+        return False
+    if not student_email:
+        return False
+    subject = "You have a reply from DEQUAD Support"
+    html_body = create_support_reply_email_html(student_name, agent_name, reply_text, app_url)
+    text_body = create_support_reply_email_text(student_name, agent_name, reply_text, app_url)
+    try:
+        return await send_email_async([student_email], subject, html_body, text_body)
+    except Exception as e:
+        logger.error(f"Support reply email error: {e}")
+        return False
+
+
 def create_password_reset_email_html(name: str, reset_url: str) -> str:
     return f"""
     <!DOCTYPE html>
