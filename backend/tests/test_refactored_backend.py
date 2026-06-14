@@ -16,13 +16,14 @@ import os
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
-# Test credentials from test_credentials.md
-SUPER_ADMIN_EMAIL = "yusufquadri83@gmail.com"
-SUPER_ADMIN_PASSWORD = "Oluwatobi11@"
-ADMIN_CODE = "DEQUAD_ADMIN_2024"
+# Credentials must come from the environment — never commit secrets to source.
+# Set these in /app/memory/test_credentials.md and export before running tests.
+SUPER_ADMIN_EMAIL = os.environ.get("SEED_ADMIN_EMAIL") or os.environ.get("ADMIN_EMAIL")
+SUPER_ADMIN_PASSWORD = os.environ.get("SEED_ADMIN_PASSWORD") or os.environ.get("ADMIN_PASSWORD")
+ADMIN_CODE = os.environ.get("ADMIN_CODE", "DEQUAD_ADMIN_2024")
 
-UNI_ADMIN_EMAIL = "admin@manchesteruni.edu"
-UNI_ADMIN_PASSWORD = "UniAdmin123!"
+UNI_ADMIN_EMAIL = os.environ.get("SEED_UNI_ADMIN_EMAIL", "admin@manchesteruni.edu")
+UNI_ADMIN_PASSWORD = os.environ.get("SEED_UNI_ADMIN_PASSWORD")
 
 
 class TestCoreRoutes:
@@ -63,7 +64,11 @@ class TestCoreRoutes:
 
 class TestAdminAuth:
     """Admin authentication endpoints"""
-    
+
+    def setup_method(self):
+        if not SUPER_ADMIN_EMAIL or not SUPER_ADMIN_PASSWORD:
+            pytest.skip("SEED_ADMIN_EMAIL/SEED_ADMIN_PASSWORD not set in environment")
+
     def test_admin_login_success(self):
         """POST /api/auth/admin-login with valid credentials returns session token"""
         response = requests.post(f"{BASE_URL}/api/auth/admin-login", json={
@@ -74,7 +79,7 @@ class TestAdminAuth:
         data = response.json()
         
         assert "session_token" in data
-        assert data["is_admin"] == True
+        assert data["is_admin"] is True
         assert "user" in data
         assert data["user"]["email"] == SUPER_ADMIN_EMAIL
         assert data["user"]["role"] == "admin"
@@ -93,7 +98,11 @@ class TestAdminAuth:
 
 class TestUniversityAdminAuth:
     """University admin authentication endpoints"""
-    
+
+    def setup_method(self):
+        if not UNI_ADMIN_PASSWORD:
+            pytest.skip("SEED_UNI_ADMIN_PASSWORD not set in environment")
+
     def test_university_admin_login_success(self):
         """POST /api/university-admin/login with valid credentials returns session token"""
         response = requests.post(f"{BASE_URL}/api/university-admin/login", json={
@@ -127,6 +136,8 @@ class TestAdminEndpoints:
     @pytest.fixture(autouse=True)
     def setup(self):
         """Get admin token before each test"""
+        if not SUPER_ADMIN_EMAIL or not SUPER_ADMIN_PASSWORD:
+            pytest.skip("SEED_ADMIN_EMAIL/SEED_ADMIN_PASSWORD not set in environment")
         response = requests.post(f"{BASE_URL}/api/auth/admin-login", json={
             "email": SUPER_ADMIN_EMAIL,
             "password": SUPER_ADMIN_PASSWORD
@@ -218,6 +229,8 @@ class TestUniversityAdminEndpoints:
     @pytest.fixture(autouse=True)
     def setup(self):
         """Get university admin token before each test"""
+        if not UNI_ADMIN_PASSWORD:
+            pytest.skip("SEED_UNI_ADMIN_PASSWORD not set in environment")
         response = requests.post(f"{BASE_URL}/api/university-admin/login", json={
             "email": UNI_ADMIN_EMAIL,
             "password": UNI_ADMIN_PASSWORD

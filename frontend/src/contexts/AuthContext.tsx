@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const processSessionId = async (sessionId: string) => {
+  const processSessionId = useCallback(async (sessionId: string) => {
     try {
       console.log('Processing session_id:', sessionId);
       const response = await api.post('/auth/session', { session_id: sessionId });
@@ -58,9 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Session exchange error:', error);
     }
-  };
+  }, []);
 
-  const checkExistingSession = async () => {
+  const checkExistingSession = useCallback(async () => {
     try {
       let token = await AsyncStorage.getItem('session_token');
       
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSessionToken(null);
       setUser(null);
     }
-  };
+  }, []);
 
   // Handle URL callback
   useEffect(() => {
@@ -146,7 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [processSessionId]);
 
   // Check existing session on mount
   useEffect(() => {
@@ -156,7 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
     };
     init();
-  }, []);
+  }, [checkExistingSession]);
 
   const login = async () => {
     try {

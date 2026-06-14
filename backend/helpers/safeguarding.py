@@ -1,7 +1,7 @@
 import logging
 import asyncio
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from database import db
 from models import SafeguardingAlert, LearnedKeyword, AILearningInsight
 from helpers.email import send_safeguarding_email_to_admins
@@ -143,6 +143,7 @@ def check_safeguarding_content(text: str) -> dict:
 
     text_lower = text.lower()
     matched_keywords = []
+    risk_level = "none"  # default — overridden below based on matched keyword count
 
     for keyword in SAFEGUARDING_KEYWORDS:
         if keyword in text_lower:
@@ -156,8 +157,6 @@ def check_safeguarding_content(text: str) -> dict:
         risk_level = "high"
     elif len(matched_keywords) == 1:
         risk_level = "medium"
-    else:
-        risk_level = "none"
 
     return {
         "flagged": len(matched_keywords) > 0,
@@ -307,7 +306,7 @@ async def record_alert_feedback(alert_id: str, was_true_positive: bool, notes: s
 
 
 async def detect_behavioral_anomalies():
-    seven_days_ago = datetime.now(timezone.utc) - __import__('datetime').timedelta(days=7)
+    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
 
     pipeline = [
         {"$match": {"created_at": {"$gte": seven_days_ago}}},

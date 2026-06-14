@@ -12,13 +12,17 @@ sys.path.insert(0, "/app/backend")
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://review-extractor-2.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 
-EMMA_TOKEN = "test-session-emma-001"
-JAMES_TOKEN = "test-session-james-002"
+# Test bearer tokens — seeded into MongoDB by the `seed_sessions` fixture.
+# These are NOT credentials; they are random-looking strings only valid during a test run.
+EMMA_TOKEN = os.environ.get("TEST_EMMA_TOKEN", "test-session-emma-001")
+JAMES_TOKEN = os.environ.get("TEST_JAMES_TOKEN", "test-session-james-002")
 EMMA_USER_ID = "test-user-001"
 JAMES_USER_ID = "test-user-002"
 
-ADMIN_EMAIL = "yusufquadri83@gmail.com"
-ADMIN_PASSWORD = "Oluwatobi11@"
+# Admin credentials must come from the environment (see /app/memory/test_credentials.md).
+# Tests will skip the admin suite if these are not provided.
+ADMIN_EMAIL = os.environ.get("SEED_ADMIN_EMAIL") or os.environ.get("ADMIN_EMAIL")
+ADMIN_PASSWORD = os.environ.get("SEED_ADMIN_PASSWORD") or os.environ.get("ADMIN_PASSWORD")
 
 
 # ==================== FIXTURES ====================
@@ -78,6 +82,8 @@ def james_headers():
 
 @pytest.fixture(scope="session")
 def admin_headers():
+    if not ADMIN_EMAIL or not ADMIN_PASSWORD:
+        pytest.skip("SEED_ADMIN_EMAIL/SEED_ADMIN_PASSWORD not set in environment")
     r = requests.post(f"{API}/auth/admin-login", json={
         "email": ADMIN_EMAIL, "password": ADMIN_PASSWORD
     })

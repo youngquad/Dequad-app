@@ -1,13 +1,18 @@
 import hashlib
 import uuid
 import os
-import random
+import secrets
 import logging
 from datetime import datetime, timezone, timedelta
 
 from database import db
 
 logger = logging.getLogger(__name__)
+
+# Use a cryptographically-strong RNG instead of the stdlib `random` module.
+# Demo data isn't security-sensitive, but this satisfies static-analysis tools
+# and removes any future risk if these helpers are ever reused for credentials.
+_rng = secrets.SystemRandom()
 
 
 async def seed_admin_and_test_users():
@@ -190,13 +195,13 @@ async def seed_admin_and_test_users():
         ]
         test_user_ids = [f"test-user-{str(i).zfill(3)}" for i in range(1, 13)]
         for _ in range(40):
-            user_id = random.choice(test_user_ids)
+            user_id = _rng.choice(test_user_ids)
             user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "name": 1, "university": 1})
             if user:
                 mood_entry = {
-                    "user_id": user_id, "score": random.randint(3, 10),
-                    "note": random.choice(mood_notes), "university": user.get("university", ""),
-                    "created_at": datetime.now(timezone.utc) - timedelta(days=random.randint(0, 14), hours=random.randint(0, 12))
+                    "user_id": user_id, "score": _rng.randint(3, 10),
+                    "note": _rng.choice(mood_notes), "university": user.get("university", ""),
+                    "created_at": datetime.now(timezone.utc) - timedelta(days=_rng.randint(0, 14), hours=_rng.randint(0, 12))
                 }
                 await db.mood_entries.insert_one(mood_entry)
         logger.info("Demo mood entries seeded")
@@ -226,9 +231,9 @@ async def seed_admin_and_test_users():
                 for direction in [(user_a, user_b), (user_b, user_a)]:
                     await db.matches.insert_one({
                         "id": match_id, "user_id": direction[0], "matched_user_id": direction[1],
-                        "status": "accepted", "score": round(random.uniform(0.5, 0.95), 2),
+                        "status": "accepted", "score": round(_rng.uniform(0.5, 0.95), 2),
                         "comment": None, "liked_section": None,
-                        "created_at": now_m - timedelta(days=random.randint(1, 7))
+                        "created_at": now_m - timedelta(days=_rng.randint(1, 7))
                     })
 
             # Add demo chat messages
@@ -278,7 +283,7 @@ async def seed_admin_and_test_users():
                 await db.chat_messages.insert_one({
                     "id": str(uuid.uuid4()), "match_id": match_id,
                     "sender_id": sender, "text": text,
-                    "created_at": now_c - timedelta(hours=len(conversation) - i, minutes=random.randint(0, 30))
+                    "created_at": now_c - timedelta(hours=len(conversation) - i, minutes=_rng.randint(0, 30))
                 })
 
         logger.info("Demo matches and chat messages seeded")

@@ -22,7 +22,13 @@
 8. **pair_id Migration** — chat messages now fetched bidirectionally via deterministic `pair_id` (`/app/backend/scripts/migrate_chat_pair_id.py`).
 9. **Chat Inbox UI** — removed emails, added last-message preview + timestamp.
 10. **Unread Badges** — Admin (Support, Safeguarding) + Student (Chat, Connect) tabs.
-11. **EAS Build Guide + Helper Script (2026-02)** — `/app/EAS_BUILD_GUIDE.md` and `/app/scripts/build.sh` (validate / dev / preview / prod / submit / ota / doctor commands).
+11. **EAS Build Guide + Helper Script (2026-02)** — `/app/EAS_BUILD_GUIDE.md`, `/app/BETA_OPTION_A.md`, and `/app/scripts/build.sh` (validate / dev / preview / prod / submit / ota / register-device / list-devices / doctor commands).
+12. **Code Quality Pass (2026-02)** — Critical fixes from external code review applied:
+    - Removed hardcoded admin/test credentials from `tests/test_reports_support.py` + `tests/test_refactored_backend.py` (now read from `SEED_ADMIN_*`/`SEED_UNI_ADMIN_*` env vars; tests skip if not set)
+    - Pre-initialized `risk_level` in `helpers/safeguarding.py:check_safeguarding_content` to remove undefined-path warning
+    - Fixed dynamic `__import__('datetime')` usage in `safeguarding.py:detect_behavioral_anomalies` (proper `timedelta` import)
+    - Wrapped `processSessionId`, `checkExistingSession` in `useCallback` in `AuthContext.tsx` to eliminate stale-closure warnings on the URL-callback + session-check `useEffect`s
+    - Replaced stdlib `random` with `secrets.SystemRandom()` in `seed.py` (demo data; satisfies static analysis)
 
 ## Tested
 - Backend: pytest suite + `/app/test_reports/iteration_8.json`.
