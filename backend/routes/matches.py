@@ -18,6 +18,18 @@ def _week_start_iso(now: datetime = None) -> str:
     return monday.strftime("%Y-%m-%d")
 
 
+def _next_week_reset(now: datetime = None) -> datetime:
+    """Return the UTC datetime of the next ISO week roll-over (Monday 00:00 UTC)."""
+    now = now or datetime.now(timezone.utc)
+    days_until_monday = (7 - now.weekday()) % 7
+    if days_until_monday == 0:  # it's Monday already → roll to next Monday
+        days_until_monday = 7
+    next_monday = (now + timedelta(days=days_until_monday)).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    return next_monday
+
+
 def calculate_match_score(user: dict, other: dict) -> float:
     score = 0.0
     user_interests = set(user.get("interests", []))
@@ -195,9 +207,11 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
             )
 
     remaining_likes = None
+    next_reset = None
     if user_plan == "free":
         used = likes_this_week + (1 if data.action == "like" else 0)
         remaining_likes = max(0, FREE_LIKES_PER_WEEK - used)
+        next_reset = _next_week_reset().isoformat()
 
     return {
         "match": match.dict(),
@@ -205,6 +219,7 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
         "matched_user": mutual_match,
         # New field: weekly like budget (used by frontend banner / upgrade prompt)
         "remaining_likes_this_week": remaining_likes,
+        "next_like_reset": next_reset,
         # Back-compat: keep the old key name pointing at the same value so older
         # clients don't break in the middle of an active session.
         "remaining_swipes": remaining_likes,

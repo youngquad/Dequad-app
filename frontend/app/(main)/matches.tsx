@@ -51,6 +51,7 @@ interface UserProfile {
 interface SwipeInfo {
   remaining_likes_this_week: number | null;
   is_premium: boolean;
+  next_like_reset: string | null;
 }
 
 interface CommentModalData {
@@ -66,7 +67,8 @@ export default function MatchesScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [matchAlert, setMatchAlert] = useState<UserProfile | null>(null);
-  const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_likes_this_week: 3, is_premium: false });
+  const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_likes_this_week: 3, is_premium: false, next_like_reset: null });
+  const [now, setNow] = useState<number>(Date.now());
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [likingSection, setLikingSection] = useState<string | null>(null);
   const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
@@ -110,11 +112,32 @@ export default function MatchesScreen() {
       const remaining = data.remaining_likes_this_week ?? data.remaining_swipes ?? null;
       setSwipeInfo({
         remaining_likes_this_week: remaining,
-        is_premium: data.is_premium
+        is_premium: data.is_premium,
+        next_like_reset: data.next_like_reset ?? null,
       });
     } catch (error) {
       console.error('Error loading swipe status:', error);
     }
+  };
+
+  // Tick once a minute so the "refreshes in X" countdown stays fresh while screen is open.
+  useEffect(() => {
+    if (swipeInfo.is_premium) return;
+    if ((swipeInfo.remaining_likes_this_week ?? 1) > 0) return;
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, [swipeInfo.is_premium, swipeInfo.remaining_likes_this_week]);
+
+  const formatResetCountdown = (iso: string | null): string => {
+    if (!iso) return 'next week';
+    const ms = new Date(iso).getTime() - now;
+    if (ms <= 0) return 'any moment';
+    const days = Math.floor(ms / 86_400_000);
+    const hours = Math.floor((ms % 86_400_000) / 3_600_000);
+    const minutes = Math.floor((ms % 3_600_000) / 60_000);
+    if (days >= 1) return `${days}d ${hours}h`;
+    if (hours >= 1) return `${hours}h ${minutes}m`;
+    return `${Math.max(1, minutes)}m`;
   };
 
   const getSectionLabel = (section: string): string => {
@@ -168,7 +191,8 @@ export default function MatchesScreen() {
       if (remaining !== null && remaining !== undefined) {
         setSwipeInfo(prev => ({
           ...prev,
-          remaining_likes_this_week: remaining
+          remaining_likes_this_week: remaining,
+          next_like_reset: result.next_like_reset ?? prev.next_like_reset,
         }));
       }
       
@@ -565,7 +589,8 @@ export default function MatchesScreen() {
             </View>
             <Text style={styles.upgradeTitle}>Weekly like limit reached</Text>
             <Text style={styles.upgradeSubtitle}>
-              You've used all 3 likes for this week.{'\n'}Skips are still unlimited — or upgrade to Premium for unlimited likes!
+              You've used all 3 likes for this week.{'\n'}
+              Likes refresh in {formatResetCountdown(swipeInfo.next_like_reset)} — or upgrade to Premium for unlimited likes now.
             </Text>
             <Pressable
               onPress={() => {
@@ -636,34 +661,48 @@ export default function MatchesScreen() {
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* Weekly Likes Counter */}
-        {!swipeInfo.is_premium && (
-          <TouchableOpacity 
-            style={styles.swipeBanner}
-            onPress={() => router.push('/(main)/subscription')}
-            activeOpacity={0.8}
-          >
-            <View style={styles.swipeCounter}>
-              <View style={styles.swipeDotsContainer}>
-                {[...Array(3)].map((_, i) => (
-                  <View 
-                    key={i} 
-                    style={[
-                      styles.swipeDot,
-                      i < (swipeInfo.remaining_likes_this_week || 0) && styles.swipeDotActive
-                    ]} 
-                  />
-                ))}
+        {/* Weekly Likes Counter — switches to a refresh-countdown when limit is hit */}
+        {!swipeInfo.is_premium && (() => {
+          const remaining = swipeInfo.remaining_likes_this_week ?? 0;
+          const limitHit = remaining <= 0;
+          return (
+            <TouchableOpacity
+              style={[styles.swipeBanner, limitHit && styles.swipeBannerLimit]}
+              onPress={() => router.push('/(main)/subscription')}
+              activeOpacity={0.8}
+              data-testid={limitHit ? "likes-reset-banner" : "likes-remaining-banner"}
+            >
+              {limitHit ? (
+                <View style={styles.swipeCounter}>
+                  <Ionicons name="time-outline" size={16} color="#FBBF24" />
+                  <Text style={styles.swipeResetText} numberOfLines={1}>
+                    Likes refresh in {formatResetCountdown(swipeInfo.next_like_reset)}
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.swipeCounter}>
+                  <View style={styles.swipeDotsContainer}>
+                    {[...Array(3)].map((_, i) => (
+                      <View
+                        key={i}
+                        style={[
+                          styles.swipeDot,
+                          i < remaining && styles.swipeDotActive
+                        ]}
+                      />
+                    ))}
+                  </View>
+                  <Text style={styles.swipeCounterText}>
+                    {remaining} likes left this week
+                  </Text>
+                </View>
+              )}
+              <View style={styles.upgradeBadge}>
+                <Ionicons name="diamond" size={14} color="#F59E0B" />
               </View>
-              <Text style={styles.swipeCounterText}>
-                {swipeInfo.remaining_likes_this_week || 0} likes left this week
-              </Text>
-            </View>
-            <View style={styles.upgradeBadge}>
-              <Ionicons name="diamond" size={14} color="#F59E0B" />
-            </View>
-          </TouchableOpacity>
-        )}
+            </TouchableOpacity>
+          );
+        })()}
       </View>
 
       {/* Profiles List */}
@@ -1278,6 +1317,16 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(148, 163, 184, 0.1)',
+  },
+  swipeBannerLimit: {
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    borderColor: 'rgba(245, 158, 11, 0.35)',
+  },
+  swipeResetText: {
+    color: '#FBBF24',
+    fontSize: 13,
+    fontWeight: '600',
+    maxWidth: 200,
   },
   swipeCounter: {
     flexDirection: 'row',

@@ -14,7 +14,7 @@ from config import (
     STRIPE_PRODUCT_NAME, UNIVERSITY_PRICE_AMOUNT, UNIVERSITY_PRICE_CURRENCY,
     UNIVERSITY_PRODUCT_NAME, FREE_LIKES_PER_WEEK
 )
-from routes.matches import _week_start_iso
+from routes.matches import _week_start_iso, _next_week_reset
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -120,6 +120,7 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
     if user_doc.get("last_like_week") != week_start:
         likes_this_week = 0
     remaining_likes = max(0, FREE_LIKES_PER_WEEK - likes_this_week) if plan == "free" else None
+    next_reset = _next_week_reset().isoformat() if plan == "free" else None
     return {
         "plan": plan,
         "is_premium": plan == "premium",
@@ -128,6 +129,7 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
         "likes_this_week": likes_this_week if plan == "free" else 0,
         "remaining_likes_this_week": remaining_likes,
         "weekly_like_limit": FREE_LIKES_PER_WEEK if plan == "free" else None,
+        "next_like_reset": next_reset,
         # Back-compat aliases (older clients)
         "remaining_swipes": remaining_likes,
         "daily_limit": FREE_LIKES_PER_WEEK if plan == "free" else None,
