@@ -85,6 +85,79 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
     return response
 
 
+@router.get("/chat/unread-count")
+async def chat_unread_count(current_user: User = Depends(get_current_user)):
+    """Total unread chat messages across all this user's accepted matches.
+    Cheap to poll — one $in over the user's pair_ids, indexed by (pair_id, created_at).
+    Defined BEFORE the dynamic /chat/{match_id} route so FastAPI doesn't capture it."""
+    matches = await db.matches.find(
+        {"user_id": current_user.user_id, "status": "accepted"},
+        {"_id": 0, "matched_user_id": 1},
+    ).to_list(200)
+    if not matches:
+        return {"unread": 0, "by_pair": {}}
+
+    pair_ids = [_pair_id_for(current_user.user_id, m["matched_user_id"]) for m in matches]
+
+    reads = {
+        r["pair_id"]: r["last_read_at"]
+        async for r in db.chat_reads.find(
+            {"user_id": current_user.user_id, "pair_id": {"$in": pair_ids}},
+            {"_id": 0, "pair_id": 1, "last_read_at": 1},
+        )
+    }
+
+    from datetime import datetime
+    epoch = datetime(1970, 1, 1)  # naive — MongoDB returns naive datetimes
+
+    def _naive(dt):
+        if dt is None:
+            return epoch
+        return dt.replace(tzinfo=None) if dt.tzinfo else dt
+
+    by_pair: dict[str, int] = {}
+    async for row in db.chat_messages.aggregate([
+        {"$match": {
+            "pair_id": {"$in": pair_ids},
+            "sender_id": {"$ne": current_user.user_id},
+        }},
+        {"$group": {
+            "_id": "$pair_id",
+            "messages": {"$push": {"created_at": "$created_at"}},
+        }},
+    ]):
+        last_read = _naive(reads.get(row["_id"]))
+        count = sum(1 for m in row["messages"] if _naive(m.get("created_at")) > last_read)
+        if count > 0:
+            by_pair[row["_id"]] = count
+
+    return {"unread": sum(by_pair.values()), "by_pair": by_pair}
+
+
+@router.post("/chat/{match_id}/read")
+async def mark_chat_read(match_id: str, current_user: User = Depends(get_current_user)):
+    """Explicit endpoint the client can hit when a thread is brought into view."""
+    match = await db.matches.find_one({
+        "id": match_id,
+        "$or": [
+            {"user_id": current_user.user_id},
+            {"matched_user_id": current_user.user_id},
+        ],
+        "status": "accepted",
+    }, {"_id": 0, "user_id": 1, "matched_user_id": 1})
+    if not match:
+        raise HTTPException(status_code=403, detail="Match not found or not accepted")
+
+    from datetime import datetime, timezone
+    pair_id = _pair_id_for(match["user_id"], match["matched_user_id"])
+    await db.chat_reads.update_one(
+        {"user_id": current_user.user_id, "pair_id": pair_id},
+        {"$set": {"last_read_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
+    return {"success": True, "pair_id": pair_id}
+
+
 @router.get("/chat/{match_id}")
 async def get_messages(match_id: str, current_user: User = Depends(get_current_user)):
     match = await db.matches.find_one({
@@ -113,5 +186,14 @@ async def get_messages(match_id: str, current_user: User = Depends(get_current_u
         },
         {"_id": 0},
     ).sort("created_at", 1).to_list(500)
+
+    # Opening the thread implicitly marks it as read — bumps the user's
+    # `last_read_at` for this pair_id so the Chat tab badge clears.
+    from datetime import datetime, timezone
+    await db.chat_reads.update_one(
+        {"user_id": current_user.user_id, "pair_id": pair_id},
+        {"$set": {"last_read_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
 
     return messages

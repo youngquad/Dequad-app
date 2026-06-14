@@ -1,20 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { useAuth } from '../../src/contexts/AuthContext';
+import { api } from '../../src/services/api';
 
-// Custom Tab Bar Icon with indicator
-function TabIcon({ name, focused, color }: { name: string; focused: boolean; color: string }) {
+// Custom Tab Bar Icon with indicator + optional unread badge
+function TabIcon({
+  name,
+  focused,
+  color,
+  badgeCount,
+}: { name: string; focused: boolean; color: string; badgeCount?: number }) {
   return (
     <View style={styles.tabIconContainer}>
       {focused && <View style={[styles.activeIndicator, { backgroundColor: color }]} />}
       <Ionicons name={name as any} size={24} color={color} />
+      {badgeCount && badgeCount > 0 ? (
+        <View style={styles.tabUnreadDot}>
+          <Text style={styles.tabUnreadText}>
+            {badgeCount > 9 ? '9+' : badgeCount}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }
 
 export default function MainLayout() {
+  const { sessionToken } = useAuth();
+  const [chatUnread, setChatUnread] = useState(0);
+
+  // Poll the unread chat count so the Chat tab badge updates even while the
+  // user is on another tab. Cheap aggregation on the new pair_id index.
+  useEffect(() => {
+    if (!sessionToken) return;
+    let cancelled = false;
+    const refresh = async () => {
+      try {
+        const r = await api.get('/chat/unread-count', sessionToken);
+        if (!cancelled) setChatUnread(r?.unread ?? 0);
+      } catch {}
+    };
+    refresh();
+    const id = setInterval(refresh, 20_000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [sessionToken]);
+
   return (
     <Tabs
       screenOptions={{
@@ -64,7 +97,12 @@ export default function MainLayout() {
         options={{
           title: 'Chat',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name={focused ? 'chatbubbles' : 'chatbubbles-outline'} focused={focused} color={color} />
+            <TabIcon
+              name={focused ? 'chatbubbles' : 'chatbubbles-outline'}
+              focused={focused}
+              color={color}
+              badgeCount={chatUnread}
+            />
           ),
           headerShown: false,
         }}
@@ -128,6 +166,26 @@ const styles = StyleSheet.create({
     width: 24,
     height: 3,
     borderRadius: 2,
+  },
+  tabUnreadDot: {
+    position: 'absolute',
+    top: -4,
+    right: -10,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#0F172A',
+  },
+  tabUnreadText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+    lineHeight: 12,
   },
   header: {
     backgroundColor: '#0F172A',
