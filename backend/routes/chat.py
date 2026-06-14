@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from typing import List
 
 from database import db
 from models import User, ChatMessage, SendMessage
@@ -8,6 +7,20 @@ from helpers.safeguarding import check_safeguarding_content, create_safeguarding
 from helpers.notifications import send_push_notification
 
 router = APIRouter()
+
+
+async def _resolve_pair_match_ids(match: dict) -> list[str]:
+    """A mutual match is stored as TWO docs (one row per party) with different `id`s.
+    Return BOTH ids so chat queries are symmetric regardless of which side opened the
+    thread."""
+    siblings = await db.matches.find({
+        "$or": [
+            {"user_id": match["user_id"], "matched_user_id": match["matched_user_id"]},
+            {"user_id": match["matched_user_id"], "matched_user_id": match["user_id"]},
+        ],
+        "status": "accepted",
+    }, {"_id": 0, "id": 1}).to_list(4)
+    return list({s["id"] for s in siblings} | {match["id"]})
 
 
 @router.post("/chat/send")
@@ -74,8 +87,13 @@ async def get_messages(match_id: str, current_user: User = Depends(get_current_u
     if not match:
         raise HTTPException(status_code=403, detail="Match not found or not accepted")
 
+    # BUG FIX: a single mutual match is represented by two docs (one per party).
+    # Messages get inserted with whichever match_id the *sender* opened the thread
+    # against — so without this $in lookup the recipient sees an empty thread.
+    pair_ids = await _resolve_pair_match_ids(match)
+
     messages = await db.chat_messages.find(
-        {"match_id": match_id}, {"_id": 0}
+        {"match_id": {"$in": pair_ids}}, {"_id": 0}
     ).sort("created_at", 1).to_list(500)
 
-    return [ChatMessage(**m) for m in messages]
+    return messages
