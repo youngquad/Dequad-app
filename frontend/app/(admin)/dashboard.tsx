@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import AdminSupportInbox from '../../src/components/AdminSupportInbox';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -82,7 +83,7 @@ export default function AdminDashboard() {
   const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
   const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
@@ -570,7 +571,7 @@ export default function AdminDashboard() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {['overview', 'safeguarding', 'subscriptions', 'ai-learning', 'universities', 'analytics', 'export'].map((tab) => (
+        {['overview', 'safeguarding', 'support', 'subscriptions', 'ai-learning', 'universities', 'analytics', 'export'].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -580,6 +581,7 @@ export default function AdminDashboard() {
               name={
                 tab === 'overview' ? 'grid-outline' :
                 tab === 'safeguarding' ? 'shield-outline' :
+                tab === 'support' ? 'chatbubbles-outline' :
                 tab === 'subscriptions' ? 'card-outline' :
                 tab === 'ai-learning' ? 'bulb-outline' :
                 tab === 'universities' ? 'school-outline' :
@@ -589,7 +591,7 @@ export default function AdminDashboard() {
               color={activeTab === tab ? '#6366F1' : '#9CA3AF'}
             />
             <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-              {tab === 'universities' ? 'Unis' : 
+              {tab === 'universities' ? 'Unis' :
                tab === 'ai-learning' ? 'AI' :
                tab === 'safeguarding' ? 'Safe' :
                tab === 'subscriptions' ? 'Subs' :
@@ -892,6 +894,19 @@ export default function AdminDashboard() {
                   </>
                 )}
               </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        {/* Support Inbox Tab */}
+        {activeTab === 'support' && (
+          <View style={styles.content}>
+            <Text style={styles.sectionTitle}>Support Inbox</Text>
+            <Text style={styles.sectionSubtitle}>
+              Reply to student support conversations as a human agent. Students get a push + email notification when you respond.
+            </Text>
+            <View style={{ marginTop: 12 }}>
+              <AdminSupportInbox sessionToken={sessionToken} />
             </View>
           </View>
         )}

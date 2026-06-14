@@ -545,17 +545,19 @@ async def get_university_students_admin(university_name: str, admin: User = Depe
     ).to_list(1000)
 
     enriched_students = []
+    user_ids = [s.get("user_id") for s in students if s.get("user_id")]
+    bulk = await _bulk_mood_and_alerts(user_ids, mood_limit=30)
     for student in students:
         user_id = student.get("user_id")
-        mood_entries = await db.mood_entries.find({"user_id": user_id}, {"_id": 0, "mood": 1}).sort("created_at", -1).limit(30).to_list(30)
-        avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries) if mood_entries else None
-        alert_count = await db.safeguarding_alerts.count_documents({"user_id": user_id})
+        b = bulk.get(user_id, {"avg_mood": None, "mood_count": 0, "alert_count": 0})
+        avg_mood = b["avg_mood"]
+        alert_count = b["alert_count"]
         risk_score = max(0, 100 - (avg_mood * 10)) if avg_mood else 50
         risk_level = "high" if alert_count > 0 or risk_score > 70 else "medium" if risk_score > 40 else "low"
         enriched_students.append({
             "user_id": user_id, "name": student.get("name"), "email": student.get("email"),
             "course": student.get("course"), "campus_name": student.get("campus_name"),
-            "average_mood": round(avg_mood, 2) if avg_mood else None, "mood_entries_count": len(mood_entries),
+            "average_mood": round(avg_mood, 2) if avg_mood else None, "mood_entries_count": b["mood_count"],
             "safeguarding_alerts": alert_count, "risk_score": round(risk_score), "risk_level": risk_level,
             "created_at": str(student.get("created_at", ""))
         })
@@ -577,11 +579,31 @@ async def university_ai_analysis(university_name: str, admin: User = Depends(req
         raise HTTPException(status_code=404, detail="No students found for this university")
 
     all_mood_data = []; all_feedback_data = []; student_summaries = []
+    user_ids = [s.get("user_id") for s in students if s.get("user_id")]
+
+    # Batch-fetch all mood and feedback entries (limited per user) + alert counts.
+    all_moods_by_user: dict[str, list] = {uid: [] for uid in user_ids}
+    async for m in db.mood_entries.find({"user_id": {"$in": user_ids}}, {"_id": 0}).sort("created_at", -1):
+        bucket = all_moods_by_user.get(m["user_id"])
+        if bucket is not None and len(bucket) < 30:
+            bucket.append(m)
+
+    all_fb_by_user: dict[str, list] = {uid: [] for uid in user_ids}
+    async for f in db.feedback_entries.find({"user_id": {"$in": user_ids}}, {"_id": 0}).sort("created_at", -1):
+        bucket = all_fb_by_user.get(f["user_id"])
+        if bucket is not None and len(bucket) < 20:
+            bucket.append(f)
+
+    alert_counts = {r["_id"]: r["c"] async for r in db.safeguarding_alerts.aggregate([
+        {"$match": {"user_id": {"$in": user_ids}}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}}},
+    ])}
+
     for student in students:
         user_id = student.get("user_id")
-        mood_entries = await db.mood_entries.find({"user_id": user_id}, {"_id": 0}).sort("created_at", -1).limit(30).to_list(30)
-        feedback_entries = await db.feedback_entries.find({"user_id": user_id}, {"_id": 0}).sort("created_at", -1).limit(20).to_list(20)
-        alert_count = await db.safeguarding_alerts.count_documents({"user_id": user_id})
+        mood_entries = all_moods_by_user.get(user_id, [])
+        feedback_entries = all_fb_by_user.get(user_id, [])
+        alert_count = alert_counts.get(user_id, 0)
         avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries) if mood_entries else None
         all_mood_data.extend(mood_entries); all_feedback_data.extend(feedback_entries)
         student_summaries.append({"name": student.get("name"), "course": student.get("course"),
@@ -620,6 +642,7 @@ async def university_ai_analysis(university_name: str, admin: User = Depends(req
 # ==================== ANALYTICS OVERVIEW & RETENTION ====================
 
 async def calculate_student_engagement(user_id: str) -> dict:
+    """Single-user engagement stats. Kept for the per-student detail endpoint."""
     now = datetime.now(timezone.utc)
     week_ago = now - timedelta(days=7); month_ago = now - timedelta(days=30)
     mood_entries_week = await db.mood_entries.count_documents({"user_id": user_id, "created_at": {"$gte": week_ago}})
@@ -637,6 +660,116 @@ async def calculate_student_engagement(user_id: str) -> dict:
             "feedback_entries_week": feedback_entries_week, "feedback_entries_month": feedback_entries_month,
             "chat_messages_week": chat_messages_week, "matches_count": matches_count,
             "average_mood": round(avg_mood, 1), "average_risk": round(avg_risk, 1)}
+
+
+async def _bulk_engagement_stats(user_ids: list[str]) -> dict[str, dict]:
+    """
+    Batch version of `calculate_student_engagement` — computes engagement for every user_id
+    in `user_ids` in a constant number of MongoDB round-trips (6 aggregations + 2 counts)
+    instead of N*6. Returns: {user_id: engagement_dict}.
+    """
+    if not user_ids:
+        return {}
+    now = datetime.now(timezone.utc)
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    in_filter = {"$in": user_ids}
+
+    # Per-user weekly mood entry counts.
+    mood_week = {r["_id"]: r["c"] async for r in db.mood_entries.aggregate([
+        {"$match": {"user_id": in_filter, "created_at": {"$gte": week_ago}}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}}},
+    ])}
+    # Per-user monthly mood entry counts + avg mood.
+    mood_month = {r["_id"]: r async for r in db.mood_entries.aggregate([
+        {"$match": {"user_id": in_filter, "created_at": {"$gte": month_ago}}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}, "avg": {"$avg": "$mood"}}},
+    ])}
+    # Per-user weekly + monthly feedback entry counts.
+    fb_week = {r["_id"]: r["c"] async for r in db.feedback_entries.aggregate([
+        {"$match": {"user_id": in_filter, "created_at": {"$gte": week_ago}}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}}},
+    ])}
+    fb_month = {r["_id"]: r["c"] async for r in db.feedback_entries.aggregate([
+        {"$match": {"user_id": in_filter, "created_at": {"$gte": month_ago}}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}}},
+    ])}
+    # Per-user weekly chat-message counts (sender side).
+    chat_week = {r["_id"]: r["c"] async for r in db.chat_messages.aggregate([
+        {"$match": {"sender_id": in_filter, "created_at": {"$gte": week_ago}}},
+        {"$group": {"_id": "$sender_id", "c": {"$sum": 1}}},
+    ])}
+    # Per-user accepted matches.
+    matches_cnt = {r["_id"]: r["c"] async for r in db.matches.aggregate([
+        {"$match": {"user_id": in_filter, "status": "accepted"}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}}},
+    ])}
+    # Per-user monthly avg risk score.
+    risk_avg = {r["_id"]: r["avg"] async for r in db.risk_scores.aggregate([
+        {"$match": {"user_id": in_filter, "created_at": {"$gte": month_ago}}},
+        {"$group": {"_id": "$user_id", "avg": {"$avg": "$risk_score"}}},
+    ])}
+
+    out = {}
+    for uid in user_ids:
+        m_week = mood_week.get(uid, 0)
+        m_month_doc = mood_month.get(uid, {"c": 0, "avg": 0})
+        m_month = m_month_doc.get("c", 0)
+        avg_mood = m_month_doc.get("avg") or 0
+        f_week = fb_week.get(uid, 0)
+        f_month = fb_month.get(uid, 0)
+        c_week = chat_week.get(uid, 0)
+        m_cnt = matches_cnt.get(uid, 0)
+        avg_risk = risk_avg.get(uid) or 0
+        engagement_score = min(100, m_week * 10 + f_week * 15 + c_week * 5 + m_cnt * 5)
+        out[uid] = {
+            "engagement_score": engagement_score,
+            "mood_entries_week": m_week, "mood_entries_month": m_month,
+            "feedback_entries_week": f_week, "feedback_entries_month": f_month,
+            "chat_messages_week": c_week, "matches_count": m_cnt,
+            "average_mood": round(avg_mood, 1), "average_risk": round(avg_risk, 1),
+        }
+    return out
+
+
+async def _bulk_mood_and_alerts(user_ids: list[str], mood_limit: int = 30) -> dict[str, dict]:
+    """
+    Returns per-user {avg_mood, mood_count, alert_count} computed with 2 aggregations + 1 count agg.
+    avg_mood is computed from the most-recent up-to-`mood_limit` mood entries per user.
+    """
+    if not user_ids:
+        return {}
+    in_filter = {"$in": user_ids}
+    # Avg + count over the most recent N mood entries per user.
+    mood_stats = {}
+    async for r in db.mood_entries.aggregate([
+        {"$match": {"user_id": in_filter}},
+        {"$sort": {"created_at": -1}},
+        {"$group": {
+            "_id": "$user_id",
+            "moods": {"$push": "$mood"},
+        }},
+    ]):
+        moods = (r.get("moods") or [])[:mood_limit]
+        if moods:
+            mood_stats[r["_id"]] = {"avg_mood": sum(moods) / len(moods), "mood_count": len(moods)}
+        else:
+            mood_stats[r["_id"]] = {"avg_mood": None, "mood_count": 0}
+
+    alerts = {r["_id"]: r["c"] async for r in db.safeguarding_alerts.aggregate([
+        {"$match": {"user_id": in_filter}},
+        {"$group": {"_id": "$user_id", "c": {"$sum": 1}}},
+    ])}
+
+    out = {}
+    for uid in user_ids:
+        m = mood_stats.get(uid, {"avg_mood": None, "mood_count": 0})
+        out[uid] = {
+            "avg_mood": m["avg_mood"],
+            "mood_count": m["mood_count"],
+            "alert_count": alerts.get(uid, 0),
+        }
+    return out
 
 
 @router.get("/admin/analytics/overview")
@@ -667,9 +800,14 @@ async def get_analytics_overview(admin: User = Depends(require_admin)):
 @router.get("/admin/analytics/at-risk-students")
 async def get_at_risk_students(admin: User = Depends(require_admin)):
     students = await db.users.find({"role": "student"}, {"_id": 0}).to_list(1000)
+    user_ids = [s["user_id"] for s in students if s.get("user_id")]
+    engagement_map = await _bulk_engagement_stats(user_ids)
     at_risk_students = []
     for student in students:
-        engagement = await calculate_student_engagement(student["user_id"])
+        engagement = engagement_map.get(student["user_id"], {
+            "engagement_score": 0, "average_mood": 0, "average_risk": 0,
+            "mood_entries_week": 0, "feedback_entries_week": 0, "matches_count": 0,
+        })
         risk_factors = []; dropout_risk = 0
         if engagement["engagement_score"] < 20: risk_factors.append("Very low platform engagement"); dropout_risk += 30
         elif engagement["engagement_score"] < 40: risk_factors.append("Low platform engagement"); dropout_risk += 15
