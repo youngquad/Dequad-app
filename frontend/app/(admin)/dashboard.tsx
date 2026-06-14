@@ -85,6 +85,7 @@ export default function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
   const [supportUnread, setSupportUnread] = useState<number>(0);
+  const [safeUnread, setSafeUnread] = useState<{ unread: number; high_risk: number }>({ unread: 0, high_risk: 0 });
   const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
@@ -448,8 +449,13 @@ export default function AdminDashboard() {
     let cancelled = false;
     const refresh = async () => {
       try {
-        const r = await api.get('/support/admin/unread-count', sessionToken);
-        if (!cancelled) setSupportUnread(r?.unread ?? 0);
+        const [s, sg] = await Promise.all([
+          api.get('/support/admin/unread-count', sessionToken).catch(() => null),
+          api.get('/admin/safeguarding-alerts/unread-count', sessionToken).catch(() => null),
+        ]);
+        if (cancelled) return;
+        if (s) setSupportUnread(s.unread ?? 0);
+        if (sg) setSafeUnread({ unread: sg.unread ?? 0, high_risk: sg.high_risk ?? 0 });
       } catch (e) {
         // silent — non-critical
       }
@@ -459,9 +465,10 @@ export default function AdminDashboard() {
     return () => { cancelled = true; clearInterval(id); };
   }, [sessionToken]);
 
-  // Optimistically clear the badge when admin opens the Support tab.
+  // Optimistically clear badges when admin opens the relevant tab.
   useEffect(() => {
     if (activeTab === 'support') setSupportUnread(0);
+    if (activeTab === 'safeguarding') setSafeUnread({ unread: 0, high_risk: 0 });
   }, [activeTab]);
 
   const exportData = async (type: string) => {
@@ -619,6 +626,19 @@ export default function AdminDashboard() {
                 <View style={styles.tabBadge} data-testid="support-tab-badge">
                   <Text style={styles.tabBadgeText}>
                     {supportUnread > 9 ? '9+' : supportUnread}
+                  </Text>
+                </View>
+              )}
+              {tab === 'safeguarding' && safeUnread.unread > 0 && (
+                <View
+                  style={[
+                    styles.tabBadge,
+                    safeUnread.high_risk > 0 ? styles.tabBadgeCritical : styles.tabBadgeWarn,
+                  ]}
+                  data-testid="safeguarding-tab-badge"
+                >
+                  <Text style={styles.tabBadgeText}>
+                    {safeUnread.unread > 9 ? '9+' : safeUnread.unread}
                   </Text>
                 </View>
               )}
@@ -1657,6 +1677,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1.5,
     borderColor: '#0F172A',
+  },
+  tabBadgeWarn: {
+    backgroundColor: '#F59E0B',
+  },
+  tabBadgeCritical: {
+    backgroundColor: '#EF4444',
   },
   tabBadgeText: {
     color: '#fff',

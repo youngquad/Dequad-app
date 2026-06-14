@@ -131,6 +131,17 @@ async def delete_university_admin(user_id: str, admin: User = Depends(require_ad
 
 # ==================== SAFEGUARDING ====================
 
+@router.get("/admin/safeguarding-alerts/unread-count")
+async def safeguarding_unread_count(admin: User = Depends(require_admin)):
+    """Cheap polling endpoint for the Safeguarding nav badge."""
+    unacknowledged = await db.safeguarding_alerts.count_documents({"acknowledged": False})
+    high_risk = await db.safeguarding_alerts.count_documents({
+        "acknowledged": False,
+        "risk_level": {"$in": ["high", "critical"]},
+    })
+    return {"unread": unacknowledged, "high_risk": high_risk}
+
+
 @router.get("/admin/safeguarding-alerts")
 async def get_safeguarding_alerts(admin: User = Depends(require_admin)):
     alerts = await db.safeguarding_alerts.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
