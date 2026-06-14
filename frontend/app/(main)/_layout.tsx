@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
+import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 
@@ -31,16 +32,28 @@ function TabIcon({
 export default function MainLayout() {
   const { sessionToken } = useAuth();
   const [chatUnread, setChatUnread] = useState(0);
+  const [likesCount, setLikesCount] = useState(0);
 
-  // Poll the unread chat count so the Chat tab badge updates even while the
-  // user is on another tab. Cheap aggregation on the new pair_id index.
+  // Poll unread chat + pending likes so the Chat and Connect tab badges update
+  // even while the user is on another tab. Cheap aggregations on indexed fields.
   useEffect(() => {
     if (!sessionToken) return;
     let cancelled = false;
     const refresh = async () => {
       try {
-        const r = await api.get('/chat/unread-count', sessionToken);
-        if (!cancelled) setChatUnread(r?.unread ?? 0);
+        const [c, l] = await Promise.all([
+          api.get('/chat/unread-count', sessionToken).catch(() => null),
+          api.get('/matches/likes-received/count', sessionToken).catch(() => null),
+        ]);
+        if (cancelled) return;
+        const cu = c?.unread ?? 0;
+        const lc = l?.count ?? 0;
+        setChatUnread(cu);
+        setLikesCount(lc);
+        // Native app-icon badge (iOS / Android springboard). No-op on web.
+        if (Platform.OS !== 'web') {
+          try { await Notifications.setBadgeCountAsync(cu + lc); } catch {}
+        }
       } catch {}
     };
     refresh();
@@ -87,7 +100,12 @@ export default function MainLayout() {
         options={{
           title: 'Connect',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name={focused ? 'people' : 'people-outline'} focused={focused} color={color} />
+            <TabIcon
+              name={focused ? 'people' : 'people-outline'}
+              focused={focused}
+              color={color}
+              badgeCount={likesCount}
+            />
           ),
           headerTitle: 'Find Friends',
         }}

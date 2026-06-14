@@ -289,6 +289,27 @@ async def get_accepted_matches(current_user: User = Depends(get_current_user)):
     return result
 
 
+@router.get("/matches/likes-received/count")
+async def get_likes_received_count(current_user: User = Depends(get_current_user)):
+    """Cheap polling endpoint for the Connect-tab badge.
+    Counts pending likes from other users that I have NOT yet responded to."""
+    likes = await db.matches.find(
+        {"matched_user_id": current_user.user_id, "status": "liked"},
+        {"_id": 0, "user_id": 1},
+    ).to_list(500)
+    if not likes:
+        return {"count": 0}
+
+    liker_ids = [lk["user_id"] for lk in likes]
+    my_responses = await db.matches.find(
+        {"user_id": current_user.user_id, "matched_user_id": {"$in": liker_ids}},
+        {"_id": 0, "matched_user_id": 1},
+    ).to_list(len(liker_ids))
+    already_responded = {r["matched_user_id"] for r in my_responses}
+    pending = [lk for lk in likes if lk["user_id"] not in already_responded]
+    return {"count": len(pending)}
+
+
 @router.get("/matches/likes-received")
 async def get_likes_received(current_user: User = Depends(get_current_user)):
     likes = await db.matches.find(
