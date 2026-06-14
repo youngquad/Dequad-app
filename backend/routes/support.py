@@ -11,7 +11,7 @@ from database import db
 from models import User
 from helpers.auth import get_current_user, require_admin
 from helpers.notifications import send_push_notification
-from helpers.email import send_support_reply_email
+from helpers.email import send_support_reply_email, send_support_inbound_email_to_admins
 from helpers.safeguarding import (
     check_language_filter,
     check_safeguarding_content,
@@ -147,6 +147,16 @@ async def send_support_message(
 
     # Save user message
     user_msg = await _save_message(current_user.user_id, "user", data.text.strip())
+
+    # Notify admins via email (throttled to once per 30 minutes per student).
+    # Fires in background so the API response stays fast.
+    asyncio.create_task(send_support_inbound_email_to_admins(
+        student_id=current_user.user_id,
+        student_name=current_user.name,
+        student_email=current_user.email,
+        message_text=data.text.strip(),
+        university=getattr(current_user, "university", "") or "",
+    ))
 
     # Get prior history for context
     history_docs = await db.support_messages.find(

@@ -248,6 +248,127 @@ async def send_support_reply_email(student_email: str, student_name: str, agent_
         return False
 
 
+def create_support_inbound_email_html(student_name: str, student_email: str, message_text: str, university: str = "") -> str:
+    import html as _html
+    safe_text = _html.escape(message_text).replace("\n", "<br>")
+    safe_name = _html.escape(student_name or "Unknown student")
+    safe_email = _html.escape(student_email or "")
+    safe_uni = _html.escape(university or "")
+    uni_line = f"<div><strong>University:</strong> {safe_uni}</div>" if safe_uni else ""
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #f9fafb; margin: 0; padding: 0; }}
+            .container {{ max-width: 560px; margin: 0 auto; padding: 24px; }}
+            .header {{ background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white; padding: 20px 24px; border-radius: 12px 12px 0 0; }}
+            .header h1 {{ margin: 0; font-size: 18px; font-weight: 700; }}
+            .content {{ background: white; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; }}
+            .meta {{ background: #F3F4F6; padding: 12px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }}
+            .meta div {{ margin: 2px 0; }}
+            .message-box {{ background: #EEF2FF; border-left: 4px solid #6366F1; padding: 14px 16px; border-radius: 8px; color: #1f2937; font-size: 14px; }}
+            .button {{ display: inline-block; background: #6366F1; color: white !important; padding: 11px 20px; text-decoration: none; border-radius: 8px; margin: 16px 0 0 0; font-weight: 600; font-size: 14px; }}
+            .footer {{ text-align: center; padding: 14px; color: #6b7280; font-size: 11px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>New support message from a student</h1>
+            </div>
+            <div class="content">
+                <div class="meta">
+                    <div><strong>From:</strong> {safe_name}</div>
+                    <div><strong>Email:</strong> {safe_email}</div>
+                    {uni_line}
+                </div>
+                <div class="message-box">{safe_text}</div>
+                <p style="color:#6b7280;font-size:12px;margin-top:14px;">The student has already received an instant AI auto-reply. Open the admin inbox to follow up as a human agent if needed.</p>
+            </div>
+            <div class="footer">
+                <p>Automated notification from DEQUAD Support.<br>
+                Throttled: at most one email per student per 30 minutes.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+
+def create_support_inbound_email_text(student_name: str, student_email: str, message_text: str, university: str = "") -> str:
+    return f"""New support message from a student.
+
+From: {student_name or 'Unknown'}
+Email: {student_email or ''}
+University: {university or 'N/A'}
+
+Message:
+{message_text}
+
+The student has already received an instant AI auto-reply.
+Open the admin inbox to follow up as a human agent if needed.
+
+This is an automated notification (throttled: at most one per student per 30 minutes).
+"""
+
+
+async def send_support_inbound_email_to_admins(
+    student_id: str,
+    student_name: str,
+    student_email: str,
+    message_text: str,
+    university: str = "",
+) -> bool:
+    """Notify admins when a student sends a new support message.
+
+    Throttles per-student to one email per 30 minutes (DB-tracked) so a chatty
+    student can't flood the admin inbox.
+    """
+    if not is_smtp_configured():
+        return False
+
+    from datetime import datetime, timezone, timedelta
+    throttle_window = datetime.now(timezone.utc) - timedelta(minutes=30)
+    recent = await db.support_messages.find_one({
+        "user_id": student_id,
+        "sender": "user",
+        "admin_email_sent_at": {"$gte": throttle_window},
+    })
+    if recent:
+        logger.info(f"Support inbound email throttled for {student_id}")
+        return False
+
+    admin_emails = await get_admin_emails()
+    if not admin_emails:
+        return False
+
+    subject = f"DEQUAD Support: new message from {student_name or 'a student'}"
+    html_body = create_support_inbound_email_html(student_name, student_email, message_text, university)
+    text_body = create_support_inbound_email_text(student_name, student_email, message_text, university)
+
+    try:
+        success = await send_email_async(admin_emails, subject, html_body, text_body)
+        if success:
+            # Mark the latest user message as having triggered an admin notification.
+            from datetime import datetime as _dt, timezone as _tz
+            latest = await db.support_messages.find_one(
+                {"user_id": student_id, "sender": "user"},
+                sort=[("created_at", -1)],
+                projection={"id": 1, "_id": 0},
+            )
+            if latest:
+                await db.support_messages.update_one(
+                    {"id": latest["id"]},
+                    {"$set": {"admin_email_sent_at": _dt.now(_tz.utc)}},
+                )
+            logger.info(f"Support inbound email sent to {len(admin_emails)} admin(s) for student {student_id}")
+        return success
+    except Exception as e:
+        logger.error(f"Support inbound email error: {e}")
+        return False
+
+
 def create_password_reset_email_html(name: str, reset_url: str) -> str:
     return f"""
     <!DOCTYPE html>
