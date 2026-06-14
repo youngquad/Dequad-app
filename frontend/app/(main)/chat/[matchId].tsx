@@ -48,6 +48,11 @@ export default function ChatScreen() {
     navigation.setOptions({
       title: name || 'Chat',
     });
+
+    // Hide the bottom Tabs bar while the conversation thread is open so it
+    // doesn't overlay the composer's send button. Restore on unmount.
+    const parent = navigation.getParent?.();
+    parent?.setOptions?.({ tabBarStyle: { display: 'none' } });
     
     if (matchId && sessionToken && isAuthenticated) {
       loadMessages();
@@ -88,6 +93,8 @@ export default function ChatScreen() {
         intervalRef.current = null;
       }
       subscription.remove();
+      // Restore the bottom Tabs bar for other screens.
+      parent?.setOptions?.({ tabBarStyle: undefined });
     };
   }, [matchId, sessionToken, isAuthenticated]);
 

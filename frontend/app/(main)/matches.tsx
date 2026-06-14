@@ -66,7 +66,7 @@ export default function MatchesScreen() {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [matchAlert, setMatchAlert] = useState<UserProfile | null>(null);
+  const [matchAlert, setMatchAlert] = useState<{ user: UserProfile; matchId: string } | null>(null);
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_likes_this_week: 3, is_premium: false, next_like_reset: null });
   const [now, setNow] = useState<number>(Date.now());
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
@@ -183,8 +183,8 @@ export default function MatchesScreen() {
         sessionToken
       );
       
-      if (result.is_mutual) {
-        setMatchAlert(result.matched_user);
+      if (result.is_mutual && result.matched_user && result?.match?.id) {
+        setMatchAlert({ user: result.matched_user, matchId: result.match.id });
       }
       
       const remaining = result.remaining_likes_this_week ?? result.remaining_swipes;
@@ -625,15 +625,30 @@ export default function MatchesScreen() {
             </View>
             <Text style={styles.matchTitle}>It's a Match!</Text>
             <Text style={styles.matchSubtitle}>
-              You and {matchAlert.name} liked each other
+              You and {matchAlert.user.name} liked each other
             </Text>
-            <Pressable onPress={() => setMatchAlert(null)}>
+            <Pressable
+              onPress={() => {
+                const target = matchAlert;
+                setMatchAlert(null);
+                router.push(`/(main)/chat/${target.matchId}?name=${encodeURIComponent(target.user.name)}`);
+              }}
+              data-testid="match-say-hi-btn"
+            >
               <LinearGradient
                 colors={['#EC4899', '#F472B6']}
-                style={styles.matchButton}
+                style={[styles.matchButton, { marginBottom: 10 }]}
               >
-                <Text style={styles.matchButtonText}>Keep Browsing</Text>
+                <Ionicons name="chatbubble" size={18} color="#fff" />
+                <Text style={[styles.matchButtonText, { marginLeft: 8 }]}>
+                  Say Hi to {matchAlert.user.name.split(' ')[0]}
+                </Text>
               </LinearGradient>
+            </Pressable>
+            <Pressable onPress={() => setMatchAlert(null)} data-testid="match-keep-browsing-btn">
+              <View style={styles.matchSecondaryButton}>
+                <Text style={styles.matchSecondaryButtonText}>Keep Browsing</Text>
+              </View>
             </Pressable>
           </View>
         </View>
@@ -1259,6 +1274,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   matchButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 36,
     paddingVertical: 14,
     borderRadius: 24,
@@ -1266,6 +1284,19 @@ const styles = StyleSheet.create({
   matchButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: '600',
+  },
+  matchSecondaryButton: {
+    paddingHorizontal: 36,
+    paddingVertical: 12,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.3)',
+    alignItems: 'center',
+  },
+  matchSecondaryButtonText: {
+    color: '#94A3B8',
+    fontSize: 14,
     fontWeight: '600',
   },
   topBanner: {
