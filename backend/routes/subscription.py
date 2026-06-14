@@ -194,13 +194,14 @@ async def create_university_checkout(data: UniversitySubscriptionRequest):
     try:
         customer = stripe.Customer.create(email=data.admin_email, name=data.admin_name,
             metadata={"university": data.university_name, "expected_students": str(data.expected_students or 0), "contact_phone": data.contact_phone or ""})
+        app_url = os.environ.get("APP_URL", "").rstrip("/")
         checkout_session = stripe.checkout.Session.create(
             customer=customer.id, mode="subscription", payment_method_types=["card"],
             line_items=[{"price_data": {"currency": UNIVERSITY_PRICE_CURRENCY, "unit_amount": UNIVERSITY_PRICE_AMOUNT,
                 "recurring": {"interval": "month"}, "product_data": {"name": UNIVERSITY_PRODUCT_NAME,
                     "description": f"Dashboard access for {data.university_name}"}}, "quantity": 1}],
-            success_url=data.success_url or "https://review-extractor-2.preview.emergentagent.com/university-subscription-success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=data.cancel_url or "https://review-extractor-2.preview.emergentagent.com",
+            success_url=data.success_url or f"{app_url}/university-subscription-success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=data.cancel_url or app_url,
             metadata={"university": data.university_name, "admin_email": data.admin_email, "admin_name": data.admin_name,
                       "type": "university_subscription"}, allow_promotion_codes=True
         )

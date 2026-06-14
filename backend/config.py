@@ -32,4 +32,4 @@ SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@dequad.com')
 SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'DEQUAD Safeguarding')
 
 # Admin
-ADMIN_SECRET_CODE = "DEQUAD_ADMIN_2024"
+ADMIN_SECRET_CODE = os.environ.get('ADMIN_SECRET_CODE', '')

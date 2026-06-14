@@ -4,6 +4,7 @@ from typing import Optional
 import hashlib
 import secrets
 import uuid
+import os
 import httpx
 import logging
 
@@ -40,7 +41,8 @@ async def forgot_password(data: ForgotPasswordRequest):
         "used": False
     })
 
-    reset_url = f"https://review-extractor-2.preview.emergentagent.com/admin/reset-password?token={reset_token}"
+    app_url = os.environ.get("APP_URL", "").rstrip("/")
+    reset_url = f"{app_url}/admin/reset-password?token={reset_token}"
 
     if is_smtp_configured():
         subject = "DEQUAD Admin Password Reset"

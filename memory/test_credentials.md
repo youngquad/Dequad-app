@@ -6,7 +6,7 @@
 
 ## University Admin
 - Email: admin@manchesteruni.edu
-- Password: ManchesterUni2024!  (per seed.py – confirm in `/app/backend/seed.py` if changed)
+- Password: UniAdmin123!
 
 ## Test Student Profiles (12 seeded)
 Emma Wilson, James Chen, Sofia Martinez, Alex Thompson, Priya Patel,

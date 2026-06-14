@@ -279,7 +279,7 @@ async def admin_send_reply(data: SupportAdminReply, admin: User = Depends(requir
 
     # Email fallback (fires in background so the API stays snappy).
     if target.get("notifications_enabled", True) and target.get("email"):
-        app_url = os.environ.get("APP_URL", "https://review-extractor-2.preview.emergentagent.com").rstrip("/")
+        app_url = os.environ.get("APP_URL", "").rstrip("/")
         deep_link = f"{app_url}/(main)/support"
         asyncio.create_task(send_support_reply_email(
             student_email=target["email"],
