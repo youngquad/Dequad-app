@@ -65,6 +65,16 @@ case "${CMD}" in
     MSG="${2:-Routine OTA update}"
     eas update --branch production --message "${MSG}"
     ;;
+  register-device)
+    require_eas
+    echo "→ Generating UDID registration link for an iOS tester..."
+    echo "→ Send the URL/QR that EAS prints below to the tester. They open it on their iPhone, install the profile in Settings, and their device is registered."
+    eas device:create
+    ;;
+  list-devices)
+    require_eas
+    eas device:list
+    ;;
   doctor)
     npx expo-doctor
     ;;
@@ -84,6 +94,8 @@ Commands:
   android [profile]    Build Android only (default profile: preview)
   submit               Submit latest builds to TestFlight + Play Console
   ota [message]        Push OTA JS update to production channel
+  register-device      Generate iOS UDID registration link for a tester
+  list-devices         List all iOS devices currently registered for ad-hoc
   doctor               Run expo-doctor diagnostics
   validate             Validate app.json + eas.json syntax
   help                 Show this message
