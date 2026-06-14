@@ -241,16 +241,51 @@ async def get_accepted_matches(current_user: User = Depends(get_current_user)):
     users = await db.users.find({"user_id": {"$in": user_ids}}, {"_id": 0}).to_list(len(user_ids))
     user_map = {u["user_id"]: u for u in users}
 
+    # Batch the last-message-per-conversation lookup via the new pair_id index.
+    pair_ids = [
+        f"{min(current_user.user_id, m['matched_user_id'])}:{max(current_user.user_id, m['matched_user_id'])}"
+        for m in matches
+    ]
+    last_msgs: dict[str, dict] = {}
+    async for row in db.chat_messages.aggregate([
+        {"$match": {"pair_id": {"$in": pair_ids}}},
+        {"$sort": {"created_at": -1}},
+        {"$group": {
+            "_id": "$pair_id",
+            "text": {"$first": "$text"},
+            "sender_id": {"$first": "$sender_id"},
+            "created_at": {"$first": "$created_at"},
+        }},
+    ]):
+        last_msgs[row["_id"]] = row
+
     result = []
     for match in matches:
         user = user_map.get(match["matched_user_id"])
-        if user:
-            result.append({
-                "match_id": match["id"],
-                "user": user,
-                "comment": match.get("comment"),
-                "liked_section": match.get("liked_section")
-            })
+        if not user:
+            continue
+        pair_id = f"{min(current_user.user_id, match['matched_user_id'])}:{max(current_user.user_id, match['matched_user_id'])}"
+        lm = last_msgs.get(pair_id)
+        last_at = None
+        if lm and lm.get("created_at"):
+            ca = lm["created_at"]
+            last_at = ca.isoformat() if hasattr(ca, "isoformat") else str(ca)
+        result.append({
+            "match_id": match["id"],
+            "user": user,
+            "comment": match.get("comment"),
+            "liked_section": match.get("liked_section"),
+            "last_message": lm.get("text") if lm else None,
+            "last_message_at": last_at,
+            "last_sender_id": lm.get("sender_id") if lm else None,
+        })
+
+    # Sort: conversations with the most recent activity bubble to the top;
+    # never-chatted matches sink to the bottom.
+    result.sort(
+        key=lambda r: r["last_message_at"] or "",
+        reverse=True,
+    )
     return result
 
 

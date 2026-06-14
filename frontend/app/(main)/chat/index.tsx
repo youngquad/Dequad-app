@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { api } from '../../../src/services/api';
+import { decrypt } from '../../../src/utils/encryption';
 
 interface MatchedUser {
   match_id: string;
@@ -19,21 +20,46 @@ interface MatchedUser {
     user_id: string;
     name: string;
     email: string;
+    course?: string;
     picture?: string;
   };
+  last_message?: string | null;
+  last_message_at?: string | null;
+  last_sender_id?: string | null;
+}
+
+function formatRelative(iso?: string | null): string {
+  if (!iso) return '';
+  const ts = new Date(iso).getTime();
+  if (isNaN(ts)) return '';
+  const diff = Date.now() - ts;
+  if (diff < 60_000) return 'now';
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m`;
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h`;
+  if (diff < 172_800_000) return 'yesterday';
+  if (diff < 7 * 86_400_000) return `${Math.floor(diff / 86_400_000)}d`;
+  return new Date(iso).toLocaleDateString([], { day: '2-digit', month: 'short' });
+}
+
+function previewMessage(text?: string | null): string {
+  if (!text) return '';
+  // Messages are end-to-end encrypted. If decryption fails (e.g. legacy
+  // plaintext or different device key), fall back to the raw text rather than
+  // showing an error string in the inbox.
+  try {
+    const plain = decrypt(text);
+    if (plain && !plain.startsWith('[Unable to decrypt')) return plain;
+  } catch {}
+  return text;
 }
 
 export default function ChatListScreen() {
   const router = useRouter();
-  const { sessionToken } = useAuth();
+  const { sessionToken, user } = useAuth();
   const [matches, setMatches] = useState<MatchedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadMatches();
-  }, []);
-
-  const loadMatches = async () => {
+  const loadMatches = useCallback(async () => {
     try {
       const data = await api.get('/matches/accepted', sessionToken);
       setMatches(data);
@@ -42,7 +68,19 @@ export default function ChatListScreen() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [sessionToken]);
+
+  useEffect(() => {
+    loadMatches();
+  }, [loadMatches]);
+
+  // Refresh whenever the user comes back to the inbox so the "last message"
+  // preview stays in sync after sending/receiving in a thread.
+  useFocusEffect(
+    useCallback(() => {
+      loadMatches();
+    }, [loadMatches]),
+  );
 
   const getInitials = (name: string) => {
     return name
@@ -53,27 +91,37 @@ export default function ChatListScreen() {
       .slice(0, 2);
   };
 
-  const renderMatch = ({ item }: { item: MatchedUser }) => (
-    <TouchableOpacity
-      style={styles.matchItem}
-      onPress={() => router.push(`/(main)/chat/${item.match_id}?name=${encodeURIComponent(item.user.name)}`)}
-    >
-      <View style={styles.avatar}>
-        <Text style={styles.avatarText}>{getInitials(item.user.name)}</Text>
-      </View>
-      <View style={styles.matchInfo}>
-        <Text style={styles.matchName} numberOfLines={1}>{item.user.name}</Text>
-        {item.user.course ? (
-          <Text style={styles.matchSubtitle} numberOfLines={1}>{item.user.course}</Text>
-        ) : null}
-      </View>
-      <View style={styles.lockIcon}>
-        <Ionicons name="lock-closed" size={16} color="#10B981" />
-        <Text style={styles.lockText}>E2E</Text>
-      </View>
-      <Ionicons name="chevron-forward" size={24} color="#6B7280" />
-    </TouchableOpacity>
-  );
+  const renderMatch = ({ item }: { item: MatchedUser }) => {
+    const preview = previewMessage(item.last_message);
+    const isMine = item.last_sender_id && user && item.last_sender_id === user.user_id;
+    const subtitle = preview
+      ? (isMine ? `You: ${preview}` : preview)
+      : (item.user.course || 'Tap to start the conversation');
+    return (
+      <TouchableOpacity
+        style={styles.matchItem}
+        onPress={() => router.push(`/(main)/chat/${item.match_id}?name=${encodeURIComponent(item.user.name)}`)}
+      >
+        <View style={styles.avatar}>
+          <Text style={styles.avatarText}>{getInitials(item.user.name)}</Text>
+        </View>
+        <View style={styles.matchInfo}>
+          <View style={styles.matchTopRow}>
+            <Text style={styles.matchName} numberOfLines={1}>{item.user.name}</Text>
+            {item.last_message_at ? (
+              <Text style={styles.matchTime}>{formatRelative(item.last_message_at)}</Text>
+            ) : null}
+          </View>
+          <Text style={styles.matchSubtitle} numberOfLines={1}>{subtitle}</Text>
+        </View>
+        <View style={styles.lockIcon}>
+          <Ionicons name="lock-closed" size={16} color="#10B981" />
+          <Text style={styles.lockText}>E2E</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={24} color="#6B7280" />
+      </TouchableOpacity>
+    );
+  };
 
   if (isLoading) {
     return (
@@ -174,12 +222,23 @@ const styles = StyleSheet.create({
   },
   matchInfo: {
     flex: 1,
+    minWidth: 0,
+  },
+  matchTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  matchTime: {
+    color: '#64748B',
+    fontSize: 11,
+    marginLeft: 'auto',
   },
   matchName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
-    marginBottom: 4,
+    flex: 1,
   },
   matchEmail: {
     fontSize: 14,
