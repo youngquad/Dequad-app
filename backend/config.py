@@ -20,7 +20,8 @@ UNIVERSITY_PRICE_CURRENCY = "gbp"
 UNIVERSITY_PRODUCT_NAME = "DEQUAD University Dashboard"
 
 # Swipe limits
-FREE_SWIPES_PER_DAY = 5
+FREE_SWIPES_PER_DAY = 5      # Legacy — no longer enforced (kept for back-compat with imports)
+FREE_LIKES_PER_WEEK = 3      # Free plan: 3 likes per ISO week, unlimited skips
 
 # SMTP Configuration
 SMTP_HOST = os.environ.get('SMTP_HOST', '')

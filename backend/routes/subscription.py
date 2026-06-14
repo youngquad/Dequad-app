@@ -12,8 +12,9 @@ from helpers.auth import get_current_user
 from config import (
     STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_AMOUNT, STRIPE_PRICE_CURRENCY,
     STRIPE_PRODUCT_NAME, UNIVERSITY_PRICE_AMOUNT, UNIVERSITY_PRICE_CURRENCY,
-    UNIVERSITY_PRODUCT_NAME, FREE_SWIPES_PER_DAY
+    UNIVERSITY_PRODUCT_NAME, FREE_LIKES_PER_WEEK
 )
+from routes.matches import _week_start_iso
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -113,14 +114,26 @@ async def create_checkout_session(data: CreateCheckoutRequest, current_user: Use
 @router.get("/subscription/status")
 async def get_subscription_status(current_user: User = Depends(get_current_user)):
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    swipes_today = user_doc.get("swipes_today", 0)
-    if user_doc.get("last_swipe_date") != today: swipes_today = 0
     plan = user_doc.get("plan", "free")
-    return {"plan": plan, "is_premium": plan == "premium", "stripe_customer_id": user_doc.get("stripe_customer_id"),
-            "swipes_today": swipes_today if plan == "free" else 0,
-            "remaining_swipes": FREE_SWIPES_PER_DAY - swipes_today if plan == "free" else None,
-            "daily_limit": FREE_SWIPES_PER_DAY if plan == "free" else None, "price": f"\u00a3{STRIPE_PRICE_AMOUNT / 100:.2f}/month"}
+    week_start = _week_start_iso()
+    likes_this_week = user_doc.get("likes_this_week", 0)
+    if user_doc.get("last_like_week") != week_start:
+        likes_this_week = 0
+    remaining_likes = max(0, FREE_LIKES_PER_WEEK - likes_this_week) if plan == "free" else None
+    return {
+        "plan": plan,
+        "is_premium": plan == "premium",
+        "stripe_customer_id": user_doc.get("stripe_customer_id"),
+        # New weekly-likes fields
+        "likes_this_week": likes_this_week if plan == "free" else 0,
+        "remaining_likes_this_week": remaining_likes,
+        "weekly_like_limit": FREE_LIKES_PER_WEEK if plan == "free" else None,
+        # Back-compat aliases (older clients)
+        "remaining_swipes": remaining_likes,
+        "daily_limit": FREE_LIKES_PER_WEEK if plan == "free" else None,
+        "swipes_today": likes_this_week if plan == "free" else 0,
+        "price": f"\u00a3{STRIPE_PRICE_AMOUNT / 100:.2f}/month",
+    }
 
 
 @router.post("/subscription/cancel")

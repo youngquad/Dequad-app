@@ -1,14 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from database import db
 from models import User, Match, SwipeAction
 from helpers.auth import get_current_user
 from helpers.notifications import send_push_notification
 from helpers.safeguarding import check_language_filter
-from config import FREE_SWIPES_PER_DAY
+from config import FREE_LIKES_PER_WEEK
 
 router = APIRouter()
+
+
+def _week_start_iso(now: datetime = None) -> str:
+    """Return the ISO Monday date (YYYY-MM-DD) for the week containing `now`."""
+    now = now or datetime.now(timezone.utc)
+    monday = now - timedelta(days=now.weekday())
+    return monday.strftime("%Y-%m-%d")
 
 
 def calculate_match_score(user: dict, other: dict) -> float:
@@ -90,18 +97,22 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
             raise HTTPException(status_code=400, detail=language_check["message"])
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    week_start = _week_start_iso()
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
     user_plan = user_doc.get("plan", "free")
-    swipes_today = user_doc.get("swipes_today", 0)
-    last_swipe_date = user_doc.get("last_swipe_date")
+    likes_this_week = user_doc.get("likes_this_week", 0)
+    last_like_week = user_doc.get("last_like_week")
 
-    if last_swipe_date != today:
-        swipes_today = 0
+    # Reset weekly like counter at the start of a new ISO week.
+    if last_like_week != week_start:
+        likes_this_week = 0
 
-    if user_plan == "free" and swipes_today >= FREE_SWIPES_PER_DAY:
+    # Only LIKES are limited; skips/dislikes are unlimited.
+    if data.action == "like" and user_plan == "free" and likes_this_week >= FREE_LIKES_PER_WEEK:
         raise HTTPException(status_code=403, detail={
-            "message": "Daily swipe limit reached",
-            "limit": FREE_SWIPES_PER_DAY,
+            "message": "Weekly like limit reached",
+            "limit": FREE_LIKES_PER_WEEK,
+            "period": "week",
             "upgrade_required": True
         })
 
@@ -115,9 +126,14 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     if existing:
         raise HTTPException(status_code=400, detail="Already swiped on this user")
 
+    # Bookkeeping: only the like counter is incremented.
+    update_set = {"last_swipe_date": today}
+    if data.action == "like":
+        update_set["likes_this_week"] = likes_this_week + 1
+        update_set["last_like_week"] = week_start
     await db.users.update_one(
         {"user_id": current_user.user_id},
-        {"$set": {"swipes_today": swipes_today + 1, "last_swipe_date": today}}
+        {"$set": update_set}
     )
 
     status = "liked" if data.action == "like" else "rejected"
@@ -178,15 +194,20 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
                 {"match_user_id": current_user.user_id, "match_user_name": current_user.name, "comment": data.comment}
             )
 
-    remaining_swipes = None
+    remaining_likes = None
     if user_plan == "free":
-        remaining_swipes = FREE_SWIPES_PER_DAY - (swipes_today + 1)
+        used = likes_this_week + (1 if data.action == "like" else 0)
+        remaining_likes = max(0, FREE_LIKES_PER_WEEK - used)
 
     return {
         "match": match.dict(),
         "is_mutual": mutual_match is not None,
         "matched_user": mutual_match,
-        "remaining_swipes": remaining_swipes,
+        # New field: weekly like budget (used by frontend banner / upgrade prompt)
+        "remaining_likes_this_week": remaining_likes,
+        # Back-compat: keep the old key name pointing at the same value so older
+        # clients don't break in the middle of an active session.
+        "remaining_swipes": remaining_likes,
         "is_premium": user_plan == "premium"
     }
 

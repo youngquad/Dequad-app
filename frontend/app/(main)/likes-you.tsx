@@ -11,6 +11,8 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
+  Platform,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -84,22 +86,49 @@ export default function LikesYouScreen() {
         },
         sessionToken
       );
-      
-      // Remove from list after responding
+
+      // Remove the like card from this screen now that we've responded.
       setLikes(prev => prev.filter(l => l.like_id !== like.like_id));
-      
-      if (result.is_mutual) {
+
+      // BUG FIX: the swipe response shape is { match: { id, ... }, is_mutual, matched_user, ... }
+      // It does NOT have a top-level `match_id`. Previously this prevented any chat navigation.
+      const matchId = result?.match?.id;
+
+      if (result?.is_mutual && matchId) {
         if (andMessage) {
-          // Navigate directly to chat with this person
-          router.push({
-            pathname: '/(main)/chat',
-            params: { matchId: result.match_id, userName: like.user.name }
-          });
+          // Open the matched conversation thread directly.
+          router.push(`/(main)/chat/${matchId}?name=${encodeURIComponent(like.user.name)}`);
         } else {
-          alert(`It's a match with ${like.user.name}! 🎉`);
+          if (Platform.OS === 'web') {
+            window.alert(`It's a match with ${like.user.name}! 🎉`);
+          } else {
+            Alert.alert("It's a match!", `You and ${like.user.name} liked each other.`);
+          }
+        }
+      } else if (andMessage) {
+        // Like was recorded but not yet mutual (shouldn't happen on likes-you screen,
+        // but handle defensively by surfacing the matches list).
+        router.push('/(main)/chat');
+      }
+    } catch (error: any) {
+      const msg = error?.message || 'Could not match back. Please try again.';
+      const lower = msg.toLowerCase();
+      if (lower.includes('weekly like limit') || lower.includes('limit')) {
+        if (Platform.OS === 'web') {
+          window.alert("You've used all 3 likes for this week. Upgrade to Premium for unlimited likes!");
+        } else {
+          Alert.alert('Weekly like limit reached', "You've used all 3 likes for this week. Upgrade to Premium for unlimited likes!");
+        }
+      } else if (lower.includes('already swiped')) {
+        // Already responded to this user — just clear the card silently.
+        setLikes(prev => prev.filter(l => l.like_id !== like.like_id));
+      } else {
+        if (Platform.OS === 'web') {
+          window.alert(msg);
+        } else {
+          Alert.alert('Could not match back', msg);
         }
       }
-    } catch (error) {
       console.error('Error liking back:', error);
     } finally {
       setRespondingTo(null);

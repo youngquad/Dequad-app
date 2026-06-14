@@ -49,7 +49,7 @@ interface UserProfile {
 }
 
 interface SwipeInfo {
-  remaining_swipes: number | null;
+  remaining_likes_this_week: number | null;
   is_premium: boolean;
 }
 
@@ -66,7 +66,7 @@ export default function MatchesScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [matchAlert, setMatchAlert] = useState<UserProfile | null>(null);
-  const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_swipes: 5, is_premium: false });
+  const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_likes_this_week: 3, is_premium: false });
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [likingSection, setLikingSection] = useState<string | null>(null);
   const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
@@ -107,8 +107,9 @@ export default function MatchesScreen() {
   const loadSwipeStatus = async () => {
     try {
       const data = await api.get('/subscription/status', sessionToken);
+      const remaining = data.remaining_likes_this_week ?? data.remaining_swipes ?? null;
       setSwipeInfo({
-        remaining_swipes: data.remaining_swipes,
+        remaining_likes_this_week: remaining,
         is_premium: data.is_premium
       });
     } catch (error) {
@@ -129,7 +130,7 @@ export default function MatchesScreen() {
   };
 
   const openCommentModal = (profile: UserProfile, section: string) => {
-    if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
+    if (!swipeInfo.is_premium && swipeInfo.remaining_likes_this_week !== null && swipeInfo.remaining_likes_this_week <= 0) {
       setShowUpgradePrompt(true);
       return;
     }
@@ -163,10 +164,11 @@ export default function MatchesScreen() {
         setMatchAlert(result.matched_user);
       }
       
-      if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
+      const remaining = result.remaining_likes_this_week ?? result.remaining_swipes;
+      if (remaining !== null && remaining !== undefined) {
         setSwipeInfo(prev => ({
           ...prev,
-          remaining_swipes: result.remaining_swipes
+          remaining_likes_this_week: remaining
         }));
       }
       
@@ -177,6 +179,9 @@ export default function MatchesScreen() {
       if (error?.message?.includes('Already swiped')) {
         setCommentModal(null);
         goToNext();
+      } else if (error?.message?.toLowerCase().includes('limit')) {
+        setCommentModal(null);
+        setShowUpgradePrompt(true);
       }
       console.error('Like error:', error);
     } finally {
@@ -185,25 +190,13 @@ export default function MatchesScreen() {
   };
 
   const handleSkip = async (profile: UserProfile) => {
-    if (!swipeInfo.is_premium && swipeInfo.remaining_swipes !== null && swipeInfo.remaining_swipes <= 0) {
-      setShowUpgradePrompt(true);
-      return;
-    }
-
+    // Skips are unlimited — no limit check.
     try {
-      const result = await api.post(
+      await api.post(
         '/matches/swipe',
         { target_user_id: profile.user_id, action: 'dislike' },
         sessionToken
       );
-      
-      if (result.remaining_swipes !== null && result.remaining_swipes !== undefined) {
-        setSwipeInfo(prev => ({
-          ...prev,
-          remaining_swipes: result.remaining_swipes
-        }));
-      }
-      
       goToNext();
     } catch (error: any) {
       if (error?.message?.includes('Already swiped')) {
@@ -570,9 +563,9 @@ export default function MatchesScreen() {
             <View style={styles.upgradeIcon}>
               <Ionicons name="diamond" size={48} color="#F59E0B" />
             </View>
-            <Text style={styles.upgradeTitle}>Daily Limit Reached</Text>
+            <Text style={styles.upgradeTitle}>Weekly like limit reached</Text>
             <Text style={styles.upgradeSubtitle}>
-              You've used all 5 likes for today.{'\n'}Upgrade to Premium for unlimited connections!
+              You've used all 3 likes for this week.{'\n'}Skips are still unlimited — or upgrade to Premium for unlimited likes!
             </Text>
             <Pressable
               onPress={() => {
@@ -643,7 +636,7 @@ export default function MatchesScreen() {
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* Swipe Counter */}
+        {/* Weekly Likes Counter */}
         {!swipeInfo.is_premium && (
           <TouchableOpacity 
             style={styles.swipeBanner}
@@ -652,18 +645,18 @@ export default function MatchesScreen() {
           >
             <View style={styles.swipeCounter}>
               <View style={styles.swipeDotsContainer}>
-                {[...Array(5)].map((_, i) => (
+                {[...Array(3)].map((_, i) => (
                   <View 
                     key={i} 
                     style={[
                       styles.swipeDot,
-                      i < (swipeInfo.remaining_swipes || 0) && styles.swipeDotActive
+                      i < (swipeInfo.remaining_likes_this_week || 0) && styles.swipeDotActive
                     ]} 
                   />
                 ))}
               </View>
               <Text style={styles.swipeCounterText}>
-                {swipeInfo.remaining_swipes || 0} left
+                {swipeInfo.remaining_likes_this_week || 0} likes left this week
               </Text>
             </View>
             <View style={styles.upgradeBadge}>
