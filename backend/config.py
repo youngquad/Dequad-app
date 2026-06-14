@@ -1,5 +1,11 @@
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 import stripe
+
+# Ensure .env is loaded regardless of which module imports config first.
+# Idempotent: if database.py already loaded it, load_dotenv is a no-op.
+load_dotenv(Path(__file__).parent / ".env")
 
 # Emergent LLM Key
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')

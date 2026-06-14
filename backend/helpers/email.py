@@ -43,11 +43,26 @@ async def send_email_async(to_emails: List[str], subject: str, html_body: str, t
 
 
 async def get_admin_emails() -> List[str]:
+    """Return all addresses that should receive admin-level emails (safeguarding alerts, etc.).
+
+    Includes every user with `role: "admin"` in the database, plus any addresses in the
+    `SAFEGUARDING_ALERT_EMAILS` env var (comma-separated). Useful for routing alerts to
+    a dedicated mailbox (e.g. safeguarding@dequad.com) without changing the platform-owner
+    account.
+    """
+    import os as _os
     admins = await db.users.find(
         {"role": "admin"},
         {"_id": 0, "email": 1}
     ).to_list(100)
-    return [a["email"] for a in admins if a.get("email")]
+    emails = {a["email"] for a in admins if a.get("email")}
+    extras = [
+        e.strip()
+        for e in _os.environ.get("SAFEGUARDING_ALERT_EMAILS", "").split(",")
+        if e.strip()
+    ]
+    emails.update(extras)
+    return list(emails)
 
 
 def create_safeguarding_email_html(alert_data: dict) -> str:
