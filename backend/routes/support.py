@@ -173,6 +173,16 @@ async def send_support_message(
 
 # ==================== ADMIN ENDPOINTS ====================
 
+@router.get("/support/admin/unread-count")
+async def admin_support_unread_count(admin: User = Depends(require_admin)):
+    """Cheap polling endpoint for a 'new support message' nav badge."""
+    total = await db.support_messages.count_documents({
+        "sender": "user",
+        "read_by_admin": False,
+    })
+    return {"unread": total}
+
+
 @router.get("/support/admin/conversations")
 async def admin_list_conversations(admin: User = Depends(require_admin)):
     """List all support conversations grouped by user with latest message + unread counts."""

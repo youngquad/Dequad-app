@@ -84,6 +84,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
+  const [supportUnread, setSupportUnread] = useState<number>(0);
   const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
@@ -440,6 +441,29 @@ export default function AdminDashboard() {
     }
   }, [activeTab, keywordFilter, sessionToken]);
 
+  // Poll the support inbox unread counter (so the nav badge updates even when
+  // the admin isn't on the Support tab — quick replies matter on wellbeing apps).
+  useEffect(() => {
+    if (!sessionToken) return;
+    let cancelled = false;
+    const refresh = async () => {
+      try {
+        const r = await api.get('/support/admin/unread-count', sessionToken);
+        if (!cancelled) setSupportUnread(r?.unread ?? 0);
+      } catch (e) {
+        // silent — non-critical
+      }
+    };
+    refresh();
+    const id = setInterval(refresh, 20_000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [sessionToken]);
+
+  // Optimistically clear the badge when admin opens the Support tab.
+  useEffect(() => {
+    if (activeTab === 'support') setSupportUnread(0);
+  }, [activeTab]);
+
   const exportData = async (type: string) => {
     const exportUrl = `${backendUrl}/api/admin/export/${type}`;
     
@@ -577,19 +601,28 @@ export default function AdminDashboard() {
             style={[styles.tab, activeTab === tab && styles.activeTab]}
             onPress={() => setActiveTab(tab as any)}
           >
-            <Ionicons
-              name={
-                tab === 'overview' ? 'grid-outline' :
-                tab === 'safeguarding' ? 'shield-outline' :
-                tab === 'support' ? 'chatbubbles-outline' :
-                tab === 'subscriptions' ? 'card-outline' :
-                tab === 'ai-learning' ? 'bulb-outline' :
-                tab === 'universities' ? 'school-outline' :
-                tab === 'analytics' ? 'bar-chart-outline' : 'download-outline'
-              }
-              size={18}
-              color={activeTab === tab ? '#6366F1' : '#9CA3AF'}
-            />
+            <View style={{ position: 'relative' }}>
+              <Ionicons
+                name={
+                  tab === 'overview' ? 'grid-outline' :
+                  tab === 'safeguarding' ? 'shield-outline' :
+                  tab === 'support' ? 'chatbubbles-outline' :
+                  tab === 'subscriptions' ? 'card-outline' :
+                  tab === 'ai-learning' ? 'bulb-outline' :
+                  tab === 'universities' ? 'school-outline' :
+                  tab === 'analytics' ? 'bar-chart-outline' : 'download-outline'
+                }
+                size={18}
+                color={activeTab === tab ? '#6366F1' : '#9CA3AF'}
+              />
+              {tab === 'support' && supportUnread > 0 && (
+                <View style={styles.tabBadge} data-testid="support-tab-badge">
+                  <Text style={styles.tabBadgeText}>
+                    {supportUnread > 9 ? '9+' : supportUnread}
+                  </Text>
+                </View>
+              )}
+            </View>
             <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
               {tab === 'universities' ? 'Unis' :
                tab === 'ai-learning' ? 'AI' :
@@ -1610,6 +1643,26 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: '#6366F1',
     fontWeight: '600',
+  },
+  tabBadge: {
+    position: 'absolute',
+    top: -6,
+    right: -10,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#0F172A',
+  },
+  tabBadgeText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '700',
+    lineHeight: 12,
   },
   scrollView: {
     flex: 1,
