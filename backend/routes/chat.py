@@ -9,10 +9,14 @@ from helpers.notifications import send_push_notification
 router = APIRouter()
 
 
-async def _resolve_pair_match_ids(match: dict) -> list[str]:
-    """A mutual match is stored as TWO docs (one row per party) with different `id`s.
-    Return BOTH ids so chat queries are symmetric regardless of which side opened the
-    thread."""
+def _pair_id_for(user_a: str, user_b: str) -> str:
+    """Deterministic conversation key independent of which side opened the thread."""
+    return f"{min(user_a, user_b)}:{max(user_a, user_b)}"
+
+
+async def _sibling_match_ids(match: dict) -> list[str]:
+    """Both match.id docs for a mutual pair — used as a back-compat fallback
+    so messages stored before the pair_id migration are still readable."""
     siblings = await db.matches.find({
         "$or": [
             {"user_id": match["user_id"], "matched_user_id": match["matched_user_id"]},
@@ -37,29 +41,37 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
     if not match:
         raise HTTPException(status_code=403, detail="Match not found or not accepted")
 
-    # Check for profanity/racist language
+    # Profanity / racism filter
     language_check = check_language_filter(data.text)
     if language_check["blocked"]:
         raise HTTPException(status_code=400, detail=language_check["message"])
 
     safeguarding_result = check_safeguarding_content(data.text)
-    message = ChatMessage(match_id=data.match_id, sender_id=current_user.user_id, text=data.text)
+
+    pair_id = _pair_id_for(match["user_id"], match["matched_user_id"])
+    message = ChatMessage(
+        match_id=data.match_id,
+        pair_id=pair_id,
+        sender_id=current_user.user_id,
+        text=data.text,
+    )
     await db.chat_messages.insert_one(message.dict())
 
     if safeguarding_result["flagged"]:
         await create_safeguarding_alert(current_user, "chat", data.text, safeguarding_result)
 
-    if match["user_id"] == current_user.user_id:
-        recipient_id = match["matched_user_id"]
-    else:
-        recipient_id = match["user_id"]
+    recipient_id = (
+        match["matched_user_id"]
+        if match["user_id"] == current_user.user_id
+        else match["user_id"]
+    )
 
     await send_push_notification(
         recipient_id,
         f"New message from {current_user.name}",
         "You have a new message. Tap to read.",
         "new_message",
-        {"match_id": data.match_id, "sender_name": current_user.name}
+        {"match_id": data.match_id, "sender_name": current_user.name},
     )
 
     response = message.dict()
@@ -68,7 +80,7 @@ async def send_message(data: SendMessage, current_user: User = Depends(get_curre
             "flagged": True,
             "risk_level": safeguarding_result["risk_level"],
             "resources": safeguarding_result["resources"],
-            "message": "We noticed you may be going through a difficult time. Please know that support is available."
+            "message": "We noticed you may be going through a difficult time. Please know that support is available.",
         }
     return response
 
@@ -87,13 +99,19 @@ async def get_messages(match_id: str, current_user: User = Depends(get_current_u
     if not match:
         raise HTTPException(status_code=403, detail="Match not found or not accepted")
 
-    # BUG FIX: a single mutual match is represented by two docs (one per party).
-    # Messages get inserted with whichever match_id the *sender* opened the thread
-    # against — so without this $in lookup the recipient sees an empty thread.
-    pair_ids = await _resolve_pair_match_ids(match)
+    # Primary path: single indexed equality lookup on pair_id (post-migration).
+    pair_id = _pair_id_for(match["user_id"], match["matched_user_id"])
+    # Back-compat: also match any legacy doc that still only has match_id but no pair_id.
+    sibling_ids = await _sibling_match_ids(match)
 
     messages = await db.chat_messages.find(
-        {"match_id": {"$in": pair_ids}}, {"_id": 0}
+        {
+            "$or": [
+                {"pair_id": pair_id},
+                {"pair_id": {"$exists": False}, "match_id": {"$in": sibling_ids}},
+            ]
+        },
+        {"_id": 0},
     ).sort("created_at", 1).to_list(500)
 
     return messages

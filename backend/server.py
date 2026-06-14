@@ -7,6 +7,7 @@ from database import db, client
 from helpers.safeguarding import load_approved_keywords
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware
 from seed import seed_admin_and_test_users
+from scripts.migrate_chat_pair_id import migrate_chat_pair_id
 
 from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core, reports, support
 
@@ -20,6 +21,13 @@ async def lifespan(app: FastAPI):
     # Startup
     await seed_admin_and_test_users()
     await load_approved_keywords()
+    # Idempotent chat migration: backfills pair_id on legacy messages and
+    # ensures the supporting index exists. Safe to run on every boot.
+    try:
+        result = await migrate_chat_pair_id(db)
+        logger.info(f"chat pair_id migration: {result}")
+    except Exception as e:
+        logger.error(f"chat pair_id migration failed (non-fatal): {e}")
     yield
     # Shutdown
     client.close()

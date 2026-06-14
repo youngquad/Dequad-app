@@ -76,6 +76,7 @@ class Match(BaseModel):
 class ChatMessage(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     match_id: str
+    pair_id: Optional[str] = None  # deterministic "min(uid_a):max(uid_b)" for symmetric lookups
     sender_id: str
     text: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
