@@ -62,8 +62,10 @@ export default function ChatListScreen() {
         <Text style={styles.avatarText}>{getInitials(item.user.name)}</Text>
       </View>
       <View style={styles.matchInfo}>
-        <Text style={styles.matchName}>{item.user.name}</Text>
-        <Text style={styles.matchEmail}>{item.user.email}</Text>
+        <Text style={styles.matchName} numberOfLines={1}>{item.user.name}</Text>
+        {item.user.course ? (
+          <Text style={styles.matchSubtitle} numberOfLines={1}>{item.user.course}</Text>
+        ) : null}
       </View>
       <View style={styles.lockIcon}>
         <Ionicons name="lock-closed" size={16} color="#10B981" />
@@ -182,6 +184,11 @@ const styles = StyleSheet.create({
   matchEmail: {
     fontSize: 14,
     color: '#9CA3AF',
+  },
+  matchSubtitle: {
+    fontSize: 13,
+    color: '#94A3B8',
+    marginTop: 2,
   },
   lockIcon: {
     flexDirection: 'row',
