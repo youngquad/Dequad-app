@@ -394,7 +394,7 @@ export default function MatchesScreen() {
                   <Text style={styles.infoTitle}>Interests</Text>
                   <View style={styles.interestTags}>
                     {profile.interests.map((interest, i) => (
-                      <View key={i} style={styles.interestTag}>
+                      <View key={`${profile.user_id}-interest-${interest}-${i}`} style={styles.interestTag}>
                         <Text style={styles.interestTagText}>{interest}</Text>
                       </View>
                     ))}
@@ -430,7 +430,7 @@ export default function MatchesScreen() {
           {profile.photos && profile.photos.length > 1 && (
             <View style={styles.additionalPhotos}>
               {profile.photos.slice(1, 3).map((photo, i) => (
-                <View key={i} style={styles.additionalPhotoContainer}>
+                <View key={`${profile.user_id}-photo-${i}-${photo.slice(-12)}`} style={styles.additionalPhotoContainer}>
                   <Image source={{ uri: photo }} style={styles.additionalPhoto} />
                   <LikeButton 
                     onPress={() => {}} 

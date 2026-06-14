@@ -1,5 +1,6 @@
 import hashlib
 import uuid
+import os
 import random
 import logging
 from datetime import datetime, timezone, timedelta
@@ -11,8 +12,10 @@ logger = logging.getLogger(__name__)
 
 async def seed_admin_and_test_users():
     """Seed admin user and test profiles on startup"""
-    admin_email = "yusufquadri83@gmail.com"
-    admin_password = "Oluwatobi11@"
+    # Defense-in-depth: read seed credentials from env so they aren't baked
+    # into source. Sensible fallbacks are kept for dev/local convenience.
+    admin_email = os.environ.get("SEED_ADMIN_EMAIL", "yusufquadri83@gmail.com")
+    admin_password = os.environ.get("SEED_ADMIN_PASSWORD", "Oluwatobi11@")
     admin_password_hash = hashlib.sha256(admin_password.encode()).hexdigest()
 
     existing_admin = await db.users.find_one({"email": admin_email})
@@ -143,9 +146,9 @@ async def seed_admin_and_test_users():
             }})
             logger.info(f"Test profile updated: {profile['name']}")
 
-    # Seed university admin
-    uni_admin_email = "admin@manchesteruni.edu"
-    uni_admin_password = "UniAdmin123!"
+    # Seed university admin (credentials also env-overridable)
+    uni_admin_email = os.environ.get("SEED_UNI_ADMIN_EMAIL", "admin@manchesteruni.edu")
+    uni_admin_password = os.environ.get("SEED_UNI_ADMIN_PASSWORD", "UniAdmin123!")
     uni_admin_password_hash = hashlib.sha256(uni_admin_password.encode()).hexdigest()
 
     existing_uni_admin = await db.users.find_one({"email": uni_admin_email})

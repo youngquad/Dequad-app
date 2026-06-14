@@ -274,7 +274,7 @@ export default function LikesYouScreen() {
           {like.user.interests && like.user.interests.length > 0 && (
             <View style={styles.interestsRow}>
               {like.user.interests.slice(0, 3).map((interest, i) => (
-                <View key={i} style={styles.interestChip}>
+                <View key={`${like.like_id}-interest-${interest}-${i}`} style={styles.interestChip}>
                   <Text style={styles.interestChipText}>{interest}</Text>
                 </View>
               ))}

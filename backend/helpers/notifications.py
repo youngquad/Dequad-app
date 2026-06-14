@@ -6,7 +6,18 @@ from models import Notification
 logger = logging.getLogger(__name__)
 
 
-async def send_push_notification(user_id: str, title: str, body: str, notification_type: str, data: dict = {}):
+async def send_push_notification(
+    user_id: str,
+    title: str,
+    body: str,
+    notification_type: str,
+    data: dict | None = None,
+):
+    # Avoid the Python "mutable default argument" foot-gun — a `{}` default is
+    # created once at import time and re-used (and potentially mutated) by every
+    # caller. Use None + explicit assignment instead.
+    data = data if data is not None else {}
+
     user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
     if not user:
         return None
