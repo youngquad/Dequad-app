@@ -29,7 +29,7 @@ node -v   # should print v20.x.x
 The project ships with `yarn.lock`. Mixing `npm install` with a `yarn.lock` is what causes most of those red errors.
 
 ```bash
-cd /path/to/Educare-updated-app/frontend
+cd /path/to/Dequad-app/frontend
 rm -rf node_modules package-lock.json
 corepack enable
 yarn install
@@ -294,7 +294,7 @@ npx expo-doctor
 ## 12. Quick-start (copy-paste, once Node 20 is active)
 
 ```bash
-cd /path/to/Educare-updated-app/frontend
+cd /path/to/Dequad-app/frontend
 rm -rf node_modules
 yarn install
 npx expo start --clear           # smoke-test locally first

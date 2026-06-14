@@ -34,7 +34,7 @@ You will use EAS's built-in internal distribution: a QR code / install link for 
 ### Step 1 — Configure backend URL (one time)
 
 ```bash
-cd /path/to/Educare-updated-app/frontend
+cd /path/to/Dequad-app/frontend
 eas secret:create --scope project --name EXPO_PUBLIC_BACKEND_URL --value "https://<your-emergent-url>"
 eas secret:create --scope project --name EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY --value "pk_test_..."
 eas secret:list   # verify
@@ -45,7 +45,7 @@ eas secret:list   # verify
 For **each** iOS tester (including yourself):
 
 ```bash
-cd /path/to/Educare-updated-app
+cd /path/to/Dequad-app
 ./scripts/build.sh register-device
 ```
 
@@ -68,7 +68,7 @@ Verify they're registered:
 ### Step 3 — Build for internal distribution
 
 ```bash
-cd /path/to/Educare-updated-app
+cd /path/to/Dequad-app
 ./scripts/build.sh preview
 ```
 
@@ -158,7 +158,7 @@ At that point, graduate to Option B (TestFlight + Play Internal Testing) — alr
 
 ```bash
 nvm use 20
-cd /path/to/Educare-updated-app
+cd /path/to/Dequad-app
 
 # One-time setup
 cd frontend && eas login && cd ..
