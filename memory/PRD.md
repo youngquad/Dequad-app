@@ -1,34 +1,43 @@
 # DEQUAD / Educare App - PRD
 
 ## Original Problem Statement
-"Get app review from GitHub" — User imported existing GitHub repo `https://github.com/youngquad/Educare-updated-app`. Subsequent requests added: report-a-profile, racism/curse-word language filter, and live customer support chat.
+"Get app review from GitHub" — User imported existing GitHub repo `https://github.com/youngquad/Educare-updated-app`. Subsequent requests added: report-a-profile, racism/curse-word language filter, live customer support chat, swipe limits with countdown, match-back fix, unread badges, EAS mobile build guide.
 
 ## Architecture
 - **Backend**: FastAPI (Python) on port 8001, MongoDB via motor.
-  - Routers: auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core, **reports (new)**, **support (new)**.
+  - Routers: auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core, reports, support.
   - LLM: Emergent LLM Key + `emergentintegrations` (OpenAI gpt-4o-mini) for support AI replies.
   - Safeguarding: `check_language_filter` (racism + profanity, word-boundary regex) + `check_safeguarding_content` (crisis keywords).
-- **Frontend**: Expo Router (React Native + react-native-web) on port 3000.
+- **Frontend**: Expo Router (React Native + react-native-web) on port 3000. SDK 54.
 - **DB**: Local MongoDB.
 
-## Setup (2026-01)
-- Repo cloned to `/app`; backend + frontend services managed by supervisor; both RUNNING.
-- Seed: admin + 12 demo students + 1 university admin on startup.
-
-## Features Shipped This Session
-1. **Report a Profile** — `POST /api/reports`, `GET /api/reports/my` (existing `GET /api/admin/reports` unchanged). UI: red flag button on each matches profile card + likes-you card; reusable `ReportProfileModal` with 9 reasons + optional details (max 500 chars). Self-report blocked; duplicate pending report blocked.
-2. **Racist & Curse Language Filter** — applied to: profile bio/course/university free-text fields, swipe comments (existing), chat messages (existing), report reasons, support messages (both directions). Word-boundary regex matching prevents false positives like "Pakistani"/"Japanese"/"Hispanic"/"suspicious".
-3. **Live Customer Support Chat** — `/(main)/support` screen, accessible from Profile screen. `POST /api/support/message` (auto AI reply via gpt-4o-mini), `GET /api/support/messages` (user thread). Admin: `GET /api/support/admin/conversations`, `GET /api/support/admin/messages/{user_id}`, `POST /api/support/admin/reply`. Crisis keywords in support chat trigger SafeguardingAlert (source=`support_chat`).
+## Features Shipped
+1. **Report a Profile** — `POST /api/reports`, modal with 9 reasons.
+2. **Racist & Curse Language Filter** — applied across bio, swipe comments, chat, reports, support messages.
+3. **Live Customer Support Chat** — user + admin threads, AI auto-reply, crisis-keyword safeguarding hook.
+4. **Admin Support Inbox UI** — `AdminSupportInbox.tsx` with unread badge.
+5. **Push + Email Notifications** — admin replies notify user via Expo push + email fallback.
+6. **Swipe Limits** — unlimited skips, 3 likes/week, countdown timer UI.
+7. **Match-back Fix** — mutual likes now correctly create a chat thread.
+8. **pair_id Migration** — chat messages now fetched bidirectionally via deterministic `pair_id` (`/app/backend/scripts/migrate_chat_pair_id.py`).
+9. **Chat Inbox UI** — removed emails, added last-message preview + timestamp.
+10. **Unread Badges** — Admin (Support, Safeguarding) + Student (Chat, Connect) tabs.
+11. **EAS Build Guide + Helper Script (2026-02)** — `/app/EAS_BUILD_GUIDE.md` and `/app/scripts/build.sh` (validate / dev / preview / prod / submit / ota / doctor commands).
 
 ## Tested
-- Backend: 24/24 pytest tests (`/app/backend/tests/test_reports_support.py`). All language-filter false-positives also verified fixed by hand.
-- Frontend: Manual screenshot tests — Profile screen "Contact Support" CTA visible; Matches screen red flag (report) button visible; Report modal opens with reasons.
+- Backend: pytest suite + `/app/test_reports/iteration_8.json`.
+- Frontend: testing_agent_v3_fork passes; manual screenshot smoke tests for badges/inbox.
+- Build scripts: `./scripts/build.sh validate` confirms `app.json` + `eas.json` are valid JSON.
 
 ## Backlog / Next Steps
-- P1: Admin Support inbox UI in admin dashboard (backend endpoints exist; need frontend screen).
-- P1: Push notification to user when an admin replies in support.
-- P2: Swap LIVE Stripe keys in `.env` for test keys before payments QA.
-- P2: Mobile build via EAS — `frontend/DEPLOYMENT_GUIDE.md`.
+- **P1**: Refactor N+1 query patterns in `backend/routes/matches.py`.
+- **P1**: Reduce complexity of `swipe_action` in `matches.py` and `university_ai_analysis` in `admin.py`.
+- **P2**: Break down massive frontend components (`dashboard.tsx`, `profile.tsx`, `matches.tsx`).
+- **P2**: Keep an eye on Safeguarding red-badge edge cases.
 
 ## Credentials
 - See `/app/memory/test_credentials.md`.
+
+## Build / Deploy
+- Mobile builds: see `/app/EAS_BUILD_GUIDE.md` (Node 20, yarn, EAS commands, iOS/Android signing checklists).
+- Helper: `/app/scripts/build.sh`.
