@@ -233,9 +233,17 @@ async def get_accepted_matches(current_user: User = Depends(get_current_user)):
         {"user_id": current_user.user_id, "status": "accepted"}, {"_id": 0}
     ).to_list(100)
 
+    if not matches:
+        return []
+
+    # Batch fetch all matched users in a single query (avoid N+1).
+    user_ids = [m["matched_user_id"] for m in matches]
+    users = await db.users.find({"user_id": {"$in": user_ids}}, {"_id": 0}).to_list(len(user_ids))
+    user_map = {u["user_id"]: u for u in users}
+
     result = []
     for match in matches:
-        user = await db.users.find_one({"user_id": match["matched_user_id"]}, {"_id": 0})
+        user = user_map.get(match["matched_user_id"])
         if user:
             result.append({
                 "match_id": match["id"],
@@ -252,14 +260,29 @@ async def get_likes_received(current_user: User = Depends(get_current_user)):
         {"matched_user_id": current_user.user_id, "status": "liked"}, {"_id": 0}
     ).sort("created_at", -1).to_list(100)
 
+    if not likes:
+        return []
+
+    liker_ids = [lk["user_id"] for lk in likes]
+
+    # Batch: which of those have I already responded to? (Skip them.)
+    my_responses = await db.matches.find(
+        {"user_id": current_user.user_id, "matched_user_id": {"$in": liker_ids}},
+        {"_id": 0, "matched_user_id": 1},
+    ).to_list(len(liker_ids))
+    already_responded = {r["matched_user_id"] for r in my_responses}
+
+    # Batch: fetch all liker user docs in one query.
+    users = await db.users.find(
+        {"user_id": {"$in": liker_ids}}, {"_id": 0}
+    ).to_list(len(liker_ids))
+    user_map = {u["user_id"]: u for u in users}
+
     result = []
     for like in likes:
-        response = await db.matches.find_one({
-            "user_id": current_user.user_id, "matched_user_id": like["user_id"]
-        })
-        if response:
+        if like["user_id"] in already_responded:
             continue
-        user = await db.users.find_one({"user_id": like["user_id"]}, {"_id": 0})
+        user = user_map.get(like["user_id"])
         if user:
             result.append({
                 "like_id": like["id"],
