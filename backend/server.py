@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
+import os
 
 from database import db, client
 from helpers.safeguarding import load_approved_keywords
@@ -38,10 +39,27 @@ app = FastAPI(title="DEQUAD API", lifespan=lifespan)
 # Middleware order: outermost runs first → CORS → Logging → Rate Limit → Route
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
+# CORS: per spec, `allow_origins=["*"]` cannot be combined with `allow_credentials=True`.
+# Modern browsers reject the response and the client thinks the request "failed" even when
+# the server returned 200. Use an explicit allow-list (env-overridable) instead.
+_default_origins = [
+    "https://dequad.co.uk",
+    "https://www.dequad.co.uk",
+    "https://review-extractor-2.emergent.host",
+    "https://review-extractor-2.preview.emergentagent.com",
+    "http://localhost:3000",
+    "http://localhost:19006",  # Expo web dev
+]
+_extra = [o.strip() for o in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()]
+ALLOWED_ORIGINS = list({*_default_origins, *_extra})
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    # Match any *.emergentagent.com / *.emergent.host / *.dequad.co.uk subdomain so future
+    # custom domains and EAS update previews don't need a code change.
+    allow_origin_regex=r"^https://([a-zA-Z0-9-]+\.)*(emergentagent\.com|emergent\.host|dequad\.co\.uk)$",
     allow_methods=["*"],
     allow_headers=["*"],
 )

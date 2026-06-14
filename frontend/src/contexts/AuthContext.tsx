@@ -224,7 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${currentToken}`,
           },
-          credentials: 'include',
+          credentials: 'omit',
         });
       }
     } catch (error) {

@@ -78,14 +78,15 @@ class ApiService {
     }
 
     try {
-      // Don't include credentials for admin endpoints to avoid cookie conflicts
-      const isAdminEndpoint = endpoint.startsWith('/admin');
-      
+      // Auth is via Bearer token in the Authorization header — cookies aren't used.
+      // Sending `credentials: 'include'` triggers a CORS preflight that fails when
+      // the response sets `Access-Control-Allow-Origin: *`. Use 'omit' so the request
+      // is treated as non-credentialed and works through any proxy/CDN.
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method,
         headers,
         body: data ? JSON.stringify(data) : undefined,
-        credentials: isAdminEndpoint ? 'omit' : 'include',
+        credentials: 'omit',
       });
 
       if (!response.ok) {

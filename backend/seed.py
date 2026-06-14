@@ -19,9 +19,22 @@ async def seed_admin_and_test_users():
     """Seed admin user and test profiles on startup"""
     # Defense-in-depth: read seed credentials from env so they aren't baked
     # into source. Sensible fallbacks are kept for dev/local convenience.
-    admin_email = os.environ.get("SEED_ADMIN_EMAIL", "yusufquadri83@gmail.com")
+    admin_email = os.environ.get("SEED_ADMIN_EMAIL", "quadri.yusuf@dequad.com")
     admin_password = os.environ.get("SEED_ADMIN_PASSWORD", "Oluwatobi11@")
     admin_password_hash = hashlib.sha256(admin_password.encode()).hexdigest()
+
+    # One-time migration: rename a legacy admin (yusufquadri83@gmail.com) to the new
+    # email so user_id, sessions, and any related records (matches, chats, alerts) are
+    # preserved instead of creating a parallel admin account. Idempotent.
+    LEGACY_ADMIN_EMAIL = "yusufquadri83@gmail.com"
+    if admin_email != LEGACY_ADMIN_EMAIL:
+        legacy = await db.users.find_one({"email": LEGACY_ADMIN_EMAIL, "role": "admin"})
+        if legacy and not await db.users.find_one({"email": admin_email}):
+            await db.users.update_one(
+                {"_id": legacy["_id"]},
+                {"$set": {"email": admin_email}},
+            )
+            logger.info(f"Admin email migrated: {LEGACY_ADMIN_EMAIL} -> {admin_email}")
 
     existing_admin = await db.users.find_one({"email": admin_email})
     if not existing_admin:

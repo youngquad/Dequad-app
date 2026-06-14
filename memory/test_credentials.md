@@ -1,8 +1,9 @@
 # Test Credentials
 
 ## Admin (Platform owner)
-- Email: yusufquadri83@gmail.com
-- Password: Oluwatobi11@
+- Email: quadri.yusuf@dequad.com
+- Password: Oluwatobi11@ (dev fallback) — override via `SEED_ADMIN_PASSWORD` env var in production
+- Legacy email `yusufquadri83@gmail.com` was renamed to the above on 2026-02 (migration in `seed.py` runs on every boot, idempotent).
 
 ## University Admin
 - Email: admin@manchesteruni.edu
