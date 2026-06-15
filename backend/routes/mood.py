@@ -42,4 +42,15 @@ async def get_mood_history(current_user: User = Depends(get_current_user)):
     entries = await db.mood_entries.find(
         {"user_id": current_user.user_id}, {"_id": 0}
     ).sort("created_at", -1).to_list(100)
-    return [MoodEntry(**e) for e in entries]
+    # Skip legacy entries that fail strict validation (e.g. missing `mood` field from
+    # an older schema). Logging keeps the issue visible without breaking the endpoint.
+    out: List[MoodEntry] = []
+    for e in entries:
+        try:
+            out.append(MoodEntry(**e))
+        except Exception as exc:
+            import logging as _logging
+            _logging.getLogger(__name__).warning(
+                f"Skipping malformed mood_entry for user={current_user.user_id}: {exc}"
+            )
+    return out

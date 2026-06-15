@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Response, Depends, HTTPException
 from datetime import datetime, timezone, timedelta
 from typing import Optional
+from pymongo import ReturnDocument
 import hashlib
 import secrets
 import uuid
@@ -173,22 +174,32 @@ async def exchange_session(request: Request, response: Response):
             raise HTTPException(status_code=500, detail="Authentication failed")
 
     session_data = SessionDataResponse(**user_data)
-    existing_user = await db.users.find_one({"email": session_data.email}, {"_id": 0})
 
-    if not existing_user:
-        user_id = f"user_{uuid.uuid4().hex[:12]}"
-        new_user = {
-            "user_id": user_id,
-            "email": session_data.email,
-            "name": session_data.name,
-            "picture": session_data.picture,
-            "role": "student",
-            "interests": [],
-            "created_at": datetime.now(timezone.utc)
-        }
-        await db.users.insert_one(new_user)
-    else:
-        user_id = existing_user["user_id"]
+    # Atomic upsert by email — replaces the previous check-then-insert which had
+    # a race condition that created duplicate users when the client retried the
+    # session-exchange call (e.g. before the recent CORS fix landed). The
+    # `$setOnInsert` block only runs when a brand-new doc is created.
+    new_user_id = f"user_{uuid.uuid4().hex[:12]}"
+    user_doc = await db.users.find_one_and_update(
+        {"email": session_data.email},
+        {
+            "$setOnInsert": {
+                "user_id": new_user_id,
+                "role": "student",
+                "interests": [],
+                "created_at": datetime.now(timezone.utc),
+            },
+            "$set": {
+                "email": session_data.email,
+                "name": session_data.name,
+                "picture": session_data.picture,
+            },
+        },
+        upsert=True,
+        return_document=ReturnDocument.AFTER,
+        projection={"_id": 0},
+    )
+    user_id = user_doc["user_id"]
 
     session_doc = {
         "user_id": user_id,
@@ -204,7 +215,6 @@ async def exchange_session(request: Request, response: Response):
         httponly=True, secure=True, samesite="none", path="/", max_age=7*24*60*60
     )
 
-    user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
     return {"user": user_doc, "session_token": session_data.session_token}
 
 

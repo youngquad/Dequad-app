@@ -9,6 +9,7 @@ from helpers.safeguarding import load_approved_keywords
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
+from scripts.migrate_dedupe_users import dedupe_users_and_index_email
 
 from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core, reports, support
 
@@ -20,6 +21,13 @@ logger = logging.getLogger("server")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    # Run user dedupe BEFORE seed so the seed admin upsert doesn't fight with duplicate
+    # admin rows. Also adds the unique email index that prevents the bug recurring.
+    try:
+        result = await dedupe_users_and_index_email(db)
+        logger.info(f"user dedupe migration: {result}")
+    except Exception as e:
+        logger.error(f"user dedupe migration failed (non-fatal): {e}")
     await seed_admin_and_test_users()
     await load_approved_keywords()
     # Idempotent chat migration: backfills pair_id on legacy messages and
