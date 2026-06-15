@@ -125,7 +125,7 @@ const STEPS = [
   {
     n: '03',
     title: 'Connect, chat, and look after your wellbeing',
-    desc: 'Match with peers, message safely, log your daily mood, and access 24/7 AI support. Every conversation is monitored by safeguarding AI that quietly flags crisis content to trained admins — so help arrives before things escalate.',
+    desc: 'Match with peers, message safely, log your daily mood, and access 24/7 support. Every conversation is monitored by safeguarding tools that quietly flag crisis content to trained admins — so help arrives before things escalate.',
   },
 ];
 
@@ -178,14 +178,14 @@ const FEATURES = [
   },
   {
     Icon: ShieldCheck,
-    title: 'AI Safeguarding that actually works.',
+    title: 'Safeguarding that actually works.',
     desc: 'Every message is silently scanned for crisis language, harassment, and bullying. High-risk content triggers an instant alert to trained university safeguarding staff — not random moderators in another country. Privacy-first, not surveillance-first.',
     size: 'md',
   },
   {
     Icon: MessageCircle,
     title: '24/7 Support, human-backed.',
-    desc: 'An AI assistant answers in seconds for the small stuff. For anything serious, a real human from the support team takes over. Average response time: under 4 minutes.',
+    desc: 'An assistant answers in seconds for the small stuff. For anything serious, a real human from the support team takes over. Average response time: under 4 minutes.',
     size: 'md',
   },
 ];
@@ -255,7 +255,7 @@ const TrustSafety = () => (
       </p>
       <ul className="dq-trust__list">
         <li><ShieldCheck size={18} aria-hidden /> <span><strong>Verified UK students only.</strong> Active <code>.ac.uk</code> email required at sign-up and re-checked each term.</span></li>
-        <li><AlertTriangle size={18} aria-hidden /> <span><strong>AI safeguarding in every message.</strong> Crisis language is flagged instantly to trained safeguarding leads, never to other students.</span></li>
+        <li><AlertTriangle size={18} aria-hidden /> <span><strong>Safeguarding in every message.</strong> Crisis language is flagged instantly to trained safeguarding leads, never to other students.</span></li>
         <li><HeartPulse size={18} aria-hidden /> <span><strong>Zero tolerance for harassment.</strong> Reports are reviewed within 4 hours by a human. Confirmed offenders are banned across the network.</span></li>
         <li><Users size={18} aria-hidden /> <span><strong>You own your data.</strong> One-tap export, one-tap delete. We never sell or share your info with universities, advertisers, or anyone else.</span></li>
       </ul>
@@ -309,7 +309,7 @@ const FAQ_ITEMS = [
   { q: 'What exactly is DEQUAD?', a: 'DEQUAD is a closed social network exclusively for verified UK university students. It brings three things into one app: (1) peer matching based on courses, societies, and real interests, (2) daily mood and wellbeing tracking, and (3) 24/7 AI-supported help with built-in safeguarding. Think of it as the friend, mentor, and safety net you wish existed in Freshers\' week.' },
   { q: 'Do I need a university email?', a: 'Yes. DEQUAD is strictly for verified UK university students. You sign up with your .ac.uk email so the network stays closed and safe. If your university uses a different domain, contact us — we add new institutions weekly.' },
   { q: 'Is my mood data private?', a: '100%. We never share your personal health data with your university, employers, or any third party. Mood entries are encrypted at rest, visible only to you, and can be exported or deleted with one tap from your profile.' },
-  { q: 'How does AI safeguarding work?', a: 'Our system scans messages and posts for patterns related to self-harm, crisis, or harassment. If high-risk language is detected, the content is reviewed by a trained safeguarding lead — not exposed to other students. The student in distress is also automatically connected to relevant resources (Samaritans, Shout, university wellbeing teams).' },
+  { q: 'How does the safeguarding work?', a: 'Our system scans messages and posts for patterns related to self-harm, crisis, or harassment. If high-risk language is detected, the content is reviewed by a trained safeguarding lead — not exposed to other students. The student in distress is also automatically connected to relevant resources (Samaritans, Shout, university wellbeing teams).' },
   { q: 'Is DEQUAD a dating app?', a: 'No. DEQUAD is for friendship, study groups, and peer support. Romantic matches do happen organically, but we don\'t prioritise looks-based swiping. The focus is real student connections, not chemistry-first chat.' },
   { q: 'How much does it cost?', a: 'Free during beta. Free forever for the core features — peer matching, mood tracking, support chat, safeguarding. We may introduce optional premium features later (advanced filters, group events), but everything that keeps you safe and connected stays free.' },
   { q: 'Who runs DEQUAD?', a: 'A small, student-led team in the UK. Founders Yusuf Quadri and the team built DEQUAD after seeing too many friends struggle alone through Freshers, exams, and post-graduation transitions. We work directly with university safeguarding staff and the NHS Every Mind Matters team.' },
@@ -486,10 +486,58 @@ const FooterCta = ({ onPrimary }: { onPrimary: () => void }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // Sticky nav with logo + primary CTA
 // ─────────────────────────────────────────────────────────────────────────────
+const Logo = ({ size = 40 }: { size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 120 120"
+    role="img"
+    aria-label="DEQUAD"
+    style={{ display: 'block' }}
+  >
+    <defs>
+      <linearGradient id="dq-heart" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#7AB3E0" />
+        <stop offset="100%" stopColor="#5B9BD5" />
+      </linearGradient>
+    </defs>
+    {/* Heart silhouette */}
+    <path
+      fill="url(#dq-heart)"
+      d="M60 108 C 20 80, 8 56, 8 40 C 8 22, 22 10, 38 10 C 48 10, 56 16, 60 24 C 64 16, 72 10, 82 10 C 98 10, 112 22, 112 40 C 112 56, 100 80, 60 108 Z"
+    />
+    {/* DEQUAD wordmark inside heart top half */}
+    <text
+      x="60"
+      y="50"
+      textAnchor="middle"
+      fontFamily="Manrope, -apple-system, sans-serif"
+      fontWeight="800"
+      fontSize="18"
+      letterSpacing="0.5"
+      fill="#0F2942"
+    >
+      DEQUAD
+    </text>
+    {/* Bar-chart wellbeing motif */}
+    <rect x="40" y="62" width="9" height="22" rx="2" fill="#FFFFFF" />
+    <rect x="55.5" y="68" width="9" height="16" rx="2" fill="#FFFFFF" />
+    <rect x="71" y="58" width="9" height="26" rx="2" fill="#FFFFFF" />
+    {/* Teal swoosh */}
+    <path
+      d="M40 86 Q 60 96, 80 86"
+      stroke="#4FB89F"
+      strokeWidth="5"
+      strokeLinecap="round"
+      fill="none"
+    />
+  </svg>
+);
+
 const Nav = ({ onPrimary }: { onPrimary: () => void }) => (
   <header className="dq-nav" data-testid="nav">
     <a href="/" className="dq-nav__brand" data-testid="nav-brand">
-      <span className="dq-nav__logo">DQ</span>
+      <Logo size={44} />
       <span className="dq-nav__name">DEQUAD</span>
     </a>
     <button
@@ -578,14 +626,19 @@ export default function LandingWeb() {
 // ─────────────────────────────────────────────────────────────────────────────
 const CSS = `
 :root {
-  --bg: #FAF9F6;
-  --text: #1C1917;
-  --text-muted: #57534E;
-  --cta: #0F172A;
+  /* Theme drawn from the DEQUAD heart logo: friendly student blue, deep navy, teal accent. */
+  --bg: #F6FAFE;
+  --bg-soft: #EDF4FB;
+  --text: #0F2942;
+  --text-muted: #4F6076;
+  --cta: #0F2942;
   --cta-text: #FFFFFF;
   --card: #FFFFFF;
-  --border: #E7E5E4;
-  --accent: #D4A373;
+  --border: #DDE8F2;
+  --brand: #5B9BD5;        /* heart blue */
+  --brand-soft: #B7D4EE;
+  --accent: #4FB89F;       /* teal swoosh */
+  --accent-soft: #C2E6DA;
   --max: 1240px;
 }
 * { box-sizing: border-box; }
@@ -608,19 +661,18 @@ body, #root, #root > div, #root > div > div { background: var(--bg); margin: 0; 
 .dq-btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; letter-spacing: 0.04em; text-decoration: none; cursor: pointer; border: none; transition: transform 200ms ease, background-color 200ms ease, color 200ms ease, box-shadow 200ms ease; }
 .dq-btn:hover { transform: translateY(-1px); }
 .dq-btn--primary { background: var(--cta); color: var(--cta-text); }
-.dq-btn--primary:hover { background: #1f2937; }
-.dq-btn--accent { background: var(--accent); color: #1C1917; }
-.dq-btn--accent:hover { background: #c2916a; }
+.dq-btn--primary:hover { background: #1c4271; box-shadow: 0 10px 24px -10px rgba(15,41,66,0.5); }
+.dq-btn--accent { background: var(--brand); color: #FFFFFF; }
+.dq-btn--accent:hover { background: #4a86bc; }
 .dq-btn--ghost { background: transparent; color: var(--text); border: 1.5px solid var(--text); }
 .dq-btn--ghost:hover { background: var(--text); color: var(--bg); }
 .dq-btn--sm { padding: 11px 18px; font-size: 13px; }
 .dq-btn[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 /* Nav */
-.dq-nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 18px max(24px, calc((100vw - var(--max)) / 2)); background: rgba(250, 249, 246, 0.85); backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); border-bottom: 1px solid var(--border); }
+.dq-nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 14px max(24px, calc((100vw - var(--max)) / 2)); background: rgba(246, 250, 254, 0.88); backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); border-bottom: 1px solid var(--border); }
 .dq-nav__brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; }
-.dq-nav__logo { width: 36px; height: 36px; border-radius: 10px; background: var(--cta); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; letter-spacing: 0.05em; }
-.dq-nav__name { font-weight: 700; letter-spacing: 0.18em; font-size: 13px; }
+.dq-nav__name { font-weight: 800; letter-spacing: 0.18em; font-size: 13px; }
 
 /* Sections */
 .dq-section { padding: 96px max(24px, calc((100vw - var(--max)) / 2)); max-width: 100vw; }
@@ -657,7 +709,7 @@ body, #root, #root > div, #root > div > div { background: var(--bg); margin: 0; 
 .dq-bento__card--lg { grid-column: span 8; min-height: 280px; }
 .dq-bento__card--md { grid-column: span 6; }
 .dq-bento__card--sm { grid-column: span 4; }
-.dq-bento__icon { color: var(--accent); margin-bottom: 18px; }
+.dq-bento__icon { color: var(--brand); margin-bottom: 18px; }
 .dq-bento__card .dq-body { font-size: 16px; }
 
 /* Trust */
@@ -665,8 +717,8 @@ body, #root, #root > div, #root > div > div { background: var(--bg); margin: 0; 
 .dq-trust__media img { width: 100%; height: 100%; max-height: 580px; object-fit: cover; border-radius: 24px; }
 .dq-trust__list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 16px; }
 .dq-trust__list li { display: flex; align-items: flex-start; gap: 12px; font-size: 17px; color: var(--text); }
-.dq-trust__list svg { color: var(--accent); margin-top: 3px; flex-shrink: 0; }
-.dq-trust__list code { background: #F3F1EC; padding: 2px 8px; border-radius: 6px; font-size: 0.9em; }
+.dq-trust__list svg { color: var(--brand); margin-top: 3px; flex-shrink: 0; }
+.dq-trust__list code { background: var(--bg-soft); padding: 2px 8px; border-radius: 6px; font-size: 0.9em; color: var(--text); }
 
 /* Testimonials */
 .dq-testimonials { text-align: left; }
