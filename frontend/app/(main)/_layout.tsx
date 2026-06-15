@@ -151,6 +151,8 @@ export default function MainLayout() {
         name="support"
         options={{
           href: null, // Hide from tab bar - accessible from Profile
+          // Also visually hide the bottom tab bar so it doesn't overlap the chat composer.
+          tabBarStyle: { display: 'none' },
         }}
       />
     </Tabs>
