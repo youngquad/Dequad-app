@@ -34,11 +34,11 @@ const Hero = ({ onPrimary }: { onPrimary: () => void }) => (
     >
       <p className="dq-label" data-testid="hero-label">THE SAFE STUDENT NETWORK</p>
       <h1 className="dq-h1" data-testid="hero-headline">
-        Designed to be deleted when you find your people.
+        Designed to make your university experience better — every single day.
       </h1>
       <p className="dq-body" data-testid="hero-sub">
         DEQUAD is the only university-verified platform built for real connections,
-        safeguarded by AI.
+        daily wellbeing, and a community that always has your back.
       </p>
       <button
         type="button"
