@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>J_architecture_diagram</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
+           line-height: 1.5; font-size: 11pt; }
+    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
+                 page-break-after: avoid; }
+    h1 { font-size: 22pt; margin-top: 0; }
+    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
+    h3 { font-size: 13pt; }
+    table { border-collapse: collapse; width: 100%; margin: 14px 0;
+            font-size: 9.5pt; }
+    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
+             vertical-align: top; }
+    th { background: #F6FAFE; }
+    code { background: #F6FAFE; padding: 1px 4px; border-radius: 4px;
+           font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
+    pre { background: #F6FAFE; padding: 10px; border-radius: 6px; overflow-x: auto;
+          font-size: 9pt; }
+    blockquote { border-left: 3px solid #5B9BD5; padding-left: 12px;
+                 color: #4F6076; margin: 12px 0; }
+    hr { border: none; border-top: 1px solid #DDE8F2; margin: 24px 0; }
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">J_architecture_diagram</h1>
+</header>
+<h1 id="appendix-j-technology-architecture">Appendix J — Technology
+Architecture</h1>
+<p>DEQUAD’s stack is intentionally simple, cloud-native, and based on
+widely-adopted open-source components — minimising key-person risk and
+supporting the scalability commitments in §7.</p>
+<hr />
+<h2 id="j.1-high-level-architecture-diagram">J.1 High-level architecture
+diagram</h2>
+<pre><code>                                  ┌──────────────────────────┐
+                                  │   Cloudflare (DNS, WAF)  │
+                                  └────────────┬─────────────┘
+                                               │ TLS 1.3
+                ┌──────────────────────────────┴──────────────────────────┐
+                │                                                         │
+        ┌───────▼────────┐                                       ┌────────▼────────┐
+        │  Web client    │                                       │  Native clients │
+        │  (React +      │                                       │  (iOS / Android │
+        │   Expo Router) │                                       │   via Expo /    │
+        │                │                                       │   EAS Build)    │
+        └───────┬────────┘                                       └────────┬────────┘
+                │                                                         │
+                │             HTTPS (Bearer-token auth, JSON)             │
+                └──────────────────────┬──────────────────────────────────┘
+                                       │
+                              ┌────────▼────────┐
+                              │   Ingress       │
+                              │  (Nginx, K8s)   │
+                              └────────┬────────┘
+                                       │
+                              ┌────────▼────────┐
+                              │  FastAPI API    │
+                              │  (Python 3.11)  │
+                              │  - Auth         │
+                              │  - Matching     │
+                              │  - Mood         │
+                              │  - Safeguarding │
+                              │  - Support      │
+                              │  - Admin        │
+                              └─┬─────┬─────┬───┘
+                                │     │     │
+              ┌─────────────────┘     │     └───────────────────────┐
+              │                       │                             │
+      ┌───────▼────────┐    ┌─────────▼─────────┐         ┌─────────▼─────────┐
+      │  MongoDB Atlas │    │  Stripe Connect   │         │  Outbound services│
+      │  (UK region,   │    │  (UK FCA-         │         │  - SMTP (Gmail/   │
+      │   replicated)  │    │   regulated)      │         │    AWS SES)       │
+      │                │    │                   │         │  - Expo Push      │
+      │  Collections:  │    │  Subscriptions    │         │  - Sentry         │
+      │  - users       │    │  - University     │         │                   │
+      │  - matches     │    │  - Premium        │         │                   │
+      │  - chat_msgs   │    │                   │         │                   │
+      │  - mood        │    └───────────────────┘         └───────────────────┘
+      │  - support     │
+      │  - sg_alerts   │              ┌───────────────────┐
+      │  - reports     │              │  LLM provider     │
+      │  - waitlist    │◄─────────────┤  (OpenAI gpt-4o-  │
+      └────────────────┘              │   mini for AI     │
+                                      │   first-line      │
+                                      │   support replies)│
+                                      └───────────────────┘</code></pre>
+<h2 id="j.2-component-table">J.2 Component table</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Technology</th>
+<th>Hosting</th>
+<th>Why this choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DNS / WAF / DDoS</td>
+<td>Cloudflare</td>
+<td>Global</td>
+<td>Industry-standard, UK regulatory comfort</td>
+</tr>
+<tr class="even">
+<td>CDN</td>
+<td>Cloudflare</td>
+<td>Global edge</td>
+<td>Reduces latency for image / static assets</td>
+</tr>
+<tr class="odd">
+<td>Ingress</td>
+<td>Nginx (managed)</td>
+<td>Kubernetes (UK)</td>
+<td>Battle-tested, no exotic dependencies</td>
+</tr>
+<tr class="even">
+<td>API</td>
+<td>FastAPI on Python 3.11</td>
+<td>Kubernetes (UK)</td>
+<td>Strong typing, async I/O, high developer velocity</td>
+</tr>
+<tr class="odd">
+<td>Database</td>
+<td>MongoDB Atlas, <strong>UK region</strong></td>
+<td>Managed</td>
+<td>Flexible schema for evolving wellbeing data; UK data residency by
+default</td>
+</tr>
+<tr class="even">
+<td>Search / aggregation</td>
+<td>MongoDB aggregation pipeline</td>
+<td>Managed</td>
+<td>Avoids extra dependency; sufficient at projected scale</td>
+</tr>
+<tr class="odd">
+<td>Auth</td>
+<td>OAuth 2.0 (university SSO partnerships, Y2+) and Bearer tokens for
+native</td>
+<td>Managed</td>
+<td>No password reuse; FA-protected admin route</td>
+</tr>
+<tr class="even">
+<td>Payments</td>
+<td>Stripe (UK entity)</td>
+<td>Managed</td>
+<td>FCA-regulated; PCI-DSS handled by Stripe</td>
+</tr>
+<tr class="odd">
+<td>File storage</td>
+<td>Cloudflare R2 (S3-compatible, UK)</td>
+<td>Managed</td>
+<td>Cost-effective; user-uploaded photos</td>
+</tr>
+<tr class="even">
+<td>Email</td>
+<td>Gmail SMTP relay (pre-pilot) → AWS SES, eu-west-2 (production)</td>
+<td>Managed</td>
+<td>Auditable delivery</td>
+</tr>
+<tr class="odd">
+<td>Push notifications</td>
+<td>Expo Push Service</td>
+<td>Managed</td>
+<td>Single API for iOS + Android</td>
+</tr>
+<tr class="even">
+<td>Observability</td>
+<td>Sentry (UK data residency option) + structured logs to CloudWatch
+(eu-west-2)</td>
+<td>Managed</td>
+<td>Proactive issue detection; SLO dashboards</td>
+</tr>
+<tr class="odd">
+<td>LLM provider</td>
+<td>OpenAI gpt-4o-mini via Emergent LLM Key</td>
+<td>API</td>
+<td>Used only for AI auto-reply to support messages; no
+user-identifiable PII in prompts</td>
+</tr>
+</tbody>
+</table>
+<h2 id="j.3-data-residency">J.3 Data residency</h2>
+<p>All Personally Identifiable Information (PII) and Special Category
+Data (mental-health, mood entries) is stored in MongoDB Atlas’s
+<strong>UK region</strong> (London). No PII leaves the UK except: -
+Stripe (UK entity; Stripe stores card tokens, not card numbers, in
+compliance with PCI-DSS Service Provider Level 1). - OpenAI inference
+calls (only contain redacted, non-PII excerpts of support messages — see
+DPIA Appendix E §4.3).</p>
+<h2 id="j.4-security-controls-implemented">J.4 Security controls
+implemented</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Control</th>
+<th>Implementation</th>
+<th>Standard</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TLS in transit</td>
+<td>All endpoints TLS 1.3, HSTS preload</td>
+<td>NCSC guidance</td>
+</tr>
+<tr class="even">
+<td>Encryption at rest</td>
+<td>MongoDB Atlas AES-256</td>
+<td>NCSC guidance</td>
+</tr>
+<tr class="odd">
+<td>Secret management</td>
+<td>Environment variables sealed via Emergent vault; never in
+source</td>
+<td>OWASP ASVS L2</td>
+</tr>
+<tr class="even">
+<td>Auth</td>
+<td>Bearer tokens, 7-day expiry, refresh on use</td>
+<td>OWASP ASVS L2</td>
+</tr>
+<tr class="odd">
+<td>Rate limiting</td>
+<td><code>RateLimitMiddleware</code> on the API gateway (per-IP +
+per-user)</td>
+<td>OWASP ASVS L2</td>
+</tr>
+<tr class="even">
+<td>Audit logging</td>
+<td>Structured logs to centralised store; safeguarding events retained 7
+years</td>
+<td>UK DPA 2018</td>
+</tr>
+<tr class="odd">
+<td>Backups</td>
+<td>Daily MongoDB Atlas snapshots, 30-day retention; quarterly restore
+drills</td>
+<td>NCSC Cloud Security Principles</td>
+</tr>
+<tr class="even">
+<td>Vulnerability scanning</td>
+<td>Dependabot + weekly OWASP ZAP scan</td>
+<td>NCSC Cloud Security</td>
+</tr>
+<tr class="odd">
+<td>Penetration testing</td>
+<td>Annual external pen-test (Y1 onward) by CREST-approved firm</td>
+<td>Cyber Essentials Plus requirement</td>
+</tr>
+</tbody>
+</table>
+<h2 id="j.5-scalability-headroom">J.5 Scalability headroom</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Current capacity</th>
+<th>Capacity at 1M users</th>
+<th>Mitigation if exceeded</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FastAPI pods</td>
+<td>2 pods × 0.5 CPU</td>
+<td>Auto-scale to 40 pods</td>
+<td>Kubernetes HPA already configured</td>
+</tr>
+<tr class="even">
+<td>MongoDB Atlas</td>
+<td>M10 cluster (~5GB)</td>
+<td>M50 cluster (~600GB)</td>
+<td>Atlas vertical scaling, no downtime</td>
+</tr>
+<tr class="odd">
+<td>Push (Expo)</td>
+<td>200k/day</td>
+<td>Unlimited (Expo Pricing)</td>
+<td>n/a</td>
+</tr>
+<tr class="even">
+<td>Email</td>
+<td>10k/day (Gmail)</td>
+<td>Migrate to AWS SES at 50k/day</td>
+<td>Already designed</td>
+</tr>
+<tr class="odd">
+<td>LLM calls</td>
+<td>Soft cap by Emergent LLM Key budget</td>
+<td>Move to direct OpenAI org account</td>
+<td>One-line config change</td>
+</tr>
+</tbody>
+</table>
+<h2 id="j.6-disaster-recovery-rto-rpo">J.6 Disaster-recovery RTO /
+RPO</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Recovery Time Objective</th>
+<th>Recovery Point Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Single-pod failure</td>
+<td>&lt; 30 seconds</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Region failure (London)</td>
+<td>&lt; 4 hours</td>
+<td>&lt; 24 hours</td>
+</tr>
+<tr class="odd">
+<td>Database corruption</td>
+<td>&lt; 4 hours</td>
+<td>&lt; 24 hours</td>
+</tr>
+<tr class="even">
+<td>Total data loss</td>
+<td>&lt; 24 hours</td>
+<td>&lt; 24 hours</td>
+</tr>
+</tbody>
+</table>
+<p>A documented runbook is maintained in
+<code>/app/backend/scripts/RUNBOOK.md</code>.</p>
+<h2 id="j.7-roadmap-items-not-yet-built">J.7 Roadmap items not yet
+built</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Item</th>
+<th>Target quarter</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>University SSO (Shibboleth / SAML)</td>
+<td>Q2 Year 1</td>
+<td>Required for some Russell Group integrations</td>
+</tr>
+<tr class="even">
+<td>Anonymised analytics export to partner DSLs</td>
+<td>Q3 Year 1</td>
+<td>Aggregate, no individual data</td>
+</tr>
+<tr class="odd">
+<td>ISO 27001 controls hardening</td>
+<td>Year 3</td>
+<td>Required for NHS DSPT alignment</td>
+</tr>
+<tr class="even">
+<td>End-to-end encrypted DMs (Signal protocol)</td>
+<td>Year 2</td>
+<td>Safeguarding compatibility under evaluation</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>This appendix is a current-state and forward-looking architecture
+summary as at the date of submission. Material architecture changes will
+be communicated to UKES at the standard 6/12/24-month contact
+points.</em></p>
+</body>
+</html>

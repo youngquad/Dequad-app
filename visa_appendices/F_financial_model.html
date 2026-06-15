@@ -1,0 +1,750 @@
+<html><head><meta charset="utf-8"><title>F — Financial Model</title>
+<style>body{font-family:Helvetica,Arial,sans-serif;font-size:9pt;color:#1c1917;margin:18px}
+h1{font-family:Georgia,serif;color:#0f2942;font-size:18pt;margin-top:0}
+table{border-collapse:collapse;width:100%;margin:8px 0}
+td{border:1px solid #DDE8F2;padding:4px 7px;vertical-align:top}
+tr.section td{background:#0f2942;color:#fff;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:8.5pt}
+tr.note td{background:#F6FAFE;font-style:italic;color:#4F6076}
+</style></head><body>
+<h1>Appendix F — DEQUAD Five-Year Financial Model</h1>
+<p style="color:#4F6076">Currency: GBP (£) thousands unless stated. Open the source <code>F_financial_model.csv</code> in Excel/Numbers for live editing.</p>
+<table>
+<tr>
+<td>DEQUAD Ltd — Five-Year Financial Model</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Currency: GBP (£) thousands unless stated</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Prepared by: Yusuf Quadri</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Last updated: 2026</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="section">
+<td>REVENUE</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td>Notes / Assumptions</td>
+</tr>
+<tr>
+<td>Universities (paid)</td>
+<td>3</td>
+<td>10</td>
+<td>25</td>
+<td>50</td>
+<td>100</td>
+<td>Conservative procurement timeline; 4-6mo sales cycle (JISC data)</td>
+</tr>
+<tr>
+<td>Avg students per university (verified)</td>
+<td>5000</td>
+<td>8000</td>
+<td>8000</td>
+<td>10000</td>
+<td>12000</td>
+<td>Manchester ~40k; Sussex ~18k; average mid-range UK uni ~10-15k</td>
+</tr>
+<tr>
+<td>Cohort coverage (students)</td>
+<td>15000</td>
+<td>80000</td>
+<td>200000</td>
+<td>500000</td>
+<td>1200000</td>
+<td>= universities x avg students</td>
+</tr>
+<tr>
+<td>Institutional revenue (£/student/year)</td>
+<td>1.5</td>
+<td>1.5</td>
+<td>2.0</td>
+<td>2.5</td>
+<td>2.8</td>
+<td>Pricing escalates with feature depth; below in-house counsellor cost</td>
+</tr>
+<tr>
+<td>Institutional ARR (£k)</td>
+<td>22.5</td>
+<td>120</td>
+<td>400</td>
+<td>1250</td>
+<td>3360</td>
+<td>= universities x avg students x price</td>
+</tr>
+<tr>
+<td>NHS ICBs commissioned</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>5</td>
+<td>NHS Innovation Accelerator Y2; first ICB Y3</td>
+</tr>
+<tr>
+<td>NHS ARR (£k)</td>
+<td>0</td>
+<td>0</td>
+<td>50</td>
+<td>250</td>
+<td>800</td>
+<td>£8/engaged user/year, conservative engagement assumption</td>
+</tr>
+<tr>
+<td>Premium subscribers (students)</td>
+<td>0</td>
+<td>1500</td>
+<td>8000</td>
+<td>25000</td>
+<td>60000</td>
+<td>~3-5% of verified base converts; Calm/Headspace benchmark</td>
+</tr>
+<tr>
+<td>Premium ARR (£k)</td>
+<td>0</td>
+<td>30</td>
+<td>150</td>
+<td>450</td>
+<td>1200</td>
+<td>£19.99/year average revenue per premium user</td>
+</tr>
+<tr>
+<td>Research-data licences (£k)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>30</td>
+<td>75</td>
+<td>Aggregated/anonymised; NIHR + MQ partnerships Y4+</td>
+</tr>
+<tr>
+<td>White-label / API (£k)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>20</td>
+<td>165</td>
+<td>International HE partners Y4+</td>
+</tr>
+<tr>
+<td>TOTAL REVENUE (£k)</td>
+<td>22.5</td>
+<td>150</td>
+<td>600</td>
+<td>2000</td>
+<td>5600</td>
+<td>Sum of all streams</td>
+</tr>
+<tr class="section">
+<td>COST OF REVENUE (COGS)</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Cloud hosting (MongoDB Atlas, K8s)</td>
+<td>4</td>
+<td>12</td>
+<td>30</td>
+<td>75</td>
+<td>180</td>
+<td>Scales sub-linearly with users</td>
+</tr>
+<tr>
+<td>Email + Push delivery</td>
+<td>1</td>
+<td>4</td>
+<td>10</td>
+<td>25</td>
+<td>55</td>
+<td>AWS SES + Expo Push</td>
+</tr>
+<tr>
+<td>LLM API costs (OpenAI gpt-4o-mini)</td>
+<td>2</td>
+<td>8</td>
+<td>22</td>
+<td>55</td>
+<td>135</td>
+<td>For AI auto-replies in support chat</td>
+</tr>
+<tr>
+<td>Stripe fees (~2.4%)</td>
+<td>0.5</td>
+<td>4</td>
+<td>15</td>
+<td>50</td>
+<td>140</td>
+<td>Standard UK Stripe fees</td>
+</tr>
+<tr>
+<td>DSL on-call coverage (24/7)</td>
+<td>18</td>
+<td>45</td>
+<td>80</td>
+<td>140</td>
+<td>250</td>
+<td>PT in Y1; FT + bank Y2+</td>
+</tr>
+<tr>
+<td>Total COGS (£k)</td>
+<td>25.5</td>
+<td>73</td>
+<td>157</td>
+<td>345</td>
+<td>760</td>
+<td></td>
+</tr>
+<tr>
+<td>Gross profit (£k)</td>
+<td>-3</td>
+<td>77</td>
+<td>443</td>
+<td>1655</td>
+<td>4840</td>
+<td></td>
+</tr>
+<tr>
+<td>Gross margin (%)</td>
+<td>-13</td>
+<td>51</td>
+<td>74</td>
+<td>83</td>
+<td>86</td>
+<td>Targets 80%+ at maturity</td>
+</tr>
+<tr class="section">
+<td>OPERATING EXPENSES</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Founder salary</td>
+<td>30</td>
+<td>55</td>
+<td>75</td>
+<td>90</td>
+<td>100</td>
+<td>Below market deliberately; visa Y1 lower</td>
+</tr>
+<tr>
+<td>Engineering (FTE x avg £55k)</td>
+<td>55</td>
+<td>165</td>
+<td>330</td>
+<td>495</td>
+<td>605</td>
+<td>1, 3, 6, 9, 11 engineers</td>
+</tr>
+<tr>
+<td>Customer success (FTE x avg £40k)</td>
+<td>20</td>
+<td>40</td>
+<td>80</td>
+<td>160</td>
+<td>240</td>
+<td>0.5, 1, 2, 4, 6 CS</td>
+</tr>
+<tr>
+<td>Sales (FTE x avg £45k base + commission)</td>
+<td>0</td>
+<td>55</td>
+<td>135</td>
+<td>270</td>
+<td>405</td>
+<td>0, 1, 3, 6, 9 sales reps</td>
+</tr>
+<tr>
+<td>Operations + Finance + People</td>
+<td>0</td>
+<td>40</td>
+<td>80</td>
+<td>160</td>
+<td>240</td>
+<td>Fractional Y1-2; FTE Y3+</td>
+</tr>
+<tr>
+<td>Marketing (paid + content)</td>
+<td>10</td>
+<td>30</td>
+<td>80</td>
+<td>180</td>
+<td>360</td>
+<td>3-7% of revenue</td>
+</tr>
+<tr>
+<td>Office / co-working</td>
+<td>6</td>
+<td>18</td>
+<td>36</td>
+<td>72</td>
+<td>108</td>
+<td>London co-working then office Y3+</td>
+</tr>
+<tr>
+<td>Legal + Accounting</td>
+<td>18</td>
+<td>15</td>
+<td>25</td>
+<td>40</td>
+<td>70</td>
+<td>Higher Y1 for incorporation + IP + OSA opinion</td>
+</tr>
+<tr>
+<td>Insurance (D&O, PI, Cyber, PL)</td>
+<td>6</td>
+<td>9</td>
+<td>15</td>
+<td>24</td>
+<td>36</td>
+<td>Hiscox + Markel quoted</td>
+</tr>
+<tr>
+<td>Cyber Essentials Plus + annual pen-test</td>
+<td>8</td>
+<td>8</td>
+<td>12</td>
+<td>15</td>
+<td>18</td>
+<td>Required for university procurement</td>
+</tr>
+<tr>
+<td>DPO (fractional then FTE)</td>
+<td>12</td>
+<td>60</td>
+<td>75</td>
+<td>80</td>
+<td>85</td>
+<td>The DPO Centre Y1; FTE Y2+</td>
+</tr>
+<tr>
+<td>Travel + conferences (UUK, AMOSSHE)</td>
+<td>4</td>
+<td>15</td>
+<td>30</td>
+<td>55</td>
+<td>90</td>
+<td></td>
+</tr>
+<tr>
+<td>Software subscriptions (GitHub, Slack, etc.)</td>
+<td>4</td>
+<td>9</td>
+<td>16</td>
+<td>24</td>
+<td>36</td>
+<td></td>
+</tr>
+<tr>
+<td>Contingency (10% of opex)</td>
+<td>17</td>
+<td>52</td>
+<td>102</td>
+<td>170</td>
+<td>253</td>
+<td></td>
+</tr>
+<tr>
+<td>Total OPEX (£k)</td>
+<td>190</td>
+<td>571</td>
+<td>1091</td>
+<td>1835</td>
+<td>2646</td>
+<td></td>
+</tr>
+<tr>
+<td>EBITDA (£k)</td>
+<td>-193</td>
+<td>-494</td>
+<td>-648</td>
+<td>-180</td>
+<td>2194</td>
+<td>Loss-making until Y5</td>
+</tr>
+<tr class="section">
+<td>CAPEX / one-off</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>R&D capitalisable</td>
+<td>0</td>
+<td>0</td>
+<td>30</td>
+<td>60</td>
+<td>100</td>
+<td></td>
+</tr>
+<tr>
+<td>Equipment</td>
+<td>4</td>
+<td>8</td>
+<td>16</td>
+<td>30</td>
+<td>45</td>
+<td></td>
+</tr>
+<tr class="section">
+<td>CASH BURN</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Monthly burn (£k)</td>
+<td>16</td>
+<td>42</td>
+<td>55</td>
+<td>18</td>
+<td>n/a</td>
+<td>Y5 cash-positive</td>
+</tr>
+<tr>
+<td>Annual net cash flow (£k)</td>
+<td>-197</td>
+<td>-502</td>
+<td>-694</td>
+<td>-270</td>
+<td>2049</td>
+<td></td>
+</tr>
+<tr class="section">
+<td>CUMULATIVE</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Cumulative net (£k)</td>
+<td>-197</td>
+<td>-699</td>
+<td>-1393</td>
+<td>-1663</td>
+<td>386</td>
+<td></td>
+</tr>
+<tr class="section">
+<td>FUNDING</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Founder seed (delivered)</td>
+<td>30</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>Pre-seed (angel + Innovate UK grant)</td>
+<td>150</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>Month 3 close</td>
+</tr>
+<tr>
+<td>Seed round</td>
+<td>0</td>
+<td>750</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>Month 18 close</td>
+</tr>
+<tr>
+<td>Series A</td>
+<td>0</td>
+<td>0</td>
+<td>3500</td>
+<td>0</td>
+<td>0</td>
+<td>Month 36 close</td>
+</tr>
+<tr>
+<td>Innovate UK Smart Grant</td>
+<td>0</td>
+<td>250</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>50% match, mental-health stream</td>
+</tr>
+<tr>
+<td>Total raised (£k)</td>
+<td>180</td>
+<td>1000</td>
+<td>3500</td>
+<td>0</td>
+<td>0</td>
+<td>Total: £4.68m over 3 rounds</td>
+</tr>
+<tr class="section">
+<td>HEADCOUNT (FTE end of year)</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Founder</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>Engineering</td>
+<td>1</td>
+<td>3</td>
+<td>6</td>
+<td>9</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>Customer success</td>
+<td>0.5</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+<td></td>
+</tr>
+<tr>
+<td>Sales</td>
+<td>0</td>
+<td>1</td>
+<td>3</td>
+<td>6</td>
+<td>9</td>
+<td></td>
+</tr>
+<tr>
+<td>DSL / Safeguarding</td>
+<td>0.5</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+<td></td>
+</tr>
+<tr>
+<td>DPO / Legal</td>
+<td>0.3</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>Marketing</td>
+<td>0.5</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+<td></td>
+</tr>
+<tr>
+<td>Operations / Finance / People</td>
+<td>0.2</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>TOTAL FTE</td>
+<td>4</td>
+<td>10</td>
+<td>19</td>
+<td>32</td>
+<td>44</td>
+<td>Slightly higher than main doc target of 42</td>
+</tr>
+<tr class="section">
+<td>KEY UNIT ECONOMICS</td>
+<td>Y1</td>
+<td>Y2</td>
+<td>Y3</td>
+<td>Y4</td>
+<td>Y5</td>
+<td></td>
+</tr>
+<tr>
+<td>Avg revenue per uni (£k)</td>
+<td>7.5</td>
+<td>12</td>
+<td>16</td>
+<td>25</td>
+<td>33.6</td>
+<td></td>
+</tr>
+<tr>
+<td>Avg cost to acquire a uni (£k)</td>
+<td>6</td>
+<td>5</td>
+<td>4.5</td>
+<td>4.2</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>Years to payback per uni</td>
+<td>0.8</td>
+<td>0.42</td>
+<td>0.28</td>
+<td>0.17</td>
+<td>0.12</td>
+<td></td>
+</tr>
+<tr>
+<td>LTV (5-yr) per uni (£k)</td>
+<td>37.5</td>
+<td>60</td>
+<td>80</td>
+<td>125</td>
+<td>168</td>
+<td></td>
+</tr>
+<tr>
+<td>LTV : CAC</td>
+<td>6.25</td>
+<td>12</td>
+<td>17.8</td>
+<td>29.8</td>
+<td>42</td>
+<td>Healthy SaaS targets >3x by Y2</td>
+</tr>
+<tr class="section">
+<td>KEY ASSUMPTIONS & RISKS</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1. Pricing assumes £1.50-£2.80 per student/year — below in-house counsellor cost (£40+ per student); validated against JISC 2024 procurement data</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2. Conversion to premium = 3-5% of verified students; below Calm (5.7%) and Headspace (4.2%) consumer benchmarks</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3. University procurement cycle = 4-6 months from first contact; aligns with JISC HE buying data</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4. NHS ICB commissioning gated on NHS Innovation Accelerator acceptance (~30% acceptance rate)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5. Cost figures use 2026 London salary benchmarks; +3% annual inflation applied</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6. International revenue (Y4+) assumes Republic of Ireland first (no localisation cost); ANZ requires localisation</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>7. R&D tax credit (HMRC RDEC) of ~16% available on qualifying spend; modelled conservatively as 10% effective</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table></body></html>
