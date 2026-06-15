@@ -82,10 +82,81 @@ const Mission = () => (
         <span className="dq-h2--muted">Not for random dating.</span>
       </h2>
       <p className="dq-body dq-mission__body">
-        University can be isolating. We built DEQUAD to help you find your actual
-        peers — safely. No bots, no creeps, just verified students from your campus.
+        Starting university should be exciting — but for most students it's also lonely,
+        overwhelming, and academically intense. Existing apps either treat you like a
+        target audience or a swipe statistic. <strong>DEQUAD is different.</strong> We're
+        a closed network of verified UK students, designed by students who lived through
+        the loneliness, the exam stress, and the late-night safety scares, with one goal:
+        make every day at university genuinely better.
       </p>
+      <div className="dq-mission__stats">
+        <div className="dq-stat" data-testid="stat-loneliness">
+          <strong>54%</strong>
+          <span>of UK students report frequent loneliness*</span>
+        </div>
+        <div className="dq-stat" data-testid="stat-mental-health">
+          <strong>1 in 3</strong>
+          <span>experience a mental-health issue during their degree*</span>
+        </div>
+        <div className="dq-stat" data-testid="stat-friends">
+          <strong>71%</strong>
+          <span>wish they'd made friends from outside their flat sooner*</span>
+        </div>
+      </div>
+      <p className="dq-mission__footnote">*Sources: ONS, Student Minds, NUS surveys 2023–24.</p>
     </motion.div>
+  </section>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section: How It Works — 3-step explanation
+// ─────────────────────────────────────────────────────────────────────────────
+const STEPS = [
+  {
+    n: '01',
+    title: 'Verify with your university email',
+    desc: 'Sign up in 60 seconds using your .ac.uk address. We never share it. Once verified, you join a closed network of students from real UK universities — no bots, no fake profiles, no off-platform creeps.',
+  },
+  {
+    n: '02',
+    title: 'Build your profile around what actually matters',
+    desc: 'Tag your course, society interests, study habits, and what you\'re looking for — study mates, society buddies, gym partners, or just someone to grab coffee with. No looks-first swiping. We surface compatibility based on overlap, not photos.',
+  },
+  {
+    n: '03',
+    title: 'Connect, chat, and look after your wellbeing',
+    desc: 'Match with peers, message safely, log your daily mood, and access 24/7 AI support. Every conversation is monitored by safeguarding AI that quietly flags crisis content to trained admins — so help arrives before things escalate.',
+  },
+];
+
+const HowItWorks = () => (
+  <section className="dq-section dq-how" data-testid="how-section">
+    <motion.p
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="dq-label"
+    >
+      HOW IT WORKS
+    </motion.p>
+    <h2 className="dq-h2 dq-how__title">Three steps to a better year.</h2>
+    <div className="dq-how__grid">
+      {STEPS.map((s, i) => (
+        <motion.div
+          key={s.n}
+          className="dq-step"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
+          data-testid={`step-${i + 1}`}
+        >
+          <div className="dq-step__num">{s.n}</div>
+          <h3 className="dq-h3">{s.title}</h3>
+          <p className="dq-body">{s.desc}</p>
+        </motion.div>
+      ))}
+    </div>
   </section>
 );
 
@@ -93,10 +164,30 @@ const Mission = () => (
 // Section: Features (Bento Grid)
 // ─────────────────────────────────────────────────────────────────────────────
 const FEATURES = [
-  { Icon: Users, title: 'Find your crowd.', desc: 'Peer matching based on modules, societies, and real interests.', size: 'lg' },
-  { Icon: HeartPulse, title: 'Track your mind.', desc: 'Daily mood check-ins designed to keep you grounded.', size: 'sm' },
-  { Icon: ShieldCheck, title: 'AI Safeguarding.', desc: 'Proactive crisis detection that keeps the community secure.', size: 'md' },
-  { Icon: MessageCircle, title: '24/7 Support.', desc: 'Real help when you need it, instantly.', size: 'md' },
+  {
+    Icon: Users,
+    title: 'Find your crowd.',
+    desc: 'Peer matching based on the things that actually predict friendship — modules, society interests, study style, the music you listen to, the gym you go to. Verified .ac.uk emails only, so every match is a real student from a real campus.',
+    size: 'lg',
+  },
+  {
+    Icon: HeartPulse,
+    title: 'Track your mind.',
+    desc: 'Daily 10-second mood check-ins build a personal wellbeing baseline — so you spot a dip before it becomes a crisis, and so do we.',
+    size: 'sm',
+  },
+  {
+    Icon: ShieldCheck,
+    title: 'AI Safeguarding that actually works.',
+    desc: 'Every message is silently scanned for crisis language, harassment, and bullying. High-risk content triggers an instant alert to trained university safeguarding staff — not random moderators in another country. Privacy-first, not surveillance-first.',
+    size: 'md',
+  },
+  {
+    Icon: MessageCircle,
+    title: '24/7 Support, human-backed.',
+    desc: 'An AI assistant answers in seconds for the small stuff. For anything serious, a real human from the support team takes over. Average response time: under 4 minutes.',
+    size: 'md',
+  },
 ];
 
 const Features = () => (
@@ -157,10 +248,16 @@ const TrustSafety = () => (
     >
       <p className="dq-label">VERIFIED & PROTECTED</p>
       <h2 className="dq-h2">A closed network for peace of mind.</h2>
+      <p className="dq-body" style={{ marginBottom: 24 }}>
+        Most "social" apps trade your safety for growth. We do the opposite.
+        DEQUAD is intentionally smaller, slower, and stricter — so when you make
+        a connection here, you can trust it.
+      </p>
       <ul className="dq-trust__list">
-        <li><ShieldCheck size={18} aria-hidden /> Requires an active <code>.ac.uk</code> university email</li>
-        <li><AlertTriangle size={18} aria-hidden /> AI moderation flags at-risk content instantly</li>
-        <li><HeartPulse size={18} aria-hidden /> Zero tolerance for harassment</li>
+        <li><ShieldCheck size={18} aria-hidden /> <span><strong>Verified UK students only.</strong> Active <code>.ac.uk</code> email required at sign-up and re-checked each term.</span></li>
+        <li><AlertTriangle size={18} aria-hidden /> <span><strong>AI safeguarding in every message.</strong> Crisis language is flagged instantly to trained safeguarding leads, never to other students.</span></li>
+        <li><HeartPulse size={18} aria-hidden /> <span><strong>Zero tolerance for harassment.</strong> Reports are reviewed within 4 hours by a human. Confirmed offenders are banned across the network.</span></li>
+        <li><Users size={18} aria-hidden /> <span><strong>You own your data.</strong> One-tap export, one-tap delete. We never sell or share your info with universities, advertisers, or anyone else.</span></li>
       </ul>
     </motion.div>
   </section>
@@ -209,11 +306,16 @@ const Testimonials = () => (
 // Section: FAQ
 // ─────────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
-  { q: 'Do I need a university email?', a: 'Yes. DEQUAD is strictly for verified UK university students. You sign up using your .ac.uk email so we can keep the network closed and safe.' },
-  { q: 'Is my mood data private?', a: '100%. We never share your personal health data with your university, employers, or any third party. You own your data and can delete it any time.' },
-  { q: 'How does AI safeguarding work?', a: 'Our system scans messages and posts for patterns related to self-harm, crisis, or harassment, and proactively surfaces support resources — without exposing your identity to anyone except a trained safeguarding officer when there is risk to life.' },
-  { q: 'Is DEQUAD a dating app?', a: 'No. DEQUAD is for friendship, study groups, and peer support. Romantic matches happen — but the focus is real student connections, not swiping.' },
-  { q: 'How much does it cost?', a: 'Free during beta. We may introduce optional premium features later, but the core platform will always be free for verified students.' },
+  { q: 'What exactly is DEQUAD?', a: 'DEQUAD is a closed social network exclusively for verified UK university students. It brings three things into one app: (1) peer matching based on courses, societies, and real interests, (2) daily mood and wellbeing tracking, and (3) 24/7 AI-supported help with built-in safeguarding. Think of it as the friend, mentor, and safety net you wish existed in Freshers\' week.' },
+  { q: 'Do I need a university email?', a: 'Yes. DEQUAD is strictly for verified UK university students. You sign up with your .ac.uk email so the network stays closed and safe. If your university uses a different domain, contact us — we add new institutions weekly.' },
+  { q: 'Is my mood data private?', a: '100%. We never share your personal health data with your university, employers, or any third party. Mood entries are encrypted at rest, visible only to you, and can be exported or deleted with one tap from your profile.' },
+  { q: 'How does AI safeguarding work?', a: 'Our system scans messages and posts for patterns related to self-harm, crisis, or harassment. If high-risk language is detected, the content is reviewed by a trained safeguarding lead — not exposed to other students. The student in distress is also automatically connected to relevant resources (Samaritans, Shout, university wellbeing teams).' },
+  { q: 'Is DEQUAD a dating app?', a: 'No. DEQUAD is for friendship, study groups, and peer support. Romantic matches do happen organically, but we don\'t prioritise looks-based swiping. The focus is real student connections, not chemistry-first chat.' },
+  { q: 'How much does it cost?', a: 'Free during beta. Free forever for the core features — peer matching, mood tracking, support chat, safeguarding. We may introduce optional premium features later (advanced filters, group events), but everything that keeps you safe and connected stays free.' },
+  { q: 'Who runs DEQUAD?', a: 'A small, student-led team in the UK. Founders Yusuf Quadri and the team built DEQUAD after seeing too many friends struggle alone through Freshers, exams, and post-graduation transitions. We work directly with university safeguarding staff and the NHS Every Mind Matters team.' },
+  { q: 'What happens to my data if I delete my account?', a: 'Everything goes. We have a 30-day cooling-off window in case you change your mind, after which all your profile data, messages, mood logs, and matches are permanently erased from our servers and backups.' },
+  { q: 'Can my university see my activity?', a: 'No individual activity ever. Universities can subscribe to a separate, fully-anonymised analytics dashboard that shows aggregate trends (e.g., "wellbeing dipped during exam week") with no way to identify any individual student.' },
+  { q: 'I\'m at a non-UK university — when can I join?', a: 'We\'re UK-first and rolling out by university. Drop your .edu or international email in the waitlist below and we\'ll let you know when your country opens.' },
 ];
 
 const FaqItem = ({ q, a, idx }: { q: string; a: string; idx: number }) => {
@@ -439,6 +541,7 @@ export default function LandingWeb() {
       <main>
         <Hero onPrimary={handlePrimary} />
         <Mission />
+        <HowItWorks />
         <Features />
         <TrustSafety />
         <Testimonials />
@@ -506,7 +609,21 @@ html, body, #root { background: var(--bg); margin: 0; padding: 0; }
 /* Mission */
 .dq-mission { text-align: center; padding-top: 56px; padding-bottom: 56px; }
 .dq-mission > div { max-width: 880px; margin: 0 auto; }
-.dq-mission__body { max-width: 600px; margin: 24px auto 0; font-size: 19px; }
+.dq-mission__body { max-width: 700px; margin: 24px auto 0; font-size: 19px; line-height: 1.65; text-align: left; }
+.dq-mission__body strong { color: var(--text); font-weight: 700; }
+.dq-mission__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px; text-align: left; }
+.dq-stat { padding: 28px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; }
+.dq-stat strong { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(40px, 4vw, 56px); line-height: 1; color: var(--accent); display: block; margin-bottom: 10px; letter-spacing: -0.02em; }
+.dq-stat span { font-size: 15px; color: var(--text-muted); line-height: 1.5; }
+.dq-mission__footnote { margin-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; opacity: 0.8; }
+
+/* How it works */
+.dq-how__title { max-width: 640px; margin-bottom: 64px; }
+.dq-how__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+.dq-step { position: relative; }
+.dq-step__num { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 56px; color: var(--accent); line-height: 1; margin-bottom: 24px; letter-spacing: -0.02em; }
+.dq-step h3 { margin: 0 0 14px; }
+.dq-step .dq-body { font-size: 16px; line-height: 1.65; }
 
 /* Bento Features */
 .dq-features__title { max-width: 640px; margin-bottom: 56px; }
@@ -589,6 +706,8 @@ html, body, #root { background: var(--bg); margin: 0; padding: 0; }
   .dq-waitlist { grid-template-columns: 1fr; }
   .dq-footer__cta-row { flex-direction: column; align-items: stretch; }
   .dq-footer__legal { flex-direction: column; align-items: flex-start; }
+  .dq-mission__stats { grid-template-columns: 1fr; }
+  .dq-how__grid { grid-template-columns: 1fr; gap: 36px; }
 }
 @media (max-width: 540px) {
   .dq-nav { padding: 14px 20px; }
