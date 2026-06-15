@@ -1,9 +1,14 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
+from pydantic import BaseModel, EmailStr
 from datetime import datetime, timezone
+import logging
 import os
 
+from database import db
+
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/")
@@ -36,3 +41,30 @@ async def get_wellbeing_resources():
         "message": "If you or someone you know is struggling, please reach out. You are not alone.",
         "emergency_note": "If you are in immediate danger, call 999 or go to your nearest A&E."
     }
+
+
+class WaitlistRequest(BaseModel):
+    email: EmailStr
+
+
+@router.post("/waitlist")
+async def join_waitlist(payload: WaitlistRequest, request: Request):
+    """Public landing-page waitlist signup. Idempotent — same email is upserted."""
+    email = payload.email.lower().strip()
+    ip = request.client.host if request.client else None
+    await db.waitlist.update_one(
+        {"email": email},
+        {
+            "$setOnInsert": {
+                "email": email,
+                "created_at": datetime.now(timezone.utc),
+                "source_ip": ip,
+            },
+            "$inc": {"submit_count": 1},
+            "$set": {"last_submitted_at": datetime.now(timezone.utc)},
+        },
+        upsert=True,
+    )
+    logger.info(f"Waitlist signup: {email}")
+    return {"ok": True, "message": "You're on the list."}
+
