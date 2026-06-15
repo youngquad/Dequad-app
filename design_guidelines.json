@@ -1,0 +1,179 @@
+{
+  "theme": "light",
+  "archetype": "1 (Organic & Earthy) with Editorial Influence",
+  "design_philosophy": "Hinge-style editorial layout: high-contrast typography, large candid lifestyle photography, vast negative space, and clear, singular CTA focus.",
+  "colors": {
+    "background": "#FAF9F6",
+    "text_primary": "#1C1917",
+    "text_secondary": "#57534E",
+    "primary_cta_bg": "#0F172A",
+    "primary_cta_text": "#FFFFFF",
+    "surface_card": "#FFFFFF",
+    "surface_border": "#E7E5E4",
+    "accent": "#D4A373"
+  },
+  "typography": {
+    "heading_font": "Playfair Display, serif",
+    "body_font": "Manrope, sans-serif",
+    "h1": "text-4xl md:text-5xl lg:text-6xl tracking-tight leading-none text-[#1C1917]",
+    "h2": "text-3xl md:text-4xl tracking-tight leading-tight text-[#1C1917]",
+    "h3": "text-xl md:text-2xl tracking-tight leading-snug text-[#1C1917]",
+    "body": "text-base md:text-lg text-[#57534E] leading-relaxed",
+    "button": "text-base font-bold tracking-widest uppercase",
+    "label": "text-sm font-semibold uppercase tracking-[0.2em] text-[#57534E]"
+  },
+  "spacing_and_layout": {
+    "section_padding": "py-20 md:py-32 px-6 md:px-12 max-w-7xl mx-auto",
+    "card_padding": "p-8 md:p-12",
+    "gap_standard": "gap-8 md:gap-16",
+    "grid_hero": "grid grid-cols-1 lg:grid-cols-2 gap-12 items-center",
+    "border_radius": "rounded-2xl"
+  },
+  "file_structure": {
+    "recommendation": "Use separate .web.js files for components to bypass React Native constraints and use pure HTML/Tailwind for the marketing layout. Do not use Shadcn for this marketing page, use raw HTML/Tailwind.",
+    "files": [
+      "/app/frontend/app/index.web.js",
+      "/app/frontend/components/marketing/Hero.web.js",
+      "/app/frontend/components/marketing/Mission.web.js",
+      "/app/frontend/components/marketing/Features.web.js",
+      "/app/frontend/components/marketing/TrustSafety.web.js",
+      "/app/frontend/components/marketing/Testimonials.web.js",
+      "/app/frontend/components/marketing/FAQ.web.js",
+      "/app/frontend/components/marketing/Footer.web.js"
+    ]
+  },
+  "icons": {
+    "library": "lucide-react",
+    "guidelines": "No emojis. Keep icons sharp, monochrome, and structural."
+  },
+  "sections_and_copy": [
+    {
+      "name": "Hero",
+      "layout": "2-column split. Left: Large typography (H1) + Subtext + Massive 'Get Started' button. Right: Full-height portrait-style lifestyle image with soft rounded corners. Image caps at max-h-[80vh] on mobile.",
+      "copy": {
+        "label": "THE SAFE STUDENT NETWORK",
+        "headline": "Designed to be deleted when you find your people.",
+        "subheadline": "DEQUAD is the only university-verified platform built for real connections, safeguarded by AI.",
+        "cta_primary": "Get Started"
+      },
+      "image_url": "https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHxmcmllbmRzJTIwdGFsa2luZyUyMGNvZmZlZXxlbnwwfHx8fDE3ODE1MTQyNTN8MA&ixlib=rb-4.1.0&q=85",
+      "image_alt": "Friends laughing and connecting over coffee",
+      "data_testid": "hero-section"
+    },
+    {
+      "name": "Mission",
+      "layout": "Centered editorial block. Massive text taking up 70% of the screen width. Lots of negative space top and bottom. Optical alignment over geometric.",
+      "copy": {
+        "headline": "Built for students, by students. Not for random dating.",
+        "body": "University can be isolating. We built DEQUAD to help you find your actual peers—safely. No bots, no creeps, just verified students from your campus."
+      },
+      "data_testid": "mission-section"
+    },
+    {
+      "name": "Features",
+      "layout": "Asymmetrical Bento Grid (Tetris Grid). 4 Cards. Card 1 (Connect): col-span-12 md:col-span-8. Card 2 (Mood Tracking): col-span-12 md:col-span-4. Card 3 (AI Safeguarding): col-span-12 md:col-span-6. Card 4 (Support): col-span-12 md:col-span-6.",
+      "copy": {
+        "feature_1": {
+          "title": "Find your crowd.",
+          "desc": "Peer matching based on modules, societies, and real interests."
+        },
+        "feature_2": {
+          "title": "Track your mind.",
+          "desc": "Daily mood check-ins designed to keep you grounded."
+        },
+        "feature_3": {
+          "title": "AI Safeguarding.",
+          "desc": "Proactive crisis detection that keeps the community secure."
+        },
+        "feature_4": {
+          "title": "24/7 Support.",
+          "desc": "Real help when you need it, instantly."
+        }
+      },
+      "data_testid": "features-section"
+    },
+    {
+      "name": "Trust & Safety",
+      "layout": "Split layout. Text on right, image on left. Minimalist icon list for key safety points. High negative space.",
+      "copy": {
+        "label": "VERIFIED & PROTECTED",
+        "headline": "A closed network for peace of mind.",
+        "bullets": [
+          "Requires active .ac.uk university email",
+          "AI moderation flags at-risk content instantly",
+          "Zero tolerance for harassment"
+        ]
+      },
+      "image_url": "https://images.unsplash.com/photo-1621274790572-7c32596bc67f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHw0fHxzdHVkZW50JTIwcG9ydHJhaXR8ZW58MHx8fHwxNzgxNTE0MjUzfDA&ixlib=rb-4.1.0&q=85",
+      "image_alt": "Student relaxed on campus, emphasizing safety",
+      "data_testid": "trust-safety-section"
+    },
+    {
+      "name": "Testimonials",
+      "layout": "3-column grid. Pure typography quotes. Large serif quotation marks. No bounding boxes or cards, just text directly on the background.",
+      "copy": {
+        "quotes": [
+          {
+            "text": "Finally, an app where I can just meet people from my course without it feeling like Tinder.",
+            "author": "Sarah, UoB"
+          },
+          {
+            "text": "The mood tracking actually helps me realize when I'm burning out before exams.",
+            "author": "James, LSE"
+          },
+          {
+            "text": "Knowing everyone on here is a verified student makes it so much less daunting.",
+            "author": "Priya, KCL"
+          }
+        ]
+      },
+      "data_testid": "testimonials-section"
+    },
+    {
+      "name": "FAQ",
+      "layout": "Clean accordion or simple list with sharp bottom borders separating items. Very readable, high contrast text.",
+      "copy": {
+        "headline": "Questions? We've got you.",
+        "questions": [
+          {
+            "q": "Do I need a university email?",
+            "a": "Yes. DEQUAD is strictly for verified UK university students."
+          },
+          {
+            "q": "Is my mood data private?",
+            "a": "100%. We never share your personal health data with your university or third parties."
+          },
+          {
+            "q": "How does AI safeguarding work?",
+            "a": "Our system scans for text patterns related to self-harm or harassment and proactively offers support resources without breaking user trust."
+          }
+        ]
+      },
+      "data_testid": "faq-section"
+    },
+    {
+      "name": "Footer",
+      "layout": "Massive bottom section. Dark background (#0F172A) to contrast the rest of the page. Huge text for CTA.",
+      "copy": {
+        "headline": "Join the Beta.",
+        "email_placeholder": "Enter your .ac.uk email",
+        "cta_secondary": "Join Waitlist",
+        "links": ["Privacy", "Terms", "Contact", "App Store", "Google Play"]
+      },
+      "data_testid": "footer-section"
+    }
+  ],
+  "motion_and_interactions": {
+    "engine": "Framer Motion",
+    "entry": "Elements should have a gentle cinematic fade up (y: 20, opacity: 0 -> y: 0, opacity: 1) with a slow ease-out (duration: 0.8s) when scrolling into view.",
+    "hover": "Buttons scale up slightly (scale: 1.02). Text color must remain accessible on hover. No extreme bouncing or spinning animations."
+  },
+  "mobile_responsiveness": {
+    "images": "Images must cap at max-h-[80vh] md:max-h-none to avoid dominating small screens.",
+    "typography": "H1 scales fluidly but caps at text-6xl. Hierarchy gap must be maintained (H2 at text-4xl).",
+    "layout": "All grids collapse to 1 column on mobile (grid-cols-1)."
+  },
+  "testing_attributes": {
+    "rule": "All interactive elements MUST include data-testid. Example: data-testid='hero-cta-button', data-testid='waitlist-submit', etc."
+  }
+}
