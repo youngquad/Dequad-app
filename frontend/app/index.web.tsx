@@ -521,6 +521,27 @@ export default function LandingWeb() {
     document.head.appendChild(link);
   }, []);
 
+  // React Native Web wraps the app in flex containers that pin every parent to
+  // 100% viewport height with overflow:hidden, which breaks long-form scrolling
+  // on a marketing page. Inject overrides while the landing is mounted and tear
+  // them down on unmount so the rest of the app's RN-styled screens stay intact.
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const STYLE_ID = 'dq-landing-scroll-fix';
+    if (document.getElementById(STYLE_ID)) return;
+    const style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      html, body { height: auto !important; min-height: 100% !important; overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; }
+      #root, #root > div, #root > div > div, #root > div > div > div { height: auto !important; min-height: 100vh !important; overflow: visible !important; flex: none !important; display: block !important; }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      const el = document.getElementById(STYLE_ID);
+      if (el) el.remove();
+    };
+  }, []);
+
   // Redirect authenticated users — defensive (also handled by _layout protected route)
   useEffect(() => {
     if (!isLoading && isAuthenticated) router.replace('/(main)/mood');
@@ -568,8 +589,11 @@ const CSS = `
   --max: 1240px;
 }
 * { box-sizing: border-box; }
-html, body, #root { background: var(--bg); margin: 0; padding: 0; }
-.dq-root { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text); background: var(--bg); min-height: 100vh; }
+/* Override Expo Router / react-native-web's fixed-height body which prevents scrolling. */
+html, body { height: auto !important; min-height: 100%; overflow-x: hidden; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
+body, #root, #root > div, #root > div > div { background: var(--bg); margin: 0; padding: 0; }
+#root, #root > div { height: auto !important; min-height: 100vh; overflow: visible !important; display: block !important; }
+.dq-root { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text); background: var(--bg); min-height: 100vh; overflow: visible; }
 .dq-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 /* Typography */
