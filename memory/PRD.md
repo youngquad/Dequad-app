@@ -23,6 +23,13 @@
 9. **Chat Inbox UI** — removed emails, added last-message preview + timestamp.
 10. **Unread Badges** — Admin (Support, Safeguarding) + Student (Chat, Connect) tabs.
 11. **EAS Build Guide + Helper Script (2026-02)** — `/app/EAS_BUILD_GUIDE.md`, `/app/BETA_OPTION_A.md`, and `/app/scripts/build.sh` (validate / dev / preview / prod / submit / ota / register-device / list-devices / doctor commands).
+14. **Auth Theme Refresh (2026-02)** — All auth screens (student login, forgot password, reset password, admin login) restyled to match the Hinge-style landing page palette (soft blue `#F6FAFE` background, white cards, navy text `#0F2942`, Playfair Display headings, navy/blue pill buttons, teal accents). DEQUAD heart logo + wordmark consistent on every screen.
+    - Admin Access link **removed** from student login. Admin portal now has its own dedicated page at `/(admin)/login` and is reachable via a "Staff login" link in the landing-page footer.
+    - Added student "Forgot password" + "Reset password" pages at `/(auth)/forgot-password` and `/(auth)/reset-password`.
+    - Backend `/api/auth/forgot-password` + `/api/auth/reset-password` extended to support students (role baked into reset record; updates `password_hash` for students, `admin_password` for admins).
+    - New reusable `DequadLogo` component at `/app/frontend/src/components/DequadLogo.tsx` (universal via `react-native-svg`).
+    - Tested: 16/16 password-reset backend tests pass (`/app/test_reports/iteration_10.json`); 12/12 email-auth regression suite still green.
+
 13. **Native Email/Password Auth (2026-02)** — Added alongside Google OAuth so non-Google beta testers can sign up.
     - `POST /api/auth/register` (email + password + optional name; rejects invalid format / <8 char password / duplicate email)
     - `POST /api/auth/email-login` (returns user + session_token + httpOnly cookie; uniform error for unknown email / wrong password)

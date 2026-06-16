@@ -8,14 +8,22 @@ import {
   Animated,
   Pressable,
   TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { DequadLogo } from '../../src/components/DequadLogo';
 
+/**
+ * Login screen — uses the landing-page palette (soft blue background, navy
+ * text, white card, Playfair headings) so the auth flow feels like a natural
+ * continuation of the marketing site. Admin access is no longer shown here;
+ * it lives on its own page at `/admin-access`.
+ */
 export default function LoginScreen() {
   const router = useRouter();
   const { login, loginWithEmail, registerWithEmail, isLoading } = useAuth();
@@ -26,32 +34,22 @@ export default function LoginScreen() {
   const [name, setName] = useState('');
   const [emailErr, setEmailErr] = useState<string | null>(null);
 
-  // Animations — exact behaviour from the previous polished template.
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const buttonScale = useRef(new Animated.Value(1)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(fadeAnim, { toValue: 1, duration: 600, useNativeDriver: true }),
-      Animated.timing(slideAnim, { toValue: 0, duration: 600, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
+      Animated.timing(slideAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
     ]).start();
-
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 1.05, duration: 1500, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: 1500, useNativeDriver: true }),
-      ])
-    ).start();
   }, []);
 
   const handleGoogle = async () => {
     setIsSigningIn(true);
     try {
       await login();
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (e) {
+      console.error('Login error:', e);
     } finally {
       setIsSigningIn(false);
     }
@@ -86,91 +84,73 @@ export default function LoginScreen() {
   const busy = isSigningIn || isLoading;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#0F172A', '#1E293B', '#0F172A']}
-        style={styles.gradient}
-        locations={[0, 0.5, 1]}
+    <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.flex}
       >
-        {/* Decorative blur circles */}
-        <View style={styles.decorativeCircle1} />
-        <View style={styles.decorativeCircle2} />
-
-        {/* Back Button */}
-        <Pressable style={styles.backButton} onPress={() => router.back()} data-testid="login-back">
-          <Ionicons name="arrow-back" size={22} color="#F8FAFC" />
-        </Pressable>
-
-        <Animated.View
-          style={[
-            styles.content,
-            { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
-          ]}
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          {/* Logo + Heading */}
-          <View style={styles.logoContainer}>
-            <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-              <View style={styles.logoGlow}>
-                <DequadLogo size={92} />
-              </View>
-            </Animated.View>
-            <Text style={styles.title} data-testid="login-title">
-              {mode === 'signin' ? 'Welcome Back' : 'Join DEQUAD'}
-            </Text>
-            <Text style={styles.subtitle}>
-              {mode === 'signin'
-                ? 'Sign in to continue your wellbeing journey'
-                : 'Create an account to connect with verified students'}
-            </Text>
-          </View>
+          <Pressable style={styles.backButton} onPress={() => router.back()} data-testid="login-back">
+            <Ionicons name="arrow-back" size={20} color="#0F2942" />
+          </Pressable>
 
-          {/* Auth Card */}
-          <View style={styles.formContainer}>
-            {/* Google Sign In */}
-            <Pressable
-              onPressIn={() => Animated.spring(buttonScale, { toValue: 0.96, useNativeDriver: true }).start()}
-              onPressOut={() => Animated.spring(buttonScale, { toValue: 1, useNativeDriver: true }).start()}
-              onPress={handleGoogle}
-              disabled={busy}
-              data-testid="login-google"
-            >
-              <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-                <LinearGradient
-                  colors={['#6366F1', '#8B5CF6']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.googleButton}
-                >
-                  {busy ? (
-                    <ActivityIndicator color="#fff" size="small" />
-                  ) : (
-                    <>
-                      <Ionicons name="logo-google" size={22} color="#fff" />
-                      <Text style={styles.googleButtonText}>Continue with Google</Text>
-                      <Ionicons name="arrow-forward" size={20} color="#fff" />
-                    </>
-                  )}
-                </LinearGradient>
-              </Animated.View>
-            </Pressable>
-
-            {/* Divider */}
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>or use email</Text>
-              <View style={styles.dividerLine} />
+          <Animated.View
+            style={[styles.content, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}
+          >
+            {/* Brand mark */}
+            <View style={styles.brandRow}>
+              <DequadLogo size={56} />
+              <Text style={styles.brandWordmark}>DEQUAD</Text>
             </View>
 
-            {/* Email / password form */}
-            <View style={styles.emailForm}>
+            {/* Heading */}
+            <Text style={styles.kicker}>{mode === 'signin' ? 'WELCOME BACK' : 'JOIN DEQUAD'}</Text>
+            <Text style={styles.title} data-testid="login-title">
+              {mode === 'signin' ? 'Sign in to continue.' : 'Create your account.'}
+            </Text>
+            <Text style={styles.lede}>
+              {mode === 'signin'
+                ? 'Pick up where you left off — your matches, mood streak, and chats are waiting.'
+                : 'Connect with verified UK students for friendship, study groups, and peer support.'}
+            </Text>
+
+            {/* Card */}
+            <View style={styles.card}>
+              {/* Google */}
+              <TouchableOpacity
+                onPress={handleGoogle}
+                disabled={busy}
+                style={[styles.googleBtn, busy && styles.btnDisabled]}
+                data-testid="login-google"
+              >
+                {busy ? (
+                  <ActivityIndicator color="#FFFFFF" size="small" />
+                ) : (
+                  <>
+                    <Ionicons name="logo-google" size={18} color="#FFFFFF" />
+                    <Text style={styles.googleBtnText}>Continue with Google</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or use email</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
               {mode === 'signup' && (
                 <View style={styles.inputWrap}>
-                  <Ionicons name="person-outline" size={18} color="#64748B" style={styles.inputIcon} />
+                  <Ionicons name="person-outline" size={18} color="#4F6076" style={styles.inputIcon} />
                   <TextInput
                     value={name}
                     onChangeText={setName}
                     placeholder="Your name (optional)"
-                    placeholderTextColor="#64748B"
+                    placeholderTextColor="#94A3B0"
                     style={styles.input}
                     data-testid="auth-name-input"
                     autoCapitalize="words"
@@ -178,12 +158,12 @@ export default function LoginScreen() {
                 </View>
               )}
               <View style={styles.inputWrap}>
-                <Ionicons name="mail-outline" size={18} color="#64748B" style={styles.inputIcon} />
+                <Ionicons name="mail-outline" size={18} color="#4F6076" style={styles.inputIcon} />
                 <TextInput
                   value={email}
                   onChangeText={setEmail}
                   placeholder="Email address"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor="#94A3B0"
                   style={styles.input}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -192,12 +172,12 @@ export default function LoginScreen() {
                 />
               </View>
               <View style={styles.inputWrap}>
-                <Ionicons name="lock-closed-outline" size={18} color="#64748B" style={styles.inputIcon} />
+                <Ionicons name="lock-closed-outline" size={18} color="#4F6076" style={styles.inputIcon} />
                 <TextInput
                   value={password}
                   onChangeText={setPassword}
                   placeholder={mode === 'signup' ? 'Create a password (8+ characters)' : 'Password'}
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor="#94A3B0"
                   style={styles.input}
                   secureTextEntry
                   data-testid="auth-password-input"
@@ -211,15 +191,14 @@ export default function LoginScreen() {
               <TouchableOpacity
                 onPress={handleEmailSubmit}
                 disabled={busy}
-                style={[styles.emailSubmit, busy && styles.emailSubmitDisabled]}
+                style={[styles.primaryBtn, busy && styles.btnDisabled]}
                 data-testid="auth-submit"
               >
-                <Text style={styles.emailSubmitText}>
+                <Text style={styles.primaryBtnText}>
                   {busy ? 'Please wait…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
                 </Text>
               </TouchableOpacity>
 
-              {/* Forgot password — only in sign-in mode */}
               {mode === 'signin' && (
                 <TouchableOpacity
                   onPress={() => router.push('/(auth)/forgot-password')}
@@ -230,153 +209,99 @@ export default function LoginScreen() {
                 </TouchableOpacity>
               )}
 
-              <TouchableOpacity
-                onPress={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setEmailErr(null); }}
-                style={styles.modeToggle}
-                data-testid="auth-mode-toggle"
-              >
-                <Text style={styles.modeToggleText}>
+              <View style={styles.modeRow}>
+                <Text style={styles.modeText}>
                   {mode === 'signin' ? "Don't have an account? " : 'Already have an account? '}
-                  <Text style={styles.modeToggleAccent}>
+                </Text>
+                <TouchableOpacity
+                  onPress={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setEmailErr(null); }}
+                  data-testid="auth-mode-toggle"
+                >
+                  <Text style={styles.modeAccent}>
                     {mode === 'signin' ? 'Sign up' : 'Sign in'}
                   </Text>
-                </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
 
-          {/* Admin Access Link */}
-          <TouchableOpacity
-            style={styles.adminLink}
-            onPress={() => router.push('/(admin)/login')}
-            data-testid="login-admin-link"
-          >
-            <Ionicons name="shield" size={15} color="#F59E0B" />
-            <Text style={styles.adminLinkText}>Admin Access</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.terms}>
-            By continuing, you agree to our Terms of Service and Privacy Policy
-          </Text>
-        </Animated.View>
-      </LinearGradient>
+            <Text style={styles.terms}>
+              By continuing, you agree to our{' '}
+              <Text style={styles.termsLink} onPress={() => router.push('/terms')}>Terms</Text> and{' '}
+              <Text style={styles.termsLink} onPress={() => router.push('/privacy')}>Privacy Policy</Text>.
+            </Text>
+          </Animated.View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0F172A' },
-  gradient: { flex: 1 },
-  decorativeCircle1: {
-    position: 'absolute',
-    top: -80,
-    right: -80,
-    width: 250,
-    height: 250,
-    borderRadius: 125,
-    backgroundColor: 'rgba(99, 102, 241, 0.08)',
-  },
-  decorativeCircle2: {
-    position: 'absolute',
-    bottom: 100,
-    left: -100,
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'rgba(139, 92, 246, 0.06)',
-  },
+  safe: { flex: 1, backgroundColor: '#F6FAFE' },
+  flex: { flex: 1 },
+  scroll: { flexGrow: 1, paddingHorizontal: 24, paddingTop: 16, paddingBottom: 48 },
   backButton: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 10,
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.1)',
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1, borderColor: '#DDE8F2',
+    alignItems: 'center', justifyContent: 'center',
+    marginBottom: 24,
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 90,
-    paddingBottom: 24,
-    justifyContent: 'space-between',
+  content: { maxWidth: 520, width: '100%', alignSelf: 'center' },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 28 },
+  brandWordmark: { color: '#0F2942', fontWeight: '800', fontSize: 13, letterSpacing: 2.4 },
+  kicker: {
+    color: '#4F6076', fontSize: 12, fontWeight: '700',
+    letterSpacing: 2.6, marginBottom: 14,
   },
-  logoContainer: { alignItems: 'center', marginBottom: 20 },
-  logoGlow: {
-    width: 108,
-    height: 108,
-    borderRadius: 32,
-    backgroundColor: 'rgba(122, 179, 224, 0.12)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(122, 179, 224, 0.18)',
+  title: {
+    color: '#0F2942', fontSize: 36, fontWeight: '700',
+    fontFamily: 'Playfair Display, Georgia, serif',
+    lineHeight: 42, marginBottom: 14, letterSpacing: -0.5,
   },
-  title: { fontSize: 30, fontWeight: '800', color: '#F8FAFC', marginBottom: 8 },
-  subtitle: { fontSize: 15, color: '#94A3B8', textAlign: 'center', maxWidth: 300 },
-  formContainer: { flex: 1, justifyContent: 'center' },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    borderRadius: 14,
-    minHeight: 56,
-    gap: 10,
+  lede: { color: '#4F6076', fontSize: 16, lineHeight: 24, marginBottom: 28 },
+  card: {
+    backgroundColor: '#FFFFFF', borderRadius: 24, padding: 24,
+    borderWidth: 1, borderColor: '#DDE8F2',
+    shadowColor: '#0F2942', shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 },
+    elevation: 2,
   },
-  googleButtonText: { color: '#fff', fontSize: 16, fontWeight: '600', flex: 1, textAlign: 'center' },
-  divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 20 },
-  dividerLine: { flex: 1, height: 1, backgroundColor: 'rgba(148, 163, 184, 0.15)' },
-  dividerText: { color: '#64748B', fontSize: 12, marginHorizontal: 14, fontWeight: '500', textTransform: 'uppercase', letterSpacing: 0.6 },
-  emailForm: { marginTop: 0 },
+  googleBtn: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
+    backgroundColor: '#0F2942', paddingVertical: 14, borderRadius: 999, minHeight: 52,
+  },
+  googleBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
+  divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 18 },
+  dividerLine: { flex: 1, height: 1, backgroundColor: '#DDE8F2' },
+  dividerText: {
+    color: '#4F6076', fontSize: 11, marginHorizontal: 12,
+    fontWeight: '600', letterSpacing: 1.6, textTransform: 'uppercase',
+  },
   inputWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(30, 41, 59, 0.6)',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.18)',
-    marginBottom: 12,
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: '#F6FAFE', borderRadius: 14, paddingHorizontal: 14,
+    borderWidth: 1, borderColor: '#DDE8F2', marginBottom: 12,
   },
   inputIcon: { marginRight: 10 },
-  input: {
-    flex: 1,
-    paddingVertical: 14,
-    color: '#F1F5F9',
-    fontSize: 15,
+  input: { flex: 1, paddingVertical: 14, color: '#0F2942', fontSize: 15 },
+  errorText: { color: '#B91C1C', fontSize: 13, marginBottom: 10, textAlign: 'center' },
+  primaryBtn: {
+    backgroundColor: '#5B9BD5', paddingVertical: 14, borderRadius: 999, alignItems: 'center',
+    minHeight: 52, justifyContent: 'center', marginTop: 4,
   },
-  errorText: { color: '#F87171', fontSize: 13, marginBottom: 10, textAlign: 'center' },
-  emailSubmit: {
-    backgroundColor: '#6366F1',
-    paddingVertical: 15,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 4,
-    minHeight: 52,
-    justifyContent: 'center',
+  btnDisabled: { opacity: 0.6 },
+  primaryBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
+  forgotLink: { paddingVertical: 14, alignItems: 'center' },
+  forgotLinkText: { color: '#5B9BD5', fontSize: 13, fontWeight: '600' },
+  modeRow: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    flexWrap: 'wrap', paddingTop: 4,
   },
-  emailSubmitDisabled: { opacity: 0.6 },
-  emailSubmitText: { color: '#fff', fontSize: 15, fontWeight: '700', letterSpacing: 0.3 },
-  forgotLink: { paddingVertical: 12, alignItems: 'center' },
-  forgotLinkText: { color: '#818CF8', fontSize: 13, fontWeight: '500' },
-  modeToggle: { paddingVertical: 8, alignItems: 'center' },
-  modeToggleText: { color: '#94A3B8', fontSize: 13 },
-  modeToggleAccent: { color: '#818CF8', fontWeight: '700' },
-  adminLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    marginBottom: 8,
-    gap: 8,
+  modeText: { color: '#4F6076', fontSize: 13 },
+  modeAccent: { color: '#5B9BD5', fontSize: 13, fontWeight: '700' },
+  terms: {
+    color: '#4F6076', fontSize: 12, textAlign: 'center',
+    lineHeight: 18, marginTop: 28, paddingHorizontal: 8,
   },
-  adminLinkText: { color: '#F59E0B', fontSize: 14, fontWeight: '600' },
-  terms: { color: '#64748B', fontSize: 12, textAlign: 'center', lineHeight: 18 },
+  termsLink: { color: '#0F2942', fontWeight: '600', textDecorationLine: 'underline' },
 });

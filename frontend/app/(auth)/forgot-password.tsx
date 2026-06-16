@@ -15,7 +15,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { api } from '../../src/services/api';
 import { DequadLogo } from '../../src/components/DequadLogo';
 
@@ -27,7 +26,7 @@ export default function ForgotPasswordScreen() {
   const [err, setErr] = useState<string | null>(null);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -48,62 +47,46 @@ export default function ForgotPasswordScreen() {
       await api.post('/auth/forgot-password', { email: trimmed });
       setSent(true);
     } catch {
-      // Always show "sent" — prevents account enumeration.
-      setSent(true);
+      setSent(true); // generic response prevents enumeration
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#0F172A', '#1E293B', '#0F172A']}
-        style={styles.gradient}
-        locations={[0, 0.5, 1]}
-      >
-        <View style={styles.decorativeCircle1} />
-        <View style={styles.decorativeCircle2} />
+    <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
+        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+          <Pressable style={styles.backButton} onPress={() => router.back()} data-testid="forgot-back">
+            <Ionicons name="arrow-back" size={20} color="#0F2942" />
+          </Pressable>
 
-        <Pressable style={styles.backButton} onPress={() => router.back()} data-testid="forgot-back">
-          <Ionicons name="arrow-back" size={22} color="#F8FAFC" />
-        </Pressable>
+          <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
+            <View style={styles.brandRow}>
+              <DequadLogo size={48} />
+              <Text style={styles.brandWordmark}>DEQUAD</Text>
+            </View>
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={{ flex: 1 }}
-        >
-          <ScrollView
-            contentContainerStyle={styles.scroll}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <Animated.View
-              style={[styles.content, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}
-            >
-              <View style={styles.logoContainer}>
-                <View style={styles.logoGlow}>
-                  <DequadLogo size={80} />
-                </View>
-                <Text style={styles.title} data-testid="forgot-title">
-                  {sent ? 'Check your email' : 'Forgot password?'}
-                </Text>
-                <Text style={styles.subtitle}>
-                  {sent
-                    ? `If an account exists for ${email.toLowerCase()}, we've sent a reset link. It expires in 1 hour.`
-                    : "Enter the email tied to your DEQUAD account and we'll send you a reset link."}
-                </Text>
-              </View>
+            <Text style={styles.kicker}>{sent ? 'CHECK YOUR INBOX' : 'PASSWORD HELP'}</Text>
+            <Text style={styles.title} data-testid="forgot-title">
+              {sent ? "We've sent you a link." : 'Forgot your password?'}
+            </Text>
+            <Text style={styles.lede}>
+              {sent
+                ? `If an account exists for ${email.toLowerCase()}, a reset link is on its way. It expires in 1 hour.`
+                : "Enter the email tied to your DEQUAD account and we'll send you a reset link."}
+            </Text>
 
+            <View style={styles.card}>
               {!sent ? (
-                <View style={styles.formContainer}>
+                <>
                   <View style={styles.inputWrap}>
-                    <Ionicons name="mail-outline" size={18} color="#64748B" style={styles.inputIcon} />
+                    <Ionicons name="mail-outline" size={18} color="#4F6076" style={styles.inputIcon} />
                     <TextInput
                       value={email}
                       onChangeText={setEmail}
                       placeholder="Email address"
-                      placeholderTextColor="#64748B"
+                      placeholderTextColor="#94A3B0"
                       style={styles.input}
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -118,13 +101,13 @@ export default function ForgotPasswordScreen() {
                   <TouchableOpacity
                     onPress={handleSubmit}
                     disabled={loading}
-                    style={[styles.submit, loading && styles.submitDisabled]}
+                    style={[styles.primaryBtn, loading && styles.btnDisabled]}
                     data-testid="forgot-submit"
                   >
                     {loading ? (
-                      <ActivityIndicator color="#fff" />
+                      <ActivityIndicator color="#FFFFFF" />
                     ) : (
-                      <Text style={styles.submitText}>Send reset link</Text>
+                      <Text style={styles.primaryBtnText}>Send reset link</Text>
                     )}
                   </TouchableOpacity>
 
@@ -133,33 +116,31 @@ export default function ForgotPasswordScreen() {
                     style={styles.backLink}
                     data-testid="forgot-back-to-login"
                   >
-                    <Ionicons name="arrow-back" size={14} color="#94A3B8" />
+                    <Ionicons name="arrow-back" size={14} color="#4F6076" />
                     <Text style={styles.backLinkText}>Back to sign in</Text>
                   </TouchableOpacity>
-                </View>
+                </>
               ) : (
-                <View style={styles.formContainer}>
+                <>
                   <View style={styles.instructions}>
-                    <View style={styles.instructionRow}>
-                      <View style={styles.bullet}><Text style={styles.bulletText}>1</Text></View>
-                      <Text style={styles.instructionText}>Check your inbox (and spam folder)</Text>
-                    </View>
-                    <View style={styles.instructionRow}>
-                      <View style={styles.bullet}><Text style={styles.bulletText}>2</Text></View>
-                      <Text style={styles.instructionText}>Click the reset link in the email</Text>
-                    </View>
-                    <View style={styles.instructionRow}>
-                      <View style={styles.bullet}><Text style={styles.bulletText}>3</Text></View>
-                      <Text style={styles.instructionText}>Create a new password (min 8 chars)</Text>
-                    </View>
+                    {[
+                      'Check your inbox (and spam folder)',
+                      'Click the reset link in the email',
+                      'Create a new password (8+ chars)',
+                    ].map((t, i) => (
+                      <View key={t} style={styles.instructionRow}>
+                        <View style={styles.bullet}><Text style={styles.bulletText}>{i + 1}</Text></View>
+                        <Text style={styles.instructionText}>{t}</Text>
+                      </View>
+                    ))}
                   </View>
 
                   <TouchableOpacity
                     onPress={() => router.replace('/(auth)/login')}
-                    style={styles.submit}
+                    style={styles.primaryBtn}
                     data-testid="forgot-back-to-login"
                   >
-                    <Text style={styles.submitText}>Back to sign in</Text>
+                    <Text style={styles.primaryBtnText}>Back to sign in</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -169,72 +150,62 @@ export default function ForgotPasswordScreen() {
                   >
                     <Text style={styles.backLinkText}>Try a different email</Text>
                   </TouchableOpacity>
-                </View>
+                </>
               )}
-            </Animated.View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </LinearGradient>
+            </View>
+          </Animated.View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0F172A' },
-  gradient: { flex: 1 },
-  decorativeCircle1: {
-    position: 'absolute', top: -80, right: -80, width: 250, height: 250, borderRadius: 125,
-    backgroundColor: 'rgba(99, 102, 241, 0.08)',
-  },
-  decorativeCircle2: {
-    position: 'absolute', bottom: 100, left: -100, width: 200, height: 200, borderRadius: 100,
-    backgroundColor: 'rgba(139, 92, 246, 0.06)',
-  },
+  safe: { flex: 1, backgroundColor: '#F6FAFE' },
+  flex: { flex: 1 },
+  scroll: { flexGrow: 1, paddingHorizontal: 24, paddingTop: 16, paddingBottom: 48 },
   backButton: {
-    position: 'absolute', top: 60, left: 20, zIndex: 10, width: 44, height: 44, borderRadius: 14,
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
-    justifyContent: 'center', alignItems: 'center',
-    borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.1)',
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#DDE8F2',
+    alignItems: 'center', justifyContent: 'center', marginBottom: 24,
   },
-  scroll: { flexGrow: 1 },
-  content: { flex: 1, paddingHorizontal: 24, paddingTop: 110, paddingBottom: 24 },
-  logoContainer: { alignItems: 'center', marginBottom: 32 },
-  logoGlow: {
-    width: 96, height: 96, borderRadius: 28,
-    backgroundColor: 'rgba(122, 179, 224, 0.12)',
-    borderWidth: 1, borderColor: 'rgba(122, 179, 224, 0.18)',
-    justifyContent: 'center', alignItems: 'center', marginBottom: 18,
+  content: { maxWidth: 520, width: '100%', alignSelf: 'center' },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 28 },
+  brandWordmark: { color: '#0F2942', fontWeight: '800', fontSize: 13, letterSpacing: 2.4 },
+  kicker: { color: '#4F6076', fontSize: 12, fontWeight: '700', letterSpacing: 2.6, marginBottom: 14 },
+  title: {
+    color: '#0F2942', fontSize: 32, fontWeight: '700',
+    fontFamily: 'Playfair Display, Georgia, serif',
+    lineHeight: 38, marginBottom: 14, letterSpacing: -0.5,
   },
-  title: { fontSize: 26, fontWeight: '800', color: '#F8FAFC', marginBottom: 10, textAlign: 'center' },
-  subtitle: { fontSize: 14, color: '#94A3B8', textAlign: 'center', maxWidth: 320, lineHeight: 21 },
-  formContainer: { marginTop: 8 },
+  lede: { color: '#4F6076', fontSize: 16, lineHeight: 24, marginBottom: 28 },
+  card: {
+    backgroundColor: '#FFFFFF', borderRadius: 24, padding: 24,
+    borderWidth: 1, borderColor: '#DDE8F2',
+    shadowColor: '#0F2942', shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 2,
+  },
   inputWrap: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: 'rgba(30, 41, 59, 0.6)',
-    borderRadius: 12, paddingHorizontal: 14, marginBottom: 12,
-    borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.18)',
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#F6FAFE',
+    borderRadius: 14, paddingHorizontal: 14, marginBottom: 12,
+    borderWidth: 1, borderColor: '#DDE8F2',
   },
   inputIcon: { marginRight: 10 },
-  input: { flex: 1, paddingVertical: 14, color: '#F1F5F9', fontSize: 15 },
-  errorText: { color: '#F87171', fontSize: 13, marginBottom: 10, textAlign: 'center' },
-  submit: {
-    backgroundColor: '#6366F1', paddingVertical: 15, borderRadius: 12, alignItems: 'center',
+  input: { flex: 1, paddingVertical: 14, color: '#0F2942', fontSize: 15 },
+  errorText: { color: '#B91C1C', fontSize: 13, marginBottom: 10, textAlign: 'center' },
+  primaryBtn: {
+    backgroundColor: '#5B9BD5', paddingVertical: 14, borderRadius: 999, alignItems: 'center',
     minHeight: 52, justifyContent: 'center', marginTop: 4,
   },
-  submitDisabled: { opacity: 0.6 },
-  submitText: { color: '#fff', fontSize: 15, fontWeight: '700', letterSpacing: 0.3 },
-  backLink: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 16 },
-  backLinkText: { color: '#94A3B8', fontSize: 13 },
-  instructions: {
-    backgroundColor: 'rgba(30, 41, 59, 0.5)',
-    borderRadius: 16, padding: 20, marginBottom: 20,
-    borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.12)',
-  },
+  btnDisabled: { opacity: 0.6 },
+  primaryBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
+  backLink: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 14 },
+  backLinkText: { color: '#4F6076', fontSize: 13, fontWeight: '500' },
+  instructions: { marginBottom: 20 },
   instructionRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
   bullet: {
-    width: 26, height: 26, borderRadius: 13, backgroundColor: '#6366F1',
+    width: 26, height: 26, borderRadius: 13, backgroundColor: '#4FB89F',
     justifyContent: 'center', alignItems: 'center', marginRight: 12,
   },
-  bulletText: { color: '#fff', fontWeight: '700', fontSize: 12 },
-  instructionText: { color: '#CBD5E1', fontSize: 14, flex: 1 },
+  bulletText: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
+  instructionText: { color: '#0F2942', fontSize: 14, flex: 1 },
 });
