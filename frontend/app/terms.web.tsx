@@ -92,7 +92,7 @@ export default function TermsWeb() {
         <p>These Terms are governed by the laws of England and Wales. Disputes will be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
 
         <h2>14. Contact</h2>
-        <p>Questions about these Terms? Email <a href="mailto:hello@dequad.co.uk">hello@dequad.co.uk</a>.</p>
+        <p>Questions about these Terms? Email <a href="mailto:quadri.yusuf@dequad.com">quadri.yusuf@dequad.com</a>.</p>
 
         <footer className="dq-legal__footer">
           <a href="/" data-testid="legal-home-link">Home</a>

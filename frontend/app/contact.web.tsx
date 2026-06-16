@@ -51,25 +51,25 @@ export default function ContactWeb() {
         <p className="dq-legal__updated">We answer every message — usually within 4 hours during UK working hours.</p>
 
         <div className="dq-contact__grid">
-          <a className="dq-contact__card" href="mailto:hello@dequad.co.uk" data-testid="contact-general">
+          <a className="dq-contact__card" href="mailto:quadri.yusuf@dequad.com" data-testid="contact-general">
             <Mail size={22} aria-hidden />
             <h3>General enquiries</h3>
-            <p>hello@dequad.co.uk</p>
+            <p>quadri.yusuf@dequad.com</p>
           </a>
-          <a className="dq-contact__card" href="mailto:support@dequad.co.uk" data-testid="contact-support">
+          <a className="dq-contact__card" href="mailto:quadri.yusuf@dequad.com" data-testid="contact-support">
             <MessageSquare size={22} aria-hidden />
             <h3>Student support</h3>
-            <p>support@dequad.co.uk</p>
+            <p>quadri.yusuf@dequad.com</p>
           </a>
-          <a className="dq-contact__card" href="mailto:privacy@dequad.co.uk" data-testid="contact-privacy">
+          <a className="dq-contact__card" href="mailto:quadri.yusuf@dequad.com" data-testid="contact-privacy">
             <ShieldAlert size={22} aria-hidden />
             <h3>Privacy & data requests</h3>
-            <p>privacy@dequad.co.uk</p>
+            <p>quadri.yusuf@dequad.com</p>
           </a>
-          <a className="dq-contact__card" href="mailto:partnerships@dequad.co.uk" data-testid="contact-partnerships">
+          <a className="dq-contact__card" href="mailto:quadri.yusuf@dequad.com" data-testid="contact-partnerships">
             <Mail size={22} aria-hidden />
             <h3>University & partnerships</h3>
-            <p>partnerships@dequad.co.uk</p>
+            <p>quadri.yusuf@dequad.com</p>
           </a>
         </div>
 
@@ -83,14 +83,8 @@ export default function ContactWeb() {
 
         <h2>Social</h2>
         <div className="dq-contact__social">
-          <a href="https://instagram.com/dequad.uk" target="_blank" rel="noopener noreferrer" data-testid="contact-instagram">
-            <SocialIcon kind="instagram" /> Instagram <span>@dequad.uk</span>
-          </a>
-          <a href="https://twitter.com/dequad_uk" target="_blank" rel="noopener noreferrer" data-testid="contact-twitter">
-            <SocialIcon kind="twitter" /> X (Twitter) <span>@dequad_uk</span>
-          </a>
-          <a href="https://facebook.com/dequad.uk" target="_blank" rel="noopener noreferrer" data-testid="contact-facebook">
-            <SocialIcon kind="facebook" /> Facebook <span>/dequad.uk</span>
+          <a href="https://www.instagram.com/dequadapp" target="_blank" rel="noopener noreferrer" data-testid="contact-instagram">
+            <SocialIcon kind="instagram" /> Instagram <span>@dequadapp</span>
           </a>
         </div>
 

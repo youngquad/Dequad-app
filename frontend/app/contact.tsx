@@ -8,14 +8,14 @@ export default function ContactNative() {
       <Text style={styles.h1}>Contact DEQUAD</Text>
       <Text style={styles.p}>We typically reply within 4 hours during UK working hours.</Text>
 
-      <Pressable onPress={() => Linking.openURL('mailto:hello@dequad.co.uk')}>
-        <Text style={styles.link}>hello@dequad.co.uk — General enquiries</Text>
+      <Pressable onPress={() => Linking.openURL('mailto:quadri.yusuf@dequad.com')}>
+        <Text style={styles.link}>quadri.yusuf@dequad.com — General enquiries</Text>
       </Pressable>
-      <Pressable onPress={() => Linking.openURL('mailto:support@dequad.co.uk')}>
-        <Text style={styles.link}>support@dequad.co.uk — Student support</Text>
+      <Pressable onPress={() => Linking.openURL('mailto:quadri.yusuf@dequad.com')}>
+        <Text style={styles.link}>quadri.yusuf@dequad.com — Student support</Text>
       </Pressable>
-      <Pressable onPress={() => Linking.openURL('mailto:privacy@dequad.co.uk')}>
-        <Text style={styles.link}>privacy@dequad.co.uk — Privacy & data requests</Text>
+      <Pressable onPress={() => Linking.openURL('mailto:quadri.yusuf@dequad.com')}>
+        <Text style={styles.link}>quadri.yusuf@dequad.com — Privacy & data requests</Text>
       </Pressable>
 
       <Text style={[styles.h2, { marginTop: 28 }]}>In an emergency</Text>

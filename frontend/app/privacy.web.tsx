@@ -43,7 +43,7 @@ export default function PrivacyWeb() {
         <p className="dq-legal__updated">Last updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
 
         <h2>1. Who we are</h2>
-        <p>DEQUAD Ltd ("DEQUAD", "we", "us", "our") is a UK-registered company building a safeguarding-first peer-wellbeing platform for UK university students. We are the data controller of personal data processed through the DEQUAD service. You can contact us at <a href="mailto:privacy@dequad.co.uk">privacy@dequad.co.uk</a>.</p>
+        <p>DEQUAD Ltd ("DEQUAD", "we", "us", "our") is a UK-registered company building a safeguarding-first peer-wellbeing platform for UK university students. We are the data controller of personal data processed through the DEQUAD service. You can contact us at <a href="mailto:quadri.yusuf@dequad.com">quadri.yusuf@dequad.com</a>.</p>
 
         <h2>2. The data we collect</h2>
         <p>When you use DEQUAD we collect:</p>
@@ -81,7 +81,7 @@ export default function PrivacyWeb() {
         </ul>
 
         <h2>8. Your rights</h2>
-        <p>Under the UK GDPR you have the right to access, rectify, erase, restrict, port, or object to our processing of your personal data, and to withdraw consent at any time. You can exercise these rights inside the app (Profile → Privacy & Data) or by emailing <a href="mailto:privacy@dequad.co.uk">privacy@dequad.co.uk</a>. We will respond within one month. You can also complain to the <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">Information Commissioner's Office (ICO)</a>.</p>
+        <p>Under the UK GDPR you have the right to access, rectify, erase, restrict, port, or object to our processing of your personal data, and to withdraw consent at any time. You can exercise these rights inside the app (Profile → Privacy & Data) or by emailing <a href="mailto:quadri.yusuf@dequad.com">quadri.yusuf@dequad.com</a>. We will respond within one month. You can also complain to the <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">Information Commissioner's Office (ICO)</a>.</p>
 
         <h2>9. Children</h2>
         <p>DEQUAD is designed for verified UK university students. A small number of first-year UK undergraduates may be under 18. For any account where we determine the user is under 18, we apply default privacy-protective settings in line with the ICO's Age-Appropriate Design Code.</p>
@@ -93,7 +93,7 @@ export default function PrivacyWeb() {
         <p>We may update this policy from time to time. Material changes will be communicated by email and through a notice in the app at least 30 days before they take effect.</p>
 
         <h2>12. Contact</h2>
-        <p>Questions or concerns? Email our Data Protection Officer at <a href="mailto:privacy@dequad.co.uk">privacy@dequad.co.uk</a> or write to:<br />
+        <p>Questions or concerns? Email our Data Protection Officer at <a href="mailto:quadri.yusuf@dequad.com">quadri.yusuf@dequad.com</a> or write to:<br />
           DEQUAD Ltd, [Registered UK address], United Kingdom.</p>
 
         <footer className="dq-legal__footer">

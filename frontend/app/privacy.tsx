@@ -11,7 +11,7 @@ export default function PrivacyNative() {
         https://dequad.co.uk/privacy in your browser.
       </Text>
       <Text style={styles.p}>
-        Email privacy@dequad.co.uk for any data-protection requests.
+        Email quadri.yusuf@dequad.com for any data-protection requests.
       </Text>
     </ScrollView>
   );

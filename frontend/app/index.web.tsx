@@ -499,7 +499,7 @@ const FooterCta = ({ onPrimary }: { onPrimary: () => void }) => {
           </div>
           <div className="dq-footer__social">
             <a
-              href="https://instagram.com/dequad.uk"
+              href="https://www.instagram.com/dequadapp"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -507,26 +507,6 @@ const FooterCta = ({ onPrimary }: { onPrimary: () => void }) => {
               className="dq-social"
             >
               <SocialIcon kind="instagram" />
-            </a>
-            <a
-              href="https://twitter.com/dequad_uk"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X (Twitter)"
-              data-testid="footer-twitter"
-              className="dq-social"
-            >
-              <SocialIcon kind="twitter" />
-            </a>
-            <a
-              href="https://facebook.com/dequad.uk"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              data-testid="footer-facebook"
-              className="dq-social"
-            >
-              <SocialIcon kind="facebook" />
             </a>
           </div>
         </div>

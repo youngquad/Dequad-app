@@ -10,7 +10,7 @@ export default function TermsNative() {
         For the full Terms & Conditions, visit https://dequad.co.uk/terms in your browser.
       </Text>
       <Text style={styles.p}>
-        Email hello@dequad.co.uk with any questions about these Terms.
+        Email quadri.yusuf@dequad.com with any questions about these Terms.
       </Text>
     </ScrollView>
   );
