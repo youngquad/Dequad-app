@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Response, Depends, HTTPException
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 from pymongo import ReturnDocument
+from pydantic import BaseModel
 import hashlib
 import secrets
 import uuid
@@ -105,9 +106,98 @@ async def verify_reset_token(token: str):
     return {"valid": True, "email": reset_record["email"]}
 
 
+class EmailRegisterRequest(BaseModel):
+    email: str
+    password: str
+    name: Optional[str] = None
+
+
+class EmailLoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+@router.post("/auth/register")
+async def email_register(data: EmailRegisterRequest, response: Response):
+    """Create a student account with an email + password.
+
+    During beta we accept any well-formed email address. Once we tighten the
+    domain policy to UK academic emails, the validation block at the top of
+    this function is the single place that needs to change.
+    """
+    email_lower = (data.email or "").lower().strip()
+    if "@" not in email_lower or "." not in email_lower.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
+    if len(data.password or "") < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters.")
+
+    existing = await db.users.find_one({"email": email_lower})
+    if existing:
+        raise HTTPException(status_code=409, detail="An account with this email already exists. Try signing in instead.")
+
+    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+    user_id = f"user_{uuid.uuid4().hex[:12]}"
+    user_doc = {
+        "user_id": user_id,
+        "email": email_lower,
+        "name": data.name or email_lower.split("@")[0].replace(".", " ").title(),
+        "password_hash": password_hash,
+        "role": "student",
+        "interests": [],
+        "created_at": datetime.now(timezone.utc),
+    }
+    await db.users.insert_one(user_doc)
+    user_doc.pop("password_hash", None)
+    user_doc.pop("_id", None)
+
+    session_token = secrets.token_urlsafe(32)
+    await db.user_sessions.delete_many({"user_id": user_id})
+    await db.user_sessions.insert_one({
+        "user_id": user_id,
+        "session_token": session_token,
+        "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
+        "created_at": datetime.now(timezone.utc),
+    })
+
+    response.set_cookie(
+        key="session_token", value=session_token,
+        httponly=True, secure=True, samesite="none", path="/", max_age=7 * 24 * 60 * 60,
+    )
+    return {"user": user_doc, "session_token": session_token}
+
+
+@router.post("/auth/email-login")
+async def email_login(data: EmailLoginRequest, response: Response):
+    """Email + password sign-in for existing accounts (non-Google users)."""
+    email_lower = (data.email or "").lower().strip()
+    user = await db.users.find_one({"email": email_lower}, {"_id": 0})
+    if not user or not user.get("password_hash"):
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
+
+    if hashlib.sha256(data.password.encode()).hexdigest() != user["password_hash"]:
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
+
+    user.pop("password_hash", None)
+    user.pop("admin_password", None)
+
+    session_token = secrets.token_urlsafe(32)
+    await db.user_sessions.delete_many({"user_id": user["user_id"]})
+    await db.user_sessions.insert_one({
+        "user_id": user["user_id"],
+        "session_token": session_token,
+        "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
+        "created_at": datetime.now(timezone.utc),
+    })
+
+    response.set_cookie(
+        key="session_token", value=session_token,
+        httponly=True, secure=True, samesite="none", path="/", max_age=7 * 24 * 60 * 60,
+    )
+    return {"user": user, "session_token": session_token}
+
+
 @router.post("/auth/admin-login")
 async def admin_login(data: AdminLoginRequest):
-    # Admin accounts must use the @dequad.com corporate domain.
     email_lower = (data.email or "").lower().strip()
     if not email_lower.endswith("@dequad.com"):
         raise HTTPException(
@@ -183,22 +273,11 @@ async def exchange_session(request: Request, response: Response):
 
     session_data = SessionDataResponse(**user_data)
 
-    # Email-domain policy:
-    # - Student accounts must use a UK academic email (.ac.uk).
-    # - Admin accounts (role escalated via admin login form, not here) must use
-    #   the @dequad.com corporate domain. We don't *create* admins via this
-    #   endpoint, but if an admin email tries to sign in as a student we block
-    #   the auto-provisioned student record so that the same person can't end
-    #   up with two parallel records.
+    # Email-domain policy (relaxed for beta — will be tightened to `.ac.uk` only
+    # before public launch). For now, accept any email through Google so that
+    # internal testers and partner-university staff with non-.ac.uk inboxes can
+    # try the product.
     email_lower = (session_data.email or "").lower().strip()
-    if not email_lower.endswith(".ac.uk") and not email_lower.endswith("@dequad.com"):
-        raise HTTPException(
-            status_code=403,
-            detail=(
-                "DEQUAD is currently for verified UK university students. "
-                "Please sign up with your .ac.uk university email address."
-            ),
-        )
 
     # Atomic upsert by email — replaces the previous check-then-insert which had
     # a race condition that created duplicate users when the client retried the

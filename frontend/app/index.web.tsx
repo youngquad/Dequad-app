@@ -627,12 +627,12 @@ export default function LandingWeb() {
     if (!isLoading && isAuthenticated) router.replace('/(main)/mood');
   }, [isAuthenticated, isLoading, router]);
 
-  const handlePrimary = async () => {
-    try {
-      await login();
-    } catch (e) {
-      console.error('Login error:', e);
-    }
+  const handlePrimary = () => {
+    // Route to the in-app login screen which offers BOTH Google sign-in and
+    // email + password (sign-in or sign-up). Previously this called login()
+    // directly, which jumped straight to Google OAuth and gave users no other
+    // option.
+    router.push('/(auth)/login' as any);
   };
 
   return (

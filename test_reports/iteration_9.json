@@ -1,0 +1,38 @@
+{
+  "summary": "Backend QA pass on the newly added native email/password auth on DEQUAD. Wrote /app/backend/tests/test_email_auth.py covering 12 cases across /api/auth/register, /api/auth/email-login, /api/auth/me, /api/auth/logout, plus regression on /api/auth/admin-login. All 12 tests PASSED against REACT_APP_BACKEND_URL.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/register", "issue": "Returns HTTP 200 on resource creation; conventional REST would use 201. Not breaking, but worth aligning."},
+      {"endpoint": "/api/auth/register & /api/auth/email-login", "issue": "Passwords are hashed with plain SHA-256 (no salt, no bcrypt/argon2). Acceptable in beta but MUST be migrated to bcrypt/argon2 before public launch — same applies to admin_password."},
+      {"endpoint": "/api/auth/register", "issue": "Email format check is very lax ('@' and a dot in domain). Things like 'a@b.c' or 'foo@bar.x' pass. Consider Pydantic EmailStr / proper regex before tightening to .ac.uk."},
+      {"endpoint": "/api/auth/email-login", "issue": "Pre-existing seeded users that only have admin_password (no password_hash) cannot use email-login — they get 401. Expected for now but flag it: any user created via /auth/session (Google) also has no password_hash, so they cannot fall back to email-login unless they go through /auth/register (which will 409). Consider an explicit 'set password' flow later."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_email_auth.py",
+    "/app/test_reports/pytest/email_auth_results.xml"
+  ],
+  "action_items": [
+    "Plan migration of password hashing from SHA-256 to bcrypt/argon2 before public launch.",
+    "Optionally return 201 from /api/auth/register and use Pydantic EmailStr for stricter email validation.",
+    "Decide UX for Google-created users who later want password-only login (today /auth/register 409s on their email)."
+  ],
+  "critical_code_review_comments": [
+    "auth.py: /auth/register and /auth/email-login both rotate sessions by `delete_many({user_id})` then insert — good (prevents stale tokens) and matches /auth/session behaviour.",
+    "auth.py: response.set_cookie uses secure=True, samesite='none', httponly=True — correct for the cross-site preview URL setup.",
+    "auth.py: _id is properly stripped from the user payload in both register (pop) and email-login (projection {_id:0}).",
+    "auth.py: /auth/email-login uses identical 'Invalid email or password.' message for both 'user not found' and 'wrong password' — correctly avoids account-existence leak.",
+    "helpers/auth.py: get_session_token correctly prefers Authorization header → query param → cookie; verified end-to-end via bearer-only requests.",
+    "Security: SHA-256 password hashing without salt is the single biggest risk in this module."
+  ],
+  "updated_files": ["/app/backend/tests/test_email_auth.py"],
+  "success_rate": {"backend": "100% (12/12)", "frontend": "not tested (backend-only request)"},
+  "test_credentials": "Admin: quadri.yusuf@dequad.com / Oluwatobi11@ verified. Dynamic e2e users created with timestamped emails (e2e_test_<ts>@example.com / Test12345!).",
+  "seed_data_creation": "Each test run creates 2 transient users in the `users` collection (prefixed TEST_ or e2e_test_). No cleanup performed — main agent may want to add a periodic purge of e2e_test_/TEST_ emails.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Pytest file /app/backend/tests/test_email_auth.py is the regression suite for the email/password endpoints. Re-run with `pytest /app/backend/tests/test_email_auth.py -v`. Frontend UI tests were skipped per request — auth-name-input / auth-email-input / auth-password-input / auth-submit / auth-mode-toggle / auth-error live in /app/frontend/app/(auth)/login.tsx and AuthContext.tsx calls /auth/email-login & /auth/register; that flow is still untested end-to-end through the UI.",
+  "rca of the issue": "N/A — all targeted features are functioning as specified."
+}

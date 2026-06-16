@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   Animated,
   Pressable,
+  TextInput,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -16,8 +18,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login, isLoading } = useAuth();
+  const { login, loginWithEmail, registerWithEmail, isLoading } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [emailErr, setEmailErr] = useState<string | null>(null);
 
   // Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -63,6 +70,32 @@ export default function LoginScreen() {
       await login();
     } catch (error) {
       console.error('Login error:', error);
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
+
+  const handleEmailSubmit = async () => {
+    setEmailErr(null);
+    if (!email || !password) {
+      setEmailErr('Please enter both an email and a password.');
+      return;
+    }
+    if (mode === 'signup' && password.length < 8) {
+      setEmailErr('Password must be at least 8 characters.');
+      return;
+    }
+    setIsSigningIn(true);
+    try {
+      if (mode === 'signin') {
+        await loginWithEmail(email, password);
+      } else {
+        await registerWithEmail(email, password, name || undefined);
+      }
+      router.replace('/(main)/mood');
+    } catch (err: any) {
+      const msg = err?.message || (mode === 'signin' ? 'Sign-in failed.' : 'Sign-up failed.');
+      setEmailErr(msg.replace(/^Error:\s*/, ''));
     } finally {
       setIsSigningIn(false);
     }
@@ -156,45 +189,64 @@ export default function LoginScreen() {
             {/* Divider */}
             <View style={styles.divider}>
               <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>University Email</Text>
+              <Text style={styles.dividerText}>or</Text>
               <View style={styles.dividerLine} />
             </View>
 
-            {/* Info Cards */}
-            <View style={styles.infoCard}>
-              <View style={styles.infoIconContainer}>
-                <Ionicons name="shield-checkmark" size={22} color="#10B981" />
-              </View>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoTitle}>Safe & Secure</Text>
-                <Text style={styles.infoDescription}>
-                  Your data is protected with enterprise-grade security
+            {/* Email / password form */}
+            <View style={styles.emailForm}>
+              {mode === 'signup' && (
+                <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Your name (optional)"
+                  placeholderTextColor="#64748B"
+                  style={styles.input}
+                  data-testid="auth-name-input"
+                  autoCapitalize="words"
+                />
+              )}
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Email"
+                placeholderTextColor="#64748B"
+                style={styles.input}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                data-testid="auth-email-input"
+              />
+              <TextInput
+                value={password}
+                onChangeText={setPassword}
+                placeholder={mode === 'signup' ? 'Create a password (8+ characters)' : 'Password'}
+                placeholderTextColor="#64748B"
+                style={styles.input}
+                secureTextEntry
+                data-testid="auth-password-input"
+              />
+              {emailErr ? (
+                <Text style={styles.errorText} data-testid="auth-error">{emailErr}</Text>
+              ) : null}
+              <TouchableOpacity
+                onPress={handleEmailSubmit}
+                disabled={isSigningIn}
+                style={styles.emailSubmit}
+                data-testid="auth-submit"
+              >
+                <Text style={styles.emailSubmitText}>
+                  {isSigningIn ? 'Please wait…' : (mode === 'signin' ? 'Sign In' : 'Create Account')}
                 </Text>
-              </View>
-            </View>
-
-            <View style={styles.infoCard}>
-              <View style={styles.infoIconContainer}>
-                <Ionicons name="lock-closed" size={22} color="#6366F1" />
-              </View>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoTitle}>Privacy First</Text>
-                <Text style={styles.infoDescription}>
-                  End-to-end encryption for all your conversations
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setEmailErr(null); }}
+                style={styles.modeToggle}
+                data-testid="auth-mode-toggle"
+              >
+                <Text style={styles.modeToggleText}>
+                  {mode === 'signin' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
                 </Text>
-              </View>
-            </View>
-
-            <View style={styles.infoCard}>
-              <View style={styles.infoIconContainer}>
-                <Ionicons name="people" size={22} color="#EC4899" />
-              </View>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoTitle}>Student Community</Text>
-                <Text style={styles.infoDescription}>
-                  Connect with verified university students only
-                </Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -334,6 +386,47 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: 'rgba(148, 163, 184, 0.08)',
+  },
+  emailForm: {
+    marginTop: 4,
+  },
+  input: {
+    backgroundColor: 'rgba(30, 41, 59, 0.6)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    color: '#F1F5F9',
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.18)',
+    marginBottom: 12,
+  },
+  errorText: {
+    color: '#F87171',
+    fontSize: 13,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  emailSubmit: {
+    backgroundColor: '#6366F1',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  emailSubmitText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  modeToggle: {
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  modeToggleText: {
+    color: '#94A3B8',
+    fontSize: 13,
   },
   infoIconContainer: {
     width: 44,

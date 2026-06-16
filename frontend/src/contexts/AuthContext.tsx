@@ -23,6 +23,8 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: () => Promise<void>;
+  loginWithEmail: (email: string, password: string) => Promise<void>;
+  registerWithEmail: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   sessionToken: string | null;
@@ -158,6 +160,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     init();
   }, [checkExistingSession]);
 
+  const _persistSession = async (sessionToken: string, userData: User) => {
+    setUser(userData);
+    setSessionToken(sessionToken);
+    try {
+      await AsyncStorage.setItem('session_token', sessionToken);
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        localStorage.setItem('session_token', sessionToken);
+      }
+    } catch (e) {
+      console.error('Token persist error:', e);
+    }
+  };
+
+  const loginWithEmail = async (email: string, password: string) => {
+    const res = await api.post('/auth/email-login', {
+      email: email.trim().toLowerCase(),
+      password,
+    });
+    if (!res?.session_token || !res?.user) {
+      throw new Error('Login failed — no session returned.');
+    }
+    await _persistSession(res.session_token, res.user);
+  };
+
+  const registerWithEmail = async (email: string, password: string, name?: string) => {
+    const res = await api.post('/auth/register', {
+      email: email.trim().toLowerCase(),
+      password,
+      name,
+    });
+    if (!res?.session_token || !res?.user) {
+      throw new Error('Sign-up failed — no session returned.');
+    }
+    await _persistSession(res.session_token, res.user);
+  };
+
   const login = async () => {
     try {
       // For web, use the current origin (user's actual domain)
@@ -266,6 +304,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         login,
+        loginWithEmail,
+        registerWithEmail,
         logout,
         refreshUser,
         sessionToken,
