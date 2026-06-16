@@ -107,7 +107,15 @@ async def verify_reset_token(token: str):
 
 @router.post("/auth/admin-login")
 async def admin_login(data: AdminLoginRequest):
-    user = await db.users.find_one({"email": data.email.lower()}, {"_id": 0})
+    # Admin accounts must use the @dequad.com corporate domain.
+    email_lower = (data.email or "").lower().strip()
+    if not email_lower.endswith("@dequad.com"):
+        raise HTTPException(
+            status_code=403,
+            detail="Admin sign-in is restricted to @dequad.com email addresses.",
+        )
+
+    user = await db.users.find_one({"email": email_lower}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
@@ -116,7 +124,7 @@ async def admin_login(data: AdminLoginRequest):
     if data.admin_code == ADMIN_SECRET_CODE:
         password_hash = hashlib.sha256(data.password.encode()).hexdigest()
         await db.users.update_one(
-            {"email": data.email.lower()},
+            {"email": email_lower},
             {"$set": {"role": "admin", "admin_password": password_hash}}
         )
         user["role"] = "admin"
@@ -175,13 +183,30 @@ async def exchange_session(request: Request, response: Response):
 
     session_data = SessionDataResponse(**user_data)
 
+    # Email-domain policy:
+    # - Student accounts must use a UK academic email (.ac.uk).
+    # - Admin accounts (role escalated via admin login form, not here) must use
+    #   the @dequad.com corporate domain. We don't *create* admins via this
+    #   endpoint, but if an admin email tries to sign in as a student we block
+    #   the auto-provisioned student record so that the same person can't end
+    #   up with two parallel records.
+    email_lower = (session_data.email or "").lower().strip()
+    if not email_lower.endswith(".ac.uk") and not email_lower.endswith("@dequad.com"):
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                "DEQUAD is currently for verified UK university students. "
+                "Please sign up with your .ac.uk university email address."
+            ),
+        )
+
     # Atomic upsert by email — replaces the previous check-then-insert which had
     # a race condition that created duplicate users when the client retried the
     # session-exchange call (e.g. before the recent CORS fix landed). The
     # `$setOnInsert` block only runs when a brand-new doc is created.
     new_user_id = f"user_{uuid.uuid4().hex[:12]}"
     user_doc = await db.users.find_one_and_update(
-        {"email": session_data.email},
+        {"email": email_lower},
         {
             "$setOnInsert": {
                 "user_id": new_user_id,
@@ -190,7 +215,7 @@ async def exchange_session(request: Request, response: Response):
                 "created_at": datetime.now(timezone.utc),
             },
             "$set": {
-                "email": session_data.email,
+                "email": email_lower,
                 "name": session_data.name,
                 "picture": session_data.picture,
             },

@@ -198,11 +198,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     // Capture token before clearing state
     const currentToken = sessionToken;
-    
+
     // Clear state immediately for instant UI update
     setUser(null);
     setSessionToken(null);
-    
+
     // Clear all stored tokens
     try {
       await AsyncStorage.removeItem('session_token');
@@ -214,26 +214,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (storageError) {
       console.error('Storage clear error:', storageError);
     }
-    
-    // Invalidate session on backend using the captured token
-    try {
-      if (currentToken) {
-        await fetch(`${API_URL}/api/auth/logout`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${currentToken}`,
-          },
-          credentials: 'omit',
-        });
-      }
-    } catch (error) {
-      console.error('Logout API error:', error);
+
+    // Fire the backend invalidation in the background — do NOT await it. We
+    // already cleared local state, so the user is logged-out from their
+    // perspective regardless of whether the backend call succeeds. Awaiting it
+    // here used to race the protected-route effect with the location.href
+    // assignment and produced the "logout needs a second click / page refresh"
+    // bug reported in production.
+    if (currentToken) {
+      fetch(`${API_URL}/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentToken}`,
+        },
+        credentials: 'omit',
+        // keepalive lets the request finish even after the page navigates away
+        keepalive: true,
+      }).catch((error) => {
+        console.error('Logout API error (non-fatal):', error);
+      });
     }
-    
-    // Force reload on web to ensure clean state
+
+    // Force navigation immediately. window.location.replace avoids leaving the
+    // protected route in the browser's history.
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
-      window.location.href = '/';
+      window.location.replace('/');
     }
   };
 

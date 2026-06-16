@@ -94,9 +94,17 @@ export default function MatchesScreen() {
     }
   };
 
-  const loadProfiles = async () => {
+  const loadProfiles = async (reset: boolean = false) => {
     try {
-      const data = await api.get('/matches/discover', sessionToken);
+      // Hard-reset the deck so any stale already-swiped cards disappear from
+      // the UI before the new data arrives.
+      if (reset) {
+        setProfiles([]);
+        setCurrentIndex(0);
+        setIsLoading(true);
+      }
+      const path = reset ? '/matches/discover?reset=true' : '/matches/discover';
+      const data = await api.get(path, sessionToken);
       setProfiles(data);
       setCurrentIndex(0);
     } catch (error) {
@@ -730,7 +738,7 @@ export default function MatchesScreen() {
           <Text style={styles.emptySubtitle}>
             Check back later for new study partners
           </Text>
-          <Pressable onPress={loadProfiles}>
+          <Pressable onPress={() => loadProfiles(true)} data-testid="refresh-deck-button">
             <LinearGradient
               colors={['#6366F1', '#8B5CF6']}
               style={styles.refreshButton}

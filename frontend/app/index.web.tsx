@@ -18,6 +18,31 @@ import {
   Play,
   ChevronDown,
 } from 'lucide-react';
+
+// Inline SVG icons for social links — keeps us off the lucide-react versioning treadmill.
+const SocialIcon = ({ kind }: { kind: 'instagram' | 'twitter' | 'facebook' }) => {
+  const common = { width: 18, height: 18, fill: 'currentColor', 'aria-hidden': true as const };
+  if (kind === 'instagram') {
+    return (
+      <svg viewBox="0 0 24 24" {...common}>
+        <path d="M12 2.2c3.2 0 3.6 0 4.85.07a6.7 6.7 0 012.23.41 3.7 3.7 0 011.36.88 3.7 3.7 0 01.88 1.36 6.7 6.7 0 01.41 2.23C21.8 8.4 21.8 8.8 21.8 12s0 3.6-.07 4.85a6.7 6.7 0 01-.41 2.23 3.7 3.7 0 01-.88 1.36 3.7 3.7 0 01-1.36.88 6.7 6.7 0 01-2.23.41C15.6 21.8 15.2 21.8 12 21.8s-3.6 0-4.85-.07a6.7 6.7 0 01-2.23-.41 3.7 3.7 0 01-1.36-.88 3.7 3.7 0 01-.88-1.36 6.7 6.7 0 01-.41-2.23C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85a6.7 6.7 0 01.41-2.23 3.7 3.7 0 01.88-1.36 3.7 3.7 0 011.36-.88 6.7 6.7 0 012.23-.41C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.16 0-3.54.01-4.78.07-.95.05-1.47.2-1.82.34-.46.18-.79.4-1.13.74-.34.34-.56.67-.74 1.13-.13.35-.29.87-.34 1.82C4 8.46 4 8.84 4 12s.01 3.54.07 4.78c.05.95.2 1.47.34 1.82.18.46.4.79.74 1.13.34.34.67.56 1.13.74.35.13.87.29 1.82.34C8.46 20 8.84 20 12 20s3.54-.01 4.78-.07c.95-.05 1.47-.2 1.82-.34a3 3 0 001.13-.74 3 3 0 00.74-1.13c.13-.35.29-.87.34-1.82C20 15.54 20 15.16 20 12s-.01-3.54-.07-4.78c-.05-.95-.2-1.47-.34-1.82a3 3 0 00-.74-1.13 3 3 0 00-1.13-.74c-.35-.13-.87-.29-1.82-.34C15.54 4 15.16 4 12 4zm0 3.05a4.95 4.95 0 110 9.9 4.95 4.95 0 010-9.9zm0 1.8a3.15 3.15 0 100 6.3 3.15 3.15 0 000-6.3zm5.18-2.07a1.16 1.16 0 110 2.32 1.16 1.16 0 010-2.32z" />
+      </svg>
+    );
+  }
+  if (kind === 'twitter') {
+    return (
+      <svg viewBox="0 0 24 24" {...common}>
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+      </svg>
+    );
+  }
+  // facebook
+  return (
+    <svg viewBox="0 0 24 24" {...common}>
+      <path d="M22 12a10 10 0 10-11.563 9.876v-6.987H7.898V12h2.539V9.798c0-2.506 1.492-3.89 3.776-3.89 1.094 0 2.238.196 2.238.196v2.46h-1.26c-1.243 0-1.63.772-1.63 1.563V12h2.773l-.443 2.889h-2.33v6.987A10 10 0 0022 12z" />
+    </svg>
+  );
+};
 import { useAuth } from '../src/contexts/AuthContext';
 import { api } from '../src/services/api';
 
@@ -306,15 +331,10 @@ const Testimonials = () => (
 // Section: FAQ
 // ─────────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
-  { q: 'What exactly is DEQUAD?', a: 'DEQUAD is a closed social network exclusively for verified UK university students. It brings three things into one app: (1) peer matching based on courses, societies, and real interests, (2) daily mood and wellbeing tracking, and (3) 24/7 AI-supported help with built-in safeguarding. Think of it as the friend, mentor, and safety net you wish existed in Freshers\' week.' },
+  { q: 'What exactly is DEQUAD?', a: 'DEQUAD is a closed social network exclusively for verified UK university students. It brings three things into one app: (1) peer matching based on courses, societies, and real interests, (2) daily mood and wellbeing tracking, and (3) 24/7 supported help with built-in safeguarding. Think of it as the friend, mentor, and safety net you wish existed in Freshers\' week.' },
   { q: 'Do I need a university email?', a: 'Yes. DEQUAD is strictly for verified UK university students. You sign up with your .ac.uk email so the network stays closed and safe. If your university uses a different domain, contact us — we add new institutions weekly.' },
-  { q: 'Is my mood data private?', a: '100%. We never share your personal health data with your university, employers, or any third party. Mood entries are encrypted at rest, visible only to you, and can be exported or deleted with one tap from your profile.' },
-  { q: 'How does the safeguarding work?', a: 'Our system scans messages and posts for patterns related to self-harm, crisis, or harassment. If high-risk language is detected, the content is reviewed by a trained safeguarding lead — not exposed to other students. The student in distress is also automatically connected to relevant resources (Samaritans, Shout, university wellbeing teams).' },
   { q: 'Is DEQUAD a dating app?', a: 'No. DEQUAD is for friendship, study groups, and peer support. Romantic matches do happen organically, but we don\'t prioritise looks-based swiping. The focus is real student connections, not chemistry-first chat.' },
-  { q: 'How much does it cost?', a: 'Free during beta. Free forever for the core features — peer matching, mood tracking, support chat, safeguarding. We may introduce optional premium features later (advanced filters, group events), but everything that keeps you safe and connected stays free.' },
-  { q: 'Who runs DEQUAD?', a: 'A small, student-led team in the UK. Founders Yusuf Quadri and the team built DEQUAD after seeing too many friends struggle alone through Freshers, exams, and post-graduation transitions. We work directly with university safeguarding staff and the NHS Every Mind Matters team.' },
   { q: 'What happens to my data if I delete my account?', a: 'Everything goes. We have a 30-day cooling-off window in case you change your mind, after which all your profile data, messages, mood logs, and matches are permanently erased from our servers and backups.' },
-  { q: 'Can my university see my activity?', a: 'No individual activity ever. Universities can subscribe to a separate, fully-anonymised analytics dashboard that shows aggregate trends (e.g., "wellbeing dipped during exam week") with no way to identify any individual student.' },
   { q: 'I\'m at a non-UK university — when can I join?', a: 'We\'re UK-first and rolling out by university. Drop your .edu or international email in the waitlist below and we\'ll let you know when your country opens.' },
 ];
 
@@ -473,9 +493,41 @@ const FooterCta = ({ onPrimary }: { onPrimary: () => void }) => {
         <div className="dq-footer__legal">
           <span>© {new Date().getFullYear()} DEQUAD. Built with care for students everywhere.</span>
           <div className="dq-footer__links">
-            <a href="#" data-testid="footer-privacy">Privacy</a>
-            <a href="#" data-testid="footer-terms">Terms</a>
-            <a href="mailto:hello@dequad.co.uk" data-testid="footer-contact">Contact</a>
+            <a href="/privacy" data-testid="footer-privacy">Privacy</a>
+            <a href="/terms" data-testid="footer-terms">Terms</a>
+            <a href="/contact" data-testid="footer-contact">Contact</a>
+          </div>
+          <div className="dq-footer__social">
+            <a
+              href="https://instagram.com/dequad.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              data-testid="footer-instagram"
+              className="dq-social"
+            >
+              <SocialIcon kind="instagram" />
+            </a>
+            <a
+              href="https://twitter.com/dequad_uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X (Twitter)"
+              data-testid="footer-twitter"
+              className="dq-social"
+            >
+              <SocialIcon kind="twitter" />
+            </a>
+            <a
+              href="https://facebook.com/dequad.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              data-testid="footer-facebook"
+              className="dq-social"
+            >
+              <SocialIcon kind="facebook" />
+            </a>
           </div>
         </div>
       </div>
@@ -767,6 +819,9 @@ body, #root, #root > div, #root > div > div { background: var(--bg); margin: 0; 
 .dq-footer__links { display: flex; gap: 24px; }
 .dq-footer__links a { color: rgba(248,250,252,0.7); text-decoration: none; }
 .dq-footer__links a:hover { color: #F8FAFC; }
+.dq-footer__social { display: flex; gap: 12px; }
+.dq-social { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(248,250,252,0.08); color: rgba(248,250,252,0.7); text-decoration: none; transition: background-color 200ms ease, color 200ms ease, transform 200ms ease; }
+.dq-social:hover { background: rgba(248,250,252,0.18); color: #F8FAFC; transform: translateY(-2px); }
 
 /* Responsive */
 @media (max-width: 980px) {
