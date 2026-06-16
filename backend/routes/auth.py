@@ -27,32 +27,57 @@ router = APIRouter()
 
 @router.post("/auth/forgot-password")
 async def forgot_password(data: ForgotPasswordRequest):
-    user = await db.users.find_one({"email": data.email.lower()}, {"_id": 0})
-    if not user or user.get("role") != "admin":
-        return {"message": "If an admin account exists with this email, a reset link has been sent."}
+    """Send a password-reset link to any registered user (admin OR student).
+
+    Response is intentionally uniform whether or not the email exists, to
+    prevent account enumeration. The role baked into the reset record
+    decides which password field gets updated when the user clicks the link.
+    """
+    email_lower = data.email.lower().strip()
+    generic_response = {"message": "If an account exists with this email, a reset link has been sent."}
+
+    user = await db.users.find_one({"email": email_lower}, {"_id": 0})
+    if not user:
+        return generic_response
+
+    role = user.get("role", "student")
+    # Admins reset `admin_password`; students reset `password_hash`. Only
+    # accounts that already have one of those fields can use this flow —
+    # Google-only accounts (no password set yet) get a generic response so we
+    # don't leak that the account exists but is OAuth-only.
+    if role == "admin":
+        if not user.get("admin_password"):
+            return generic_response
+    else:
+        if not user.get("password_hash"):
+            return generic_response
 
     reset_token = secrets.token_urlsafe(32)
     expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
 
-    await db.password_resets.delete_many({"email": data.email.lower()})
+    await db.password_resets.delete_many({"email": email_lower})
     await db.password_resets.insert_one({
-        "email": data.email.lower(),
+        "email": email_lower,
         "token": reset_token,
+        "role": role,
         "created_at": datetime.now(timezone.utc),
         "expires_at": expires_at,
-        "used": False
+        "used": False,
     })
 
     app_url = os.environ.get("APP_URL", "").rstrip("/")
-    reset_url = f"{app_url}/admin/reset-password?token={reset_token}"
+    # Admins still use the legacy /admin/reset-password page; students get the
+    # in-app screen under (auth)/reset-password.
+    reset_path = "/admin/reset-password" if role == "admin" else "/reset-password"
+    reset_url = f"{app_url}{reset_path}?token={reset_token}"
 
     if is_smtp_configured():
-        subject = "DEQUAD Admin Password Reset"
-        html_body = create_password_reset_email_html(user.get("name", "Admin"), reset_url)
+        subject = "DEQUAD Password Reset" if role != "admin" else "DEQUAD Admin Password Reset"
+        html_body = create_password_reset_email_html(user.get("name", role.title()), reset_url)
         text_body = f"""
-Hi {user.get("name", "Admin")},
+Hi {user.get("name", role.title())},
 
-We received a request to reset your admin password for DEQUAD.
+We received a request to reset your DEQUAD password.
 
 Click here to reset your password:
 {reset_url}
@@ -63,12 +88,12 @@ If you didn't request this reset, please ignore this email.
 
 - DEQUAD Team
         """
-        await send_email_async([data.email.lower()], subject, html_body, text_body)
-        logger.info(f"Password reset email sent to {data.email.lower()}")
+        await send_email_async([email_lower], subject, html_body, text_body)
+        logger.info(f"Password reset email sent to {email_lower} (role={role})")
     else:
-        logger.warning(f"SMTP not configured - password reset token: {reset_token}")
+        logger.warning(f"SMTP not configured - password reset token for {email_lower}: {reset_token}")
 
-    return {"message": "If an admin account exists with this email, a reset link has been sent."}
+    return generic_response
 
 
 @router.post("/auth/reset-password")
@@ -79,19 +104,24 @@ async def reset_password(data: ResetPasswordRequest):
     })
     if not reset_record:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
-    if len(data.new_password) < 6:
-        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+    if len(data.new_password) < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
 
     password_hash = hashlib.sha256(data.new_password.encode()).hexdigest()
+    # Update the correct field based on the role captured when the token was
+    # issued. Falls back to admin_password for legacy records that don't carry
+    # a role (pre-existing admin reset tokens).
+    role = reset_record.get("role", "admin")
+    field = "admin_password" if role == "admin" else "password_hash"
     result = await db.users.update_one(
         {"email": reset_record["email"]},
-        {"$set": {"admin_password": password_hash}}
+        {"$set": {field: password_hash}},
     )
     if result.modified_count == 0:
         raise HTTPException(status_code=400, detail="Failed to update password")
 
     await db.password_resets.update_one({"token": data.token}, {"$set": {"used": True}})
-    logger.info(f"Password reset successful for {reset_record['email']}")
+    logger.info(f"Password reset successful for {reset_record['email']} (role={role})")
     return {"message": "Password reset successful. You can now login with your new password."}
 
 

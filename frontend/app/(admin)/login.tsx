@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DequadLogo } from '../../src/components/DequadLogo';
 
 export default function AdminLoginScreen() {
   const router = useRouter();
@@ -118,7 +119,11 @@ export default function AdminLoginScreen() {
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.iconContainer}>
-              <Ionicons name="shield-checkmark" size={48} color="#F59E0B" />
+              <DequadLogo size={72} />
+            </View>
+            <View style={styles.adminBadge}>
+              <Ionicons name="shield-checkmark" size={14} color="#F59E0B" />
+              <Text style={styles.adminBadgeText}>ADMIN</Text>
             </View>
             <Text style={styles.title}>Admin Access</Text>
             <Text style={styles.subtitle}>
@@ -249,13 +254,33 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   iconContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    width: 96,
+    height: 96,
+    borderRadius: 28,
+    backgroundColor: 'rgba(122, 179, 224, 0.12)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(122, 179, 224, 0.18)',
+  },
+  adminBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+    borderColor: 'rgba(245, 158, 11, 0.35)',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    marginBottom: 12,
+  },
+  adminBadgeText: {
+    color: '#F59E0B',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.1,
   },
   title: {
     fontSize: 28,

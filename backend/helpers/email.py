@@ -391,7 +391,7 @@ def create_password_reset_email_html(name: str, reset_url: str) -> str:
             </div>
             <div class="content">
                 <p>Hi {name},</p>
-                <p>We received a request to reset your admin password for DEQUAD. Click the button below to set a new password:</p>
+                <p>We received a request to reset your DEQUAD password. Click the button below to set a new password:</p>
                 <div style="text-align: center;">
                     <a href="{reset_url}" class="button">Reset Password</a>
                 </div>
