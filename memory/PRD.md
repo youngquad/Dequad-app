@@ -23,6 +23,12 @@
 9. **Chat Inbox UI** — removed emails, added last-message preview + timestamp.
 10. **Unread Badges** — Admin (Support, Safeguarding) + Student (Chat, Connect) tabs.
 11. **EAS Build Guide + Helper Script (2026-02)** — `/app/EAS_BUILD_GUIDE.md`, `/app/BETA_OPTION_A.md`, and `/app/scripts/build.sh` (validate / dev / preview / prod / submit / ota / register-device / list-devices / doctor commands).
+16. **Admin "Pending Student Verification" Queue (2026-02)** — New tab in the admin dashboard that surfaces every account whose `student_verification` is `self_declared` or `pending_review` (i.e. bare `.ac.uk` signups that need a human glance).
+    - Backend: `GET /api/admin/pending-verifications`, `POST /api/admin/pending-verifications/:uid/approve`, `POST /api/admin/pending-verifications/:uid/reject` (reject hard-deletes the account + revokes sessions).
+    - Frontend: new `Verify` tab in the admin dashboard with a live unread badge (polled every 20s). Self-contained component at `/app/frontend/src/components/AdminVerificationQueue.tsx`.
+    - Cards show name + email + university (inferred from domain) + status + auth method + signup date, with one-click Verify / Remove buttons and a `window.confirm` guard on reject.
+    - Tested: 7/7 new pytest cases (`/app/backend/tests/test_verification_queue.py`).
+
 15. **UK Student-Email Policy (2026-02)** — `.ac.uk` restriction is back, with smart classification:
     - Hard-rejects non-`.ac.uk` and known staff patterns (`staff.*`, `admin.*`, `faculty.*`, `alumni.*` etc.).
     - Auto-approves known student subdomains (`student.*`, `live.*`, `sms.*`, `my.*`, …).

@@ -129,6 +129,120 @@ async def delete_university_admin(user_id: str, admin: User = Depends(require_ad
     return {"success": True}
 
 
+# ==================== STUDENT VERIFICATION QUEUE ====================
+
+# UK student-email policy lets bare `.ac.uk` accounts (UCL, KCL, Oxford,
+# Cambridge, etc.) sign up after self-declaration. Those rows land in this
+# queue so an admin can vouch for or remove anyone whose status looks off.
+PENDING_VERIFICATION_STATUSES = ("self_declared", "pending_review")
+
+
+def _university_from_email(email: str) -> str:
+    """Best-effort university name from the email domain.
+
+    `name@student.leeds.ac.uk` → "leeds.ac.uk"
+    `name@kcl.ac.uk`           → "kcl.ac.uk"
+    Used for grouping/labelling in the admin UI; not authoritative.
+    """
+    if not email or "@" not in email:
+        return ""
+    domain = email.split("@", 1)[1].lower()
+    parts = domain.split(".")
+    # Strip the optional student-style prefix subdomain so universities group
+    # consistently regardless of whether the signup used the bare or student
+    # subdomain.
+    student_prefixes = {
+        "student", "students", "stu", "live", "my", "sms",
+        "mail", "uni", "studentmail",
+    }
+    if len(parts) > 3 and parts[0] in student_prefixes:
+        parts = parts[1:]
+    return ".".join(parts)
+
+
+@router.get("/admin/pending-verifications")
+async def list_pending_verifications(admin: User = Depends(require_admin)):
+    """List accounts whose student status still needs admin sign-off."""
+    users = await db.users.find(
+        {"student_verification": {"$in": list(PENDING_VERIFICATION_STATUSES)}},
+        # Include password_hash temporarily to tell email-signup vs Google
+        # apart; we convert it to a boolean in Python before returning so the
+        # hash never leaves the backend.
+        {"_id": 0, "admin_password": 0},
+    ).sort("created_at", -1).to_list(500)
+
+    enriched = []
+    for u in users:
+        created = u.get("created_at")
+        has_password = bool(u.get("password_hash"))
+        enriched.append({
+            "user_id": u.get("user_id"),
+            "email": u.get("email"),
+            "name": u.get("name"),
+            "role": u.get("role", "student"),
+            "student_verification": u.get("student_verification"),
+            "university": _university_from_email(u.get("email", "")),
+            "created_at": created.isoformat() if isinstance(created, datetime) else created,
+            "auth_method": "password" if has_password else "google",
+        })
+
+    return {
+        "count": len(enriched),
+        "users": enriched,
+    }
+
+
+@router.post("/admin/pending-verifications/{user_id}/approve")
+async def approve_pending_verification(user_id: str, admin: User = Depends(require_admin)):
+    """Mark the user as a verified student. Removes them from the queue."""
+    result = await db.users.update_one(
+        {
+            "user_id": user_id,
+            "student_verification": {"$in": list(PENDING_VERIFICATION_STATUSES)},
+        },
+        {
+            "$set": {
+                "student_verification": "verified",
+                "verified_by": admin.email,
+                "verified_at": datetime.now(timezone.utc),
+            },
+        },
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="No pending verification for that user_id.")
+    logger.info(f"admin {admin.email} approved student verification for user_id={user_id}")
+    return {"user_id": user_id, "student_verification": "verified"}
+
+
+@router.post("/admin/pending-verifications/{user_id}/reject")
+async def reject_pending_verification(user_id: str, admin: User = Depends(require_admin)):
+    """Reject a self-declaration. Deletes the user and revokes their sessions.
+
+    Used when an admin determines the account is staff/alumni and shouldn't
+    be on DEQUAD. Hard-deletes rather than soft-blocking so the email can be
+    re-used by a legitimate student later if needed.
+    """
+    user = await db.users.find_one(
+        {"user_id": user_id, "student_verification": {"$in": list(PENDING_VERIFICATION_STATUSES)}},
+        {"_id": 0, "email": 1, "role": 1},
+    )
+    if not user:
+        raise HTTPException(status_code=404, detail="No pending verification for that user_id.")
+    if user.get("role") == "admin":
+        # Don't let an admin accidentally nuke another admin via this endpoint.
+        raise HTTPException(status_code=403, detail="Cannot reject an admin account through this endpoint.")
+
+    await db.user_sessions.delete_many({"user_id": user_id})
+    await db.sessions.delete_many({"user_id": user_id})
+    await db.users.delete_one({"user_id": user_id})
+
+    logger.info(
+        f"admin {admin.email} rejected student verification for user_id={user_id} "
+        f"email={user.get('email')} (account deleted)"
+    )
+    return {"user_id": user_id, "deleted": True}
+
+
 # ==================== SAFEGUARDING ====================
 
 @router.get("/admin/safeguarding-alerts/unread-count")

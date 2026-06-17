@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import AdminSupportInbox from '../../src/components/AdminSupportInbox';
+import { AdminVerificationQueue } from '../../src/components/AdminVerificationQueue';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -83,9 +84,10 @@ export default function AdminDashboard() {
   const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'verifications' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
   const [supportUnread, setSupportUnread] = useState<number>(0);
   const [safeUnread, setSafeUnread] = useState<{ unread: number; high_risk: number }>({ unread: 0, high_risk: 0 });
+  const [verifyUnread, setVerifyUnread] = useState<number>(0);
   const [tokenLoaded, setTokenLoaded] = useState(false);
   
   // Use local token or auth context token
@@ -449,13 +451,15 @@ export default function AdminDashboard() {
     let cancelled = false;
     const refresh = async () => {
       try {
-        const [s, sg] = await Promise.all([
+        const [s, sg, vq] = await Promise.all([
           api.get('/support/admin/unread-count', sessionToken).catch(() => null),
           api.get('/admin/safeguarding-alerts/unread-count', sessionToken).catch(() => null),
+          api.get('/admin/pending-verifications', sessionToken).catch(() => null),
         ]);
         if (cancelled) return;
         if (s) setSupportUnread(s.unread ?? 0);
         if (sg) setSafeUnread({ unread: sg.unread ?? 0, high_risk: sg.high_risk ?? 0 });
+        if (vq) setVerifyUnread(vq.count ?? 0);
       } catch (e) {
         // silent — non-critical
       }
@@ -602,7 +606,7 @@ export default function AdminDashboard() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {['overview', 'safeguarding', 'support', 'subscriptions', 'ai-learning', 'universities', 'analytics', 'export'].map((tab) => (
+        {['overview', 'safeguarding', 'verifications', 'support', 'subscriptions', 'ai-learning', 'universities', 'analytics', 'export'].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -613,6 +617,7 @@ export default function AdminDashboard() {
                 name={
                   tab === 'overview' ? 'grid-outline' :
                   tab === 'safeguarding' ? 'shield-outline' :
+                  tab === 'verifications' ? 'shield-checkmark-outline' :
                   tab === 'support' ? 'chatbubbles-outline' :
                   tab === 'subscriptions' ? 'card-outline' :
                   tab === 'ai-learning' ? 'bulb-outline' :
@@ -642,11 +647,19 @@ export default function AdminDashboard() {
                   </Text>
                 </View>
               )}
+              {tab === 'verifications' && verifyUnread > 0 && (
+                <View style={styles.tabBadge} data-testid="verifications-tab-badge">
+                  <Text style={styles.tabBadgeText}>
+                    {verifyUnread > 9 ? '9+' : verifyUnread}
+                  </Text>
+                </View>
+              )}
             </View>
             <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
               {tab === 'universities' ? 'Unis' :
                tab === 'ai-learning' ? 'AI' :
                tab === 'safeguarding' ? 'Safe' :
+               tab === 'verifications' ? 'Verify' :
                tab === 'subscriptions' ? 'Subs' :
                tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Text>
@@ -960,6 +973,19 @@ export default function AdminDashboard() {
             </Text>
             <View style={{ marginTop: 12 }}>
               <AdminSupportInbox sessionToken={sessionToken} />
+            </View>
+          </View>
+        )}
+
+        {/* Pending Verifications Tab */}
+        {activeTab === 'verifications' && (
+          <View style={styles.content}>
+            <Text style={styles.sectionTitle}>Pending Student Verification</Text>
+            <Text style={styles.sectionSubtitle}>
+              UK universities share the same `.ac.uk` domain for students and staff. These accounts self-declared they are students at signup — review and verify or remove anyone who looks like staff/alumni.
+            </Text>
+            <View style={{ marginTop: 12 }}>
+              <AdminVerificationQueue sessionToken={sessionToken} />
             </View>
           </View>
         )}
