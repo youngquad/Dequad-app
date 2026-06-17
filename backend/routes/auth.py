@@ -19,6 +19,7 @@ from helpers.auth import get_session_token, get_current_user
 from helpers.email import (
     is_smtp_configured, send_email_async, create_password_reset_email_html
 )
+from helpers.uk_student_email import classify_email
 from config import ADMIN_SECRET_CODE
 
 logger = logging.getLogger(__name__)
@@ -140,6 +141,10 @@ class EmailRegisterRequest(BaseModel):
     email: str
     password: str
     name: Optional[str] = None
+    # User must tick "I confirm I am a current student at a UK university"
+    # before we accept bare-domain `.ac.uk` addresses. Required by the UK
+    # student-email policy (see helpers/uk_student_email.py).
+    confirm_student: bool = False
 
 
 class EmailLoginRequest(BaseModel):
@@ -151,9 +156,11 @@ class EmailLoginRequest(BaseModel):
 async def email_register(data: EmailRegisterRequest, response: Response):
     """Create a student account with an email + password.
 
-    During beta we accept any well-formed email address. Once we tighten the
-    domain policy to UK academic emails, the validation block at the top of
-    this function is the single place that needs to change.
+    Applies the UK student-email policy: only `.ac.uk` addresses are
+    accepted, obvious staff/alumni patterns are hard-rejected, known
+    student-subdomain emails (`student.*.ac.uk`, etc.) are auto-approved,
+    and bare `.ac.uk` addresses require an explicit `confirm_student`
+    attestation and get flagged for admin review.
     """
     email_lower = (data.email or "").lower().strip()
     if "@" not in email_lower or "." not in email_lower.split("@")[-1]:
@@ -161,12 +168,24 @@ async def email_register(data: EmailRegisterRequest, response: Response):
     if len(data.password or "") < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters.")
 
+    verdict = classify_email(email_lower)
+    if verdict.verdict in ("blocked", "not_uk_academic"):
+        raise HTTPException(status_code=403, detail=verdict.reason)
+    if verdict.verdict == "needs_attestation" and not data.confirm_student:
+        raise HTTPException(
+            status_code=400,
+            detail="Please confirm you are currently enrolled as a student at a UK university.",
+        )
+
     existing = await db.users.find_one({"email": email_lower})
     if existing:
         raise HTTPException(status_code=409, detail="An account with this email already exists. Try signing in instead.")
 
     password_hash = hashlib.sha256(data.password.encode()).hexdigest()
     user_id = f"user_{uuid.uuid4().hex[:12]}"
+    # "auto" → known student subdomain, no review needed.
+    # "self_declared" → bare .ac.uk + checkbox ticked. Flagged for admin review.
+    student_verification = "auto" if verdict.verdict == "auto_student" else "self_declared"
     user_doc = {
         "user_id": user_id,
         "email": email_lower,
@@ -175,6 +194,10 @@ async def email_register(data: EmailRegisterRequest, response: Response):
         "role": "student",
         "interests": [],
         "created_at": datetime.now(timezone.utc),
+        "student_verification": student_verification,
+        "student_attested_at": (
+            datetime.now(timezone.utc) if verdict.verdict == "needs_attestation" else None
+        ),
     }
     await db.users.insert_one(user_doc)
     user_doc.pop("password_hash", None)
@@ -303,11 +326,29 @@ async def exchange_session(request: Request, response: Response):
 
     session_data = SessionDataResponse(**user_data)
 
-    # Email-domain policy (relaxed for beta — will be tightened to `.ac.uk` only
-    # before public launch). For now, accept any email through Google so that
-    # internal testers and partner-university staff with non-.ac.uk inboxes can
-    # try the product.
+    # UK student-email policy. Google sign-in has no checkbox surface during
+    # the popup, so bare `.ac.uk` accounts are accepted but flagged as
+    # `pending_review`; the admin dashboard surfaces these for manual
+    # verification. Staff and non-academic emails are hard-rejected — except
+    # for accounts that are already admins (so the dequad.com team can keep
+    # signing in via Google without triggering the student policy).
     email_lower = (session_data.email or "").lower().strip()
+    existing_user = await db.users.find_one(
+        {"email": email_lower}, {"role": 1, "student_verification": 1, "_id": 0}
+    )
+    is_existing_admin = bool(existing_user and existing_user.get("role") == "admin")
+
+    if not is_existing_admin:
+        verdict = classify_email(email_lower)
+        if verdict.verdict in ("blocked", "not_uk_academic"):
+            logger.info(f"rejecting google signin for {email_lower}: {verdict.reason}")
+            raise HTTPException(status_code=403, detail=verdict.reason)
+        student_verification = (
+            "auto" if verdict.verdict == "auto_student" else "pending_review"
+        )
+    else:
+        # Preserve whatever verification status the admin already has (or none).
+        student_verification = existing_user.get("student_verification", "auto")
 
     # Atomic upsert by email — replaces the previous check-then-insert which had
     # a race condition that created duplicate users when the client retried the
@@ -322,6 +363,7 @@ async def exchange_session(request: Request, response: Response):
                 "role": "student",
                 "interests": [],
                 "created_at": datetime.now(timezone.utc),
+                "student_verification": student_verification,
             },
             "$set": {
                 "email": email_lower,

@@ -23,6 +23,13 @@
 9. **Chat Inbox UI** — removed emails, added last-message preview + timestamp.
 10. **Unread Badges** — Admin (Support, Safeguarding) + Student (Chat, Connect) tabs.
 11. **EAS Build Guide + Helper Script (2026-02)** — `/app/EAS_BUILD_GUIDE.md`, `/app/BETA_OPTION_A.md`, and `/app/scripts/build.sh` (validate / dev / preview / prod / submit / ota / register-device / list-devices / doctor commands).
+15. **UK Student-Email Policy (2026-02)** — `.ac.uk` restriction is back, with smart classification:
+    - Hard-rejects non-`.ac.uk` and known staff patterns (`staff.*`, `admin.*`, `faculty.*`, `alumni.*` etc.).
+    - Auto-approves known student subdomains (`student.*`, `live.*`, `sms.*`, `my.*`, …).
+    - Bare `.ac.uk` accounts (UCL, KCL, Oxford, Cambridge, etc.) require an explicit `confirm_student=true` checkbox at sign-up and are flagged `student_verification="self_declared"` for admin review.
+    - Google sign-in flagged as `pending_review` for bare `.ac.uk`; admin accounts (@dequad.com) bypass the policy.
+    - New helper at `/app/backend/helpers/uk_student_email.py`. Sign-up UI gained a green tick-box. Tests at `/app/backend/tests/test_uk_student_email_policy.py` (15/15 pass).
+
 14. **Auth Theme Refresh (2026-02)** — All auth screens (student login, forgot password, reset password, admin login) restyled to match the Hinge-style landing page palette (soft blue `#F6FAFE` background, white cards, navy text `#0F2942`, Playfair Display headings, navy/blue pill buttons, teal accents). DEQUAD heart logo + wordmark consistent on every screen.
     - Admin Access link **removed** from student login. Admin portal now has its own dedicated page at `/(admin)/login` and is reachable via a "Staff login" link in the landing-page footer.
     - Added student "Forgot password" + "Reset password" pages at `/(auth)/forgot-password` and `/(auth)/reset-password`.

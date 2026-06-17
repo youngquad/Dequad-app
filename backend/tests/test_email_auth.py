@@ -32,8 +32,10 @@ def client():
 @pytest.fixture(scope="module")
 def fresh_user():
     ts = int(time.time())
+    # Use a known student-subdomain so the email passes the UK student-email
+    # policy without needing a `confirm_student` attestation.
     return {
-        "email": f"e2e_test_{ts}_{uuid.uuid4().hex[:6]}@example.com",
+        "email": f"e2e_test_{ts}_{uuid.uuid4().hex[:6]}@student.leeds.ac.uk",
         "password": "Test12345!",
         "name": "E2E Test User",
     }
@@ -56,7 +58,7 @@ class TestRegister:
     def test_register_success_returns_user_and_token_and_cookie(self, client):
         ts = int(time.time())
         creds = {
-            "email": f"TEST_reg_{ts}_{uuid.uuid4().hex[:6]}@example.com",
+            "email": f"TEST_reg_{ts}_{uuid.uuid4().hex[:6]}@student.leeds.ac.uk",
             "password": "Test12345!",
             "name": "TEST Register",
         }
@@ -87,7 +89,7 @@ class TestRegister:
         ts = int(time.time())
         r = client.post(
             f"{API}/auth/register",
-            json={"email": f"TEST_short_{ts}@example.com", "password": "short1"},
+            json={"email": f"TEST_short_{ts}@student.leeds.ac.uk", "password": "short1"},
         )
         assert r.status_code == 400, r.text
         assert "8 characters" in r.json().get("detail", "")

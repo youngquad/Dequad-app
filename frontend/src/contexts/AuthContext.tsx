@@ -24,7 +24,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: () => Promise<void>;
   loginWithEmail: (email: string, password: string) => Promise<void>;
-  registerWithEmail: (email: string, password: string, name?: string) => Promise<void>;
+  registerWithEmail: (email: string, password: string, name?: string, confirmStudent?: boolean) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   sessionToken: string | null;
@@ -184,11 +184,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await _persistSession(res.session_token, res.user);
   };
 
-  const registerWithEmail = async (email: string, password: string, name?: string) => {
+  const registerWithEmail = async (
+    email: string,
+    password: string,
+    name?: string,
+    confirmStudent?: boolean,
+  ) => {
     const res = await api.post('/auth/register', {
       email: email.trim().toLowerCase(),
       password,
       name,
+      confirm_student: !!confirmStudent,
     });
     if (!res?.session_token || !res?.user) {
       throw new Error('Sign-up failed — no session returned.');

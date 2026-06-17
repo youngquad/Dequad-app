@@ -32,6 +32,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [confirmStudent, setConfirmStudent] = useState(false);
   const [emailErr, setEmailErr] = useState<string | null>(null);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -65,12 +66,16 @@ export default function LoginScreen() {
       setEmailErr('Password must be at least 8 characters.');
       return;
     }
+    if (mode === 'signup' && !confirmStudent) {
+      setEmailErr('Please confirm you are currently a student at a UK university.');
+      return;
+    }
     setIsSigningIn(true);
     try {
       if (mode === 'signin') {
         await loginWithEmail(email, password);
       } else {
-        await registerWithEmail(email, password, name || undefined);
+        await registerWithEmail(email, password, name || undefined, confirmStudent);
       }
       router.replace('/(main)/mood');
     } catch (err: any) {
@@ -188,6 +193,25 @@ export default function LoginScreen() {
                 <Text style={styles.errorText} data-testid="auth-error">{emailErr}</Text>
               ) : null}
 
+              {mode === 'signup' && (
+                <Pressable
+                  onPress={() => setConfirmStudent((v) => !v)}
+                  style={styles.checkboxRow}
+                  data-testid="auth-confirm-student"
+                >
+                  <View style={[styles.checkbox, confirmStudent && styles.checkboxOn]}>
+                    {confirmStudent ? (
+                      <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                    ) : null}
+                  </View>
+                  <Text style={styles.checkboxLabel}>
+                    I confirm I'm currently enrolled as an undergraduate or postgraduate{' '}
+                    <Text style={styles.checkboxLabelStrong}>student at a UK university</Text>
+                    {' '}(staff and alumni accounts are not allowed).
+                  </Text>
+                </Pressable>
+              )}
+
               <TouchableOpacity
                 onPress={handleEmailSubmit}
                 disabled={busy}
@@ -285,6 +309,36 @@ const styles = StyleSheet.create({
   inputIcon: { marginRight: 10 },
   input: { flex: 1, paddingVertical: 14, color: '#0F2942', fontSize: 15 },
   errorText: { color: '#B91C1C', fontSize: 13, marginBottom: 10, textAlign: 'center' },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    marginBottom: 6,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: '#94A3B0',
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
+  },
+  checkboxOn: {
+    backgroundColor: '#4FB89F',
+    borderColor: '#4FB89F',
+  },
+  checkboxLabel: {
+    flex: 1,
+    color: '#4F6076',
+    fontSize: 12.5,
+    lineHeight: 18,
+  },
+  checkboxLabelStrong: { color: '#0F2942', fontWeight: '700' },
   primaryBtn: {
     backgroundColor: '#5B9BD5', paddingVertical: 14, borderRadius: 999, alignItems: 'center',
     minHeight: 52, justifyContent: 'center', marginTop: 4,

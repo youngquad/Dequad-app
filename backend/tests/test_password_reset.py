@@ -100,7 +100,7 @@ class TestStudentResetFlow:
     def student(self, http):
         ts = int(time.time())
         creds = {
-            "email": f"student_reset_{ts}_{uuid.uuid4().hex[:6]}@example.com",
+            "email": f"student_reset_{ts}_{uuid.uuid4().hex[:6]}@student.leeds.ac.uk",
             "password": "Original123!",
             "name": "Student Reset",
         }
@@ -228,7 +228,7 @@ class TestForgotPasswordEnumeration:
     def test_existing_student_returns_same_generic_message(self, http, mongo_db):
         ts = int(time.time())
         creds = {
-            "email": f"realstudent_{ts}_{uuid.uuid4().hex[:6]}@example.com",
+            "email": f"realstudent_{ts}_{uuid.uuid4().hex[:6]}@student.leeds.ac.uk",
             "password": "Original123!",
         }
         reg = http.post(f"{API}/auth/register", json=creds)
