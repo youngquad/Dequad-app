@@ -4,9 +4,13 @@
 > Beyond the two named co-founders (Yusuf Quadri, CEO; Yusuff Adeagbo, CTO),
 > DEQUAD is joined at incorporation by three senior team members who bring
 > deep functional expertise across marketing, engineering and programme
-> delivery. Each has accepted an EMI share-option grant; none is taking a
-> cash salary in Year 1, materially strengthening the leadership profile
-> without increasing cash burn.
+> delivery.
+>
+> **None of the team is currently drawing a salary.** Each has accepted an
+> EMI share-option grant and is contributing time on a pure-equity basis
+> pending the close of the pre-seed round in September Year 1. This is a
+> material signal of belief in the mission and materially strengthens the
+> leadership profile without adding to cash burn.
 
 ---
 
@@ -15,7 +19,7 @@
 | Field | Value |
 |---|---|
 | **Role at DEQUAD** | Chief Marketing Officer (founding team member) |
-| **Working pattern Y1** | Part-time, EMI-vesting; full-time and salaried from Y2 once seed closes |
+| **Working pattern Y1** | Equity-only — **no Y1 salary**; salaried role to commence after seed close (Q2 Y2) |
 | **Cash investment** | £0 — joining as senior team member, not as a share-capital founder |
 | **Equity** | EMI options with 4-year vest, 1-year cliff |
 
@@ -44,7 +48,7 @@ Dr Gerald Marfo holds a **PhD in Digital Marketing** and brings academic-level r
 | Field | Value |
 |---|---|
 | **Role at DEQUAD** | Senior Software Engineer (founding team member) |
-| **Working pattern Y1** | Part-time / contributor with the CTO; full-time and salaried from Q3 Y1 once pre-seed lands |
+| **Working pattern Y1** | Equity-only — **no Y1 salary**; salaried role to commence Q1 Y2 |
 | **Cash investment** | £0 — joining as senior team member |
 | **Equity** | EMI options with 4-year vest, 1-year cliff |
 

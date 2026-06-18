@@ -185,11 +185,11 @@ Only ~30% of revenue because (a) founder organic outreach is the primary B2B cha
 - Co-founder cash contribution: **£3,000** of the £6,000 founder capital.
 - Full CV at Appendix B-2 (`B_cofounder_cv.pdf`).
 
-### Wider founding team — joining at incorporation (EMI options, no cash investment)
+### Wider founding team — joining at incorporation (EMI options, **no Y1 salary**)
 
-- **Dr Gerald Marfo — Chief Marketing Officer** · PhD in Digital Marketing; owns Y1 marketing strategy and measurement.
-- **Adedapo Ajuwon — Senior Software Engineer** · supports CTO on platform engineering, infrastructure, reliability.
-- **Chinyere Jennifer — Senior Advisor (Programme & Delivery)** · Senior PM Consultant at **MIGSO-PCUBED** with LLM background; programme-governance + safeguarding-model safety review.
+- **Dr Gerald Marfo — Chief Marketing Officer** · PhD in Digital Marketing; owns Y1 marketing strategy and measurement. **Equity-only Y1**; salaried from Q2 Y2.
+- **Adedapo Ajuwon — Senior Software Engineer** · supports CTO on platform engineering, infrastructure, reliability. **Equity-only Y1**; salaried from Q1 Y2.
+- **Chinyere Jennifer — Senior Advisor (Programme & Delivery)** · Senior PM Consultant at **MIGSO-PCUBED** with LLM background. **Advisor on EMI options**; MIGSO-PCUBED remains her primary employer.
 
 Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 

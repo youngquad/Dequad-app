@@ -211,10 +211,12 @@ The SME R&D Tax Credit scheme is expected to recoup approximately **16%** of qua
 
 ### 7.1 Founding team — Year 1
 
+**Compensation reality as of submission date:** No team member — not the founders, not Dr Gerald Marfo, not Adedapo Ajuwon, not Chinyere Jennifer — is currently drawing a salary from DEQUAD. The founders are funding personal cost-of-living from savings; the wider team is contributing time on a pure-equity basis pending the close of the pre-seed round in September Y1. This is a deliberate founder commitment.
+
 | Role | Name | Compensation Y1 | Why |
 |---|---|---|---|
-| **CEO / Product & Safeguarding** | **Yusuf Quadri** — University of Bedfordshire Student Union President 2021–2023; safeguarding-trained (Appendix O) | **£0 in Q1-Q2** (personal savings), **£1,500/mo from M7** (£9k total Y1) | Founder commitment + cash preservation. |
-| **CTO / Engineering & IT** | **Yusuff Adeagbo** — MSc Information Technology with Project Management (UWS); HND Computer Science | Same — **£0 Q1-Q2, £1,500/mo from M7** | Founder commitment + cash preservation. |
+| **CEO / Product & Safeguarding** | **Yusuf Quadri** — University of Bedfordshire Student Union President 2021–2023; safeguarding-trained (Appendix O) | **£0 in Q1-Q2** (personal savings), **£1,500/mo from M7** (£9k total Y1, after pre-seed lands) | Founder commitment + cash preservation. |
+| **CTO / Engineering & IT** | **Yusuff Adeagbo** — MSc IT with Project Management (UWS); HND Computer Science | Same — **£0 Q1-Q2, £1,500/mo from M7** | Founder commitment + cash preservation. |
 
 Both founders are UK-resident, full-time on DEQUAD, with signed founder commitment undertakings (Appendix C). Q3 onwards salaries are intentionally below market; founders accept this trade-off in exchange for ~10% each of equity.
 
@@ -222,15 +224,15 @@ Both founders are UK-resident, full-time on DEQUAD, with signed founder commitme
 
 **Yusuff Adeagbo (CTO)** brings a **MSc in Information Technology with Project Management (University of the West of Scotland)** plus a HND in Computer Science, with applied skills across IT support, UI/UX, graphic design, digital marketing and IT business analysis (Appendix B-2).
 
-### 7.2 Wider founding team — joining at incorporation (no cash investment, EMI options)
+### 7.2 Wider founding team — joining at incorporation (no cash investment, EMI options, **no salary in Year 1**)
 
-| Role | Name | Background | Y1 status |
+| Role | Name | Background | Y1 compensation |
 |---|---|---|---|
-| **Chief Marketing Officer** | **Dr Gerald Marfo** | **PhD in Digital Marketing**; specialist in digital go-to-market for impact-led startups. | Part-time, EMI-vesting; takes full salary from Y2 once seed closes. |
-| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior engineer working on the DEQUAD platform alongside the CTO; full-stack and infrastructure scale-out. | Part-time, EMI-vesting; full-time from Q3 Y1 once pre-seed lands. |
-| **Senior Advisor — Programme & Delivery** | **Chinyere Jennifer** | Senior Project Management Consultant at **MIGSO-PCUBED** (global PM consultancy); LLM background. | Advisory capacity; EMI options on a 4-year vest. |
+| **Chief Marketing Officer** | **Dr Gerald Marfo** | **PhD in Digital Marketing**; specialist in digital go-to-market for impact-led startups. | **£0** — equity-only via EMI options; salaried role to commence after seed close (Q2 Y2). |
+| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior engineer working on the DEQUAD platform alongside the CTO; full-stack and infrastructure scale-out. | **£0** — equity-only via EMI options; salaried role to commence Q1 Y2. |
+| **Senior Advisor — Programme & Delivery** | **Chinyere Jennifer** | Senior Project Management Consultant at **MIGSO-PCUBED** (global PM consultancy); LLM background. | **£0** — advisory engagement on EMI options (advisor vest); MIGSO-PCUBED remains her primary employer. |
 
-The presence of a PhD-credentialled CMO, a senior engineering hire, and a MIGSO-PCUBED senior consultant as advisor materially strengthens the team beyond the two named founders. CVs for all three are in Appendix N.
+The presence of a PhD-credentialled CMO, a senior engineering contributor, and a MIGSO-PCUBED senior consultant as advisor — all working on equity-only terms — materially strengthens the team beyond the two named founders and signals deep belief in the mission. CVs for all three are in Appendix N.
 
 ### 7.2 Hiring plan
 
