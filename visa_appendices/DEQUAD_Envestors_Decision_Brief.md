@@ -13,10 +13,13 @@
 |---|---|
 | **Entity** | DEQUAD Ltd (in formation, England & Wales) |
 | **Founders** | Yusuf Quadri (CEO) + Co-Founder (CTO, TBC) |
-| **HQ** | London — NatWest Accelerator |
+| **HQ** | London — NatWest Accelerator (joined **16 March 2026**) |
+| **Prior validation** | **Santander Universities Pre-Incubator** — completed 2025 |
+| **Founder anchor** | Yusuf Quadri served as **University of Bedfordshire SU President 2021–2023** |
 | **MVP** | Live in production at https://dequad.co.uk |
 | **Beta users** | ~50 across 3 UK universities |
-| **Starting cash** | £3,000 (founders, pooled) |
+| **Anchor pilot in negotiation** | **University of Bedfordshire** — direct relationship via former SU presidency |
+| **Starting cash** | **£6,000 (£3,000 from each of 2 founders)** |
 | **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring) |
 | **Funding ask Y1** | £150,000 pre-seed bridge (Sep Y1, post-pilot conversion) |
 | **3-yr revenue** | £12k → £186k → £699k |
@@ -39,8 +42,9 @@
 **Why us:**
 
 1. **MVP is already shipped** — production deployment at dequad.co.uk, identity verification live, safeguarding webhook live, mood tracker live, Stripe billing live.
-2. **NatWest Accelerator membership** — independent third-party validation. The bank's selection panel reviewed DEQUAD; we are now mentored alongside ~30 other UK fintech/healthtech startups.
-3. **Two complementary founders** — product/safeguarding lead (Yusuf Quadri) + engineering/ML lead (Co-Founder TBC). Both UK-resident, full-time, signing customary vesting at pre-seed close.
+2. **Two independent UK-bank validations.** Completed the **Santander Universities Pre-Incubator** programme in 2025 and joined the **NatWest Accelerator (London cohort) on 16 March 2026**. Two competitive selection processes have separately admitted DEQUAD's team and thesis.
+3. **Founder–institution fit.** Yusuf Quadri served as **University of Bedfordshire Student Union President for two consecutive years (2021–2023)**, representing the student body at senior-management level. The first paying pilot is now in active negotiation with the same university.
+4. **Two complementary founders** — product/safeguarding lead (Yusuf Quadri) + engineering/ML lead (Co-Founder TBC). Both UK-resident, full-time, signing customary vesting at pre-seed close.
 
 ---
 
@@ -59,8 +63,10 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 
 ### Viability ✅
 
-- Production MVP is live, in beta with real students, with paying-customer LOIs in negotiation.
-- £3,000 founder cash + £31,000 in-kind NatWest support **carries the business through Y1 with positive monthly closing cash balances** (see Page 9).
+- Production MVP is live, in beta with real students.
+- **Anchor pilot live with University of Bedfordshire** — the founder's former institution where he served two terms as SU President (2021–2023). Pilot target signature Q2 Y1, conversion to paid SaaS Q3 Y1 (Sep), which is also when the pre-seed bridge lands.
+- Two independent UK-bank programme validations: **Santander Universities Pre-Incubator (2025)** + **NatWest Accelerator (joined 16 March 2026)**.
+- £6,000 founder cash (£3k each) + £31,000 in-kind NatWest support **carries the business through Y1 with positive monthly closing cash balances** (see Page 9).
 - B2B SaaS revenue model is proven in the adjacent market — Togetherall serves 60+ UK universities at ~£40k/year.
 
 ### Scalability ✅
@@ -145,7 +151,8 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 
 ### B2B pilot conversion track-record (live)
 
-- **3 pilot LOIs** in negotiation (London, Birmingham, Manchester catchment).
+- **University of Bedfordshire** — anchor pilot in active negotiation. Lead founder served two terms as SU President there (2021–2023); direct relationships with student services and safeguarding leads.
+- **Two further peer institutions** — early-stage pilot scoping (anonymised for now).
 - **Beta cohort active** — 50 students across 3 universities use DEQUAD weekly.
 
 ### Y1 marketing spend: £3,600
@@ -159,17 +166,19 @@ Only ~30% of revenue because (a) founder organic outreach is the primary B2B cha
 ### Yusuf Quadri — CEO / Product & Safeguarding Lead
 
 - UK-resident, full-time on DEQUAD.
+- **University of Bedfordshire Student Union President 2021–2023** (two consecutive terms). Represented the student body at senior-management level on student-services, safeguarding and welfare policy. This is the basis of DEQUAD's anchor pilot relationship with the same university.
+- Completed the **Santander Universities Pre-Incubator programme** in 2025; admitted to the **NatWest Accelerator (London cohort)** on 16 March 2026.
 - Built and shipped the entire MVP at dequad.co.uk.
 - Owns the safeguarding policy (Appendix E — DPIA, Appendix I — OSA-2023 compliance).
 - Owns university partnerships and the NatWest Accelerator relationship.
-- Co-founder cash contribution: **£1,500** of the £3,000 founder capital.
+- Co-founder cash contribution: **£3,000** of the £6,000 founder capital.
 
 ### Co-Founder — CTO / Engineering & Data Lead (TBC)
 
 - UK-resident, full-time on DEQUAD.
 - Full-stack and ML engineering, security, infrastructure scale-out.
 - Will own the engineering hiring pipeline and the R&D claim leadership.
-- Co-founder cash contribution: **£1,500** of the £3,000 founder capital.
+- Co-founder cash contribution: **£3,000** of the £6,000 founder capital.
 - CV template at `B_cofounder_cv_template.pdf` — to be populated before final submission.
 
 ### Y1 founder compensation
@@ -184,13 +193,13 @@ Only ~30% of revenue because (a) founder organic outreach is the primary B2B cha
 
 | Round | Timing | Amount | Use of funds |
 |---|---|---:|---|
-| Founder equity | Day 1 | **£3,000** | Incorporation, domains, IP filings, hosting. |
+| Founder equity (£3,000 × 2) | Day 1 | **£6,000** | Incorporation, domains, IP filings, hosting. |
 | R&D tax credit | End Y1 | ~£3,600 | Recycled into engineering. |
-| **Pre-seed bridge** | **Sep Y1** (post-pilot conversion) | **£150,000** | First 4 hires, 18-month runway, dual mobile builds. |
+| **Pre-seed bridge** | **Sep Y1** (after Bedfordshire pilot converts) | **£150,000** | First 4 hires, 18-month runway, dual mobile builds. |
 | Seed round | Q2 Y2 | £750,000 | 20-uni scale, ML team, NHS-ICB channel. |
 | Series A | Q1 Y4 | £3–5m | EU + AU launch, federated-learning, 30+ FTE. |
 
-The **pre-seed is contingent on the first paid pilot** — the round will only be approached after a converted institution provides commercial validation. This is deliberate; it forces customer-led growth.
+The **pre-seed is contingent on the University of Bedfordshire pilot converting** — the round will only be approached after that institution provides commercial validation. This is deliberate; it forces customer-led growth.
 
 ---
 
@@ -200,20 +209,20 @@ The **pre-seed is contingent on the first paid pilot** — the round will only b
 
 | Month | Inflows | Outflows | Closing balance |
 |---|---:|---:|---:|
-| M1 (Mar) — incorporation | £3,000 founder | (~£1,090) | **£1,910** |
-| M2 (Apr) | — | (~£820) | **£1,090** |
-| M3 (May) | £200 sales | (~£860) | **£430** |
-| M4 (Jun) | £350 | (~£780) | **£0** |
-| M5 (Jul) | £500 | (~£780) | **(£280)** — *briefly negative; covered by founder personal funds* |
-| M6 (Aug) | £700 | (~£750) | **(£330)** |
-| **M7 (Sep) — £150k pre-seed lands** | **£150,800** | (£4,830) | **£145,640** |
-| M8 (Oct) | £1,100 | (£4,750) | **£141,990** |
-| M9 (Nov) | £1,350 | (£4,750) | **£138,590** |
-| M10 (Dec) | £1,700 | (£4,830) | **£135,460** |
-| M11 (Jan) | £2,100 | (£4,810) | **£132,750** |
-| M12 (Feb) | £3,188 | (£5,910) | **£130,028** |
+| M1 (Mar) — incorporation | £6,000 founder | (~£1,090) | **£4,910** |
+| M2 (Apr) | — | (~£820) | **£4,090** |
+| M3 (May) | £200 sales | (~£860) | **£3,430** |
+| M4 (Jun) | £350 | (~£780) | **£3,000** |
+| M5 (Jul) | £500 | (~£780) | **£2,720** |
+| M6 (Aug) | £700 | (~£750) | **£2,670** |
+| **M7 (Sep) — £150k pre-seed lands + Bedfordshire pilot converts** | **£150,800** | (£4,830) | **£148,640** |
+| M8 (Oct) | £1,100 | (£4,750) | **£144,990** |
+| M9 (Nov) | £1,350 | (£4,750) | **£141,590** |
+| M10 (Dec) | £1,700 | (£4,830) | **£138,460** |
+| M11 (Jan) | £2,100 | (£4,810) | **£135,750** |
+| M12 (Feb) | £3,188 | (£5,910) | **£133,028** |
 
-> **The £150k pre-seed bridge is the single critical event in Year 1.** Founders have committed to topping up personal funds to cover the small M5–M6 dip should the pilot conversion slip.
+> **The £6,000 founder cash buffer means cash never dips below £2,500** in any month before the pre-seed bridge — a significantly more comfortable runway than the £3k starting case. The Bedfordshire pilot conversion in M7 is the single critical commercial event of Year 1, and the founders' direct relationship with the university (via the former SU presidency) is the principal de-risking factor.
 
 The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow Y1 (mo)".
 

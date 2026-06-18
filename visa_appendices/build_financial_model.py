@@ -1,13 +1,18 @@
 """DEQUAD financial model — bootstrap edition.
 
 Starting reality:
-  - Two co-founders, £3,000 cash in the bank, MVP already shipped.
-  - On the NatWest Accelerator programme: office co-working, legal advice
-    and accountancy support all provided FREE through the programme. Only
-    out-of-scope costs (Companies House filings, trademark fees, optional
-    overflow accountancy at year-end) are budgeted as cash.
+  - Two co-founders, £3,000 EACH (£6,000 pooled) in the bank, MVP already shipped.
+  - On the NatWest Accelerator (London cohort) — joined 16 March 2026. Office
+    co-working, legal advice and accountancy support all provided FREE
+    through the programme for 12 months. Only out-of-scope costs (Companies
+    House filings, trademark fees, optional overflow accountancy at year-end)
+    are budgeted as cash.
+  - Previously completed the Santander Universities Pre-Incubator programme
+    (2025) — another independent validation point.
   - Founders draw NO salary in Q1-Q2 Y1 (living on personal savings) and
     take a minimum draw only after the £150k pre-seed lands in Q3.
+  - Anchor pilot: University of Bedfordshire (lead founder served as SU
+    President 2021-2023, direct senior-management relationship).
 
 This produces a model that is credible for an Innovator visa endorsement:
 - Cash never goes negative.
@@ -107,10 +112,12 @@ def sheet_readme(wb):
         "Prepared for: Envestors (endorsing body) — UK Innovator Founder Visa",
         "Entity:       DEQUAD Ltd (company in formation, England & Wales)",
         "Founders:     Two co-founders — Founder A (Yusuf Quadri) and Founder B (TBC)",
-        "Starting cash: £3,000 (pooled founder capital)",
+        "Starting cash: £6,000 (£3,000 from each founder, pooled in the company bank)",
         "MVP status:    Production-ready and deployed at https://dequad.co.uk",
-        "Accelerator:   NatWest Accelerator (London) — office, legal and accountancy support",
-        "               provided in-kind for the first 12 months",
+        "Accelerator:   NatWest Accelerator (London) — joined 16 March 2026.",
+        "               Office, legal and accountancy support provided in-kind for 12 months.",
+        "Prior accel:   Santander Universities Pre-Incubator — completed 2025.",
+        "Anchor pilot:  University of Bedfordshire (lead founder = former SU President 2021-2023).",
         "Currency:     GBP, net of VAT",
         "Horizon:      3 years annual + Year-1 monthly cash flow",
         "",
@@ -251,7 +258,7 @@ def sheet_pl(wb):
 # Cash Flow 3yr
 # ============================================================
 RECEIPTS = {
-    "founder_eq":  (3_000, 0, 0),
+    "founder_eq":  (6_000, 0, 0),
     "preseed":     (150_000, 0, 0),
     "seed":        (0, 750_000, 0),
     "rd_credit":   (0, 4_500, 9_500),
@@ -328,11 +335,11 @@ def sheet_cf_monthly(wb):
     write_header(ws, "Year 1 Monthly Cash Flow Forecast (Bootstrap)", cols, [42] + [11] * 13)
 
     # Phased monthly inflows
-    inflow_eq   = [3_000] + [0]*11
+    inflow_eq   = [6_000] + [0]*11
     inflow_pre  = [0,0,0,0,0,0, 150_000, 0,0,0,0,0]   # M7 (Sep) pre-seed lands
     inflow_sale = [0, 0, 200, 350, 500, 700, 800, 1_100, 1_350, 1_700, 2_100, 3_188]
     total_in    = [inflow_eq[i] + inflow_pre[i] + inflow_sale[i] for i in range(12)]
-    assert sum(inflow_eq) == 3_000
+    assert sum(inflow_eq) == 6_000
     assert sum(inflow_pre) == 150_000
 
     # Outflows — bootstrap-tight

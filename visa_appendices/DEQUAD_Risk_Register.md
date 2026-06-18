@@ -36,9 +36,9 @@ Risk score traffic-light:
 
 | # | Risk | Category | Lk | Im | Score | RAG | Owner | Mitigation in place / planned |
 |---|---|---|---:|---:|---:|---|---|---|
-| **R1** | **First paid university pilot fails to convert before Sep Y1 — pre-seed bridge slips** | Commercial | 3 | 5 | **15** | 🟠 | CEO | 3 LOIs in parallel (London, Birmingham, Manchester); ICB pilot conversation in parallel; founders pre-committed to fund any 4-week slip personally; warm intros via NatWest network shorten cycle. |
+| **R1** | **University of Bedfordshire pilot fails to convert before Sep Y1 — pre-seed bridge slips** | Commercial | 2 | 5 | **10** | 🟠 | CEO | Lead founder is a **former University of Bedfordshire Student Union President (2021–2023)** with existing senior-management relationships; conversion likelihood materially de-risked vs. cold-outreach. Two further pilot conversations scoped at peer institutions as backup. Founders have committed personal-savings top-up for any 4-week slip. |
 | **R2** | **Co-founder formal appointment delayed past incorporation** | Team | 3 | 5 | **15** | 🟠 | CEO | Candidate identified, term sheet drafted; founder agreement signed; CEO covers Y1 technical work alone if hire slips by < 90 days; backup engineering contractor identified. |
-| **R3** | **Pre-seed bridge fails to close in Sep Y1** | Capital | 2 | 5 | **10** | 🟠 | CEO | Two parallel investor tracks: (a) Envestors angel network, (b) NatWest Accelerator demo day Q3 Y1. Founder personal-savings buffer covers 3-month extension. Fall-back: Innovate UK Smart Grant submitted Q2 Y1 (~£30k). |
+| **R3** | **Pre-seed bridge fails to close in Sep Y1** | Capital | 2 | 4 | **8** | 🟡 | CEO | Two parallel investor tracks: (a) Envestors angel network, (b) NatWest Accelerator demo day Q3 Y1. **£6,000 founder cash + £31k in-kind support carry the business with positive monthly closing balances every month of Year 1**, so a 3-month investor slip is tolerable. Fall-back: Innovate UK Smart Grant submitted Q2 Y1 (~£30k). |
 | **R4** | **Safeguarding incident — false negative (failure to flag a real risk signal)** | Product / Clinical | 3 | 5 | **15** | 🟠 | CEO | Human-in-the-loop review for all high-risk flags within 1h; clear in-app crisis-escalation path (Samaritans, 999, university DSL); £1m professional indemnity insurance; clinical advisory board recruitment underway (Q2 Y2 target). |
 | **R5** | **Safeguarding incident — false positive that harms a student** (e.g. wrong escalation) | Product / Clinical | 3 | 4 | **12** | 🟠 | CEO | Two-step DSL confirmation before any disclosure outside the platform; full audit log; student "appeal" route surfaced in-product. |
 | **R6** | **Online Safety Act 2023 non-compliance or ICO enforcement** | Regulatory | 2 | 5 | **10** | 🟠 | CEO | OSA risk assessment & reporting flows already shipped (Appendix I); ICO DPIA drafted (Appendix E); legal review via NatWest Mishcon panel; quarterly compliance review with external counsel. |
@@ -61,7 +61,7 @@ The seven highest-scoring risks define the Year-1 management agenda:
 
 | Risk | Active monitoring |
 |---|---|
-| R1 — First-pilot conversion | Weekly pipeline review with CEO; pilot-to-paid forecast updated each Friday. |
+| R1 — Bedfordshire pilot conversion | Weekly pipeline review with CEO; pilot-to-paid forecast updated each Friday. Standing fortnightly check-in with Bedfordshire Director of Student Services. |
 | R2 — Co-founder appointment | Term sheet + commencement date frozen by end M2. |
 | R3 — Pre-seed bridge timing | Investor pipeline reviewed fortnightly; data-room kept current. |
 | R4 — Safeguarding false negative | Sample of flagged + un-flagged cases reviewed each week by CEO + clinical advisor (informal until Q2 Y2). |
