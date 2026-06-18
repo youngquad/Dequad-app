@@ -124,6 +124,18 @@ def main() -> None:
             "DEQUAD — Business Plan (Envestors Submission)",
         ),
         (
+            APPDIR / "DEQUAD_Envestors_Decision_Brief.md",
+            APPDIR / "DEQUAD_Envestors_Decision_Brief.html",
+            APPDIR / "DEQUAD_Envestors_Decision_Brief.pdf",
+            "DEQUAD — Decision-Maker Brief (15 pages)",
+        ),
+        (
+            APPDIR / "DEQUAD_Risk_Register.md",
+            APPDIR / "DEQUAD_Risk_Register.html",
+            APPDIR / "DEQUAD_Risk_Register.pdf",
+            "DEQUAD — Risk Register",
+        ),
+        (
             APPDIR / "B_cofounder_cv_template.md",
             APPDIR / "B_cofounder_cv_template.html",
             APPDIR / "B_cofounder_cv_template.pdf",
