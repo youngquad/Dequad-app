@@ -94,3 +94,9 @@ app.include_router(support.router, prefix="/api")
 _marketing_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "marketing")
 if os.path.isdir(_marketing_dir):
     app.mount("/api/marketing", StaticFiles(directory=_marketing_dir), name="marketing")
+
+# Static mount for downloadable visa-submission documents (business plan,
+# financial model, CV templates, appendices).
+_visa_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "visa_appendices")
+if os.path.isdir(_visa_dir):
+    app.mount("/api/visa-docs", StaticFiles(directory=_visa_dir), name="visa-docs")
