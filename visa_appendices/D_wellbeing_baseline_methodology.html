@@ -1,318 +1,152 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>D_wellbeing_baseline_methodology</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <style>
-    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
-           line-height: 1.5; font-size: 11pt; }
-    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
-                 page-break-after: avoid; }
-    h1 { font-size: 22pt; margin-top: 0; }
-    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
-    h3 { font-size: 13pt; }
-    table { border-collapse: collapse; width: 100%; margin: 14px 0;
-            font-size: 9.5pt; }
-    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
-             vertical-align: top; }
-    th { background: #F6FAFE; }
-    code { background: #F6FAFE; padding: 1px 4px; border-radius: 4px;
-           font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
-    pre { background: #F6FAFE; padding: 10px; border-radius: 6px; overflow-x: auto;
-          font-size: 9pt; }
-    blockquote { border-left: 3px solid #5B9BD5; padding-left: 12px;
-                 color: #4F6076; margin: 12px 0; }
-    hr { border: none; border-top: 1px solid #DDE8F2; margin: 24px 0; }
-  </style>
+<meta charset="utf-8">
+<title>DEQUAD — Appendix D: Wellbeing Baseline Methodology</title>
+<style>
+@page { size: A4; margin: 22mm 18mm; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: #0F2942;
+  line-height: 1.55;
+  font-size: 11.5pt;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+h1 {
+  color: #0F2942;
+  font-size: 26pt;
+  border-bottom: 2px solid #5B9BD5;
+  padding-bottom: 6px;
+  page-break-after: avoid;
+}
+h2 {
+  color: #0F2942;
+  font-size: 17pt;
+  margin-top: 32px;
+  border-bottom: 1px solid #DDE8F2;
+  padding-bottom: 4px;
+  page-break-after: avoid;
+}
+h3 { color: #0F2942; font-size: 13pt; margin-top: 22px; page-break-after: avoid; }
+h4 { color: #4F6076; font-size: 11pt; margin-top: 16px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th {
+  background: #EDF4FB;
+  color: #0F2942;
+  text-align: left;
+  padding: 7px 9px;
+  border: 1px solid #DDE8F2;
+}
+td { padding: 6px 9px; border: 1px solid #DDE8F2; vertical-align: top; }
+tr:nth-child(even) td { background: #F8FBFD; }
+code { background: #F1F5F9; padding: 2px 5px; border-radius: 4px; font-size: 9.5pt; }
+blockquote {
+  border-left: 3px solid #5B9BD5;
+  margin: 14px 0;
+  padding: 4px 14px;
+  background: #EDF4FB;
+  color: #4F6076;
+}
+hr { border: 0; border-top: 1px dashed #DDE8F2; margin: 24px 0; }
+ul, ol { padding-left: 22px; }
+li { margin-bottom: 4px; }
+strong { color: #0F2942; }
+</style>
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">D_wellbeing_baseline_methodology</h1>
-</header>
-<h1 id="appendix-d-dequad-wellbeing-baseline-methodology">Appendix D —
-DEQUAD Wellbeing-Baseline Methodology</h1>
-<p><strong>Working title:</strong> <em>Per-user wellbeing-baseline
-detection: a low-friction approach to early identification of student
-mental-health deterioration in a closed peer network</em></p>
+<h1 id="appendix-d-dequad-wellbeing-baseline-methodology">Appendix D — DEQUAD Wellbeing-Baseline Methodology</h1>
+<p><strong>Working title:</strong> <em>Per-user wellbeing-baseline detection: a low-friction approach to early identification of student mental-health deterioration in a closed peer network</em></p>
 <p><strong>Author:</strong> Yusuf Quadri, DEQUAD
 <strong>Version:</strong> v0.3 — draft for endorsement submission
-<strong>Date:</strong> ___________________</p>
+<strong>Date:</strong> <strong><em>_</em></strong><strong><em>_</em></strong>_____</p>
 <hr />
-<h2 id="d.1-abstract">D.1 Abstract</h2>
-<p>Most consumer mood-tracking applications use absolute-score
-thresholds (e.g. “if mood ≤ 2/5, suggest support”) to identify users at
-risk. Absolute thresholds are easy to implement but generate high rates
-of false positives in heterogeneous populations: a student whose
-baseline mood sits at 3/5 is treated identically to one whose baseline
-is 4/5. In the student-wellbeing context this matters because:</p>
-<ol type="1">
-<li>False positives erode user trust (“the app keeps telling me to call
-Samaritans when I’m just stressed about a deadline”).</li>
-<li>False negatives are catastrophic — a normally-cheerful student
-dipping from 5 to 3 may be in greater relative distress than a
-chronically-low student logging 3.</li>
+<h2 id="d1-abstract">D.1 Abstract</h2>
+<p>Most consumer mood-tracking applications use absolute-score thresholds (e.g. "if mood ≤ 2/5, suggest support") to identify users at risk. Absolute thresholds are easy to implement but generate high rates of false positives in heterogeneous populations: a student whose baseline mood sits at 3/5 is treated identically to one whose baseline is 4/5. In the student-wellbeing context this matters because:</p>
+<ol>
+<li>False positives erode user trust ("the app keeps telling me to call Samaritans when I'm just stressed about a deadline").</li>
+<li>False negatives are catastrophic — a normally-cheerful student dipping from 5 to 3 may be in greater relative distress than a chronically-low student logging 3.</li>
 </ol>
-<p>DEQUAD’s wellbeing engine builds a <strong>per-user baseline</strong>
-from the user’s first 14 daily check-ins and detects statistically
-meaningful deviation against that personal baseline. This document
-describes the methodology, its assumptions, and the validation plan.</p>
+<p>DEQUAD's wellbeing engine builds a <strong>per-user baseline</strong> from the user's first 14 daily check-ins and detects statistically meaningful deviation against that personal baseline. This document describes the methodology, its assumptions, and the validation plan.</p>
 <hr />
-<h2 id="d.2-method">D.2 Method</h2>
-<h3 id="d.2.1-data-collected">D.2.1 Data collected</h3>
+<h2 id="d2-method">D.2 Method</h2>
+<h3 id="d21-data-collected">D.2.1 Data collected</h3>
 <p>Each daily check-in captures:</p>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Type</th>
 <th>Constraint</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>mood_score</code></td>
 <td>Integer 1–5</td>
 <td>1 = very low, 5 = very good</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>mood_note</code></td>
 <td>Text (optional)</td>
 <td>Max 500 chars; scanned for crisis keywords</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>timestamp</code></td>
 <td>datetime (UTC)</td>
 <td>Server-set</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>user_id</code></td>
 <td>string</td>
 <td>Foreign key to user record</td>
 </tr>
 </tbody>
 </table>
-<h3 id="d.2.2-baseline-window">D.2.2 Baseline window</h3>
-<p>For each user, the first 14 daily check-ins (the <strong>calibration
-window</strong>) establish:</p>
+<h3 id="d22-baseline-window">D.2.2 Baseline window</h3>
+<p>For each user, the first 14 daily check-ins (the <strong>calibration window</strong>) establish:</p>
 <ul>
-<li><code>μ_user</code> — arithmetic mean of <code>mood_score</code>
-over the calibration window</li>
-<li><code>σ_user</code> — standard deviation of <code>mood_score</code>
-over the calibration window, clamped to a minimum of 0.5 to avoid
-zero-variance edge cases</li>
+<li><code>μ_user</code> — arithmetic mean of <code>mood_score</code> over the calibration window</li>
+<li><code>σ_user</code> — standard deviation of <code>mood_score</code> over the calibration window, clamped to a minimum of 0.5 to avoid zero-variance edge cases</li>
 </ul>
-<p>If a user logs fewer than 14 check-ins in their first 30 days, the
-engine uses cohort-level priors (mean=3.5, sd=1.0 — drawn from Student
-Minds 2024 normative data) until 14 own data points are accumulated.</p>
-<h3 id="d.2.3-deviation-detection-z-score-approach">D.2.3 Deviation
-detection (z-score approach)</h3>
+<p>If a user logs fewer than 14 check-ins in their first 30 days, the engine uses cohort-level priors (mean=3.5, sd=1.0 — drawn from Student Minds 2024 normative data) until 14 own data points are accumulated.</p>
+<h3 id="d23-deviation-detection-z-score-approach">D.2.3 Deviation detection (z-score approach)</h3>
 <p>For every new check-in, the engine computes:</p>
-<pre><code>z_today = (mood_score_today - μ_user) / σ_user</code></pre>
-<p>A rolling 7-day average of <code>z_today</code> is maintained. If the
-rolling average falls below <strong>−1.5 standard deviations</strong>
-for two consecutive days, the engine fires a <strong>“deterioration
-nudge”</strong> — a low-friction in-app prompt offering to connect the
-user to:</p>
+<pre><code>z_today = (mood_score_today - μ_user) / σ_user
+</code></pre>
+<p>A rolling 7-day average of <code>z_today</code> is maintained. If the rolling average falls below <strong>−1.5 standard deviations</strong> for two consecutive days, the engine fires a <strong>"deterioration nudge"</strong> — a low-friction in-app prompt offering to connect the user to:</p>
 <ul>
-<li>The user’s chosen support contacts (configurable in their
-profile);</li>
+<li>The user's chosen support contacts (configurable in their profile);</li>
 <li>The DEQUAD 24/7 support chat;</li>
 <li>Samaritans (116 123) / Shout (text 85258);</li>
-<li>Their university’s wellbeing service (if a partner
-institution).</li>
+<li>Their university's wellbeing service (if a partner institution).</li>
 </ul>
-<p><strong>No automatic action involving third parties is taken at this
-threshold.</strong> The nudge is private to the user.</p>
-<h3 id="d.2.4-safeguarding-escalation-separate-channel">D.2.4
-Safeguarding escalation (separate channel)</h3>
-<p>If a user’s check-in <code>mood_note</code> text matches the
-high-risk crisis-keyword set (independent of the z-score), an escalation
-is sent to the Designated Safeguarding Lead under the safeguarding
-policy described in main document §14.1. This is a <strong>separate
-channel</strong> from baseline deviation: high-risk text triggers
-immediate human review regardless of mood-score trend.</p>
+<p><strong>No automatic action involving third parties is taken at this threshold.</strong> The nudge is private to the user.</p>
+<h3 id="d24-safeguarding-escalation-separate-channel">D.2.4 Safeguarding escalation (separate channel)</h3>
+<p>If a user's check-in <code>mood_note</code> text matches the high-risk crisis-keyword set (independent of the z-score), an escalation is sent to the Designated Safeguarding Lead under the safeguarding policy described in main document §14.1. This is a <strong>separate channel</strong> from baseline deviation: high-risk text triggers immediate human review regardless of mood-score trend.</p>
 <hr />
-<h2 id="d.3-why-per-user-baselines-not-population-thresholds">D.3 Why
-per-user baselines, not population thresholds</h2>
+<h2 id="d3-why-per-user-baselines-not-population-thresholds">D.3 Why per-user baselines, not population thresholds</h2>
 <p>A short worked example illustrates the value:</p>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
+<table>
 <thead>
-<tr class="header">
+<tr>
 <th>Student</th>
 <th>Calibration mean</th>
 <th>Calibration sd</th>
-<th>Today’s score</th>
+<th>Today's score</th>
 <th>Population-threshold (≤2 = alert)</th>
 <th>Per-user (z &lt; −1.5 = nudge)</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Aisha (chronically anxious)</td>
 <td>2.5</td>
 <td>0.7</td>
@@ -320,7 +154,7 @@ per-user baselines, not population thresholds</h2>
 <td><strong>Alert</strong> (over-trigger)</td>
 <td>z = −0.71 → no nudge ✅</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Ben (usually upbeat)</td>
 <td>4.6</td>
 <td>0.5</td>
@@ -328,7 +162,7 @@ per-user baselines, not population thresholds</h2>
 <td>No alert (under-trigger)</td>
 <td>z = −3.2 → nudge ✅</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Chen (medium baseline)</td>
 <td>3.4</td>
 <td>0.8</td>
@@ -338,129 +172,81 @@ per-user baselines, not population thresholds</h2>
 </tr>
 </tbody>
 </table>
-<p>Per-user baselines reduce false positives for chronically-low users
-and reduce false negatives for normally-cheerful users — both of which
-matter for the safety profile of the platform.</p>
+<p>Per-user baselines reduce false positives for chronically-low users and reduce false negatives for normally-cheerful users — both of which matter for the safety profile of the platform.</p>
 <hr />
-<h2 id="d.4-statistical-assumptions">D.4 Statistical assumptions</h2>
+<h2 id="d4-statistical-assumptions">D.4 Statistical assumptions</h2>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Assumption</th>
 <th>Risk</th>
 <th>Mitigation</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>1–5 ordinal mood scale is approximately normal in calibration
-window</td>
-<td>Mild non-normality is acceptable for z-score deviation thresholds
-(Tukey, 1977)</td>
-<td>Floor sd at 0.5 to avoid extreme z-scores; alternative
-non-parametric trend test under evaluation</td>
+<tr>
+<td>1–5 ordinal mood scale is approximately normal in calibration window</td>
+<td>Mild non-normality is acceptable for z-score deviation thresholds (Tukey, 1977)</td>
+<td>Floor sd at 0.5 to avoid extreme z-scores; alternative non-parametric trend test under evaluation</td>
 </tr>
-<tr class="even">
-<td>User does not “game” the scale</td>
+<tr>
+<td>User does not "game" the scale</td>
 <td>Some users may inflate baseline to avoid prompts</td>
-<td>Trend analysis robust to absolute-level manipulation; new check-ins
-outside expected daily-time pattern flagged for review</td>
+<td>Trend analysis robust to absolute-level manipulation; new check-ins outside expected daily-time pattern flagged for review</td>
 </tr>
-<tr class="odd">
-<td>Daily logging frequency is sufficient to detect a multi-week
-deterioration</td>
+<tr>
+<td>Daily logging frequency is sufficient to detect a multi-week deterioration</td>
 <td>Low logging frequency could miss declines</td>
-<td>Cohort-prior fallback for low-frequency users; Y2 roadmap includes
-passive-signal triangulation (e.g. typing latency)</td>
+<td>Cohort-prior fallback for low-frequency users; Y2 roadmap includes passive-signal triangulation (e.g. typing latency)</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="d.5-validation-plan">D.5 Validation plan</h2>
-<h3 id="d.5.1-phase-1-pilot-validation-academic-year-202627">D.5.1 Phase
-1 — pilot validation (academic year 2026/27)</h3>
-<p>In partnership with the first paid university, DEQUAD will validate
-the deterioration-nudge engine against three benchmarks:</p>
-<ol type="1">
-<li><strong>Self-report concurrent validity</strong> — Quarterly PHQ-9 /
-GAD-7 surveys (with consent) cross-correlated against the engine’s
-deterioration flags. Target Pearson r ≥ 0.4.</li>
-<li><strong>Service-utilisation concordance</strong> — Anonymised
-university-counselling appointment data cross-referenced against
-deterioration-flag timing. Target: ≥ 25% of counselling-service
-self-referrals preceded by an engine flag in the prior 21 days.</li>
-<li><strong>False-positive rate</strong> — User survey at end of
-academic year asking whether engine nudges were appropriately timed.
-Target FP rate ≤ 30% (i.e. ≥ 70% of nudges judged appropriate).</li>
+<h2 id="d5-validation-plan">D.5 Validation plan</h2>
+<h3 id="d51-phase-1-pilot-validation-academic-year-202627">D.5.1 Phase 1 — pilot validation (academic year 2026/27)</h3>
+<p>In partnership with the first paid university, DEQUAD will validate the deterioration-nudge engine against three benchmarks:</p>
+<ol>
+<li><strong>Self-report concurrent validity</strong> — Quarterly PHQ-9 / GAD-7 surveys (with consent) cross-correlated against the engine's deterioration flags. Target Pearson r ≥ 0.4.</li>
+<li><strong>Service-utilisation concordance</strong> — Anonymised university-counselling appointment data cross-referenced against deterioration-flag timing. Target: ≥ 25% of counselling-service self-referrals preceded by an engine flag in the prior 21 days.</li>
+<li><strong>False-positive rate</strong> — User survey at end of academic year asking whether engine nudges were appropriately timed. Target FP rate ≤ 30% (i.e. ≥ 70% of nudges judged appropriate).</li>
 </ol>
-<h3 id="d.5.2-phase-2-peer-reviewed-publication-year-2">D.5.2 Phase 2 —
-peer-reviewed publication (Year 2)</h3>
-<p>If pilot validation passes pre-registered thresholds, DEQUAD will
-submit a methodology paper to:</p>
+<h3 id="d52-phase-2-peer-reviewed-publication-year-2">D.5.2 Phase 2 — peer-reviewed publication (Year 2)</h3>
+<p>If pilot validation passes pre-registered thresholds, DEQUAD will submit a methodology paper to:</p>
 <ul>
-<li><em>JMIR Mental Health</em> (open-access, fast-track for digital
-health)</li>
+<li><em>JMIR Mental Health</em> (open-access, fast-track for digital health)</li>
 <li>or <em>British Journal of Psychiatry Open</em></li>
 </ul>
-<p>The pre-registration will be lodged with the Open Science Framework
-(OSF).</p>
-<h3 id="d.5.3-phase-3-independent-replication-year-3">D.5.3 Phase 3 —
-independent replication (Year 3+)</h3>
-<p>Engage at least one independent research group (target: King’s
-College London Institute of Psychiatry, Psychology &amp; Neuroscience)
-to replicate the method on a sample DEQUAD does not control.</p>
+<p>The pre-registration will be lodged with the Open Science Framework (OSF).</p>
+<h3 id="d53-phase-3-independent-replication-year-3">D.5.3 Phase 3 — independent replication (Year 3+)</h3>
+<p>Engage at least one independent research group (target: King's College London Institute of Psychiatry, Psychology &amp; Neuroscience) to replicate the method on a sample DEQUAD does not control.</p>
 <hr />
-<h2 id="d.6-ethics-and-governance">D.6 Ethics and governance</h2>
+<h2 id="d6-ethics-and-governance">D.6 Ethics and governance</h2>
 <ul>
-<li>The engine never shares individual user data with the partner
-university. Aggregated, anonymised dashboards only.</li>
-<li>Users can opt out of the engine entirely without losing access to
-other DEQUAD features.</li>
-<li>Users can export their full mood history at any time (UK GDPR Art 20
-— right to data portability).</li>
-<li>An ethics review by an independent advisory board (target convened:
-Year 1 Q4) governs all material changes to the engine.</li>
+<li>The engine never shares individual user data with the partner university. Aggregated, anonymised dashboards only.</li>
+<li>Users can opt out of the engine entirely without losing access to other DEQUAD features.</li>
+<li>Users can export their full mood history at any time (UK GDPR Art 20 — right to data portability).</li>
+<li>An ethics review by an independent advisory board (target convened: Year 1 Q4) governs all material changes to the engine.</li>
 </ul>
 <hr />
-<h2 id="d.7-limitations-explicitly-acknowledged">D.7 Limitations
-explicitly acknowledged</h2>
-<ol type="1">
-<li>The engine is <strong>not a diagnostic tool</strong>. It does not
-diagnose depression, anxiety, or any other clinical condition.</li>
-<li>The engine should not be relied upon as a sole indicator of risk.
-Other channels (peer reports, university counselling self-referral, GP
-referral) remain primary.</li>
-<li>The engine has not been clinically validated at the date of this
-document. Section D.5 documents the plan to do so.</li>
-<li>Cohort priors are drawn from UK undergraduate normative data and may
-not generalise to FE / international expansion without
-re-calibration.</li>
+<h2 id="d7-limitations-explicitly-acknowledged">D.7 Limitations explicitly acknowledged</h2>
+<ol>
+<li>The engine is <strong>not a diagnostic tool</strong>. It does not diagnose depression, anxiety, or any other clinical condition.</li>
+<li>The engine should not be relied upon as a sole indicator of risk. Other channels (peer reports, university counselling self-referral, GP referral) remain primary.</li>
+<li>The engine has not been clinically validated at the date of this document. Section D.5 documents the plan to do so.</li>
+<li>Cohort priors are drawn from UK undergraduate normative data and may not generalise to FE / international expansion without re-calibration.</li>
 </ol>
 <hr />
-<h2 id="d.8-references">D.8 References</h2>
+<h2 id="d8-references">D.8 References</h2>
 <ul>
-<li>Beck, A.T., et al. (1996). <em>Beck Depression Inventory — II</em>.
-The Psychological Corporation.</li>
-<li>Kroenke, K., Spitzer, R.L., &amp; Williams, J.B.W. (2001). The
-PHQ-9: Validity of a brief depression severity measure. <em>Journal of
-General Internal Medicine</em>, 16, 606–613.</li>
-<li>Student Minds (2024). <em>Insight Briefing — Student Mental Health
-2024</em>.</li>
-<li>Tukey, J.W. (1977). <em>Exploratory Data Analysis</em>.
-Addison-Wesley.</li>
-<li>ONS (2023). <em>Student Insights — University Mental
-Wellbeing</em>.</li>
+<li>Beck, A.T., et al. (1996). <em>Beck Depression Inventory — II</em>. The Psychological Corporation.</li>
+<li>Kroenke, K., Spitzer, R.L., &amp; Williams, J.B.W. (2001). The PHQ-9: Validity of a brief depression severity measure. <em>Journal of General Internal Medicine</em>, 16, 606–613.</li>
+<li>Student Minds (2024). <em>Insight Briefing — Student Mental Health 2024</em>.</li>
+<li>Tukey, J.W. (1977). <em>Exploratory Data Analysis</em>. Addison-Wesley.</li>
+<li>ONS (2023). <em>Student Insights — University Mental Wellbeing</em>.</li>
 <li>OFCOM (2024). <em>Online Safety: Illegal Harms Guidance</em>.</li>
-<li>NICE NG133 (2019). <em>Suicide prevention: identifying and
-supporting people at risk</em>.</li>
+<li>NICE NG133 (2019). <em>Suicide prevention: identifying and supporting people at risk</em>.</li>
 </ul>
 <hr />
-<p><em>This methodology document is a living draft. Material updates
-will be lodged at OSF when pre-registration is complete.</em></p>
+<p><em>This methodology document is a living draft. Material updates will be lodged at OSF when pre-registration is complete.</em></p>
 </body>
 </html>

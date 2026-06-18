@@ -1,201 +1,75 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>G_job_descriptions</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <style>
-    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
-           line-height: 1.5; font-size: 11pt; }
-    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
-                 page-break-after: avoid; }
-    h1 { font-size: 22pt; margin-top: 0; }
-    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
-    h3 { font-size: 13pt; }
-    table { border-collapse: collapse; width: 100%; margin: 14px 0;
-            font-size: 9.5pt; }
-    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
-             vertical-align: top; }
-    th { background: #F6FAFE; }
-    code { background: #F6FAFE; padding: 1px 4px; border-radius: 4px;
-           font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
-    pre { background: #F6FAFE; padding: 10px; border-radius: 6px; overflow-x: auto;
-          font-size: 9pt; }
-    blockquote { border-left: 3px solid #5B9BD5; padding-left: 12px;
-                 color: #4F6076; margin: 12px 0; }
-    hr { border: none; border-top: 1px solid #DDE8F2; margin: 24px 0; }
-  </style>
+<meta charset="utf-8">
+<title>DEQUAD — Appendix G: Job Descriptions</title>
+<style>
+@page { size: A4; margin: 22mm 18mm; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: #0F2942;
+  line-height: 1.55;
+  font-size: 11.5pt;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+h1 {
+  color: #0F2942;
+  font-size: 26pt;
+  border-bottom: 2px solid #5B9BD5;
+  padding-bottom: 6px;
+  page-break-after: avoid;
+}
+h2 {
+  color: #0F2942;
+  font-size: 17pt;
+  margin-top: 32px;
+  border-bottom: 1px solid #DDE8F2;
+  padding-bottom: 4px;
+  page-break-after: avoid;
+}
+h3 { color: #0F2942; font-size: 13pt; margin-top: 22px; page-break-after: avoid; }
+h4 { color: #4F6076; font-size: 11pt; margin-top: 16px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th {
+  background: #EDF4FB;
+  color: #0F2942;
+  text-align: left;
+  padding: 7px 9px;
+  border: 1px solid #DDE8F2;
+}
+td { padding: 6px 9px; border: 1px solid #DDE8F2; vertical-align: top; }
+tr:nth-child(even) td { background: #F8FBFD; }
+code { background: #F1F5F9; padding: 2px 5px; border-radius: 4px; font-size: 9.5pt; }
+blockquote {
+  border-left: 3px solid #5B9BD5;
+  margin: 14px 0;
+  padding: 4px 14px;
+  background: #EDF4FB;
+  color: #4F6076;
+}
+hr { border: 0; border-top: 1px dashed #DDE8F2; margin: 24px 0; }
+ul, ol { padding-left: 22px; }
+li { margin-bottom: 4px; }
+strong { color: #0F2942; }
+</style>
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">G_job_descriptions</h1>
-</header>
-<h1
-id="appendix-g-job-descriptions-salary-bands-42-uk-fte-roles">Appendix G
-— Job Descriptions &amp; Salary Bands (42 UK FTE Roles)</h1>
-<p>This appendix documents every role in the 5-year hiring plan
-referenced in main document §7.3. All roles are <strong>UK-based, PAYE,
-paying UK National Insurance contributions</strong>, and recruited
-through fair and open processes.</p>
-<p>Salary bands are aligned with <strong>London or
-hybrid-London</strong> weighting where applicable (2026 baseline), with
-cost-of-living adjustments noted for any non-London hires.</p>
+<h1 id="appendix-g-job-descriptions-salary-bands-42-uk-fte-roles">Appendix G — Job Descriptions &amp; Salary Bands (42 UK FTE Roles)</h1>
+<p>This appendix documents every role in the 5-year hiring plan referenced in main document §7.3. All roles are <strong>UK-based, PAYE, paying UK National Insurance contributions</strong>, and recruited through fair and open processes.</p>
+<p>Salary bands are aligned with <strong>London or hybrid-London</strong> weighting where applicable (2026 baseline), with cost-of-living adjustments noted for any non-London hires.</p>
 <hr />
-<h2 id="g.1-hiring-summary">G.1 Hiring summary</h2>
+<h2 id="g1-hiring-summary">G.1 Hiring summary</h2>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Year</th>
 <th>New hires (FTE)</th>
 <th>Cumulative</th>
@@ -203,31 +77,31 @@ cost-of-living adjustments noted for any non-London hires.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Y1</td>
 <td>4</td>
 <td>4</td>
 <td>~145</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Y2</td>
 <td>6</td>
 <td>10</td>
 <td>~410</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Y3</td>
 <td>9</td>
 <td>19</td>
 <td>~880</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Y4</td>
 <td>11</td>
 <td>30</td>
 <td>~1,510</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Y5</td>
 <td>12</td>
 <td>42</td>
@@ -236,207 +110,176 @@ cost-of-living adjustments noted for any non-London hires.</p>
 </tbody>
 </table>
 <hr />
-<h2 id="g.2-year-1-4-hires">G.2 Year 1 — 4 hires</h2>
-<h3 id="g.2.1-designated-safeguarding-lead-pt-ft">G.2.1 Designated
-Safeguarding Lead (PT → FT)</h3>
+<h2 id="g2-year-1-4-hires">G.2 Year 1 — 4 hires</h2>
+<h3 id="g21-designated-safeguarding-lead-pt-ft">G.2.1 Designated Safeguarding Lead (PT → FT)</h3>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Detail</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Hire month</td>
 <td>Month 1</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Initial commitment</td>
 <td>0.5 FTE (Y1) → 1.0 FTE end of Y1</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Salary band</td>
 <td>£42k–£52k (pro-rata)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Reporting line</td>
 <td>Founder (CEO)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Mission</td>
-<td>Lead safeguarding triage, manage DSL on-call rota, liaise with
-partner-university DSLs</td>
+<td>Lead safeguarding triage, manage DSL on-call rota, liaise with partner-university DSLs</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Must-have</td>
-<td>Level 3 Safeguarding Adults qualification; ≥3 years HE / NHS /
-charity safeguarding experience; enhanced DBS</td>
+<td>Level 3 Safeguarding Adults qualification; ≥3 years HE / NHS / charity safeguarding experience; enhanced DBS</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Nice-to-have</td>
 <td>Direct counselling experience; suicide-safer training</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Recruitment channel</td>
 <td>Charity Job, NCVO, AMOSSHE network</td>
 </tr>
 </tbody>
 </table>
-<h3 id="g.2.2-full-stack-engineer">G.2.2 Full-stack engineer</h3>
+<h3 id="g22-full-stack-engineer">G.2.2 Full-stack engineer</h3>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Detail</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Hire month</td>
 <td>Month 4</td>
 </tr>
-<tr class="even">
+<tr>
 <td>FTE</td>
 <td>1.0</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Salary band</td>
 <td>£55k–£70k</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Reporting line</td>
 <td>Founder (CEO)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Mission</td>
-<td>Take ownership of frontend (Expo/React) so founder can shift to
-product + sales; ship the iOS + Android stores release</td>
+<td>Take ownership of frontend (Expo/React) so founder can shift to product + sales; ship the iOS + Android stores release</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Must-have</td>
-<td>4+ years full-stack; React Native or Expo production experience;
-comfort with serverless + Mongo</td>
+<td>4+ years full-stack; React Native or Expo production experience; comfort with serverless + Mongo</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Nice-to-have</td>
 <td>Health-tech background; safeguarding context</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Recruitment channel</td>
 <td>Otta, Wellfound, LinkedIn, Tech Nation Visa alumni</td>
 </tr>
 </tbody>
 </table>
-<h3 id="g.2.3-customer-success-lead">G.2.3 Customer-success lead</h3>
+<h3 id="g23-customer-success-lead">G.2.3 Customer-success lead</h3>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Detail</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Hire month</td>
 <td>Month 7</td>
 </tr>
-<tr class="even">
+<tr>
 <td>FTE</td>
 <td>0.5 (Y1) → 1.0 (Y2)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Salary band</td>
 <td>£36k–£44k (pro-rata)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Reporting line</td>
 <td>Founder</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Mission</td>
 <td>Onboard first 3 pilot universities; build CS playbook</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Must-have</td>
-<td>2+ years CS or account management in B2B SaaS; education or
-health-tech background</td>
+<td>2+ years CS or account management in B2B SaaS; education or health-tech background</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Recruitment channel</td>
 <td>LinkedIn, Otta</td>
 </tr>
 </tbody>
 </table>
-<h3 id="g.2.4-growth-marketer">G.2.4 Growth marketer</h3>
+<h3 id="g24-growth-marketer">G.2.4 Growth marketer</h3>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Detail</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Hire month</td>
 <td>Month 10</td>
 </tr>
-<tr class="even">
+<tr>
 <td>FTE</td>
 <td>0.5</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Salary band</td>
 <td>£40k–£50k (pro-rata)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Reporting line</td>
 <td>Founder</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Mission</td>
-<td>Student-facing marketing: TikTok/Instagram, freshers’ fair
-partnerships, society sponsorships</td>
+<td>Student-facing marketing: TikTok/Instagram, freshers' fair partnerships, society sponsorships</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Must-have</td>
-<td>Demonstrated organic growth on Gen-Z channels; basic data
-literacy</td>
+<td>Demonstrated organic growth on Gen-Z channels; basic data literacy</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Recruitment channel</td>
 <td>LinkedIn, freelancer-platform conversion</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="g.3-year-2-6-hires-cumulative-10-fte">G.3 Year 2 — 6 hires
-(cumulative 10 FTE)</h2>
+<h2 id="g3-year-2-6-hires-cumulative-10-fte">G.3 Year 2 — 6 hires (cumulative 10 FTE)</h2>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>FTE</th>
 <th>Salary band</th>
@@ -444,37 +287,37 @@ literacy</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Engineer #2 (backend / data)</td>
 <td>1.0</td>
 <td>£55k–£70k</td>
 <td>Scale to 10 universities; data pipeline</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Engineer #3 (mobile lead)</td>
 <td>1.0</td>
 <td>£60k–£75k</td>
 <td>Native-app release maintenance + iOS App Store ops</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Sales rep (university accounts)</td>
 <td>1.0</td>
 <td>£40k base + £15k OTE</td>
 <td>Inbound conversion + outbound to 25 universities</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Data Protection Officer (FTE)</td>
 <td>1.0</td>
 <td>£55k–£75k</td>
 <td>NHS DSPT prep + scale of processing</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Operations / People Ops</td>
 <td>1.0</td>
 <td>£40k–£50k</td>
 <td>First-line HR, finance, contracts</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Customer-success specialist #2</td>
 <td>1.0</td>
 <td>£36k–£44k</td>
@@ -483,17 +326,10 @@ literacy</td>
 </tbody>
 </table>
 <hr />
-<h2 id="g.4-year-3-9-hires-cumulative-19-fte">G.4 Year 3 — 9 hires
-(cumulative 19 FTE)</h2>
+<h2 id="g4-year-3-9-hires-cumulative-19-fte">G.4 Year 3 — 9 hires (cumulative 19 FTE)</h2>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>FTE</th>
 <th>Salary band</th>
@@ -501,43 +337,43 @@ literacy</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Engineer #4 (platform / SRE)</td>
 <td>1.0</td>
 <td>£65k–£85k</td>
 <td>200k users requires SRE discipline</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Engineer #5 + #6 (full-stack)</td>
 <td>2.0</td>
 <td>£55k–£70k each</td>
 <td>Faster product velocity</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Sales rep #2 + #3</td>
 <td>2.0</td>
 <td>£40k+OTE</td>
 <td>UK sales motion expansion</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Clinical / safeguarding lead (senior)</td>
 <td>1.0</td>
 <td>£55k–£70k</td>
 <td>NHS commissioning bid leadership</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Finance manager (FTE)</td>
 <td>1.0</td>
 <td>£50k–£65k</td>
 <td>Series A readiness</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Marketing manager</td>
 <td>1.0</td>
 <td>£45k–£60k</td>
 <td>Brand + content</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>HR business partner</td>
 <td>1.0</td>
 <td>£45k–£60k</td>
@@ -546,17 +382,10 @@ literacy</td>
 </tbody>
 </table>
 <hr />
-<h2 id="g.5-year-4-11-hires-cumulative-30-fte">G.5 Year 4 — 11 hires
-(cumulative 30 FTE)</h2>
+<h2 id="g5-year-4-11-hires-cumulative-30-fte">G.5 Year 4 — 11 hires (cumulative 30 FTE)</h2>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>FTE</th>
 <th>Salary band</th>
@@ -564,43 +393,43 @@ literacy</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Head of Engineering</td>
 <td>1.0</td>
 <td>£100k–£130k</td>
 <td>Spans risk away from founder</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Engineer #7, #8, #9</td>
 <td>3.0</td>
 <td>£55k–£75k</td>
 <td>Maintain velocity</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Senior sales (NHS accounts)</td>
 <td>1.0</td>
 <td>£55k+OTE</td>
 <td>NHS ICB bids</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Sales rep #4, #5, #6</td>
 <td>3.0</td>
 <td>£40k+OTE</td>
 <td>UK + ROI expansion</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Senior CS (enterprise / NHS)</td>
 <td>1.0</td>
 <td>£55k–£70k</td>
 <td>NHS implementation</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Data scientist</td>
 <td>1.0</td>
 <td>£55k–£75k</td>
 <td>Wellbeing-baseline R&amp;D + publications</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Partnerships manager (ROI / first international)</td>
 <td>1.0</td>
 <td>£45k–£60k</td>
@@ -609,11 +438,10 @@ literacy</td>
 </tbody>
 </table>
 <hr />
-<h2 id="g.6-year-5-12-hires-cumulative-42-fte">G.6 Year 5 — 12 hires
-(cumulative 42 FTE)</h2>
+<h2 id="g6-year-5-12-hires-cumulative-42-fte">G.6 Year 5 — 12 hires (cumulative 42 FTE)</h2>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>FTE</th>
 <th>Salary band</th>
@@ -621,55 +449,55 @@ literacy</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Head of Sales</td>
 <td>1.0</td>
 <td>£90k–£120k</td>
 <td>Sales-leadership layer</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Head of Customer Success</td>
 <td>1.0</td>
 <td>£75k–£100k</td>
 <td>Enterprise CS layer</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Engineer #10, #11</td>
 <td>2.0</td>
 <td>£55k–£75k</td>
 <td>Localisation + new platform</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Sales rep #7–#9</td>
 <td>3.0</td>
 <td>£40k+OTE</td>
 <td>Volume growth</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Senior product manager</td>
 <td>1.0</td>
 <td>£65k–£85k</td>
 <td>First dedicated PM</td>
 </tr>
-<tr class="even">
+<tr>
 <td>QA lead</td>
 <td>1.0</td>
 <td>£45k–£60k</td>
 <td>Quality gate</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Sales engineer</td>
 <td>1.0</td>
 <td>£55k–£70k</td>
 <td>Pre-sales technical assistance</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Compliance manager</td>
 <td>1.0</td>
 <td>£55k–£70k</td>
 <td>ISO 27001 + DSPT</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Marketing exec #2</td>
 <td>1.0</td>
 <td>£30k–£40k</td>
@@ -678,41 +506,21 @@ literacy</td>
 </tbody>
 </table>
 <hr />
-<h2 id="g.7-diversity-equality-and-inclusion-commitments">G.7 Diversity,
-equality, and inclusion commitments</h2>
+<h2 id="g7-diversity-equality-and-inclusion-commitments">G.7 Diversity, equality, and inclusion commitments</h2>
 <p>DEQUAD commits to:</p>
 <ul>
-<li><strong>Open advertising</strong> for every role on at least two
-channels (LinkedIn + Otta minimum) for at least 14 days before any
-offer.</li>
-<li><strong>Blind shortlisting</strong> at CV-screening stage (name,
-university, address removed).</li>
+<li><strong>Open advertising</strong> for every role on at least two channels (LinkedIn + Otta minimum) for at least 14 days before any offer.</li>
+<li><strong>Blind shortlisting</strong> at CV-screening stage (name, university, address removed).</li>
 <li><strong>Structured interview rubrics</strong> for every role.</li>
-<li><strong>Pay-band transparency</strong> — salary published in every
-job advert.</li>
-<li><strong>Mentor opportunities</strong> — formal partnership with
-<strong>Code First Girls</strong>, <strong>Pinpoint</strong> (women
-returners), and <strong>Diversity in Tech</strong> by end of Year
-2.</li>
-<li><strong>Hiring-mix targets</strong> — by Year 3, the company aims
-for at least 45% female engineering hires and at least 30%
-minority-ethnic representation across the company. These targets are
-aspirational and reported annually.</li>
+<li><strong>Pay-band transparency</strong> — salary published in every job advert.</li>
+<li><strong>Mentor opportunities</strong> — formal partnership with <strong>Code First Girls</strong>, <strong>Pinpoint</strong> (women returners), and <strong>Diversity in Tech</strong> by end of Year 2.</li>
+<li><strong>Hiring-mix targets</strong> — by Year 3, the company aims for at least 45% female engineering hires and at least 30% minority-ethnic representation across the company. These targets are aspirational and reported annually.</li>
 </ul>
 <hr />
-<h2 id="g.8-wage-bill-summary-rounded">G.8 Wage-bill summary
-(rounded)</h2>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
+<h2 id="g8-wage-bill-summary-rounded">G.8 Wage-bill summary (rounded)</h2>
+<table>
 <thead>
-<tr class="header">
+<tr>
 <th>Year</th>
 <th>Engineering</th>
 <th>Commercial</th>
@@ -722,7 +530,7 @@ aspirational and reported annually.</li>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Y1</td>
 <td>55</td>
 <td>40</td>
@@ -730,7 +538,7 @@ aspirational and reported annually.</li>
 <td>20</td>
 <td>145</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Y2</td>
 <td>200</td>
 <td>80</td>
@@ -738,7 +546,7 @@ aspirational and reported annually.</li>
 <td>65</td>
 <td>410</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Y3</td>
 <td>470</td>
 <td>160</td>
@@ -746,7 +554,7 @@ aspirational and reported annually.</li>
 <td>105</td>
 <td>880</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Y4</td>
 <td>810</td>
 <td>320</td>
@@ -754,7 +562,7 @@ aspirational and reported annually.</li>
 <td>180</td>
 <td>1,510</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Y5</td>
 <td>1,150</td>
 <td>500</td>
@@ -764,17 +572,11 @@ aspirational and reported annually.</li>
 </tr>
 </tbody>
 </table>
-<p>Figures include employer NI (13.8% above secondary threshold),
-workplace-pension contribution (3% minimum), and basic
-apprenticeship-levy (0.5% above £3m wage bill from Y5).</p>
+<p>Figures include employer NI (13.8% above secondary threshold), workplace-pension contribution (3% minimum), and basic apprenticeship-levy (0.5% above £3m wage bill from Y5).</p>
 <hr />
-<h2 id="g.9-recruitment-cost-assumption">G.9 Recruitment-cost
-assumption</h2>
-<p>Average <strong>cost-per-hire</strong> for technical roles: £2,500
-(mostly LinkedIn Recruiter + interview-time opportunity cost). Average
-cost-per-hire for senior roles: £8,000–£12,000 (occasional
-retained-search where required).</p>
-<p>These costs are absorbed in the Marketing / People line of the
-financial model (Appendix F).</p>
+<h2 id="g9-recruitment-cost-assumption">G.9 Recruitment-cost assumption</h2>
+<p>Average <strong>cost-per-hire</strong> for technical roles: £2,500 (mostly LinkedIn Recruiter + interview-time opportunity cost).
+Average cost-per-hire for senior roles: £8,000–£12,000 (occasional retained-search where required).</p>
+<p>These costs are absorbed in the Marketing / People line of the financial model (Appendix F).</p>
 </body>
 </html>

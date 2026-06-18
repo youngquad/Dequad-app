@@ -115,6 +115,68 @@ def build(md_path: Path, html_path: Path, pdf_path: Path, title: str) -> None:
         print("stderr:", res.stderr[-400:])
 
 
+def merge_master_pdf() -> None:
+    """Combine every Envestors-pack PDF into one master submission file.
+
+    Order chosen to read naturally for a reviewer: Decision Brief first
+    (the 15-page Envestors short-track summary), then full Business Plan,
+    then each appendix in alphabetical reference order. The Excel
+    Financial Model cannot be embedded — it stays as a sibling file
+    alongside the master PDF.
+    """
+    try:
+        from pypdf import PdfWriter
+    except ImportError:
+        print("pypdf not installed — skipping master merge")
+        return
+
+    order = [
+        # Cover-of-pack (most useful first read)
+        ("DEQUAD_Envestors_Decision_Brief.pdf", "00 Decision-Maker Brief (15 pages)"),
+        # Full plan
+        ("DEQUAD_Envestors_Business_Plan.pdf", "01 Business Plan"),
+        # Risk register
+        ("DEQUAD_Risk_Register.pdf", "02 Risk Register (Appendix L)"),
+        # Founder CVs
+        ("B_founder_cv.pdf", "03 Appendix B — Yusuf Quadri CV"),
+        ("B_cofounder_cv.pdf", "04 Appendix B-2 — Yusuff Adeagbo CV"),
+        # New appendices
+        ("N_wider_team_cvs.pdf", "05 Appendix N — Wider Team CVs"),
+        ("O_safeguarding_certifications.pdf", "06 Appendix O — Safeguarding Certifications"),
+        # Original supporting appendices (built in prior session)
+        ("A_founder_academic_certificates.pdf", "07 Appendix A — Founder Academic Certificates"),
+        ("C_personal_commitment_undertaking.pdf", "08 Appendix C — Personal Commitment"),
+        ("D_wellbeing_baseline_methodology.pdf", "09 Appendix D — Wellbeing Baseline Methodology"),
+        ("E_dpia.pdf", "10 Appendix E — DPIA"),
+        ("G_job_descriptions.pdf", "11 Appendix G — Job Descriptions"),
+        ("H_university_letter_of_interest_template.pdf", "12 Appendix H — University LOI Template"),
+        ("I_online_safety_act_compliance.pdf", "13 Appendix I — Online Safety Act Compliance"),
+        ("J_architecture_diagram.pdf", "14 Appendix J — Architecture Diagram"),
+        ("K_product_screenshots.pdf", "15 Appendix K — Product Screenshots"),
+    ]
+
+    writer = PdfWriter()
+    included = 0
+    missing = []
+    for filename, bookmark in order:
+        path = APPDIR / filename
+        if not path.exists():
+            missing.append(filename)
+            continue
+        page_start = len(writer.pages)
+        writer.append(str(path))
+        writer.add_outline_item(bookmark, page_start)
+        included += 1
+
+    out = APPDIR / "DEQUAD_Envestors_FULL_SUBMISSION.pdf"
+    with open(out, "wb") as fp:
+        writer.write(fp)
+    size_kb = out.stat().st_size // 1024
+    print(f"merged {included} PDFs → {out} ({size_kb} KB)")
+    if missing:
+        print(f"  (missing — skipped: {missing})")
+
+
 def main() -> None:
     jobs = [
         (
@@ -136,17 +198,50 @@ def main() -> None:
             "DEQUAD — Risk Register",
         ),
         (
-            APPDIR / "B_cofounder_cv_template.md",
-            APPDIR / "B_cofounder_cv_template.html",
-            APPDIR / "B_cofounder_cv_template.pdf",
-            "DEQUAD — Co-Founder CV (Template)",
+            APPDIR / "B_cofounder_cv.md",
+            APPDIR / "B_cofounder_cv.html",
+            APPDIR / "B_cofounder_cv.pdf",
+            "DEQUAD — Co-Founder CV (Yusuff Adeagbo)",
+        ),
+        (
+            APPDIR / "N_wider_team_cvs.md",
+            APPDIR / "N_wider_team_cvs.html",
+            APPDIR / "N_wider_team_cvs.pdf",
+            "DEQUAD — Appendix N: Wider Founding Team CVs",
+        ),
+        (
+            APPDIR / "O_safeguarding_certifications.md",
+            APPDIR / "O_safeguarding_certifications.html",
+            APPDIR / "O_safeguarding_certifications.pdf",
+            "DEQUAD — Appendix O: Yusuf Quadri Safeguarding Certifications",
         ),
     ]
+
+    # Earlier-session appendices that already exist as markdown — render to
+    # PDF too so the master combined PDF can include them.
+    for ref in [
+        ("A_founder_academic_certificates", "DEQUAD — Appendix A: Founder Academic Certificates"),
+        ("B_founder_cv", "DEQUAD — Appendix B: Founder CV (Yusuf Quadri)"),
+        ("C_personal_commitment_undertaking", "DEQUAD — Appendix C: Personal Commitment & Undertaking"),
+        ("D_wellbeing_baseline_methodology", "DEQUAD — Appendix D: Wellbeing Baseline Methodology"),
+        ("E_dpia", "DEQUAD — Appendix E: DPIA"),
+        ("G_job_descriptions", "DEQUAD — Appendix G: Job Descriptions"),
+        ("H_university_letter_of_interest_template", "DEQUAD — Appendix H: University LOI Template"),
+        ("I_online_safety_act_compliance", "DEQUAD — Appendix I: Online Safety Act Compliance"),
+        ("J_architecture_diagram", "DEQUAD — Appendix J: Architecture Diagram"),
+        ("K_product_screenshots", "DEQUAD — Appendix K: Product Screenshots"),
+    ]:
+        slug, title = ref
+        md_path = APPDIR / f"{slug}.md"
+        if md_path.exists():
+            jobs.append((md_path, APPDIR / f"{slug}.html", APPDIR / f"{slug}.pdf", title))
     for md, html, pdf, title in jobs:
         if not md.exists():
             print(f"SKIP {md} — does not exist")
             continue
         build(md, html, pdf, title)
+
+    merge_master_pdf()
 
 
 if __name__ == "__main__":

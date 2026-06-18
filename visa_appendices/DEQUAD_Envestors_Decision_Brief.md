@@ -12,7 +12,8 @@
 | | |
 |---|---|
 | **Entity** | DEQUAD Ltd (in formation, England & Wales) |
-| **Founders** | Yusuf Quadri (CEO) + Co-Founder (CTO, TBC) |
+| **Founders** | **Yusuf Quadri** (CEO) + **Yusuff Adeagbo** (CTO) |
+| **Wider founding team** | **Dr Gerald Marfo** (CMO, PhD Digital Marketing) · **Adedapo Ajuwon** (Senior SWE) · **Chinyere Jennifer** (Senior Advisor — MIGSO-PCUBED PM) |
 | **HQ** | London — NatWest Accelerator (joined **16 March 2026**) |
 | **Prior validation** | **Santander Universities Pre-Incubator** — completed 2025 |
 | **Founder anchor** | Yusuf Quadri served as **University of Bedfordshire SU President 2021–2023** |
@@ -168,18 +169,29 @@ Only ~30% of revenue because (a) founder organic outreach is the primary B2B cha
 - UK-resident, full-time on DEQUAD.
 - **University of Bedfordshire Student Union President 2021–2023** (two consecutive terms). Represented the student body at senior-management level on student-services, safeguarding and welfare policy. This is the basis of DEQUAD's anchor pilot relationship with the same university.
 - Completed the **Santander Universities Pre-Incubator programme** in 2025; admitted to the **NatWest Accelerator (London cohort)** on 16 March 2026.
+- **Seven safeguarding & clinical-awareness certifications** including Oliver McGowan Learning Disabilities & Autism, Adult Safeguarding Partnership Working, Suicide Prevention (2026), Data Protection & Information Security, and Safe Response to Challenging Situations (see Appendix O).
 - Built and shipped the entire MVP at dequad.co.uk.
 - Owns the safeguarding policy (Appendix E — DPIA, Appendix I — OSA-2023 compliance).
 - Owns university partnerships and the NatWest Accelerator relationship.
 - Co-founder cash contribution: **£3,000** of the £6,000 founder capital.
 
-### Co-Founder — CTO / Engineering & Data Lead (TBC)
+### Yusuff Adeagbo — Co-Founder / CTO / Engineering & IT Lead
 
 - UK-resident, full-time on DEQUAD.
-- Full-stack and ML engineering, security, infrastructure scale-out.
-- Will own the engineering hiring pipeline and the R&D claim leadership.
+- **MSc Information Technology with Project Management — University of the West of Scotland**.
+- **Higher National Diploma in Computer Science** (prior).
+- Multi-disciplinary skill set: full-stack engineering, IT support, UI/UX design, graphic design, digital marketing (e-commerce), IT business analysis.
+- Will own the engineering hiring pipeline, infrastructure security, and the R&D claim leadership.
 - Co-founder cash contribution: **£3,000** of the £6,000 founder capital.
-- CV template at `B_cofounder_cv_template.pdf` — to be populated before final submission.
+- Full CV at Appendix B-2 (`B_cofounder_cv.pdf`).
+
+### Wider founding team — joining at incorporation (EMI options, no cash investment)
+
+- **Dr Gerald Marfo — Chief Marketing Officer** · PhD in Digital Marketing; owns Y1 marketing strategy and measurement.
+- **Adedapo Ajuwon — Senior Software Engineer** · supports CTO on platform engineering, infrastructure, reliability.
+- **Chinyere Jennifer — Senior Advisor (Programme & Delivery)** · Senior PM Consultant at **MIGSO-PCUBED** with LLM background; programme-governance + safeguarding-model safety review.
+
+Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 
 ### Y1 founder compensation
 

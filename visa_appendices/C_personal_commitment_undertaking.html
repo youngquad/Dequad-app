@@ -1,272 +1,115 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>C_personal_commitment_undertaking</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <style>
-    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
-           line-height: 1.5; font-size: 11pt; }
-    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
-                 page-break-after: avoid; }
-    h1 { font-size: 22pt; margin-top: 0; }
-    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
-    h3 { font-size: 13pt; }
-    table { border-collapse: collapse; width: 100%; margin: 14px 0;
-            font-size: 9.5pt; }
-    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
-             vertical-align: top; }
-    th { background: #F6FAFE; }
-    code { background: #F6FAFE; padding: 1px 4px; border-radius: 4px;
-           font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
-    pre { background: #F6FAFE; padding: 10px; border-radius: 6px; overflow-x: auto;
-          font-size: 9pt; }
-    blockquote { border-left: 3px solid #5B9BD5; padding-left: 12px;
-                 color: #4F6076; margin: 12px 0; }
-    hr { border: none; border-top: 1px solid #DDE8F2; margin: 24px 0; }
-  </style>
+<meta charset="utf-8">
+<title>DEQUAD — Appendix C: Personal Commitment & Undertaking</title>
+<style>
+@page { size: A4; margin: 22mm 18mm; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: #0F2942;
+  line-height: 1.55;
+  font-size: 11.5pt;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+h1 {
+  color: #0F2942;
+  font-size: 26pt;
+  border-bottom: 2px solid #5B9BD5;
+  padding-bottom: 6px;
+  page-break-after: avoid;
+}
+h2 {
+  color: #0F2942;
+  font-size: 17pt;
+  margin-top: 32px;
+  border-bottom: 1px solid #DDE8F2;
+  padding-bottom: 4px;
+  page-break-after: avoid;
+}
+h3 { color: #0F2942; font-size: 13pt; margin-top: 22px; page-break-after: avoid; }
+h4 { color: #4F6076; font-size: 11pt; margin-top: 16px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th {
+  background: #EDF4FB;
+  color: #0F2942;
+  text-align: left;
+  padding: 7px 9px;
+  border: 1px solid #DDE8F2;
+}
+td { padding: 6px 9px; border: 1px solid #DDE8F2; vertical-align: top; }
+tr:nth-child(even) td { background: #F8FBFD; }
+code { background: #F1F5F9; padding: 2px 5px; border-radius: 4px; font-size: 9.5pt; }
+blockquote {
+  border-left: 3px solid #5B9BD5;
+  margin: 14px 0;
+  padding: 4px 14px;
+  background: #EDF4FB;
+  color: #4F6076;
+}
+hr { border: 0; border-top: 1px dashed #DDE8F2; margin: 24px 0; }
+ul, ol { padding-left: 22px; }
+li { margin-bottom: 4px; }
+strong { color: #0F2942; }
+</style>
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">C_personal_commitment_undertaking</h1>
-</header>
-<h1 id="appendix-c-founder-personal-commitment-undertaking">Appendix C —
-Founder Personal-Commitment Undertaking</h1>
+<h1 id="appendix-c-founder-personal-commitment-undertaking">Appendix C — Founder Personal-Commitment Undertaking</h1>
 <p><strong>To:</strong> UK Endorsement Services Ltd (UKES)
-<strong>From:</strong> Yusuf Quadri (“the Founder”) <strong>Re:</strong>
-DEQUAD Ltd — Innovator Founder route endorsement <strong>Date:</strong>
-___________________</p>
+<strong>From:</strong> Yusuf Quadri ("the Founder")
+<strong>Re:</strong> DEQUAD Ltd — Innovator Founder route endorsement
+<strong>Date:</strong> <strong><em>_</em></strong><strong><em>_</em></strong>_____</p>
 <hr />
-<p>I, <strong>Yusuf Quadri</strong>, the sole founder and CEO of DEQUAD
-Ltd (the “Company”) and applicant for endorsement under the UK Innovator
-Founder route, irrevocably undertake to UK Endorsement Services Ltd as
-follows:</p>
-<h2 id="sole-and-full-time-occupation">1. Sole and full-time
-occupation</h2>
-<p>I will be engaged in the business of DEQUAD Ltd as my <strong>sole
-and full-time occupation</strong> in the United Kingdom from the date of
-my grant of leave to remain as an Innovator Founder. I will not
-undertake any other employment or commercial activity that would prevent
-me from devoting a minimum of <strong>35 hours per week</strong> to
-DEQUAD Ltd, save for incidental activities expressly permitted by the
-Immigration Rules in force from time to time.</p>
-<h2 id="continuity-of-role-and-equity">2. Continuity of role and
-equity</h2>
-<p>I will retain the role of Chief Executive Officer of the Company for
-the duration of the endorsement period. I will retain a majority
-shareholding in the Company throughout that period unless a dilutive
-equity investment is approved in advance by the endorsing body in
-accordance with UKES’s published guidance.</p>
-<h2 id="uk-base-of-operations">3. UK base of operations</h2>
-<p>I will base the Company’s registered office, principal place of
-business, and operations in the United Kingdom. All employees recruited
-in support of the business plan submitted with this endorsement will be
-UK-based.</p>
-<h2 id="compliance-with-endorsement-contact-points">4. Compliance with
-endorsement contact points</h2>
-<p>I will participate in the <strong>6, 12, and 24-month contact
-points</strong> with UKES as required by the Innovator Founder route,
-and will provide UKES with: - A current business-progress report; -
-Up-to-date management accounts; - Evidence of material milestones met; -
-Notice of any material adverse changes in the business plan within 30
-days of becoming aware of them.</p>
-<h2 id="material-changes">5. Material changes</h2>
-<p>I undertake to notify UKES in writing of any of the following events
-within thirty (30) days of their occurrence: - Change in the legal form
-of the Company; - Sale or transfer of more than 25% of the Company’s
-equity in a single transaction; - Departure from the business model,
-market, or geography submitted in support of the endorsement; -
-Insolvency event, including but not limited to administration, voluntary
-arrangement, or winding-up petition.</p>
-<h2 id="legal-and-regulatory-compliance">6. Legal and regulatory
-compliance</h2>
-<p>I undertake that DEQUAD Ltd will at all times comply with: - UK GDPR
-and the Data Protection Act 2018; - The Online Safety Act 2023 and
-applicable secondary regulations; - The Equality Act 2010; - The
-Companies Act 2006; - All applicable safeguarding obligations, including
-those applicable to processors of data relating to children and
-vulnerable adults.</p>
-<h2 id="anti-fraud-and-good-standing">7. Anti-fraud and good
-standing</h2>
-<p>I confirm that I have not been: - Convicted of any criminal offence
-in any jurisdiction that would be considered serious under UK law; -
-Subject to any disqualification order under the Company Directors
-Disqualification Act 1986; - Subject to any current investigation by
-HMRC, the Insolvency Service, or any equivalent overseas authority.</p>
-<h2 id="truthfulness-of-submission">8. Truthfulness of submission</h2>
-<p>I confirm that the contents of the principal endorsement document
-(<strong>INNOVATOR_VISA_DEQUAD.md</strong>) and all appendices are true
-and accurate to the best of my knowledge. I acknowledge that the
-provision of false information may result in the revocation of any
-endorsement granted and removal of leave to remain in the United
-Kingdom.</p>
-<h2 id="use-of-endorsement">9. Use of endorsement</h2>
-<p>I will not represent to any third party that endorsement carries any
-implication of investment recommendation, financial advice, or guarantee
-of business success. I will use the endorsement only for the purpose of
-supporting my Innovator Founder visa application and as evidence of
-UKES’s professional view at the date of issue.</p>
+<p>I, <strong>Yusuf Quadri</strong>, the sole founder and CEO of DEQUAD Ltd (the "Company") and applicant for endorsement under the UK Innovator Founder route, irrevocably undertake to UK Endorsement Services Ltd as follows:</p>
+<h2 id="1-sole-and-full-time-occupation">1. Sole and full-time occupation</h2>
+<p>I will be engaged in the business of DEQUAD Ltd as my <strong>sole and full-time occupation</strong> in the United Kingdom from the date of my grant of leave to remain as an Innovator Founder. I will not undertake any other employment or commercial activity that would prevent me from devoting a minimum of <strong>35 hours per week</strong> to DEQUAD Ltd, save for incidental activities expressly permitted by the Immigration Rules in force from time to time.</p>
+<h2 id="2-continuity-of-role-and-equity">2. Continuity of role and equity</h2>
+<p>I will retain the role of Chief Executive Officer of the Company for the duration of the endorsement period. I will retain a majority shareholding in the Company throughout that period unless a dilutive equity investment is approved in advance by the endorsing body in accordance with UKES's published guidance.</p>
+<h2 id="3-uk-base-of-operations">3. UK base of operations</h2>
+<p>I will base the Company's registered office, principal place of business, and operations in the United Kingdom. All employees recruited in support of the business plan submitted with this endorsement will be UK-based.</p>
+<h2 id="4-compliance-with-endorsement-contact-points">4. Compliance with endorsement contact points</h2>
+<p>I will participate in the <strong>6, 12, and 24-month contact points</strong> with UKES as required by the Innovator Founder route, and will provide UKES with:
+- A current business-progress report;
+- Up-to-date management accounts;
+- Evidence of material milestones met;
+- Notice of any material adverse changes in the business plan within 30 days of becoming aware of them.</p>
+<h2 id="5-material-changes">5. Material changes</h2>
+<p>I undertake to notify UKES in writing of any of the following events within thirty (30) days of their occurrence:
+- Change in the legal form of the Company;
+- Sale or transfer of more than 25% of the Company's equity in a single transaction;
+- Departure from the business model, market, or geography submitted in support of the endorsement;
+- Insolvency event, including but not limited to administration, voluntary arrangement, or winding-up petition.</p>
+<h2 id="6-legal-and-regulatory-compliance">6. Legal and regulatory compliance</h2>
+<p>I undertake that DEQUAD Ltd will at all times comply with:
+- UK GDPR and the Data Protection Act 2018;
+- The Online Safety Act 2023 and applicable secondary regulations;
+- The Equality Act 2010;
+- The Companies Act 2006;
+- All applicable safeguarding obligations, including those applicable to processors of data relating to children and vulnerable adults.</p>
+<h2 id="7-anti-fraud-and-good-standing">7. Anti-fraud and good standing</h2>
+<p>I confirm that I have not been:
+- Convicted of any criminal offence in any jurisdiction that would be considered serious under UK law;
+- Subject to any disqualification order under the Company Directors Disqualification Act 1986;
+- Subject to any current investigation by HMRC, the Insolvency Service, or any equivalent overseas authority.</p>
+<h2 id="8-truthfulness-of-submission">8. Truthfulness of submission</h2>
+<p>I confirm that the contents of the principal endorsement document (<strong>INNOVATOR_VISA_DEQUAD.md</strong>) and all appendices are true and accurate to the best of my knowledge. I acknowledge that the provision of false information may result in the revocation of any endorsement granted and removal of leave to remain in the United Kingdom.</p>
+<h2 id="9-use-of-endorsement">9. Use of endorsement</h2>
+<p>I will not represent to any third party that endorsement carries any implication of investment recommendation, financial advice, or guarantee of business success. I will use the endorsement only for the purpose of supporting my Innovator Founder visa application and as evidence of UKES's professional view at the date of issue.</p>
 <hr />
-<p><strong>Signed:</strong> ___________________________________</p>
+<p><strong>Signed:</strong> <strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong></p>
 <p><strong>Print name:</strong> Yusuf Quadri</p>
-<p><strong>Date:</strong> ___________________________________</p>
-<p><strong>Witness signature:</strong>
-___________________________________</p>
-<p><strong>Witness name + address:</strong>
-___________________________________</p>
+<p><strong>Date:</strong> <strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong></p>
+<p><strong>Witness signature:</strong> <strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong></p>
+<p><strong>Witness name + address:</strong> <strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong></p>
 <hr />
-<p><em>This undertaking is given freely and without coercion. It is
-governed by the laws of England and Wales.</em></p>
+<p><em>This undertaking is given freely and without coercion. It is governed by the laws of England and Wales.</em></p>
 </body>
 </html>

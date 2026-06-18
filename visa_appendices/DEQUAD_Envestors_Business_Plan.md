@@ -5,7 +5,8 @@
 ---
 
 **Entity:** DEQUAD Ltd (Company in formation, England & Wales)
-**Founders:** Yusuf Quadri (CEO) and Co-Founder (CTO, TBC)
+**Founders:** **Yusuf Quadri (CEO)** and **Yusuff Adeagbo (CTO)**
+**Wider founding team:** Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior Software Engineer), Chinyere Jennifer (Senior Project Management Consultant, advisor)
 **Headquarters:** London, United Kingdom — NatWest Accelerator (hosted)
 **Trading domain:** dequad.co.uk
 **MVP status:** Production-ready (live at https://dequad.co.uk)
@@ -59,7 +60,7 @@ DEQUAD is the **only** UK platform that combines `.ac.uk`-verified student-peer 
 
 | Item | Detail |
 |---|---|
-| **Two complementary co-founders** | Founder A (Yusuf Quadri) — product, GTM, safeguarding policy; **University of Bedfordshire Student Union President 2021–2023**. Founder B — engineering, ML, security. Both full-time, UK-resident, working on DEQUAD now. |
+| **Founding team** | **Yusuf Quadri** (CEO) + **Yusuff Adeagbo** (CTO), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor — Project Management, MIGSO-PCUBED). |
 | **MVP already shipped** | Production deployment at dequad.co.uk with ~50 beta users across 3 universities. **No engineering build cost** in Y1. |
 | **Two independent validations** | (1) **Santander Universities Pre-Incubator** — completed 2025. (2) **NatWest Accelerator London** — joined 16 March 2026. Two UK high-street banks have independently selected the team. |
 | **Anchor pilot ready** | Pilot conversations live with **University of Bedfordshire** — the lead founder's alma mater and the university whose students he represented as SU President for two years. |
@@ -212,12 +213,24 @@ The SME R&D Tax Credit scheme is expected to recoup approximately **16%** of qua
 
 | Role | Name | Compensation Y1 | Why |
 |---|---|---|---|
-| **CEO / Product & Safeguarding** | Yusuf Quadri — University of Bedfordshire Student Union President 2021–2023 | **£0 in Q1-Q2** (personal savings), **£1,500/mo from M7** (£9k total Y1) | Founder commitment + cash preservation. |
-| **CTO / Engineering & Data** | Co-Founder (TBC) | Same — **£0 Q1-Q2, £1,500/mo from M7** | Founder commitment + cash preservation. |
+| **CEO / Product & Safeguarding** | **Yusuf Quadri** — University of Bedfordshire Student Union President 2021–2023; safeguarding-trained (Appendix O) | **£0 in Q1-Q2** (personal savings), **£1,500/mo from M7** (£9k total Y1) | Founder commitment + cash preservation. |
+| **CTO / Engineering & IT** | **Yusuff Adeagbo** — MSc Information Technology with Project Management (UWS); HND Computer Science | Same — **£0 Q1-Q2, £1,500/mo from M7** | Founder commitment + cash preservation. |
 
 Both founders are UK-resident, full-time on DEQUAD, with signed founder commitment undertakings (Appendix C). Q3 onwards salaries are intentionally below market; founders accept this trade-off in exchange for ~10% each of equity.
 
-**Yusuf Quadri's two years as University of Bedfordshire SU President** is highly relevant: it gives DEQUAD founder-level credibility on student wellbeing policy, a trusted-broker status with the university's senior leadership, and a direct route into the institution's safeguarding team. It is also the basis of DEQUAD's anchor pilot conversation (see Section 8).
+**Yusuf Quadri's two years as University of Bedfordshire SU President** is highly relevant: it gives DEQUAD founder-level credibility on student wellbeing policy, a trusted-broker status with the university's senior leadership, and a direct route into the institution's safeguarding team. It is also the basis of DEQUAD's anchor pilot conversation (see Section 8). He holds **seven safeguarding and clinical-awareness certifications** (see Appendix O) covering Oliver McGowan Learning Disabilities & Autism, Adult Safeguarding Partnership Working, Suicide Prevention (2026), Data Protection and Information Security, and Safe Response to Challenging Situations.
+
+**Yusuff Adeagbo (CTO)** brings a **MSc in Information Technology with Project Management (University of the West of Scotland)** plus a HND in Computer Science, with applied skills across IT support, UI/UX, graphic design, digital marketing and IT business analysis (Appendix B-2).
+
+### 7.2 Wider founding team — joining at incorporation (no cash investment, EMI options)
+
+| Role | Name | Background | Y1 status |
+|---|---|---|---|
+| **Chief Marketing Officer** | **Dr Gerald Marfo** | **PhD in Digital Marketing**; specialist in digital go-to-market for impact-led startups. | Part-time, EMI-vesting; takes full salary from Y2 once seed closes. |
+| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior engineer working on the DEQUAD platform alongside the CTO; full-stack and infrastructure scale-out. | Part-time, EMI-vesting; full-time from Q3 Y1 once pre-seed lands. |
+| **Senior Advisor — Programme & Delivery** | **Chinyere Jennifer** | Senior Project Management Consultant at **MIGSO-PCUBED** (global PM consultancy); LLM background. | Advisory capacity; EMI options on a 4-year vest. |
+
+The presence of a PhD-credentialled CMO, a senior engineering hire, and a MIGSO-PCUBED senior consultant as advisor materially strengthens the team beyond the two named founders. CVs for all three are in Appendix N.
 
 ### 7.2 Hiring plan
 
@@ -556,20 +569,22 @@ All Y2+ hires receive EMI options (HMRC-approved) — 4-year vest, 1-year cliff.
 
 | Ref | Document | File |
 |---|---|---|
-| A | Founder A academic certificates | `A_founder_academic_certificates.md` |
-| B | Founder A CV (full) | `B_founder_cv.md` |
-| B-2 | Co-founder CV (template — populate before submission) | `B_cofounder_cv_template.md` |
+| A | Founder A academic certificates (Yusuf Quadri) | `A_founder_academic_certificates.md` |
+| B | Founder A CV — Yusuf Quadri (full) | `B_founder_cv.md` |
+| **B-2** | **Co-Founder CV — Yusuff Adeagbo (CTO)** | `B_cofounder_cv.md` |
 | C | Personal commitment & undertaking | `C_personal_commitment_undertaking.md` |
 | D | Wellbeing baseline methodology | `D_wellbeing_baseline_methodology.md` |
 | E | Data Protection Impact Assessment (DPIA) | `E_dpia.md` |
-| F | Financial model | `DEQUAD_Financial_Model.xlsx` |
+| F | Financial model (annotated) | `DEQUAD_Financial_Model.xlsx` |
 | G | Job descriptions for first 6 hires | `G_job_descriptions.md` |
 | H | University Letters of Interest (template) | `H_university_letter_of_interest_template.md` |
 | I | Online Safety Act 2023 compliance statement | `I_online_safety_act_compliance.md` |
 | J | Architecture diagram | `J_architecture_diagram.md` |
 | K | Product screenshots | `K_product_screenshots.md` |
-| L | Risk Register (Envestors) — **new** | `DEQUAD_Risk_Register.md` |
-| M | Decision-Maker Brief (Envestors short track) — **new** | `DEQUAD_Envestors_Decision_Brief.md` |
+| L | Risk Register (Envestors) | `DEQUAD_Risk_Register.md` |
+| M | Decision-Maker Brief (Envestors short track) | `DEQUAD_Envestors_Decision_Brief.md` |
+| **N** | **Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior SWE), Chinyere Jennifer (Advisor)** | `N_wider_team_cvs.md` |
+| **O** | **Yusuf Quadri — Safeguarding & Clinical-Awareness Certifications** | `O_safeguarding_certifications.md` |
 
 ---
 

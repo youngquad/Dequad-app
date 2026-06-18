@@ -1,360 +1,205 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>E_dpia</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <style>
-    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
-           line-height: 1.5; font-size: 11pt; }
-    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
-                 page-break-after: avoid; }
-    h1 { font-size: 22pt; margin-top: 0; }
-    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
-    h3 { font-size: 13pt; }
-    table { border-collapse: collapse; width: 100%; margin: 14px 0;
-            font-size: 9.5pt; }
-    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
-             vertical-align: top; }
-    th { background: #F6FAFE; }
-    code { background: #F6FAFE; padding: 1px 4px; border-radius: 4px;
-           font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
-    pre { background: #F6FAFE; padding: 10px; border-radius: 6px; overflow-x: auto;
-          font-size: 9pt; }
-    blockquote { border-left: 3px solid #5B9BD5; padding-left: 12px;
-                 color: #4F6076; margin: 12px 0; }
-    hr { border: none; border-top: 1px solid #DDE8F2; margin: 24px 0; }
-  </style>
+<meta charset="utf-8">
+<title>DEQUAD — Appendix E: DPIA</title>
+<style>
+@page { size: A4; margin: 22mm 18mm; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: #0F2942;
+  line-height: 1.55;
+  font-size: 11.5pt;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+h1 {
+  color: #0F2942;
+  font-size: 26pt;
+  border-bottom: 2px solid #5B9BD5;
+  padding-bottom: 6px;
+  page-break-after: avoid;
+}
+h2 {
+  color: #0F2942;
+  font-size: 17pt;
+  margin-top: 32px;
+  border-bottom: 1px solid #DDE8F2;
+  padding-bottom: 4px;
+  page-break-after: avoid;
+}
+h3 { color: #0F2942; font-size: 13pt; margin-top: 22px; page-break-after: avoid; }
+h4 { color: #4F6076; font-size: 11pt; margin-top: 16px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th {
+  background: #EDF4FB;
+  color: #0F2942;
+  text-align: left;
+  padding: 7px 9px;
+  border: 1px solid #DDE8F2;
+}
+td { padding: 6px 9px; border: 1px solid #DDE8F2; vertical-align: top; }
+tr:nth-child(even) td { background: #F8FBFD; }
+code { background: #F1F5F9; padding: 2px 5px; border-radius: 4px; font-size: 9.5pt; }
+blockquote {
+  border-left: 3px solid #5B9BD5;
+  margin: 14px 0;
+  padding: 4px 14px;
+  background: #EDF4FB;
+  color: #4F6076;
+}
+hr { border: 0; border-top: 1px dashed #DDE8F2; margin: 24px 0; }
+ul, ol { padding-left: 22px; }
+li { margin-bottom: 4px; }
+strong { color: #0F2942; }
+</style>
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">E_dpia</h1>
-</header>
-<h1 id="appendix-e-data-protection-impact-assessment-dpia">Appendix E —
-Data Protection Impact Assessment (DPIA)</h1>
-<p><strong>Controller:</strong> DEQUAD Ltd (in formation), United
-Kingdom <strong>Processor:</strong> DEQUAD Ltd (in formation)
-<strong>Processing activity covered:</strong> Operation of the DEQUAD
-platform — verified-student peer matching, daily mood tracking, in-app
-messaging, safeguarding scanning, and 24/7 support chat. <strong>DPIA
-version:</strong> v0.4 (draft) <strong>Author:</strong> Yusuf Quadri,
-CEO (acting controller representative) <strong>Reviewed by:</strong>
-<em>External fractional DPO to be appointed Month 1 post-endorsement
-(recommended: The DPO Centre)</em> <strong>Last reviewed:</strong>
-___________________ <strong>Next review due:</strong> 12 months from
-approval</p>
+<h1 id="appendix-e-data-protection-impact-assessment-dpia">Appendix E — Data Protection Impact Assessment (DPIA)</h1>
+<p><strong>Controller:</strong> DEQUAD Ltd (in formation), United Kingdom
+<strong>Processor:</strong> DEQUAD Ltd (in formation)
+<strong>Processing activity covered:</strong> Operation of the DEQUAD platform — verified-student peer matching, daily mood tracking, in-app messaging, safeguarding scanning, and 24/7 support chat.
+<strong>DPIA version:</strong> v0.4 (draft)
+<strong>Author:</strong> Yusuf Quadri, CEO (acting controller representative)
+<strong>Reviewed by:</strong> <em>External fractional DPO to be appointed Month 1 post-endorsement (recommended: The DPO Centre)</em>
+<strong>Last reviewed:</strong> <strong><em>_</em></strong><strong><em>_</em></strong>_____
+<strong>Next review due:</strong> 12 months from approval</p>
 <hr />
-<h2 id="e.1-why-this-dpia-is-required">E.1 Why this DPIA is
-required</h2>
-<p>UK GDPR Art 35 requires a DPIA where processing is <strong>likely to
-result in a high risk to the rights and freedoms of natural
-persons</strong>, including:</p>
+<h2 id="e1-why-this-dpia-is-required">E.1 Why this DPIA is required</h2>
+<p>UK GDPR Art 35 requires a DPIA where processing is <strong>likely to result in a high risk to the rights and freedoms of natural persons</strong>, including:</p>
 <ul>
 <li>Systematic monitoring of behaviour (Art 35(3)(c))</li>
-<li>Processing of special-category data on a large scale (Art
-35(3)(b))</li>
+<li>Processing of special-category data on a large scale (Art 35(3)(b))</li>
 <li>Use of new technologies (Art 35(3))</li>
 </ul>
-<p>DEQUAD’s processing meets at least two of these criteria — systematic
-monitoring of in-app behaviour for safeguarding purposes and processing
-of mental-health (special category) data. A DPIA is therefore
-mandatory.</p>
+<p>DEQUAD's processing meets at least two of these criteria — systematic monitoring of in-app behaviour for safeguarding purposes and processing of mental-health (special category) data. A DPIA is therefore mandatory.</p>
 <hr />
-<h2 id="e.2-description-of-the-processing">E.2 Description of the
-processing</h2>
-<h3 id="e.2.1-nature">E.2.1 Nature</h3>
-<p>DEQUAD collects, stores, analyses, and acts upon data from verified
-UK university students relating to:</p>
+<h2 id="e2-description-of-the-processing">E.2 Description of the processing</h2>
+<h3 id="e21-nature">E.2.1 Nature</h3>
+<p>DEQUAD collects, stores, analyses, and acts upon data from verified UK university students relating to:</p>
 <ul>
 <li>Identity (name, photo, university email)</li>
-<li>Profile preferences (course, modules, society interests,
-lifestyle)</li>
+<li>Profile preferences (course, modules, society interests, lifestyle)</li>
 <li>In-app messages</li>
 <li>Daily mood scores and free-text notes</li>
 <li>Support-chat messages</li>
 </ul>
-<p>Data is analysed by: - A peer-matching engine (compatibility ranking)
-- A safeguarding engine (real-time crisis-keyword scanning) - A
-wellbeing-baseline engine (per-user trend detection) - An LLM-assisted
-support reply engine (text generation)</p>
-<h3 id="e.2.2-scope">E.2.2 Scope</h3>
+<p>Data is analysed by:
+- A peer-matching engine (compatibility ranking)
+- A safeguarding engine (real-time crisis-keyword scanning)
+- A wellbeing-baseline engine (per-user trend detection)
+- An LLM-assisted support reply engine (text generation)</p>
+<h3 id="e22-scope">E.2.2 Scope</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Dimension</th>
 <th>Scope at endorsement</th>
 <th>Scope at Year 5</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Geographic</td>
 <td>United Kingdom only</td>
 <td>UK + Republic of Ireland + ANZ + Canada</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Data subjects</td>
 <td>Verified UK HE students</td>
 <td>+ FE students + ICB-commissioned 16-25</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Volume</td>
 <td>0 at endorsement</td>
 <td>Up to ~1.2m active users</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Retention</td>
 <td>See E.5</td>
 <td>See E.5</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Special-category data</td>
 <td>Mental-health (mood, support, safeguarding flags)</td>
 <td>Same</td>
 </tr>
 </tbody>
 </table>
-<h3 id="e.2.3-context">E.2.3 Context</h3>
-<p>DEQUAD is a closed network. Data subjects are adults (16+) who have
-actively chosen to sign up, have read a plain-English privacy notice,
-and have given explicit consent to special-category processing where
-required. The processing is necessary to deliver the product the user
-has signed up for.</p>
-<h3 id="e.2.4-purposes">E.2.4 Purposes</h3>
+<h3 id="e23-context">E.2.3 Context</h3>
+<p>DEQUAD is a closed network. Data subjects are adults (16+) who have actively chosen to sign up, have read a plain-English privacy notice, and have given explicit consent to special-category processing where required. The processing is necessary to deliver the product the user has signed up for.</p>
+<h3 id="e24-purposes">E.2.4 Purposes</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Purpose</th>
 <th>Lawful basis (Art 6)</th>
 <th>Special category basis (Art 9)</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Verifying university affiliation</td>
 <td>Performance of contract (Art 6.1.b)</td>
 <td>n/a</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Storing mood entries</td>
 <td>Consent (Art 6.1.a)</td>
 <td>Explicit consent (Art 9.2.a)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Crisis-keyword scanning</td>
-<td>Legitimate interest (Art 6.1.f) + vital interests (Art 6.1.d) where
-life at risk</td>
-<td>Substantial public interest — safeguarding of children and
-individuals at risk (DPA 2018 Sch 1 Pt 2 para 18)</td>
+<td>Legitimate interest (Art 6.1.f) + vital interests (Art 6.1.d) where life at risk</td>
+<td>Substantial public interest — safeguarding of children and individuals at risk (DPA 2018 Sch 1 Pt 2 para 18)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Peer matching</td>
 <td>Performance of contract</td>
 <td>n/a</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Anonymised research licensing</td>
 <td>Legitimate interest (Art 6.1.f)</td>
 <td>Data fully anonymised before transfer; not in scope of Art 9</td>
 </tr>
 </tbody>
 </table>
-<p>A full data-flow diagram is filed alongside this DPIA as
-<code>E_supporting/data_flow.png</code>.</p>
+<p>A full data-flow diagram is filed alongside this DPIA as <code>E_supporting/data_flow.png</code>.</p>
 <hr />
-<h2 id="e.3-consultation">E.3 Consultation</h2>
+<h2 id="e3-consultation">E.3 Consultation</h2>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Party consulted</th>
 <th>Date</th>
 <th>Outcome</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>The DPO Centre (proposed DPO)</td>
 <td><em>Pending</em></td>
 <td>Fractional DPO retainer to be signed Month 1 post-endorsement</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ICO Innovation Hub</td>
 <td><em>Pending</em></td>
-<td>Application to the Innovation Service for early-stage guidance
-during Month 2</td>
+<td>Application to the Innovation Service for early-stage guidance during Month 2</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Sample data subjects</td>
 <td><em>Pending — pilot university</em></td>
 <td>User-research interviews planned during pilot onboarding</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Independent safeguarding consultant</td>
 <td><em>Pending — proposed: Survivors UK / NSPCC Learning</em></td>
 <td>Annual audit retainer Year 1</td>
@@ -362,118 +207,96 @@ during Month 2</td>
 </tbody>
 </table>
 <hr />
-<h2 id="e.4-necessity-and-proportionality">E.4 Necessity and
-proportionality</h2>
+<h2 id="e4-necessity-and-proportionality">E.4 Necessity and proportionality</h2>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Test</th>
 <th>Assessment</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Are the lawful bases identified appropriate?</td>
-<td>Yes — consent for mood (revocable), contract for matching,
-substantial public interest for safeguarding</td>
+<td>Yes — consent for mood (revocable), contract for matching, substantial public interest for safeguarding</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Does the processing achieve its purpose?</td>
-<td>Yes — wellbeing trends and safeguarding alerts cannot be detected
-without processing the underlying data</td>
+<td>Yes — wellbeing trends and safeguarding alerts cannot be detected without processing the underlying data</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Is there a less-invasive way?</td>
-<td>Considered: (a) population thresholds instead of per-user baseline
-(rejected — see Appendix D for evidence of higher false-positive rate);
-(b) self-report only with no scanning (rejected — fails OSA s. 10
-safeguarding duty); (c) hashing of message content (rejected — defeats
-safeguarding purpose)</td>
+<td>Considered: (a) population thresholds instead of per-user baseline (rejected — see Appendix D for evidence of higher false-positive rate); (b) self-report only with no scanning (rejected — fails OSA s. 10 safeguarding duty); (c) hashing of message content (rejected — defeats safeguarding purpose)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Quality and accuracy</td>
-<td>Mood data is self-reported (Art 5.1.d compliant — subject to data
-subject’s own veracity); profile data is editable by the user at any
-time; admin records are auditable</td>
+<td>Mood data is self-reported (Art 5.1.d compliant — subject to data subject's own veracity); profile data is editable by the user at any time; admin records are auditable</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Data minimisation</td>
-<td>Profile-photo upload optional; mood-note free-text is optional; no
-demographic data collected beyond university name unless user explicitly
-adds it</td>
+<td>Profile-photo upload optional; mood-note free-text is optional; no demographic data collected beyond university name unless user explicitly adds it</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Retention</td>
 <td>See E.5</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Rights of data subjects</td>
 <td>See E.6</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Processors</td>
 <td>See E.7</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="e.5-retention-schedule">E.5 Retention schedule</h2>
+<h2 id="e5-retention-schedule">E.5 Retention schedule</h2>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Data category</th>
 <th>Retention period</th>
 <th>Justification</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Active account profile</td>
 <td>Duration of account + 30 days post-deletion</td>
 <td>30-day grace for accidental deletion; compliant with Art 17</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Mood entries</td>
 <td>Duration of account; user-exportable; user-deletable</td>
 <td>User-controlled</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>In-app messages</td>
-<td>Duration of account, both sides; deleted on either party’s account
-deletion (deletion takes precedence)</td>
+<td>Duration of account, both sides; deleted on either party's account deletion (deletion takes precedence)</td>
 <td>UK GDPR principle of data minimisation</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Safeguarding-alert records</td>
 <td><strong>7 years</strong> from creation</td>
-<td>Required for safeguarding audit trail (Care Act 2014 best practice;
-statutory limitation for civil claims)</td>
+<td>Required for safeguarding audit trail (Care Act 2014 best practice; statutory limitation for civil claims)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Support-chat transcripts</td>
 <td>2 years</td>
 <td>Customer-service quality + dispute resolution</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Stripe billing records</td>
 <td>7 years</td>
 <td>Companies Act 2006 + HMRC requirement</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Server access logs</td>
 <td>90 days</td>
 <td>Security; sufficient for incident response</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Audit logs (admin actions)</td>
 <td>7 years</td>
 <td>Internal-control + OSA s. 23 record-keeping</td>
@@ -481,78 +304,64 @@ statutory limitation for civil claims)</td>
 </tbody>
 </table>
 <hr />
-<h2 id="e.6-rights-of-data-subjects">E.6 Rights of data subjects</h2>
+<h2 id="e6-rights-of-data-subjects">E.6 Rights of data subjects</h2>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Right</th>
 <th>How exercised</th>
 <th>Response SLA</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Access (Art 15)</td>
-<td>“Download my data” in app + DPO email</td>
+<td>"Download my data" in app + DPO email</td>
 <td>30 days</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Rectification (Art 16)</td>
 <td>Inline profile edits + DPO email</td>
 <td>Immediate (UI) / 30 days (DPO)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Erasure (Art 17)</td>
-<td>“Delete account” in app + DPO email</td>
-<td>30 days; safeguarding records retained per E.5 with lawful
-basis</td>
+<td>"Delete account" in app + DPO email</td>
+<td>30 days; safeguarding records retained per E.5 with lawful basis</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Restriction (Art 18)</td>
 <td>DPO email</td>
 <td>30 days</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Portability (Art 20)</td>
-<td>“Export my data” in app — JSON file</td>
+<td>"Export my data" in app — JSON file</td>
 <td>30 days</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Objection (Art 21)</td>
 <td>DPO email</td>
 <td>30 days</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Withdraw consent (Art 7.3)</td>
 <td>One-tap revocation in app</td>
 <td>Immediate</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Lodge a complaint with ICO</td>
 <td>Linked from in-app privacy notice and dequad.co.uk/privacy</td>
 <td>n/a</td>
 </tr>
 </tbody>
 </table>
-<p>A documented Subject Rights Request procedure is maintained at
-<code>/internal/SRR_procedure.md</code> (not yet public).</p>
+<p>A documented Subject Rights Request procedure is maintained at <code>/internal/SRR_procedure.md</code> (not yet public).</p>
 <hr />
-<h2 id="e.7-processors">E.7 Processors</h2>
+<h2 id="e7-processors">E.7 Processors</h2>
 <table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Processor</th>
 <th>Purpose</th>
 <th>Data shared</th>
@@ -561,56 +370,56 @@ basis</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>MongoDB Atlas (MongoDB Inc.)</td>
 <td>Database hosting</td>
 <td>All collections</td>
 <td>UK (London region)</td>
 <td>Atlas DPA accepted; Standard Contractual Clauses adopted</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Stripe Payments UK Ltd</td>
 <td>Subscription billing</td>
 <td>Email + payment token</td>
 <td>UK</td>
 <td>Stripe DPA accepted</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Cloudflare UK Ltd</td>
 <td>DNS / WAF / CDN</td>
 <td>IP + request metadata</td>
 <td>UK / EU</td>
 <td>Cloudflare DPA accepted</td>
 </tr>
-<tr class="even">
+<tr>
 <td>OpenAI (via Emergent LLM Key)</td>
 <td>LLM auto-reply on support chat</td>
 <td>Redacted excerpt of support text only</td>
 <td>US (with Standard Contractual Clauses)</td>
 <td>Emergent ToS + OpenAI DPA</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Expo Push Service (Expo Inc.)</td>
 <td>Push notifications</td>
 <td>Device token + alert payload</td>
 <td>US (with SCCs)</td>
 <td>Expo DPA</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Sentry (Functional Software Inc.)</td>
 <td>Error monitoring</td>
 <td>Stack traces (PII-scrubbed)</td>
 <td>EU region</td>
 <td>Sentry DPA</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>AWS SES (Amazon Web Services EMEA)</td>
 <td>Transactional email</td>
 <td>Email address + body</td>
 <td>UK (eu-west-2)</td>
 <td>AWS DPA accepted</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Hiscox / Markel</td>
 <td>Insurance</td>
 <td>None during ordinary course</td>
@@ -619,23 +428,12 @@ basis</td>
 </tr>
 </tbody>
 </table>
-<p>International transfers documented in
-<code>E_supporting/transfer_register.md</code> with Standard Contractual
-Clauses 2021 in place where applicable.</p>
+<p>International transfers documented in <code>E_supporting/transfer_register.md</code> with Standard Contractual Clauses 2021 in place where applicable.</p>
 <hr />
-<h2 id="e.8-risk-register">E.8 Risk register</h2>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-</colgroup>
+<h2 id="e8-risk-register">E.8 Risk register</h2>
+<table>
 <thead>
-<tr class="header">
+<tr>
 <th>#</th>
 <th>Risk</th>
 <th>Likelihood</th>
@@ -646,120 +444,103 @@ Clauses 2021 in place where applicable.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td>Unauthorised access to mood/safeguarding records</td>
 <td>Low</td>
 <td>High</td>
 <td>High</td>
-<td>Encryption at rest + TLS in transit + RBAC + audit logging + annual
-pen-test</td>
+<td>Encryption at rest + TLS in transit + RBAC + audit logging + annual pen-test</td>
 <td>Low</td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
-<td>Re-identification from “anonymised” research data</td>
+<td>Re-identification from "anonymised" research data</td>
 <td>Med</td>
 <td>High</td>
 <td>High</td>
-<td>k-anonymity ≥ 5 enforced; named DPO review of every release; written
-agreements with recipients</td>
+<td>k-anonymity ≥ 5 enforced; named DPO review of every release; written agreements with recipients</td>
 <td>Low</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td>Excessive scanning of in-app messages (over-collection)</td>
 <td>Med</td>
 <td>Med</td>
 <td>Med</td>
-<td>Keyword library reviewed quarterly; false-positive rate audited;
-transparency report annually</td>
+<td>Keyword library reviewed quarterly; false-positive rate audited; transparency report annually</td>
 <td>Low</td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td>LLM prompt-injection or output containing PII</td>
 <td>Med</td>
 <td>Med</td>
 <td>Med</td>
-<td>All user text redacted before LLM call; no PII in prompt templates;
-output filtered for crisis numbers + URLs only</td>
+<td>All user text redacted before LLM call; no PII in prompt templates; output filtered for crisis numbers + URLs only</td>
 <td>Low</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>5</td>
 <td>Cross-border transfer to OpenAI (US)</td>
 <td>Med</td>
 <td>Med</td>
 <td>Med</td>
-<td>Only redacted excerpts; SCCs in place; transfer-risk assessment
-lodged at <code>E_supporting/transfer_risk_assessment.md</code></td>
+<td>Only redacted excerpts; SCCs in place; transfer-risk assessment lodged at <code>E_supporting/transfer_risk_assessment.md</code></td>
 <td>Low-Med</td>
 </tr>
-<tr class="even">
+<tr>
 <td>6</td>
 <td>Data subject denied erasure due to safeguarding retention</td>
 <td>Low</td>
 <td>High</td>
 <td>Med</td>
-<td>Lawful basis (substantial public interest) documented per request;
-data subject notified in writing with right to ICO complaint</td>
+<td>Lawful basis (substantial public interest) documented per request; data subject notified in writing with right to ICO complaint</td>
 <td>Low</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>7</td>
 <td>Insider misuse of admin dashboard</td>
 <td>Low</td>
 <td>High</td>
 <td>Med</td>
-<td>Two-factor auth on admin; audit log retained 7 years; quarterly
-access review; immediate offboarding workflow</td>
+<td>Two-factor auth on admin; audit log retained 7 years; quarterly access review; immediate offboarding workflow</td>
 <td>Low</td>
 </tr>
-<tr class="even">
+<tr>
 <td>8</td>
 <td>DPIA itself becomes stale</td>
 <td>High</td>
 <td>Med</td>
 <td>Med</td>
-<td>DPIA reviewed annually and on any material change (e.g. new
-processor, new processing purpose)</td>
+<td>DPIA reviewed annually and on any material change (e.g. new processor, new processing purpose)</td>
 <td>Low</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>9</td>
 <td>Children (under-18) processed without parental consent</td>
 <td>Low</td>
 <td>High</td>
 <td>Med</td>
-<td>Birth-date check at sign-up; flag for <code>.ac.uk</code> accounts
-where birth-date &lt; 18; default privacy-protective settings; ICO AADC
-alignment</td>
+<td>Birth-date check at sign-up; flag for <code>.ac.uk</code> accounts where birth-date &lt; 18; default privacy-protective settings; ICO AADC alignment</td>
 <td>Low</td>
 </tr>
-<tr class="even">
+<tr>
 <td>10</td>
 <td>A safeguarding event leaks to other students</td>
 <td>Low</td>
 <td>Critical</td>
 <td>High</td>
-<td>Safeguarding scans are server-side only; alerts go to DSL email,
-never in-app; UI design prevents accidental exposure</td>
+<td>Safeguarding scans are server-side only; alerts go to DSL email, never in-app; UI design prevents accidental exposure</td>
 <td>Low</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="e.9-approvals">E.9 Approvals</h2>
+<h2 id="e9-approvals">E.9 Approvals</h2>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>Name</th>
 <th>Signature</th>
@@ -767,37 +548,29 @@ never in-app; UI design prevents accidental exposure</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Controller representative</td>
 <td>Yusuf Quadri</td>
 <td><em>signed in original</em></td>
-<td>___________________</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>_____</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Data Protection Officer</td>
 <td><em>The DPO Centre (designated)</em></td>
 <td><em>to follow Month 1</em></td>
-<td>___________________</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>_____</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>External safeguarding advisor</td>
 <td><em>to be appointed Year 1</em></td>
 <td><em>to follow</em></td>
-<td>___________________</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>_____</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="e.10-conclusion">E.10 Conclusion</h2>
-<p>The processing described above is necessary to deliver the DEQUAD
-service and to meet UK regulatory obligations under the Online Safety
-Act 2023. The risks have been identified and mitigated to a level that —
-in the controller’s view — meets the UK GDPR Article 35 standard of
-being <strong>proportionate to the purposes and rights at
-stake</strong>. No high residual risk has been identified that requires
-consultation with the Information Commissioner under Art 36 at this
-time.</p>
-<p>The DPIA will be re-reviewed annually, on the appointment of the DPO,
-and immediately upon any material change in processing.</p>
+<h2 id="e10-conclusion">E.10 Conclusion</h2>
+<p>The processing described above is necessary to deliver the DEQUAD service and to meet UK regulatory obligations under the Online Safety Act 2023. The risks have been identified and mitigated to a level that — in the controller's view — meets the UK GDPR Article 35 standard of being <strong>proportionate to the purposes and rights at stake</strong>. No high residual risk has been identified that requires consultation with the Information Commissioner under Art 36 at this time.</p>
+<p>The DPIA will be re-reviewed annually, on the appointment of the DPO, and immediately upon any material change in processing.</p>
 </body>
 </html>
