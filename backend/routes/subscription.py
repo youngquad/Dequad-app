@@ -105,13 +105,21 @@ async def create_checkout_session(data: CreateCheckoutRequest, current_user: Use
         default_cancel = f"{app_url}/subscription" if app_url else "dequad://subscription-cancel"
 
         checkout_session = stripe.checkout.Session.create(
-            customer=stripe_customer_id, mode="subscription", payment_method_types=["card", "link"],
+            customer=stripe_customer_id, mode="subscription",
+            # BACS Direct Debit is enabled on the Stripe account — UK customers
+            # can pay via direct debit (sort code + account number) in addition
+            # to card / Apple Pay / Google Pay (handled by "card") and Stripe
+            # Link. Currency must be GBP for BACS (already set via
+            # STRIPE_PRICE_CURRENCY).
+            payment_method_types=["card", "link", "bacs_debit"],
             line_items=[{"price_data": {"currency": STRIPE_PRICE_CURRENCY, "unit_amount": STRIPE_PRICE_AMOUNT,
                 "recurring": {"interval": "month"}, "product_data": {"name": STRIPE_PRODUCT_NAME, "description": "Unlimited swipes, priority matching, and premium features"}}, "quantity": 1}],
             success_url=data.success_url or default_success,
             cancel_url=data.cancel_url or default_cancel,
             metadata={"user_id": current_user.user_id}, allow_promotion_codes=True, billing_address_collection="auto",
-            payment_method_options={"card": {"request_three_d_secure": "automatic"}}
+            payment_method_options={
+                "card": {"request_three_d_secure": "automatic"},
+            },
         )
         return {"checkout_url": checkout_session.url, "session_id": checkout_session.id}
     except stripe.error.StripeError as e:
