@@ -91,13 +91,15 @@ export default function SubscriptionScreen() {
     const confirmCancel = async () => {
       setIsProcessing(true);
       try {
-        await api.post('/subscription/cancel', {}, sessionToken);
+        const res = await api.post('/subscription/cancel', {}, sessionToken);
         await loadSubscriptionStatus();
         await refreshUser();
+        const msg = res?.message ||
+          'Your subscription will end at the end of the current billing period. You keep Premium until then — no refund issued.';
         if (Platform.OS === 'web' && typeof window !== 'undefined') {
-          window.alert('Your subscription has been cancelled.');
+          window.alert(msg);
         } else {
-          Alert.alert('Subscription Cancelled', 'Your subscription has been cancelled.');
+          Alert.alert('Subscription Cancelled', msg);
         }
       } catch (error: any) {
         console.error('Error cancelling subscription:', error);
@@ -112,11 +114,14 @@ export default function SubscriptionScreen() {
       }
     };
 
-    // React Native `Alert.alert` is a no-op on web — use `window.confirm` instead.
+    const confirmText =
+      'Cancel your Premium subscription?\n\n' +
+      "• You'll keep Premium until the end of the current billing period.\n" +
+      '• No refund will be issued.\n' +
+      "• Your subscription won't auto-renew — no further charges.";
+
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
-      const ok = window.confirm(
-        'Cancel your premium subscription? You will lose unlimited likes at the end of the current billing period.',
-      );
+      const ok = window.confirm(confirmText);
       if (ok) {
         await confirmCancel();
       }
@@ -125,11 +130,11 @@ export default function SubscriptionScreen() {
 
     Alert.alert(
       'Cancel Subscription',
-      'Are you sure you want to cancel your premium subscription? You will lose access to unlimited swipes.',
+      confirmText,
       [
         { text: 'Keep Premium', style: 'cancel' },
         {
-          text: 'Cancel Subscription',
+          text: 'Cancel at period end',
           style: 'destructive',
           onPress: confirmCancel,
         },

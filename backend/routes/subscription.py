@@ -132,6 +132,11 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
         "plan": plan,
         "is_premium": plan == "premium",
         "stripe_customer_id": user_doc.get("stripe_customer_id"),
+        # Cancel-at-period-end state (set when user cancels — premium still
+        # active until `cancel_at`).
+        "subscription_status": user_doc.get("subscription_status"),
+        "cancel_at_period_end": user_doc.get("subscription_status") == "cancel_at_period_end",
+        "cancel_at": user_doc.get("subscription_cancel_at"),
         # New weekly-likes fields
         "likes_this_week": likes_this_week if plan == "free" else 0,
         "remaining_likes_this_week": remaining_likes,
@@ -147,10 +152,18 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
 
 @router.post("/subscription/cancel")
 async def cancel_subscription(current_user: User = Depends(get_current_user)):
+    """Cancel the user's subscription **at the end of the current billing period**.
+
+    Stripe stops auto-renewing the subscription but the user keeps premium access
+    until ``current_period_end``. No refund is issued — the user has already paid
+    for the current period. Direct-debit / card collection is *not* triggered for
+    the next cycle.
+
+    To resume before the period ends, call ``POST /subscription/resume``.
+    """
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
     stripe_customer_id = user_doc.get("stripe_customer_id")
     if not stripe_customer_id:
-        # No Stripe customer at all — just make sure the local plan is free.
         await db.users.update_one(
             {"user_id": current_user.user_id},
             {"$set": {"plan": "free", "subscription_status": "free", "is_premium": False}},
@@ -159,18 +172,65 @@ async def cancel_subscription(current_user: User = Depends(get_current_user)):
     try:
         subscriptions = stripe.Subscription.list(customer=stripe_customer_id, status="active", limit=1)
         if not subscriptions.data:
-            # Nothing active in Stripe — sync local state to free instead of erroring.
             await db.users.update_one(
                 {"user_id": current_user.user_id},
                 {"$set": {"plan": "free", "subscription_status": "free", "is_premium": False}},
             )
             return {"message": "No active subscription to cancel", "plan": "free"}
-        stripe.Subscription.cancel(subscriptions.data[0].id)
+
+        sub = subscriptions.data[0]
+        # Cancel at period end — premium stays active until current_period_end,
+        # no refund, no further charges.
+        updated = stripe.Subscription.modify(sub.id, cancel_at_period_end=True)
+        period_end_iso = datetime.fromtimestamp(updated.current_period_end, tz=timezone.utc).isoformat()
+
         await db.users.update_one(
             {"user_id": current_user.user_id},
-            {"$set": {"plan": "free", "subscription_status": "free", "is_premium": False}},
+            {"$set": {
+                # Keep plan = premium until the period actually ends; a Stripe
+                # webhook (customer.subscription.deleted) will flip it to free.
+                "plan": "premium",
+                "is_premium": True,
+                "subscription_status": "cancel_at_period_end",
+                "subscription_cancel_at": period_end_iso,
+                "subscription_id": sub.id,
+            }},
         )
-        return {"message": "Subscription cancelled successfully", "plan": "free"}
+        return {
+            "message": "Subscription will end at the end of the current billing period. You keep premium until then — no refund issued.",
+            "plan": "premium",
+            "cancel_at_period_end": True,
+            "current_period_end": period_end_iso,
+        }
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error: {e}"); raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/subscription/resume")
+async def resume_subscription(current_user: User = Depends(get_current_user)):
+    """Undo a pending cancellation — the subscription auto-renews again."""
+    user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    stripe_customer_id = user_doc.get("stripe_customer_id")
+    if not stripe_customer_id:
+        raise HTTPException(status_code=400, detail="No subscription found")
+    try:
+        subscriptions = stripe.Subscription.list(customer=stripe_customer_id, status="active", limit=1)
+        if not subscriptions.data:
+            raise HTTPException(status_code=400, detail="No active subscription found")
+        sub = subscriptions.data[0]
+        if not sub.cancel_at_period_end:
+            return {"message": "Subscription is already active", "plan": "premium"}
+        stripe.Subscription.modify(sub.id, cancel_at_period_end=False)
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$set": {
+                "plan": "premium",
+                "is_premium": True,
+                "subscription_status": "active",
+                "subscription_cancel_at": None,
+            }},
+        )
+        return {"message": "Subscription resumed. It will auto-renew at the next billing date.", "plan": "premium"}
     except stripe.error.StripeError as e:
         logger.error(f"Stripe error: {e}"); raise HTTPException(status_code=400, detail=str(e))
 
