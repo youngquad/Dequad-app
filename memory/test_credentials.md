@@ -10,18 +10,18 @@
 - Email: admin@manchesteruni.edu
 - Password: UniAdmin123!
 
-## DEQUAD Staff Demo Accounts (2026-06) — student-app login only
+## DEQUAD Staff Demo Accounts (2026-06, revised) — student-app login only
 For UKES / investor demos. Login via the regular student email/password flow at `/(auth)/login`.
-Public registration of `@dequad.com` is blocked by the `.ac.uk` policy — these accounts exist only because they are seeded by `seed.py`. Override the shared password via `SEED_STAFF_PASSWORD` env var if needed.
+Public registration of `@dequad.com` is blocked by the `.ac.uk` policy — these accounts exist only because they are seeded by `seed.py`. Email format: `firstname.lastname@dequad.com` (case-insensitive at login).
 
-| Email | Name | Role in product |
+| Email | Name | Password |
 |---|---|---|
-| yusuff@dequad.com | Yusuff Adeagbo | student (CTO demo) |
-| gerald@dequad.com | Dr Gerald Marfo | student (CMO demo) |
-| dapo@dequad.com | Adedapo Ajuwon | student (SWE demo) |
-| chinyere@dequad.com | Chinyere Jennifer | student (Advisor demo) |
+| Yusuff.Adeagbo@dequad.com | Yusuff Adeagbo (real mailbox — CTO) | `YusuffAdeagbo11@` |
+| Gerald.Marfo@dequad.com | Dr Gerald Marfo (demo only — CMO) | `DequadStaff2026!` |
+| Adedapo.Ajuwon@dequad.com | Adedapo Ajuwon (demo only — SWE) | `DequadStaff2026!` |
+| Chinyere.Jennifer@dequad.com | Chinyere Jennifer (demo only — Advisor) | `DequadStaff2026!` |
 
-Shared password: `DequadStaff2026!`
+Legacy first-name-only emails (`yusuff@`, `gerald@`, `dapo@`, `chinyere@dequad.com`) were deleted on this revision. Override the shared demo password via `SEED_STAFF_PASSWORD` env var.
 
 ## Test Student Profiles (12 seeded)
 Emma Wilson, James Chen, Sofia Martinez, Alex Thompson, Priya Patel,

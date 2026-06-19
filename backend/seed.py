@@ -192,42 +192,60 @@ async def seed_admin_and_test_users():
     # investor demos so the wider team can sign in to the student app and
     # walk a reviewer through the user experience without creating fresh
     # accounts on demand. Idempotent.
-    staff_password = os.environ.get("SEED_STAFF_PASSWORD", "DequadStaff2026!")
-    staff_password_hash = hashlib.sha256(staff_password.encode()).hexdigest()
+    #
+    # Email format: firstname.lastname@dequad.com.
+    # Only Yusuff.Adeagbo is a real, in-use mailbox; the other three are
+    # demo-only seeded profiles that share the firstname.lastname convention
+    # for visual consistency in screen-share walkthroughs. Each account has
+    # its own per-person password derived from the same convention.
+    generic_demo_password = os.environ.get("SEED_STAFF_PASSWORD", "DequadStaff2026!")
     staff_accounts = [
         {
-            "email": "yusuff@dequad.com", "name": "Yusuff Adeagbo",
+            "email": "Yusuff.Adeagbo@dequad.com", "name": "Yusuff Adeagbo",
+            "password": "YusuffAdeagbo11@",
             "age": 27, "gender": "male", "course": "MSc IT with Project Management",
-            "bio": "CTO @ DEQUAD. Builder, infra and ML enthusiast. Demo account.",
+            "bio": "CTO @ DEQUAD. Builder, infra and ML enthusiast.",
             "interests": ["Engineering", "ML", "Football", "Tech", "Music"],
             "picture": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
         },
         {
-            "email": "gerald@dequad.com", "name": "Dr Gerald Marfo",
+            "email": "Gerald.Marfo@dequad.com", "name": "Dr Gerald Marfo",
+            "password": generic_demo_password,
             "age": 34, "gender": "male", "course": "PhD Digital Marketing",
             "bio": "CMO @ DEQUAD. Digital marketing scholar, marathon runner. Demo account.",
             "interests": ["Marketing", "Running", "Reading", "Podcasts", "Travel"],
             "picture": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
         },
         {
-            "email": "dapo@dequad.com", "name": "Adedapo Ajuwon",
+            "email": "Adedapo.Ajuwon@dequad.com", "name": "Adedapo Ajuwon",
+            "password": generic_demo_password,
             "age": 28, "gender": "male", "course": "Software Engineering",
             "bio": "Senior Software Engineer @ DEQUAD. Full-stack + infra. Demo account.",
             "interests": ["Coding", "Open Source", "Chess", "Gaming", "Coffee"],
             "picture": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop",
         },
         {
-            "email": "chinyere@dequad.com", "name": "Chinyere Jennifer",
+            "email": "Chinyere.Jennifer@dequad.com", "name": "Chinyere Jennifer",
+            "password": generic_demo_password,
             "age": 31, "gender": "female", "course": "Project Management (MIGSO-PCUBED)",
             "bio": "Senior PM Consultant. Advisor @ DEQUAD. LLM background. Demo account.",
             "interests": ["Project Management", "Books", "Yoga", "Cooking", "Mentoring"],
             "picture": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
         },
     ]
+    # Clean up any old-format accounts from the previous (first-name-only) convention.
+    old_emails = ["yusuff@dequad.com", "gerald@dequad.com", "dapo@dequad.com", "chinyere@dequad.com"]
+    cleanup = await db.users.delete_many({"email": {"$in": old_emails}})
+    if cleanup.deleted_count:
+        logger.info(f"Removed {cleanup.deleted_count} legacy staff demo account(s) with first-name-only emails")
+
     for staff in staff_accounts:
-        existing_staff = await db.users.find_one({"email": staff["email"]})
+        staff_email_lower = staff["email"].lower()
+        existing_staff = await db.users.find_one({"email": staff_email_lower})
+        staff_password_hash = hashlib.sha256(staff["password"].encode()).hexdigest()
         staff_doc = {
-            "email": staff["email"],
+            "email": staff_email_lower,
+            "display_email": staff["email"],
             "name": staff["name"],
             "password_hash": staff_password_hash,
             "role": "student",
@@ -252,7 +270,7 @@ async def seed_admin_and_test_users():
             logger.info(f"Staff demo account created: {staff['email']}")
         else:
             await db.users.update_one(
-                {"email": staff["email"]},
+                {"email": staff_email_lower},
                 {"$set": staff_doc},
             )
             logger.info(f"Staff demo account updated: {staff['email']}")
