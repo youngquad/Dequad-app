@@ -1,9 +1,9 @@
 """Convert DEQUAD markdown documents to standalone branded PDFs.
 
-Run with:  python /app/visa_appendices/build_envestors_pdf.py
+Run with:  python /app/visa_appendices/build_ukes_pdf.py
 Outputs:
-  - /app/visa_appendices/DEQUAD_Envestors_Business_Plan.html
-  - /app/visa_appendices/DEQUAD_Envestors_Business_Plan.pdf
+  - /app/visa_appendices/DEQUAD_UKES_Business_Plan.html
+  - /app/visa_appendices/DEQUAD_UKES_Business_Plan.pdf
   - /app/visa_appendices/B_cofounder_cv_template.html / .pdf
 """
 from __future__ import annotations
@@ -116,10 +116,10 @@ def build(md_path: Path, html_path: Path, pdf_path: Path, title: str) -> None:
 
 
 def merge_master_pdf() -> None:
-    """Combine every Envestors-pack PDF into one master submission file.
+    """Combine every UKES-pack PDF into one master submission file.
 
     Order chosen to read naturally for a reviewer: Decision Brief first
-    (the 15-page Envestors short-track summary), then full Business Plan,
+    (the 15-page UKES short-track summary), then full Business Plan,
     then each appendix in alphabetical reference order. The Excel
     Financial Model cannot be embedded — it stays as a sibling file
     alongside the master PDF.
@@ -132,9 +132,9 @@ def merge_master_pdf() -> None:
 
     order = [
         # Cover-of-pack (most useful first read)
-        ("DEQUAD_Envestors_Decision_Brief.pdf", "00 Decision-Maker Brief (15 pages)"),
+        ("DEQUAD_UKES_Decision_Brief.pdf", "00 Decision-Maker Brief (15 pages)"),
         # Full plan
-        ("DEQUAD_Envestors_Business_Plan.pdf", "01 Business Plan"),
+        ("DEQUAD_UKES_Business_Plan.pdf", "01 Business Plan"),
         # Risk register
         ("DEQUAD_Risk_Register.pdf", "02 Risk Register (Appendix L)"),
         # Founder CVs
@@ -168,7 +168,7 @@ def merge_master_pdf() -> None:
         writer.add_outline_item(bookmark, page_start)
         included += 1
 
-    out = APPDIR / "DEQUAD_Envestors_FULL_SUBMISSION.pdf"
+    out = APPDIR / "DEQUAD_UKES_FULL_SUBMISSION.pdf"
     with open(out, "wb") as fp:
         writer.write(fp)
     size_kb = out.stat().st_size // 1024
@@ -180,15 +180,15 @@ def merge_master_pdf() -> None:
 def main() -> None:
     jobs = [
         (
-            APPDIR / "DEQUAD_Envestors_Business_Plan.md",
-            APPDIR / "DEQUAD_Envestors_Business_Plan.html",
-            APPDIR / "DEQUAD_Envestors_Business_Plan.pdf",
-            "DEQUAD — Business Plan (Envestors Submission)",
+            APPDIR / "DEQUAD_UKES_Business_Plan.md",
+            APPDIR / "DEQUAD_UKES_Business_Plan.html",
+            APPDIR / "DEQUAD_UKES_Business_Plan.pdf",
+            "DEQUAD — Business Plan (UKES Submission)",
         ),
         (
-            APPDIR / "DEQUAD_Envestors_Decision_Brief.md",
-            APPDIR / "DEQUAD_Envestors_Decision_Brief.html",
-            APPDIR / "DEQUAD_Envestors_Decision_Brief.pdf",
+            APPDIR / "DEQUAD_UKES_Decision_Brief.md",
+            APPDIR / "DEQUAD_UKES_Decision_Brief.html",
+            APPDIR / "DEQUAD_UKES_Decision_Brief.pdf",
             "DEQUAD — Decision-Maker Brief (15 pages)",
         ),
         (

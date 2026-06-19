@@ -18,7 +18,7 @@ _(On partner-university letterhead.)_
 
 To whom it may concern,
 
-I am writing in my capacity as **[Job Title]** at **[University Name]** to confirm our institutional interest in piloting the DEQUAD platform (developed by DEQUAD Ltd, founded by Yusuf Quadri) during academic year 2026/27.
+I am writing in my capacity as **[Job Title]** at the **University of Bedfordshire** to confirm our institutional interest in piloting the DEQUAD platform (developed by DEQUAD Ltd, co-founded by Yusuf Quadri — formerly Bedfordshire SU President 2021–2023 — and Yusuff Adeagbo, CTO) during academic year 2026/27.
 
 ## Background
 

@@ -1,7 +1,7 @@
 # DEQUAD — Risk Register
-## Supporting Appendix — Envestors Innovator Founder Visa Submission
+## Supporting Appendix — UKES Innovator Founder Visa Submission
 
-> **Purpose.** Envestors may request a standalone risk register alongside the
+> **Purpose.** UKES may request a standalone risk register alongside the
 > business plan. This document enumerates the 16 most material risks
 > identified by the founders, scores each on a 1–5 scale for both
 > Likelihood and Impact, gives the resulting Risk Score
@@ -38,7 +38,7 @@ Risk score traffic-light:
 |---|---|---|---:|---:|---:|---|---|---|
 | **R1** | **University of Bedfordshire pilot fails to convert before Sep Y1 — pre-seed bridge slips** | Commercial | 2 | 5 | **10** | 🟠 | CEO | Lead founder is a **former University of Bedfordshire Student Union President (2021–2023)** with existing senior-management relationships; conversion likelihood materially de-risked vs. cold-outreach. Two further pilot conversations scoped at peer institutions as backup. Founders have committed personal-savings top-up for any 4-week slip. |
 | **R2** | **Co-founder formal appointment delayed past incorporation** | Team | 3 | 5 | **15** | 🟠 | CEO | Candidate identified, term sheet drafted; founder agreement signed; CEO covers Y1 technical work alone if hire slips by < 90 days; backup engineering contractor identified. |
-| **R3** | **Pre-seed bridge fails to close in Sep Y1** | Capital | 2 | 4 | **8** | 🟡 | CEO | Two parallel investor tracks: (a) Envestors angel network, (b) NatWest Accelerator demo day Q3 Y1. **£6,000 founder cash + £31k in-kind support carry the business with positive monthly closing balances every month of Year 1**, so a 3-month investor slip is tolerable. Fall-back: Innovate UK Smart Grant submitted Q2 Y1 (~£30k). |
+| **R3** | **Pre-seed bridge fails to close in Sep Y1** | Capital | 2 | 4 | **8** | 🟡 | CEO | Two parallel investor tracks: (a) UKES angel network, (b) NatWest Accelerator demo day Q3 Y1. **£6,000 founder cash + £31k in-kind support carry the business with positive monthly closing balances every month of Year 1**, so a 3-month investor slip is tolerable. Fall-back: Innovate UK Smart Grant submitted Q2 Y1 (~£30k). |
 | **R4** | **Safeguarding incident — false negative (failure to flag a real risk signal)** | Product / Clinical | 3 | 5 | **15** | 🟠 | CEO | Human-in-the-loop review for all high-risk flags within 1h; clear in-app crisis-escalation path (Samaritans, 999, university DSL); £1m professional indemnity insurance; clinical advisory board recruitment underway (Q2 Y2 target). |
 | **R5** | **Safeguarding incident — false positive that harms a student** (e.g. wrong escalation) | Product / Clinical | 3 | 4 | **12** | 🟠 | CEO | Two-step DSL confirmation before any disclosure outside the platform; full audit log; student "appeal" route surfaced in-product. |
 | **R6** | **Online Safety Act 2023 non-compliance or ICO enforcement** | Regulatory | 2 | 5 | **10** | 🟠 | CEO | OSA risk assessment & reporting flows already shipped (Appendix I); ICO DPIA drafted (Appendix E); legal review via NatWest Mishcon panel; quarterly compliance review with external counsel. |
@@ -73,7 +73,7 @@ The seven highest-scoring risks define the Year-1 management agenda:
 
 ## Risks accepted (🟢)
 
-The founders have accepted (and disclosed to Envestors) the following lower-priority risks without active mitigation in Year 1:
+The founders have accepted (and disclosed to UKES) the following lower-priority risks without active mitigation in Year 1:
 
 - **R-A1** Foreign-exchange exposure on USD-denominated cloud bills — accepted: < 10% of COGS.
 - **R-A2** Personal liability for limited director duties — accepted with standard D&O insurance to be in place post-seed.
@@ -90,4 +90,4 @@ The founders have accepted (and disclosed to Envestors) the following lower-prio
 
 ---
 
-*Prepared for Envestors as Appendix L to the Innovator Founder visa endorsement application — February 2026.*
+*Prepared for UKES as Appendix L to the Innovator Founder visa endorsement application — February 2026.*

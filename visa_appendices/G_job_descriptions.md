@@ -27,7 +27,7 @@ Salary bands are aligned with **London or hybrid-London** weighting where applic
 | Hire month | Month 1 |
 | Initial commitment | 0.5 FTE (Y1) → 1.0 FTE end of Y1 |
 | Salary band | £42k–£52k (pro-rata) |
-| Reporting line | Founder (CEO) |
+| Reporting line | CEO + CTO (Yusuf Quadri + Yusuff Adeagbo) |
 | Mission | Lead safeguarding triage, manage DSL on-call rota, liaise with partner-university DSLs |
 | Must-have | Level 3 Safeguarding Adults qualification; ≥3 years HE / NHS / charity safeguarding experience; enhanced DBS |
 | Nice-to-have | Direct counselling experience; suicide-safer training |
@@ -40,7 +40,7 @@ Salary bands are aligned with **London or hybrid-London** weighting where applic
 | Hire month | Month 4 |
 | FTE | 1.0 |
 | Salary band | £55k–£70k |
-| Reporting line | Founder (CEO) |
+| Reporting line | CEO + CTO (Yusuf Quadri + Yusuff Adeagbo) |
 | Mission | Take ownership of frontend (Expo/React) so founder can shift to product + sales; ship the iOS + Android stores release |
 | Must-have | 4+ years full-stack; React Native or Expo production experience; comfort with serverless + Mongo |
 | Nice-to-have | Health-tech background; safeguarding context |
@@ -53,7 +53,7 @@ Salary bands are aligned with **London or hybrid-London** weighting where applic
 | Hire month | Month 7 |
 | FTE | 0.5 (Y1) → 1.0 (Y2) |
 | Salary band | £36k–£44k (pro-rata) |
-| Reporting line | Founder |
+| Reporting line | CEO + CTO |
 | Mission | Onboard first 3 pilot universities; build CS playbook |
 | Must-have | 2+ years CS or account management in B2B SaaS; education or health-tech background |
 | Recruitment channel | LinkedIn, Otta |
@@ -65,7 +65,7 @@ Salary bands are aligned with **London or hybrid-London** weighting where applic
 | Hire month | Month 10 |
 | FTE | 0.5 |
 | Salary band | £40k–£50k (pro-rata) |
-| Reporting line | Founder |
+| Reporting line | CEO + CTO |
 | Mission | Student-facing marketing: TikTok/Instagram, freshers' fair partnerships, society sponsorships |
 | Must-have | Demonstrated organic growth on Gen-Z channels; basic data literacy |
 | Recruitment channel | LinkedIn, freelancer-platform conversion |

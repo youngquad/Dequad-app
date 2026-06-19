@@ -1,7 +1,7 @@
 # Appendix O — Yusuf Quadri
 ## Safeguarding & Clinical-Awareness Certifications
 
-> Supporting appendix to the DEQUAD Envestors Innovator Founder visa
+> Supporting appendix to the DEQUAD UKES Innovator Founder visa
 > submission. Confirms that the lead applicant (CEO and safeguarding
 > policy owner for DEQUAD) holds the relevant baseline safeguarding,
 > data-protection and clinical-awareness certifications required to
@@ -66,4 +66,4 @@ The lead applicant commits to:
 
 *Copies of the original certificates can be supplied on request.*
 
-*Prepared for Envestors as Appendix O to the Innovator Founder visa endorsement application — February 2026.*
+*Prepared for UKES as Appendix O to the Innovator Founder visa endorsement application — February 2026.*

@@ -109,7 +109,7 @@ def sheet_readme(wb):
     ws["A1"].font = Font(bold=True, size=16, color=NAVY)
     intro = [
         "",
-        "Prepared for: Envestors (endorsing body) — UK Innovator Founder Visa",
+        "Prepared for: UKES (endorsing body) — UK Innovator Founder Visa",
         "Entity:       DEQUAD Ltd (company in formation, England & Wales)",
         "Founders:     Two co-founders — Founder A (Yusuf Quadri) and Founder B (TBC)",
         "Starting cash: £6,000 (£3,000 from each founder, pooled in the company bank)",
@@ -144,7 +144,7 @@ def sheet_readme(wb):
         " 11. Accelerator Value  — Quantified in-kind value of NatWest support",
         " 12. Startup Loan       — Empty (no debt taken)",
         "",
-        "All assumptions map to /app/visa_appendices/DEQUAD_Envestors_Business_Plan.md.",
+        "All assumptions map to /app/visa_appendices/DEQUAD_UKES_Business_Plan.md.",
         "Yellow cells indicate user-editable inputs.",
     ]
     for i, line in enumerate(intro, start=2):
@@ -325,7 +325,7 @@ def sheet_cf(wb):
 
 
 # ============================================================
-# Year 1 monthly cash flow — critical for Envestors
+# Year 1 monthly cash flow — critical for UKES
 # ============================================================
 def sheet_cf_monthly(wb):
     ws = wb.create_sheet("Cash Flow Y1 (mo)")
@@ -737,7 +737,7 @@ def sheet_accelerator(wb):
         r += 1
     ws.cell(row=r+1, column=1,
             value="The NatWest Accelerator membership materially de-risks Year 1: £31k of services received in-kind "
-                  "against just £1.2k of cash cost. This is a strong validation signal for Envestors — DEQUAD has "
+                  "against just £1.2k of cash cost. This is a strong validation signal for UKES — DEQUAD has "
                   "already passed NatWest's selection process and is being mentored by their startup network.").font = italic_small
     ws.merge_cells(start_row=r+1, start_column=1, end_row=r+1, end_column=4)
 

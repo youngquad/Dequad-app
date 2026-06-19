@@ -7,7 +7,11 @@
 
 ---
 
-I, **Yusuf Quadri**, the sole founder and CEO of DEQUAD Ltd (the "Company") and applicant for endorsement under the UK Innovator Founder route, irrevocably undertake to UK Endorsement Services Ltd as follows:
+I, **Yusuf Quadri**, co-founder and CEO of DEQUAD Ltd (the "Company") and applicant for endorsement under the UK Innovator Founder route, irrevocably undertake to UK Endorsement Services Ltd as follows:
+
+## 0. Co-founder context
+
+The Company is being co-founded with **Yusuff Adeagbo** (Chief Technology Officer), who is also UK-resident, full-time on DEQUAD, and contributing matching founder share capital of £3,000. Both co-founders have signed customary founder-vesting on equivalent terms. The wider founding team — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior Software Engineer) and Chinyere Jennifer (Senior Advisor) — is joining at incorporation on equity-only terms with no Year-1 salary.
 
 ## 1. Sole and full-time occupation
 
@@ -15,7 +19,7 @@ I will be engaged in the business of DEQUAD Ltd as my **sole and full-time occup
 
 ## 2. Continuity of role and equity
 
-I will retain the role of Chief Executive Officer of the Company for the duration of the endorsement period. I will retain a majority shareholding in the Company throughout that period unless a dilutive equity investment is approved in advance by the endorsing body in accordance with UKES's published guidance.
+I will retain the role of Chief Executive Officer of the Company for the duration of the endorsement period. I will retain a material founding shareholding (initially 50%, jointly with the co-founder) throughout that period; any dilutive equity investment will be approved in advance by the endorsing body in accordance with UKES's published guidance.
 
 ## 3. UK base of operations
 

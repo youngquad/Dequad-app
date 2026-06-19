@@ -1,7 +1,7 @@
 # DEQUAD — Decision-Maker Brief
-## Envestors Endorsement (Innovator Founder Visa) · Short-Track Review
+## UKES Endorsement (Innovator Founder Visa) · Short-Track Review
 
-> **15-page brief.** Companion to the full Business Plan (`DEQUAD_Envestors_Business_Plan.pdf`)
+> **15-page brief.** Companion to the full Business Plan (`DEQUAD_UKES_Business_Plan.pdf`)
 > and the Financial Model (`DEQUAD_Financial_Model.xlsx`). Use this document to
 > assess endorsement readiness in 20 minutes.
 
@@ -371,5 +371,5 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 
 ---
 
-*Prepared for Envestors short-track endorsement review — February 2026.*
-*Companion documents: `DEQUAD_Envestors_Business_Plan.pdf`, `DEQUAD_Financial_Model.xlsx`, `DEQUAD_Risk_Register.pdf`.*
+*Prepared for UKES short-track endorsement review — February 2026.*
+*Companion documents: `DEQUAD_UKES_Business_Plan.pdf`, `DEQUAD_Financial_Model.xlsx`, `DEQUAD_Risk_Register.pdf`.*

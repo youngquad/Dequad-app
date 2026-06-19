@@ -80,4 +80,4 @@ Signed: ___________________________   Date: ___________________
 
 ---
 
-*Prepared for submission to Envestors as Appendix B-2 of the DEQUAD Innovator Founder visa endorsement application — February 2026.*
+*Prepared for submission to UKES as Appendix B-2 of the DEQUAD Innovator Founder visa endorsement application — February 2026.*

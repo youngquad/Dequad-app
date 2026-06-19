@@ -1,6 +1,6 @@
 # DEQUAD
 ## Business Plan — UK Innovator Founder Visa
-### Endorsement Application to Envestors
+### Endorsement Application to UKES
 
 ---
 
@@ -16,7 +16,7 @@ office co-working, legal advice and accountancy support provided in-kind for the
 **Prior validation:** **Santander Universities Pre-Incubator programme** — completed 2025
 **Document version:** 2.0 (Bootstrap edition)
 **Date:** February 2026
-**Endorsing body:** Envestors
+**Endorsing body:** UKES
 
 ---
 
@@ -352,7 +352,7 @@ This in-kind support is what makes the £6,000 founder capital sufficient — DE
 |---|---|---|---:|---|
 | **Founder equity** | Day 1 (Q1 Y1) | Yusuf (£3,000) + Co-Founder (£3,000) | **£6,000** | Incorporation, domains, IP filings, initial hosting. |
 | **R&D tax credit** | End Y1 | HMRC SME R&D | ~£3,600 | Recycled into engineering. |
-| **Pre-seed bridge** | M7 (Sep Y1) — *after* Bedfordshire pilot converts | UK pre-seed angels via Envestors / NatWest network | **£150,000** at £1.2m post-money cap (12.5% equity) | First 4 hires, 18-month runway, dual mobile builds, R&D engineering. |
+| **Pre-seed bridge** | M7 (Sep Y1) — *after* Bedfordshire pilot converts | UK pre-seed angels via UKES / NatWest network | **£150,000** at £1.2m post-money cap (12.5% equity) | First 4 hires, 18-month runway, dual mobile builds, R&D engineering. |
 | **Seed round** | Q2 Y2 | UK VCs (Forward Partners, Local Globe, Crane) | **£750,000** at £6m post (12.5% equity) | Scale to 20 universities, ML data team, NHS-ICB channel. |
 | **Series A** | Q1 Y4 | Growth-stage VCs | **£3–5m** | EU + AU launch, federated-learning infra, 30+ FTE. |
 
@@ -583,11 +583,11 @@ All Y2+ hires receive EMI options (HMRC-approved) — 4-year vest, 1-year cliff.
 | I | Online Safety Act 2023 compliance statement | `I_online_safety_act_compliance.md` |
 | J | Architecture diagram | `J_architecture_diagram.md` |
 | K | Product screenshots | `K_product_screenshots.md` |
-| L | Risk Register (Envestors) | `DEQUAD_Risk_Register.md` |
-| M | Decision-Maker Brief (Envestors short track) | `DEQUAD_Envestors_Decision_Brief.md` |
+| L | Risk Register (UKES) | `DEQUAD_Risk_Register.md` |
+| M | Decision-Maker Brief (UKES short track) | `DEQUAD_UKES_Decision_Brief.md` |
 | **N** | **Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior SWE), Chinyere Jennifer (Advisor)** | `N_wider_team_cvs.md` |
 | **O** | **Yusuf Quadri — Safeguarding & Clinical-Awareness Certifications** | `O_safeguarding_certifications.md` |
 
 ---
 
-*End of business plan. All figures are forecasts and not guarantees of future performance. Prepared for submission to Envestors as part of the UK Innovator Founder visa endorsement process — February 2026.*
+*End of business plan. All figures are forecasts and not guarantees of future performance. Prepared for submission to UKES as part of the UK Innovator Founder visa endorsement process — February 2026.*

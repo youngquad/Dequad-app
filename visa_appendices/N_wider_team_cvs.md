@@ -1,5 +1,5 @@
 # Appendix N — Wider Founding Team CVs
-## Supporting Appendix to the DEQUAD Envestors Submission
+## Supporting Appendix to the DEQUAD UKES Submission
 
 > Beyond the two named co-founders (Yusuf Quadri, CEO; Yusuff Adeagbo, CTO),
 > DEQUAD is joined at incorporation by three senior team members who bring
@@ -90,7 +90,7 @@ Chinyere Jennifer is a Senior Project Management Consultant at MIGSO-PCUBED, one
 
 ## Why this matters for endorsement
 
-For Envestors, the wider team materially strengthens the **viability** evidence:
+For UKES, the wider team materially strengthens the **viability** evidence:
 
 | Dimension | Evidence |
 |---|---|
@@ -104,4 +104,4 @@ Three appointments to a founding team alongside two co-founders is unusually dee
 
 ---
 
-*Prepared for Envestors as Appendix N to the Innovator Founder visa endorsement application — February 2026.*
+*Prepared for UKES as Appendix N to the Innovator Founder visa endorsement application — February 2026.*
