@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DEQUAD — Pre-Seed Pitch Deck</title>
+<style>
+@page { size: A4 landscape; margin: 0; }
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: #0F2942;
+  background: #F6FAFE;
+  margin: 0;
+  padding: 0;
+  font-size: 13pt;
+  line-height: 1.5;
+}
+.slide {
+  width: 297mm;
+  height: 210mm;
+  padding: 24mm 28mm;
+  page-break-after: always;
+  page-break-inside: avoid;
+  background: #F6FAFE;
+  position: relative;
+  overflow: hidden;
+}
+.slide:last-child { page-break-after: auto; }
+.slide.cover {
+  background: linear-gradient(135deg, #0F2942 0%, #1A3F60 60%, #2C5680 100%);
+  color: #F6FAFE;
+  padding: 40mm 32mm;
+}
+.slide.cover h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 84pt;
+  font-weight: 800;
+  margin: 0 0 6mm 0;
+  letter-spacing: -2px;
+  color: #F6FAFE;
+  border: none;
+}
+.slide.cover h2 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 28pt;
+  font-weight: 400;
+  margin: 0 0 14mm 0;
+  color: #B7D4EE;
+  border: none;
+}
+.slide.cover p { font-size: 13pt; line-height: 1.7; opacity: 0.92; }
+.slide.cover p strong { color: #4FB89F; }
+
+.slide h2 {
+  font-family: "Playfair Display", Georgia, serif;
+  color: #0F2942;
+  font-size: 32pt;
+  font-weight: 700;
+  margin: 0 0 10mm 0;
+  letter-spacing: -1px;
+  border-bottom: 3px solid #5B9BD5;
+  padding-bottom: 4mm;
+  display: inline-block;
+}
+.slide h3 {
+  font-size: 16pt;
+  color: #0F2942;
+  margin-top: 6mm;
+}
+.slide blockquote {
+  border-left: 4px solid #4FB89F;
+  margin: 6mm 0;
+  padding: 4mm 8mm;
+  background: #FFFFFF;
+  font-size: 14pt;
+  line-height: 1.7;
+  border-radius: 4px;
+}
+.slide p { margin: 4mm 0; }
+.slide strong { color: #0F2942; font-weight: 700; }
+.slide ul { padding-left: 8mm; }
+.slide li { margin-bottom: 3mm; }
+.slide table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 11pt;
+  background: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(15, 41, 66, 0.06);
+}
+.slide th {
+  background: #0F2942;
+  color: #FFFFFF;
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 10pt;
+  letter-spacing: 0.3px;
+}
+.slide td {
+  padding: 5px 10px;
+  border-bottom: 1px solid #DDE8F2;
+  vertical-align: top;
+}
+.slide tr:last-child td { border-bottom: none; }
+.slide tr:nth-child(even) td { background: #EDF4FB; }
+.slide hr { display: none; }
+
+/* Page number watermark */
+.slide:not(.cover)::after {
+  content: "DEQUAD · UKES Pre-Seed Deck · February 2026";
+  position: absolute;
+  bottom: 8mm;
+  right: 28mm;
+  font-size: 9pt;
+  color: #94A3B0;
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+<hr />
+<div class="slide cover">
+<h1>DEQUAD</h1>
+<h2>See loneliness early. Act before it becomes a crisis.</h2>
+<p>The closed-network student-wellbeing platform for UK universities.
+Verified <code>.ac.uk</code> peer matching · daily mood telemetry · machine-assisted safeguarding triage.</p>
+<p><strong>Yusuf Quadri</strong> (CEO) · <strong>Yusuff Adeagbo</strong> (CTO) · dequad.co.uk
+Pre-Seed · £150,000 · February 2026</p>
+</div>
+<hr />
+<div class="slide">
+<h2>01 · The problem</h2>
+<blockquote>
+<p><strong>54%</strong> of UK undergraduates report frequent loneliness <em>(ONS, 2023)</em>
+<strong>34%</strong> experience a clinically-significant mental-health issue during their degree <em>(Student Minds, 2024)</em>
+<strong>6.1 weeks</strong> average wait for a university counsellor <em>(UUK, 2024)</em></p>
+</blockquote>
+<p>University wellbeing teams are reactive. By the time a student presents in crisis, the relationships that would have prevented it never formed.</p>
+<p><strong>No-one is solving this for the 95% of students who never walk into the counselling office.</strong></p>
+</div>
+<hr />
+<div class="slide">
+<h2>02 · Why now</h2>
+<ul>
+<li><strong>Office for Students (2023)</strong> — every UK uni must now evidence proactive prevention.</li>
+<li><strong>Online Safety Act 2023</strong> — student-facing platforms must implement risk-assessment and reporting flows. DEQUAD ships with these built in.</li>
+<li><strong>UUK Mental Health Charter</strong> — <strong>100+ UK universities</strong> committed to data-driven wellbeing strategy.</li>
+<li><strong>Post-pandemic loneliness has not normalised</strong> — undergraduate levels remain <strong>18 percentage points</strong> above 2019 baseline.</li>
+</ul>
+<p>The buyer is now mandated to spend, and the regulator is now watching. The window to land institutional contracts is open today.</p>
+</div>
+<hr />
+<div class="slide">
+<h2>03 · The product</h2>
+<p>DEQUAD is <strong>one app, four shipped modules</strong>, live in production at dequad.co.uk.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Verified peer matching</strong></td>
+<td><code>.ac.uk</code> email + student-attestation; match by intent (friend / study / support).</td>
+</tr>
+<tr>
+<td><strong>Daily wellbeing tracker</strong></td>
+<td>30-second mood, sleep, stress and connection check-in → personal trend dashboard.</td>
+</tr>
+<tr>
+<td><strong>Machine-assisted safeguarding</strong></td>
+<td>LLM classifier on mood + chat metadata flags risk signals; webhook to university DSL in <strong>&lt; 60s</strong>.</td>
+</tr>
+<tr>
+<td><strong>University Insights Dashboard</strong></td>
+<td>Anonymised, aggregated wellbeing analytics — cohort mood trends, hotspot alerts.</td>
+</tr>
+</tbody>
+</table>
+<p>Built with FastAPI + MongoDB + Expo (universal iOS / Android / web).</p>
+</div>
+<hr />
+<div class="slide">
+<h2>04 · Differentiation</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th><strong>DEQUAD</strong></th>
+<th>Togetherall</th>
+<th>TalkCampus</th>
+<th>UniBuddy</th>
+<th>Bumble BFF</th>
+<th>Discord</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.ac.uk</code> verification</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Intent-based peer matching</td>
+<td>✅</td>
+<td>❌</td>
+<td>Ltd</td>
+<td>❌</td>
+<td>Ltd</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Daily mood telemetry</td>
+<td>✅</td>
+<td>❌</td>
+<td>Ltd</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Machine-assisted safeguarding</td>
+<td>✅</td>
+<td>Ltd</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Safeguarding webhook to uni</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>UK universities served</td>
+<td>growing</td>
+<td>~60</td>
+<td>~30</td>
+<td>200+</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>ASP per uni</td>
+<td><strong>£12–20k</strong></td>
+<td>£40k+</td>
+<td>£25k</td>
+<td>£18k</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<p><strong>DEQUAD is the only product combining all five top-row capabilities.</strong></p>
+</div>
+<hr />
+<div class="slide">
+<h2>05 · Market</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Definition</th>
+<th style="text-align: right;">Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TAM</strong></td>
+<td>All UK universities + ICBs + UK student premium subs</td>
+<td style="text-align: right;"><strong>£86m / year</strong></td>
+</tr>
+<tr>
+<td><strong>SAM</strong></td>
+<td>Russell-Group + post-92 unis &gt; 10k students + their ICBs</td>
+<td style="text-align: right;"><strong>£28m / year</strong></td>
+</tr>
+<tr>
+<td><strong>SOM (5-yr)</strong></td>
+<td>12% SAM capture (matches Togetherall's Y5 share)</td>
+<td style="text-align: right;"><strong>£3.4m ARR by Y5</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>2.86m</strong> UK higher-ed students <em>(HESA 2023/24)</em></li>
+<li><strong>285</strong> UK higher-ed institutions</li>
+<li><strong>100+</strong> UUK Mental Health Charter signatories</li>
+</ul>
+<p>International optionality post-Y3: <code>.edu</code>, <code>.edu.au</code>, EU domains → <strong>£180m TAM</strong> in EN-language HE markets.</p>
+</div>
+<hr />
+<div class="slide">
+<h2>06 · Business model</h2>
+<p>Three revenue lines — software-only, <strong>92% gross margin</strong> by Y3.</p>
+<table>
+<thead>
+<tr>
+<th>Customer</th>
+<th>What they receive</th>
+<th style="text-align: right;">Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UK university</strong></td>
+<td>Site-licence + safeguarding webhook + success manager</td>
+<td style="text-align: right;"><strong>£12,000 / yr</strong> (tiered)</td>
+</tr>
+<tr>
+<td><strong>NHS Integrated Care Board</strong></td>
+<td>Population-level analytics + joint safeguarding pathway</td>
+<td style="text-align: right;"><strong>£20,000 / yr</strong></td>
+</tr>
+<tr>
+<td><strong>Student (B2C)</strong></td>
+<td>Free core. Optional <strong>DEQUAD Premium</strong></td>
+<td style="text-align: right;"><strong>£4.99 / month</strong></td>
+</tr>
+</tbody>
+</table>
+<p>B2B subscriptions cover the fixed cost base. Premium and ICB contracts are the upside.</p>
+</div>
+<hr />
+<div class="slide">
+<h2>07 · Traction</h2>
+<ul>
+<li>🛠️ <strong>MVP live in production</strong> at dequad.co.uk — no further build-cost in Y1.</li>
+<li>👥 <strong>~50 beta users</strong> active across 3 UK universities.</li>
+<li>🏛️ <strong>Anchor pilot in negotiation: University of Bedfordshire.</strong> Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.</li>
+<li>🏦 <strong>Santander Universities Pre-Incubator</strong> — completed 2025.</li>
+<li>🏦 <strong>NatWest Accelerator (London)</strong> — joined <strong>16 March 2026</strong>. £31k of in-kind support delivered (office, legal, accountancy, mentoring).</li>
+</ul>
+<p>Two UK high-street banks have independently selected the team.</p>
+</div>
+<hr />
+<div class="slide">
+<h2>08 · Team</h2>
+<p>A <strong>founding team of five</strong> — two named co-founders contributing £3,000 each in cash; three senior team members joining on equity-only terms, <strong>no Year-1 salary</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Person</th>
+<th>Role</th>
+<th>Background</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Yusuf Quadri</strong></td>
+<td>CEO · Product &amp; Safeguarding</td>
+<td>Bedfordshire SU President 2021–23; 7 safeguarding &amp; clinical-awareness certifications.</td>
+</tr>
+<tr>
+<td><strong>Yusuff Adeagbo</strong></td>
+<td>CTO · Engineering &amp; IT</td>
+<td>MSc IT with Project Management (UWS); HND Computer Science.</td>
+</tr>
+<tr>
+<td><strong>Dr Gerald Marfo</strong></td>
+<td>CMO</td>
+<td><strong>PhD in Digital Marketing</strong>.</td>
+</tr>
+<tr>
+<td><strong>Adedapo Ajuwon</strong></td>
+<td>Senior Software Engineer</td>
+<td>Full-stack and infrastructure.</td>
+</tr>
+<tr>
+<td><strong>Chinyere Jennifer</strong></td>
+<td>Senior Advisor</td>
+<td>Senior PM Consultant, <strong>MIGSO-PCUBED</strong>; LLM background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr />
+<div class="slide">
+<h2>09 · Financials — 3-year forecast</h2>
+<table>
+<thead>
+<tr>
+<th>(£)</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Revenue</td>
+<td style="text-align: right;">11,988</td>
+<td style="text-align: right;">185,808</td>
+<td style="text-align: right;"><strong>699,280</strong></td>
+</tr>
+<tr>
+<td>Gross profit</td>
+<td style="text-align: right;">10,548</td>
+<td style="text-align: right;">170,208</td>
+<td style="text-align: right;">645,280</td>
+</tr>
+<tr>
+<td>Gross margin</td>
+<td style="text-align: right;">88%</td>
+<td style="text-align: right;">92%</td>
+<td style="text-align: right;"><strong>92%</strong></td>
+</tr>
+<tr>
+<td>Operating profit / (loss)</td>
+<td style="text-align: right;">(18,372)</td>
+<td style="text-align: right;">(62,772)</td>
+<td style="text-align: right;"><strong>61,520</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Operating profit positive Q3 Y3.</strong> Cumulative loss before profitability ≈ <strong>£81k</strong> — exceptionally capital-efficient because the NatWest in-kind support and 6-month no-salary founder commitment hold Y1 burn to single digits.</p>
+<p>UK jobs: <strong>2 (Y1) → 6 (Y2) → 12 (Y3)</strong>.</p>
+</div>
+<hr />
+<div class="slide">
+<h2>10 · Year-1 cash plan — viability evidence</h2>
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th style="text-align: right;">Closing cash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 (Mar) — incorporation, £6k founder cash</td>
+<td style="text-align: right;">£4,910</td>
+</tr>
+<tr>
+<td>M4 (Jun)</td>
+<td style="text-align: right;">£3,000</td>
+</tr>
+<tr>
+<td>M6 (Aug) — lowest point</td>
+<td style="text-align: right;"><strong>£2,670</strong></td>
+</tr>
+<tr>
+<td><strong>M7 (Sep) — £150k pre-seed + Bedfordshire pilot converts</strong></td>
+<td style="text-align: right;"><strong>£148,640</strong></td>
+</tr>
+<tr>
+<td>M12 (Feb) — Y1 close</td>
+<td style="text-align: right;"><strong>£137,028</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Cash is positive every single month of Year 1.
+The £150k pre-seed bridge is the only critical commercial event — and the Bedfordshire relationship de-risks it.</p>
+</blockquote>
+</div>
+<hr />
+<div class="slide">
+<h2>11 · The ask · £150,000 pre-seed</h2>
+<p><strong>Round:</strong> Pre-seed bridge at <strong>£1.2m post-money cap</strong> (~12.5% equity).
+<strong>Trigger:</strong> Anchor university pilot signature (University of Bedfordshire, target Sep 2026).
+<strong>Lead via:</strong> Envestors angel network + NatWest Accelerator demo day Q3 Y1.</p>
+<h3>Use of funds (£150k → 18 months)</h3>
+<table>
+<thead>
+<tr>
+<th>Bucket</th>
+<th style="text-align: right;">£</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First 4 UK hires (Customer Success, Backend Eng, Safeguarding Lead, Marketing)</td>
+<td style="text-align: right;">£105,000</td>
+</tr>
+<tr>
+<td>Dual mobile builds (EAS iOS + Android)</td>
+<td style="text-align: right;">£8,000</td>
+</tr>
+<tr>
+<td>Marketing (Year 1 H2 + Year 2 H1)</td>
+<td style="text-align: right;">£14,000</td>
+</tr>
+<tr>
+<td>R&amp;D engineering (federated learning, OCR student-ID verification)</td>
+<td style="text-align: right;">£15,000</td>
+</tr>
+<tr>
+<td>Reserves</td>
+<td style="text-align: right;">£8,000</td>
+</tr>
+</tbody>
+</table>
+<p>Next round: <strong>£750k seed Q2 Y2</strong> at £6m post — to scale to 20 paying universities.</p>
+</div>
+<hr />
+<div class="slide cover">
+<h2>DEQUAD</h2>
+<blockquote>
+<p>See loneliness early. Act before it becomes a crisis.</p>
+</blockquote>
+<p><strong>Live at dequad.co.uk</strong> · MVP shipped · 5-person founding team
+NatWest Accelerator · Santander Universities · University of Bedfordshire pilot</p>
+<p><strong>Yusuf Quadri</strong> — yusuf@dequad.co.uk
+<strong>Yusuff Adeagbo</strong> — yusuff@dequad.co.uk</p>
+<p><em>Thank you.</em></p>
+</div>
+</body>
+</html>
