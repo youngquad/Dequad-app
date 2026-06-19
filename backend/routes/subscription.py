@@ -10,7 +10,8 @@ from database import db
 from models import User, CreateCheckoutRequest, UniversitySubscriptionRequest
 from helpers.auth import get_current_user
 from config import (
-    STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_AMOUNT, STRIPE_PRICE_CURRENCY,
+    STRIPE_WEBHOOK_SECRET, STRIPE_UNIVERSITY_WEBHOOK_SECRET,
+    STRIPE_PRICE_AMOUNT, STRIPE_PRICE_CURRENCY,
     STRIPE_PRODUCT_NAME, UNIVERSITY_PRICE_AMOUNT, UNIVERSITY_PRICE_CURRENCY,
     UNIVERSITY_PRODUCT_NAME, FREE_LIKES_PER_WEEK
 )
@@ -216,7 +217,7 @@ async def university_stripe_webhook(request: Request):
     sig_header = request.headers.get("stripe-signature")
     if not sig_header: raise HTTPException(status_code=400, detail="Missing Stripe signature")
     try:
-        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_UNIVERSITY_WEBHOOK_SECRET)
     except (ValueError, stripe.error.SignatureVerificationError):
         raise HTTPException(status_code=400, detail="Invalid webhook")
 
