@@ -78,31 +78,22 @@ async def discover_matches(
     """Return candidate profiles for the swipe deck.
 
     By default, anyone the current user has already swiped on (like OR dislike) is
-    excluded. When ``reset=true`` is passed (used by the "Refresh" button after
-    exhausting the deck), profiles the user *disliked* more than 7 days ago come
-    back into the pool, so the user has someone new to see. Likes are never
-    re-shown — those are already a "match in progress".
+    excluded. When ``reset=true`` is passed (used by the "Refresh" button on the
+    Connect page), **all previous dislike/skip records for the current user are
+    cleared** so that every profile they skipped comes back into the deck and
+    can be re-swiped. Likes are never cleared — those are already a "match in
+    progress" and re-showing them would be confusing.
     """
-    cutoff = datetime.now(timezone.utc) - timedelta(days=7)
-
     if reset:
-        # Re-include dislikes older than the cutoff by excluding only:
-        #  - any LIKE the user has ever made
-        #  - any DISLIKE within the last 7 days
-        like_filter = {"user_id": current_user.user_id, "status": "liked"}
-        recent_dislike_filter = {
-            "user_id": current_user.user_id,
-            "status": "rejected",
-            "created_at": {"$gte": cutoff},
-        }
-        existing_swipes = await db.matches.find(
-            {"$or": [like_filter, recent_dislike_filter]},
-            {"matched_user_id": 1},
-        ).to_list(1000)
-    else:
-        existing_swipes = await db.matches.find(
-            {"user_id": current_user.user_id}, {"matched_user_id": 1}
-        ).to_list(1000)
+        # Wipe every dislike/skip the user has made so the deck genuinely
+        # restarts. The user can then re-swipe these profiles normally.
+        await db.matches.delete_many(
+            {"user_id": current_user.user_id, "status": "rejected"}
+        )
+
+    existing_swipes = await db.matches.find(
+        {"user_id": current_user.user_id}, {"matched_user_id": 1}
+    ).to_list(1000)
 
     swiped_ids = [s["matched_user_id"] for s in existing_swipes]
     swiped_ids.append(current_user.user_id)
