@@ -12,7 +12,7 @@ from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
 from scripts.migrate_dedupe_users import dedupe_users_and_index_email
 
-from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, subscription, core, reports, support
+from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, admin_invites, subscription, core, reports, support
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -84,6 +84,7 @@ app.include_router(chat.router, prefix="/api")
 app.include_router(notifications.router, prefix="/api")
 app.include_router(university_admin.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
+app.include_router(admin_invites.router, prefix="/api")
 app.include_router(subscription.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(support.router, prefix="/api")

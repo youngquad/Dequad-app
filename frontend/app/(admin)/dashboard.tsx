@@ -19,6 +19,7 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import AdminSupportInbox from '../../src/components/AdminSupportInbox';
 import { AdminVerificationQueue } from '../../src/components/AdminVerificationQueue';
+import AdminInviteManager from '../../src/components/AdminInviteManager';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -606,7 +607,7 @@ export default function AdminDashboard() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {['overview', 'safeguarding', 'verifications', 'support', 'subscriptions', 'ai-learning', 'universities', 'analytics', 'export'].map((tab) => (
+        {['overview', 'safeguarding', 'verifications', 'support', 'subscriptions', 'ai-learning', 'team', 'universities', 'analytics', 'export'].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -621,6 +622,7 @@ export default function AdminDashboard() {
                   tab === 'support' ? 'chatbubbles-outline' :
                   tab === 'subscriptions' ? 'card-outline' :
                   tab === 'ai-learning' ? 'bulb-outline' :
+                  tab === 'team' ? 'people-outline' :
                   tab === 'universities' ? 'school-outline' :
                   tab === 'analytics' ? 'bar-chart-outline' : 'download-outline'
                 }
@@ -661,6 +663,7 @@ export default function AdminDashboard() {
                tab === 'safeguarding' ? 'Safe' :
                tab === 'verifications' ? 'Verify' :
                tab === 'subscriptions' ? 'Subs' :
+               tab === 'team' ? 'Team' :
                tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Text>
           </TouchableOpacity>
@@ -987,6 +990,20 @@ export default function AdminDashboard() {
             <View style={{ marginTop: 12 }}>
               <AdminVerificationQueue sessionToken={sessionToken} />
             </View>
+          </View>
+        )}
+
+        {/* Subscriptions Tab */}
+        {activeTab === 'team' && (
+          <View style={styles.content}>
+            <Text style={styles.sectionTitle}>Team & Admin Invitations</Text>
+            <Text style={styles.sectionSubtitle}>
+              Invite new DEQUAD admins by email. Each invitation creates a one-time secure link that expires in 7 days. Recipients set their own password and become admins on this instance.
+            </Text>
+            <AdminInviteManager
+              sessionToken={sessionToken}
+              apiBaseUrl={process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || ''}
+            />
           </View>
         )}
 
