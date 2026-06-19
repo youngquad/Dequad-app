@@ -187,6 +187,76 @@ async def seed_admin_and_test_users():
         }})
         logger.info(f"University admin updated: {uni_admin_email}")
 
+    # Seed DEQUAD staff demo accounts (login-only — registration is blocked
+    # by the .ac.uk UK student-email policy). These are used during UKES /
+    # investor demos so the wider team can sign in to the student app and
+    # walk a reviewer through the user experience without creating fresh
+    # accounts on demand. Idempotent.
+    staff_password = os.environ.get("SEED_STAFF_PASSWORD", "DequadStaff2026!")
+    staff_password_hash = hashlib.sha256(staff_password.encode()).hexdigest()
+    staff_accounts = [
+        {
+            "email": "yusuff@dequad.com", "name": "Yusuff Adeagbo",
+            "age": 27, "gender": "male", "course": "MSc IT with Project Management",
+            "bio": "CTO @ DEQUAD. Builder, infra and ML enthusiast. Demo account.",
+            "interests": ["Engineering", "ML", "Football", "Tech", "Music"],
+            "picture": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+        },
+        {
+            "email": "gerald@dequad.com", "name": "Dr Gerald Marfo",
+            "age": 34, "gender": "male", "course": "PhD Digital Marketing",
+            "bio": "CMO @ DEQUAD. Digital marketing scholar, marathon runner. Demo account.",
+            "interests": ["Marketing", "Running", "Reading", "Podcasts", "Travel"],
+            "picture": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+        },
+        {
+            "email": "dapo@dequad.com", "name": "Adedapo Ajuwon",
+            "age": 28, "gender": "male", "course": "Software Engineering",
+            "bio": "Senior Software Engineer @ DEQUAD. Full-stack + infra. Demo account.",
+            "interests": ["Coding", "Open Source", "Chess", "Gaming", "Coffee"],
+            "picture": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop",
+        },
+        {
+            "email": "chinyere@dequad.com", "name": "Chinyere Jennifer",
+            "age": 31, "gender": "female", "course": "Project Management (MIGSO-PCUBED)",
+            "bio": "Senior PM Consultant. Advisor @ DEQUAD. LLM background. Demo account.",
+            "interests": ["Project Management", "Books", "Yoga", "Cooking", "Mentoring"],
+            "picture": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
+        },
+    ]
+    for staff in staff_accounts:
+        existing_staff = await db.users.find_one({"email": staff["email"]})
+        staff_doc = {
+            "email": staff["email"],
+            "name": staff["name"],
+            "password_hash": staff_password_hash,
+            "role": "student",
+            "age": staff["age"], "gender": staff["gender"],
+            "interested_in": ["male", "female", "non-binary"],
+            "university": "DEQUAD Team", "campus_name": "London",
+            "course": staff["course"],
+            "bio": staff["bio"],
+            "interests": staff["interests"],
+            "picture": staff["picture"],
+            "photos": [staff["picture"]],
+            "profile_completed": True,
+            "subscription_status": "premium", "is_premium": True,
+            "student_verification": "auto",
+            "auth_method": "email",
+            "is_demo_account": True,
+        }
+        if not existing_staff:
+            staff_doc["user_id"] = f"staff-{uuid.uuid4().hex[:8]}"
+            staff_doc["created_at"] = datetime.now(timezone.utc)
+            await db.users.insert_one(staff_doc)
+            logger.info(f"Staff demo account created: {staff['email']}")
+        else:
+            await db.users.update_one(
+                {"email": staff["email"]},
+                {"$set": staff_doc},
+            )
+            logger.info(f"Staff demo account updated: {staff['email']}")
+
     logger.info("Seed data initialization complete")
 
     # Seed demo mood entries

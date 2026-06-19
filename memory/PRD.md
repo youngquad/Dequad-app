@@ -62,6 +62,14 @@
 - Frontend: testing_agent_v3_fork passes; manual screenshot smoke tests for badges/inbox.
 - Build scripts: `./scripts/build.sh validate` confirms `app.json` + `eas.json` are valid JSON.
 
+## DEQUAD Staff Demo Login Accounts (2026-06)
+Seeded in `seed.py` so the founding team can sign in to the **student app** during UKES / investor demos without on-the-fly account creation. Public registration with `@dequad.com` is hard-blocked by the `.ac.uk` student-email policy.
+- Endpoint: `POST /api/auth/email-login` (regular student login, route `/(auth)/login`).
+- Seeded accounts: `yusuff@dequad.com`, `gerald@dequad.com`, `dapo@dequad.com`, `chinyere@dequad.com`.
+- Shared password: `DequadStaff2026!` (override via `SEED_STAFF_PASSWORD` env var).
+- All four accounts get `role: student`, `profile_completed: true`, premium subscription and `student_verification: auto` so they don't show up in the admin verification queue.
+- Tested: 6/6 regressions pass — `/app/backend/tests/test_staff_demo_login.py`.
+
 ## UKES Visa Endorsement Pack (2026-02 → 2026-06)
 - Master submission PDF: `/app/visa_appendices/DEQUAD_UKES_FULL_SUBMISSION.pdf` (18 PDFs merged, ~2 MB).
 - Cover email: `/app/visa_appendices/UKES_Submission_Cover_Email.md` + `.pdf` (4 pages — body of the formal submission email to `info@ukendorsement.com`).
