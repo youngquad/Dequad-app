@@ -98,12 +98,18 @@ async def create_checkout_session(data: CreateCheckoutRequest, current_user: Use
             stripe_customer_id = customer.id
             await db.users.update_one({"user_id": current_user.user_id}, {"$set": {"stripe_customer_id": stripe_customer_id}})
 
+        # Default to a WEB-friendly success/cancel URL (browser can navigate to it).
+        # The mobile app can override these by passing `dequad://...` deep links in the request body.
+        app_url = os.environ.get("APP_URL", "").rstrip("/")
+        default_success = f"{app_url}/subscription-success?session_id={{CHECKOUT_SESSION_ID}}" if app_url else "dequad://subscription-success?session_id={CHECKOUT_SESSION_ID}"
+        default_cancel = f"{app_url}/subscription" if app_url else "dequad://subscription-cancel"
+
         checkout_session = stripe.checkout.Session.create(
             customer=stripe_customer_id, mode="subscription", payment_method_types=["card", "link"],
             line_items=[{"price_data": {"currency": STRIPE_PRICE_CURRENCY, "unit_amount": STRIPE_PRICE_AMOUNT,
                 "recurring": {"interval": "month"}, "product_data": {"name": STRIPE_PRODUCT_NAME, "description": "Unlimited swipes, priority matching, and premium features"}}, "quantity": 1}],
-            success_url=data.success_url or "dequad://subscription-success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=data.cancel_url or "dequad://subscription-cancel",
+            success_url=data.success_url or default_success,
+            cancel_url=data.cancel_url or default_cancel,
             metadata={"user_id": current_user.user_id}, allow_promotion_codes=True, billing_address_collection="auto",
             payment_method_options={"card": {"request_three_d_secure": "automatic"}}
         )

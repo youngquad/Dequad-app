@@ -48,10 +48,29 @@ export default function SubscriptionScreen() {
   const handleSubscribe = async () => {
     setIsProcessing(true);
     try {
-      const data = await api.post('/subscription/create-checkout', {}, sessionToken);
+      // On web we pass the current origin so Stripe redirects back to a real URL
+      // (the backend default also handles this via APP_URL, but we send it
+      // explicitly so the success page matches the window the user is in).
+      const origin =
+        typeof window !== 'undefined' && window.location ? window.location.origin : undefined;
+      const data = await api.post(
+        '/subscription/create-checkout',
+        origin
+          ? {
+              success_url: `${origin}/subscription-success?session_id={CHECKOUT_SESSION_ID}`,
+              cancel_url: `${origin}/(main)/subscription`,
+            }
+          : {},
+        sessionToken,
+      );
       
       if (data.checkout_url) {
-        // Open Stripe checkout in browser
+        if (typeof window !== 'undefined' && window.location) {
+          // Same-tab redirect on web — keeps the session cookie + auth context intact.
+          window.location.href = data.checkout_url;
+          return;
+        }
+        // Open Stripe checkout in browser (native)
         const canOpen = await Linking.canOpenURL(data.checkout_url);
         if (canOpen) {
           await Linking.openURL(data.checkout_url);

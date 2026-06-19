@@ -1,11 +1,14 @@
-"""Regression tests for the DEQUAD staff-demo seeding (2026-06).
+"""Regression tests for the DEQUAD demo-login seeding (2026-06, revised).
 
-Staff at `firstname.lastname@dequad.com` are seeded by `seed.py` so the wider
-team can log in to the student app during UKES / investor demos. Public
-registration with a `@dequad.com` address is blocked by the `.ac.uk`
-student-email policy. `Yusuff.Adeagbo@dequad.com` is the only real mailbox of
-the four and has its own per-person password; the other three are demo-only
-profiles sharing a generic demo password.
+Three account groups exist for demos:
+1. Staff `firstname.lastname@dequad.com` — seeded by `seed.py` so the wider team
+   can log in to the student app during UKES / investor demos.
+2. Founder's personal student-side account `yusufquadri83@gmail.com`.
+3. Blocked staff: `Adedapo.Ajuwon@dequad.com` is intentionally not allowed to
+   sign in.
+
+Public registration with a `@dequad.com` address is blocked by the `.ac.uk`
+student-email policy regardless.
 
 Run with:
     cd /app/backend && pytest tests/test_staff_demo_login.py -v
@@ -26,16 +29,26 @@ GENERIC_STAFF_PASSWORD = os.environ.get("SEED_STAFF_PASSWORD", "DequadStaff2026!
 
 
 # (login_email, expected_user_name, password)
-STAFF_ACCOUNTS = [
+ALLOWED_ACCOUNTS = [
     ("Yusuff.Adeagbo@dequad.com", "Yusuff Adeagbo", "YusuffAdeagbo11@"),
     ("Gerald.Marfo@dequad.com", "Dr Gerald Marfo", GENERIC_STAFF_PASSWORD),
-    ("Adedapo.Ajuwon@dequad.com", "Adedapo Ajuwon", GENERIC_STAFF_PASSWORD),
     ("Chinyere.Jennifer@dequad.com", "Chinyere Jennifer", GENERIC_STAFF_PASSWORD),
+    ("yusufquadri83@gmail.com", "Yusuf Quadri", "Oluwatobi11@"),
+]
+
+# Accounts that must NOT be able to log in (blocked / legacy / removed)
+BLOCKED_ACCOUNTS = [
+    ("Adedapo.Ajuwon@dequad.com", GENERIC_STAFF_PASSWORD),
+    # Legacy first-name-only emails
+    ("yusuff@dequad.com", GENERIC_STAFF_PASSWORD),
+    ("gerald@dequad.com", GENERIC_STAFF_PASSWORD),
+    ("dapo@dequad.com", GENERIC_STAFF_PASSWORD),
+    ("chinyere@dequad.com", GENERIC_STAFF_PASSWORD),
 ]
 
 
-@pytest.mark.parametrize("email,name,password", STAFF_ACCOUNTS)
-def test_staff_demo_login_succeeds(email: str, name: str, password: str) -> None:
+@pytest.mark.parametrize("email,name,password", ALLOWED_ACCOUNTS)
+def test_allowed_demo_login_succeeds(email: str, name: str, password: str) -> None:
     resp = requests.post(
         f"{API_URL}/api/auth/email-login",
         json={"email": email, "password": password},
@@ -47,6 +60,16 @@ def test_staff_demo_login_succeeds(email: str, name: str, password: str) -> None
     assert body["user"]["name"] == name
     assert body["user"]["role"] == "student"
     assert body.get("session_token")
+
+
+@pytest.mark.parametrize("email,password", BLOCKED_ACCOUNTS)
+def test_blocked_account_login_rejected(email: str, password: str) -> None:
+    resp = requests.post(
+        f"{API_URL}/api/auth/email-login",
+        json={"email": email, "password": password},
+        timeout=15,
+    )
+    assert resp.status_code == 401, f"{email} should be blocked: {resp.status_code} {resp.text}"
 
 
 def test_staff_demo_login_wrong_password_rejected() -> None:
@@ -67,14 +90,3 @@ def test_register_blocks_dequad_dot_com() -> None:
     )
     assert resp.status_code == 403
     assert ".ac.uk" in resp.json().get("detail", "")
-
-
-def test_legacy_first_name_only_emails_removed() -> None:
-    """The old `yusuff@dequad.com`-style accounts must no longer log in."""
-    for old_email in ("yusuff@dequad.com", "gerald@dequad.com", "dapo@dequad.com", "chinyere@dequad.com"):
-        resp = requests.post(
-            f"{API_URL}/api/auth/email-login",
-            json={"email": old_email, "password": GENERIC_STAFF_PASSWORD},
-            timeout=15,
-        )
-        assert resp.status_code == 401, f"Legacy {old_email} should be removed: {resp.status_code} {resp.text}"

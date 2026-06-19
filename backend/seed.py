@@ -217,14 +217,6 @@ async def seed_admin_and_test_users():
             "picture": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
         },
         {
-            "email": "Adedapo.Ajuwon@dequad.com", "name": "Adedapo Ajuwon",
-            "password": generic_demo_password,
-            "age": 28, "gender": "male", "course": "Software Engineering",
-            "bio": "Senior Software Engineer @ DEQUAD. Full-stack + infra. Demo account.",
-            "interests": ["Coding", "Open Source", "Chess", "Gaming", "Coffee"],
-            "picture": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop",
-        },
-        {
             "email": "Chinyere.Jennifer@dequad.com", "name": "Chinyere Jennifer",
             "password": generic_demo_password,
             "age": 31, "gender": "female", "course": "Project Management (MIGSO-PCUBED)",
@@ -232,12 +224,27 @@ async def seed_admin_and_test_users():
             "interests": ["Project Management", "Books", "Yoga", "Cooking", "Mentoring"],
             "picture": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
         },
+        # Founder personal student-side account — separate from the admin
+        # account `quadri.yusuf@dequad.com`. Yusuf uses this to log in as a
+        # student and walk reviewers through the full student journey.
+        {
+            "email": "yusufquadri83@gmail.com", "name": "Yusuf Quadri",
+            "password": "Oluwatobi11@",
+            "age": 26, "gender": "male", "course": "Business Administration",
+            "bio": "Founder @ DEQUAD. Former University of Bedfordshire SU President.",
+            "interests": ["Student Welfare", "Tech", "Football", "Travel", "Mentoring"],
+            "picture": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
+        },
     ]
-    # Clean up any old-format accounts from the previous (first-name-only) convention.
-    old_emails = ["yusuff@dequad.com", "gerald@dequad.com", "dapo@dequad.com", "chinyere@dequad.com"]
-    cleanup = await db.users.delete_many({"email": {"$in": old_emails}})
+    # Remove legacy and now-blocked accounts (idempotent).
+    removed_emails = [
+        "yusuff@dequad.com", "gerald@dequad.com", "dapo@dequad.com", "chinyere@dequad.com",
+        # Adedapo.Ajuwon is intentionally blocked from student login (2026-06).
+        "adedapo.ajuwon@dequad.com",
+    ]
+    cleanup = await db.users.delete_many({"email": {"$in": removed_emails}})
     if cleanup.deleted_count:
-        logger.info(f"Removed {cleanup.deleted_count} legacy staff demo account(s) with first-name-only emails")
+        logger.info(f"Removed {cleanup.deleted_count} legacy/blocked staff demo account(s)")
 
     for staff in staff_accounts:
         staff_email_lower = staff["email"].lower()

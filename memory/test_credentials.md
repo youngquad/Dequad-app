@@ -10,18 +10,24 @@
 - Email: admin@manchesteruni.edu
 - Password: UniAdmin123!
 
-## DEQUAD Staff Demo Accounts (2026-06, revised) — student-app login only
+## DEQUAD Demo Accounts (2026-06, revised) — student-app login only
 For UKES / investor demos. Login via the regular student email/password flow at `/(auth)/login`.
 Public registration of `@dequad.com` is blocked by the `.ac.uk` policy — these accounts exist only because they are seeded by `seed.py`. Email format: `firstname.lastname@dequad.com` (case-insensitive at login).
 
-| Email | Name | Password |
-|---|---|---|
-| Yusuff.Adeagbo@dequad.com | Yusuff Adeagbo (real mailbox — CTO) | `YusuffAdeagbo11@` |
-| Gerald.Marfo@dequad.com | Dr Gerald Marfo (demo only — CMO) | `DequadStaff2026!` |
-| Adedapo.Ajuwon@dequad.com | Adedapo Ajuwon (demo only — SWE) | `DequadStaff2026!` |
-| Chinyere.Jennifer@dequad.com | Chinyere Jennifer (demo only — Advisor) | `DequadStaff2026!` |
+| Email | Name | Password | Notes |
+|---|---|---|---|
+| Yusuff.Adeagbo@dequad.com | Yusuff Adeagbo | `YusuffAdeagbo11@` | Real mailbox — CTO |
+| Gerald.Marfo@dequad.com | Dr Gerald Marfo | `DequadStaff2026!` | Demo only — CMO |
+| Chinyere.Jennifer@dequad.com | Chinyere Jennifer | `DequadStaff2026!` | Demo only — Advisor |
+| yusufquadri83@gmail.com | Yusuf Quadri | `Oluwatobi11@` | Founder's personal student-side account (separate from admin login) |
 
-Legacy first-name-only emails (`yusuff@`, `gerald@`, `dapo@`, `chinyere@dequad.com`) were deleted on this revision. Override the shared demo password via `SEED_STAFF_PASSWORD` env var.
+**Blocked / removed from DB:**
+- `Adedapo.Ajuwon@dequad.com` (intentionally blocked from student login)
+- Legacy first-name-only emails: `yusuff@`, `gerald@`, `dapo@`, `chinyere@dequad.com` (deleted on seed)
+
+Override the shared demo password via `SEED_STAFF_PASSWORD` env var.
+
+Tested: 11/11 regressions pass — `/app/backend/tests/test_staff_demo_login.py`.
 
 ## Test Student Profiles (12 seeded)
 Emma Wilson, James Chen, Sofia Martinez, Alex Thompson, Priya Patel,
