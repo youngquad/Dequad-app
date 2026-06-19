@@ -284,19 +284,21 @@ Headcount: **2 (Y1)** → **6 (Y2)** → **12 (Y3)**.
 
 Marketing grows to **£28,000 (Y2)** and **£92,000 (Y3)** — see Section 16.
 
-### 8.3 Sales motion (B2B) — anchor pilot live
+### 8.3 Sales motion (B2B) — anchor pilot in progress
 
-**Anchor pilot:** **University of Bedfordshire**. The lead founder served two consecutive terms as Bedfordshire SU President (2021–2023). Pilot discussion is currently in progress with the university's student services and safeguarding leads; target signature of a no-fee 12-week pilot Q2 Y1, conversion to paid SaaS at the end of the pilot, targeted for **September Y1** (which aligns with the pre-seed bridge).
+**Anchor pilot:** **University of Bedfordshire**. The lead founder served two consecutive terms as Bedfordshire SU President (2021–2023). **Pilot discussion is currently in progress** with the university's student services and safeguarding leads.
 
-| Stage | Activity | Cycle |
+**Pilot timing (deliberate, conservative):**
+
+| Stage | Months | Detail |
 |---|---|---|
-| Lead | LinkedIn / NatWest network / UUK Charter inbound / founder direct relationships. | Week 0 |
-| Discovery | 30-min call with Director of Student Services + IT Security. | Week 1 |
-| Pilot scope | 12-week pilot for one student cohort; £0 invoiced. | Week 2 |
-| Pilot run | Founder-led implementation; weekly office hours. | Weeks 3–14 |
-| Conversion | Steering-group readout → paid SaaS. | Week 16 |
+| Pilot launch | **Sep 2026 (M4)** — academic year start | 12-week no-fee pilot for one student cohort |
+| Pilot runs | **Sep – Nov 2026 (M4–M6)** | Founder-led implementation; weekly office hours; mid-pilot steering-group review |
+| Pilot review & conversion conversations begin | **Dec 2026 (M7) onwards** | Outcomes readout to steering group; commercial-conversion discussion opens |
+| Target paid-contract signature | **Q1 2027 (M8–M9)** | Paid SaaS agreement for academic year 2026/27 H2 + 2027/28 |
+| Pre-seed bridge close | **M7 (Dec 2026)** | Targeted off pilot-outcome signals + NatWest demo day, *ahead of* full paid signature — standard for UK pre-seed cycles |
 
-Y1 cash forecasts assume **only the Bedfordshire pilot converts** (others modelled as 0% conversion in Y1 to be deliberately conservative). Two further pilots are being scoped at peer institutions to provide a Q4 Y1 upside.
+Y1 cash forecasts assume **only the Bedfordshire pilot converts in Y1** (others modelled as 0% conversion to be deliberately conservative). Two further pilots are being scoped at peer institutions to provide Q1 2027 upside.
 
 ---
 
