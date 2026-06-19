@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
   Linking,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -87,6 +88,41 @@ export default function SubscriptionScreen() {
   };
 
   const handleCancelSubscription = async () => {
+    const confirmCancel = async () => {
+      setIsProcessing(true);
+      try {
+        await api.post('/subscription/cancel', {}, sessionToken);
+        await loadSubscriptionStatus();
+        await refreshUser();
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert('Your subscription has been cancelled.');
+        } else {
+          Alert.alert('Subscription Cancelled', 'Your subscription has been cancelled.');
+        }
+      } catch (error: any) {
+        console.error('Error cancelling subscription:', error);
+        const msg = error?.message || 'Failed to cancel subscription';
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert(`Error: ${msg}`);
+        } else {
+          Alert.alert('Error', msg);
+        }
+      } finally {
+        setIsProcessing(false);
+      }
+    };
+
+    // React Native `Alert.alert` is a no-op on web — use `window.confirm` instead.
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const ok = window.confirm(
+        'Cancel your premium subscription? You will lose unlimited likes at the end of the current billing period.',
+      );
+      if (ok) {
+        await confirmCancel();
+      }
+      return;
+    }
+
     Alert.alert(
       'Cancel Subscription',
       'Are you sure you want to cancel your premium subscription? You will lose access to unlimited swipes.',
@@ -95,22 +131,9 @@ export default function SubscriptionScreen() {
         {
           text: 'Cancel Subscription',
           style: 'destructive',
-          onPress: async () => {
-            setIsProcessing(true);
-            try {
-              await api.post('/subscription/cancel', {}, sessionToken);
-              Alert.alert('Subscription Cancelled', 'Your subscription has been cancelled.');
-              await loadSubscriptionStatus();
-              await refreshUser();
-            } catch (error) {
-              console.error('Error cancelling subscription:', error);
-              Alert.alert('Error', 'Failed to cancel subscription');
-            } finally {
-              setIsProcessing(false);
-            }
-          },
+          onPress: confirmCancel,
         },
-      ]
+      ],
     );
   };
 

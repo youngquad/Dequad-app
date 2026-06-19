@@ -149,12 +149,27 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
 async def cancel_subscription(current_user: User = Depends(get_current_user)):
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
     stripe_customer_id = user_doc.get("stripe_customer_id")
-    if not stripe_customer_id: raise HTTPException(status_code=400, detail="No active subscription")
+    if not stripe_customer_id:
+        # No Stripe customer at all — just make sure the local plan is free.
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$set": {"plan": "free", "subscription_status": "free", "is_premium": False}},
+        )
+        return {"message": "No active subscription to cancel", "plan": "free"}
     try:
         subscriptions = stripe.Subscription.list(customer=stripe_customer_id, status="active", limit=1)
-        if not subscriptions.data: raise HTTPException(status_code=400, detail="No active subscription found")
+        if not subscriptions.data:
+            # Nothing active in Stripe — sync local state to free instead of erroring.
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$set": {"plan": "free", "subscription_status": "free", "is_premium": False}},
+            )
+            return {"message": "No active subscription to cancel", "plan": "free"}
         stripe.Subscription.cancel(subscriptions.data[0].id)
-        await db.users.update_one({"user_id": current_user.user_id}, {"$set": {"plan": "free"}})
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$set": {"plan": "free", "subscription_status": "free", "is_premium": False}},
+        )
         return {"message": "Subscription cancelled successfully", "plan": "free"}
     except stripe.error.StripeError as e:
         logger.error(f"Stripe error: {e}"); raise HTTPException(status_code=400, detail=str(e))
