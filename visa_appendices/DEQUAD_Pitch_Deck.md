@@ -128,9 +128,10 @@ B2B subscriptions cover the fixed cost base. Premium and ICB contracts are the u
 
 ## 07 · Traction
 
+- 📅 **Business start date: 15 June 2026** (incorporation).
 - 🛠️ **MVP live in production** at dequad.co.uk — no further build-cost in Y1.
 - 👥 **~50 beta users** active across 3 UK universities.
-- 🏛️ **Anchor pilot in negotiation: University of Bedfordshire.** Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
+- 🏛️ **Anchor pilot discussion currently in progress: University of Bedfordshire.** Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
 - 🏦 **Santander Universities Pre-Incubator** — completed 2025.
 - 🏦 **NatWest Accelerator (London)** — joined **16 March 2026**. £31k of in-kind support delivered (office, legal, accountancy, mentoring).
 

@@ -9,6 +9,7 @@
 **Wider founding team:** Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior Software Engineer), Chinyere Jennifer (Senior Project Management Consultant, advisor)
 **Headquarters:** London, United Kingdom — NatWest Accelerator (hosted)
 **Trading domain:** dequad.co.uk
+**Business start date:** **15 June 2026** (incorporation; trading from M1 = June 2026)
 **MVP status:** Production-ready (live at https://dequad.co.uk)
 **Founder starting capital:** £6,000 cash (£3,000 from each founder, pooled in the company bank)
 **Accelerator:** **NatWest Accelerator London** — joined **16 March 2026**;
@@ -63,7 +64,7 @@ DEQUAD is the **only** UK platform that combines `.ac.uk`-verified student-peer 
 | **Founding team** | **Yusuf Quadri** (CEO) + **Yusuff Adeagbo** (CTO), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor — Project Management, MIGSO-PCUBED). |
 | **MVP already shipped** | Production deployment at dequad.co.uk with ~50 beta users across 3 universities. **No engineering build cost** in Y1. |
 | **Two independent validations** | (1) **Santander Universities Pre-Incubator** — completed 2025. (2) **NatWest Accelerator London** — joined 16 March 2026. Two UK high-street banks have independently selected the team. |
-| **Anchor pilot ready** | Pilot conversations live with **University of Bedfordshire** — the lead founder's alma mater and the university whose students he represented as SU President for two years. |
+| **Anchor pilot ready** | Pilot discussion currently in progress with **University of Bedfordshire** — the lead founder's alma mater and the university whose students he represented as SU President for two years. |
 | **NatWest in-kind support** | London office co-working, legal advice (Mishcon de Reya panel), accountancy and investor introductions delivered **in-kind**. Quantified value: **£31,000/yr** against £1,200 of cash cost. |
 | **Bootstrap-credible** | £6,000 founder cash (£3k each) + NatWest in-kind support carries the business through the first 6 months with **zero salary**. The £150k pre-seed bridge is targeted for September Y1 *after* the first paying university pilot converts. |
 | **Realistic forecast** | Y1 revenue £12k (Bedfordshire pilot + ~100 premium subs) → Y2 £186k → Y3 £699k. Operating profit reaches positive territory in **Q3 Y3**. |
@@ -107,7 +108,7 @@ Delivered as a cross-platform application (iOS, Android, web at dequad.co.uk) pl
 ### 3.2 Viability
 
 - **Production MVP shipped** — engineering build risk is materially behind us.
-- **Anchor pilot identified.** The lead founder served two consecutive terms as **University of Bedfordshire Student Union President (2021–2023)**, giving DEQUAD a direct, trusted relationship with the university's senior management, safeguarding leads and student-services team. A pilot conversation is live and a paid contract is targeted for end of Q2 Y1.
+- **Anchor pilot identified.** The lead founder served two consecutive terms as **University of Bedfordshire Student Union President (2021–2023)**, giving DEQUAD a direct, trusted relationship with the university's senior management, safeguarding leads and student-services team. A pilot discussion is currently in progress and a paid contract is targeted for end of Q2 Y1.
 - **Two independent third-party validations.** DEQUAD completed the **Santander Universities Pre-Incubator programme in 2025** and was admitted to the **NatWest Accelerator (London cohort)** on **16 March 2026**. Both selection processes are competitive and explicitly assess team and product quality.
 - **Two founders with complementary skills**: product + safeguarding (Founder A) and engineering + data (Founder B). Each works full-time with founder commitment undertakings.
 - **Adjacent proof points**: Togetherall and TalkCampus charge UK universities £15k–£60k/year for inferior products and have 100+ UK customers between them — the willingness to pay is established.
@@ -220,7 +221,7 @@ The SME R&D Tax Credit scheme is expected to recoup approximately **16%** of qua
 
 Both founders are UK-resident, full-time on DEQUAD, with signed founder commitment undertakings (Appendix C). Q3 onwards salaries are intentionally below market; founders accept this trade-off in exchange for ~10% each of equity.
 
-**Yusuf Quadri's two years as University of Bedfordshire SU President** is highly relevant: it gives DEQUAD founder-level credibility on student wellbeing policy, a trusted-broker status with the university's senior leadership, and a direct route into the institution's safeguarding team. It is also the basis of DEQUAD's anchor pilot conversation (see Section 8). He holds **seven safeguarding and clinical-awareness certifications** (see Appendix O) covering Oliver McGowan Learning Disabilities & Autism, Adult Safeguarding Partnership Working, Suicide Prevention (2026), Data Protection and Information Security, and Safe Response to Challenging Situations.
+**Yusuf Quadri's two years as University of Bedfordshire SU President** is highly relevant: it gives DEQUAD founder-level credibility on student wellbeing policy, a trusted-broker status with the university's senior leadership, and a direct route into the institution's safeguarding team. It is also the basis of DEQUAD's anchor pilot discussion (currently in progress) (see Section 8). He holds **seven safeguarding and clinical-awareness certifications** (see Appendix O) covering Oliver McGowan Learning Disabilities & Autism, Adult Safeguarding Partnership Working, Suicide Prevention (2026), Data Protection and Information Security, and Safe Response to Challenging Situations.
 
 **Yusuff Adeagbo (CTO)** brings a **MSc in Information Technology with Project Management (University of the West of Scotland)** plus a HND in Computer Science, with applied skills across IT support, UI/UX, graphic design, digital marketing and IT business analysis (Appendix B-2).
 
@@ -285,7 +286,7 @@ Marketing grows to **£28,000 (Y2)** and **£92,000 (Y3)** — see Section 16.
 
 ### 8.3 Sales motion (B2B) — anchor pilot live
 
-**Anchor pilot:** **University of Bedfordshire**. The lead founder served two consecutive terms as Bedfordshire SU President (2021–2023). Pilot conversation is live with the university's student services and safeguarding leads; target signature of a no-fee 12-week pilot Q2 Y1, conversion to paid SaaS at the end of the pilot, targeted for **September Y1** (which aligns with the pre-seed bridge).
+**Anchor pilot:** **University of Bedfordshire**. The lead founder served two consecutive terms as Bedfordshire SU President (2021–2023). Pilot discussion is currently in progress with the university's student services and safeguarding leads; target signature of a no-fee 12-week pilot Q2 Y1, conversion to paid SaaS at the end of the pilot, targeted for **September Y1** (which aligns with the pre-seed bridge).
 
 | Stage | Activity | Cycle |
 |---|---|---|
@@ -304,7 +305,7 @@ Y1 cash forecasts assume **only the Bedfordshire pilot converts** (others modell
 | **Strengths** | **Weaknesses** |
 |---|---|
 | MVP shipped and in beta with real students. | Cash-light start (£6,000 founder capital). |
-| **University of Bedfordshire pilot in active negotiation** — direct relationship via former SU President role. | Two-person team — bus factor risk until Q1 Y2. |
+| **University of Bedfordshire pilot currently in progress** — direct relationship via former SU President role. | Two-person team — bus factor risk until Q1 Y2. |
 | **Two independent UK-bank validations:** Santander Pre-Incubator (completed 2025) + NatWest Accelerator (joined 16 March 2026). | No formal clinical advisory board yet (planned Q2 Y2). |
 | NatWest Accelerator membership → £31k of in-kind support and London office. | Limited brand awareness in the student consumer market. |
 | `.ac.uk` verification + safeguarding webhook are technical moats. | Cyber Essentials accreditation pending. |

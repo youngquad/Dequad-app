@@ -8,7 +8,7 @@ quadri.yusuf@dequad.com · https://dequad.co.uk · _______________ (LinkedIn) ·
 
 ## Professional summary
 
-Co-founder of DEQUAD, a UK-headquartered safeguarding-first student-wellbeing platform live in production at dequad.co.uk. Built the entire MVP end-to-end (FastAPI backend, MongoDB persistence, React Native / Expo web + native frontends, Stripe billing, safeguarding pipeline, admin dashboard) alongside co-founder Yusuff Adeagbo (CTO). Two-time University of Bedfordshire Student Union President (2021–2023). Member of the NatWest Accelerator (London cohort, joined 16 March 2026) and alumnus of the Santander Universities Pre-Incubator (2025). Now scaling toward institutional pilots in academic year 2026/27, with University of Bedfordshire as the anchor pilot conversation.
+Co-founder of DEQUAD, a UK-headquartered safeguarding-first student-wellbeing platform live in production at dequad.co.uk. Built the entire MVP end-to-end (FastAPI backend, MongoDB persistence, React Native / Expo web + native frontends, Stripe billing, safeguarding pipeline, admin dashboard) alongside co-founder Yusuff Adeagbo (CTO). Two-time University of Bedfordshire Student Union President (2021–2023). Member of the NatWest Accelerator (London cohort, joined 16 March 2026) and alumnus of the Santander Universities Pre-Incubator (2025). Now scaling toward institutional pilots in academic year 2026/27, with University of Bedfordshire as the anchor pilot discussion (currently in progress).
 
 Areas of expertise: software product strategy, full-stack engineering, **student safeguarding policy and triage** (holder of seven UK safeguarding / clinical-awareness certifications — see Appendix O), regulatory compliance (UK GDPR, Online Safety Act 2023), institutional sales to UK higher-education.
 
@@ -24,7 +24,7 @@ _2025 – Present · London / United Kingdom_
 - Engineered the closed-network architecture (`.ac.uk` email verification with UK-student-domain policy, per-user wellbeing baseline detection, real-time crisis-keyword scanning, admin verification queue, safeguarding webhook).
 - Designed the safeguarding policy modelled on UUK Stepchange / Suicide-Safer Universities; wrote the GDPR DPIA and Lawful Basis register; wrote the OSA-2023 risk assessment.
 - **Joined the NatWest Accelerator (London cohort) on 16 March 2026**; previously completed the **Santander Universities Pre-Incubator programme (2025)**.
-- Anchor pilot conversation in active negotiation with the **University of Bedfordshire** — leveraging the founder's prior two-year tenure as Student Union President of the same university.
+- Anchor pilot discussion (currently in progress) currently in progress with the **University of Bedfordshire** — leveraging the founder's prior two-year tenure as Student Union President of the same university.
 - Recruited a wider founding team contributing on a pure-equity basis: Dr Gerald Marfo (CMO, PhD Digital Marketing), Adedapo Ajuwon (Senior Software Engineer), Chinyere Jennifer (Senior Advisor — MIGSO-PCUBED).
 
 ### Student Union President — University of Bedfordshire
@@ -32,7 +32,7 @@ _2021 – 2023 · Two consecutive terms · Luton / Bedfordshire, UK_
 
 - Represented the full student body at university senior-management level, including on safeguarding, student services, equality and welfare policy.
 - Sat on university-wide committees governing student experience and academic governance.
-- Direct relationships with the Director of Student Services, safeguarding leads and senior leadership team — the relationships that now underpin DEQUAD's anchor pilot conversation.
+- Direct relationships with the Director of Student Services, safeguarding leads and senior leadership team — the relationships that now underpin DEQUAD's anchor pilot discussion (currently in progress).
 
 ### [Previous role 1] — [Company]
 _[Year]–[Year] · [Location]_

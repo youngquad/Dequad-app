@@ -11,6 +11,7 @@
 
 | | |
 |---|---|
+| **Business start date** | **15 June 2026** (incorporation) |
 | **Entity** | DEQUAD Ltd (in formation, England & Wales) |
 | **Founders** | **Yusuf Quadri** (CEO) + **Yusuff Adeagbo** (CTO) |
 | **Wider founding team** | **Dr Gerald Marfo** (CMO, PhD Digital Marketing) · **Adedapo Ajuwon** (Senior SWE) · **Chinyere Jennifer** (Senior Advisor — MIGSO-PCUBED PM) |
@@ -19,7 +20,7 @@
 | **Founder anchor** | Yusuf Quadri served as **University of Bedfordshire SU President 2021–2023** |
 | **MVP** | Live in production at https://dequad.co.uk |
 | **Beta users** | ~50 across 3 UK universities |
-| **Anchor pilot in negotiation** | **University of Bedfordshire** — direct relationship via former SU presidency |
+| **Anchor pilot discussion currently in progress** | **University of Bedfordshire** — direct relationship via former SU presidency |
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders)** |
 | **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring) |
 | **Funding ask Y1** | £150,000 pre-seed bridge (Sep Y1, post-pilot conversion) |
@@ -44,7 +45,7 @@
 
 1. **MVP is already shipped** — production deployment at dequad.co.uk, identity verification live, safeguarding webhook live, mood tracker live, Stripe billing live.
 2. **Two independent UK-bank validations.** Completed the **Santander Universities Pre-Incubator** programme in 2025 and joined the **NatWest Accelerator (London cohort) on 16 March 2026**. Two competitive selection processes have separately admitted DEQUAD's team and thesis.
-3. **Founder–institution fit.** Yusuf Quadri served as **University of Bedfordshire Student Union President for two consecutive years (2021–2023)**, representing the student body at senior-management level. The first paying pilot is now in active negotiation with the same university.
+3. **Founder–institution fit.** Yusuf Quadri served as **University of Bedfordshire Student Union President for two consecutive years (2021–2023)**, representing the student body at senior-management level. The first paying pilot is now currently in progress with the same university.
 4. **Two complementary founders** — product/safeguarding lead (Yusuf Quadri) + engineering/ML lead (Co-Founder TBC). Both UK-resident, full-time, signing customary vesting at pre-seed close.
 
 ---
@@ -152,7 +153,7 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 
 ### B2B pilot conversion track-record (live)
 
-- **University of Bedfordshire** — anchor pilot in active negotiation. Lead founder served two terms as SU President there (2021–2023); direct relationships with student services and safeguarding leads.
+- **University of Bedfordshire** — anchor pilot discussion currently in progress. Lead founder served two terms as SU President there (2021–2023); direct relationships with student services and safeguarding leads.
 - **Two further peer institutions** — early-stage pilot scoping (anonymised for now).
 - **Beta cohort active** — 50 students across 3 universities use DEQUAD weekly.
 

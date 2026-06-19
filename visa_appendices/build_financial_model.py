@@ -329,14 +329,14 @@ def sheet_cf(wb):
 # ============================================================
 def sheet_cf_monthly(wb):
     ws = wb.create_sheet("Cash Flow Y1 (mo)")
-    months = ["M1\nMar", "M2\nApr", "M3\nMay", "M4\nJun", "M5\nJul", "M6\nAug",
-              "M7\nSep", "M8\nOct", "M9\nNov", "M10\nDec", "M11\nJan", "M12\nFeb"]
+    months = ["M1\nJun", "M2\nJul", "M3\nAug", "M4\nSep", "M5\nOct", "M6\nNov",
+              "M7\nDec", "M8\nJan", "M9\nFeb", "M10\nMar", "M11\nApr", "M12\nMay"]
     cols = months + ["Y1 total"]
     write_header(ws, "Year 1 Monthly Cash Flow Forecast (Bootstrap)", cols, [42] + [11] * 13)
 
     # Phased monthly inflows
     inflow_eq   = [6_000] + [0]*11
-    inflow_pre  = [0,0,0,0,0,0, 150_000, 0,0,0,0,0]   # M7 (Sep) pre-seed lands
+    inflow_pre  = [0,0,0,0,0,0, 150_000, 0,0,0,0,0]   # M7 (Dec) pre-seed lands
     inflow_sale = [0, 0, 200, 350, 500, 700, 800, 1_100, 1_350, 1_700, 2_100, 3_188]
     total_in    = [inflow_eq[i] + inflow_pre[i] + inflow_sale[i] for i in range(12)]
     assert sum(inflow_eq) == 6_000
