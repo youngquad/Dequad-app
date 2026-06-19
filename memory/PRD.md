@@ -62,6 +62,19 @@
 - Frontend: testing_agent_v3_fork passes; manual screenshot smoke tests for badges/inbox.
 - Build scripts: `./scripts/build.sh validate` confirms `app.json` + `eas.json` are valid JSON.
 
+## UKES Visa Endorsement Pack (2026-02 → 2026-06)
+- Master submission PDF: `/app/visa_appendices/DEQUAD_UKES_FULL_SUBMISSION.pdf` (18 PDFs merged, ~2 MB).
+- Cover email: `/app/visa_appendices/UKES_Submission_Cover_Email.md` + `.pdf` (4 pages — body of the formal submission email to `info@ukendorsement.com`).
+- Pitch deck: `/app/visa_appendices/DEQUAD_Pitch_Deck.pdf` (12 slides, landscape A4).
+- Business plan + Decision brief + Risk register + Financial model (xlsx) + 13 appendices.
+- **Pilot timeline** (consistent across all docs as of 2026-06):
+  - **Business start**: 15 June 2026 (M1).
+  - **Pilot launch**: Sep 2026 (M4 — academic year start).
+  - **Pilot runs**: Sep–Nov 2026 (M4–M6, 12-week / 3-month duration).
+  - **Conversion conversations + £150k pre-seed bridge**: Dec 2026 (M7).
+  - **Target paid contract signature**: Q1 2027 (M8–M9).
+- Rebuild commands: `python /app/visa_appendices/build_ukes_pdf.py` and `python /app/visa_appendices/build_pitch_deck.py`.
+
 ## Backlog / Next Steps
 - **P0**: Re-enable `.ac.uk` student email restriction before public launch (single block at top of `/api/auth/register` and the email-domain check in `/api/auth/session`).
 - **P0 (security)**: Migrate password hashing from plain SHA-256 → bcrypt/argon2 (applies to `password_hash` AND `admin_password`). Add a one-time migration on next login.

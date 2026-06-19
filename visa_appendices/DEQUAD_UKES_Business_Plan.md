@@ -66,7 +66,7 @@ DEQUAD is the **only** UK platform that combines `.ac.uk`-verified student-peer 
 | **Two independent validations** | (1) **Santander Universities Pre-Incubator** — completed 2025. (2) **NatWest Accelerator London** — joined 16 March 2026. Two UK high-street banks have independently selected the team. |
 | **Anchor pilot ready** | Pilot discussion currently in progress with **University of Bedfordshire** — the lead founder's alma mater and the university whose students he represented as SU President for two years. |
 | **NatWest in-kind support** | London office co-working, legal advice (Mishcon de Reya panel), accountancy and investor introductions delivered **in-kind**. Quantified value: **£31,000/yr** against £1,200 of cash cost. |
-| **Bootstrap-credible** | £6,000 founder cash (£3k each) + NatWest in-kind support carries the business through the first 6 months with **zero salary**. The £150k pre-seed bridge is targeted for September Y1 *after* the first paying university pilot converts. |
+| **Bootstrap-credible** | £6,000 founder cash (£3k each) + NatWest in-kind support carries the business through the first 6 months with **zero salary**. The 12-week (3-month) Bedfordshire pilot launches in Sep 2026 (M4) and completes in Nov 2026 (M6); pilot-conversion discussions and the **£150k pre-seed bridge close in Dec 2026 (M7)**. |
 | **Realistic forecast** | Y1 revenue £12k (Bedfordshire pilot + ~100 premium subs) → Y2 £186k → Y3 £699k. Operating profit reaches positive territory in **Q3 Y3**. |
 | **UK jobs created** | 2 (founders, Y1) → 6 (Y2) → 12 (Y3). All UK-based. |
 
@@ -108,7 +108,7 @@ Delivered as a cross-platform application (iOS, Android, web at dequad.co.uk) pl
 ### 3.2 Viability
 
 - **Production MVP shipped** — engineering build risk is materially behind us.
-- **Anchor pilot identified.** The lead founder served two consecutive terms as **University of Bedfordshire Student Union President (2021–2023)**, giving DEQUAD a direct, trusted relationship with the university's senior management, safeguarding leads and student-services team. A pilot discussion is currently in progress and a paid contract is targeted for end of Q2 Y1.
+- **Anchor pilot identified.** The lead founder served two consecutive terms as **University of Bedfordshire Student Union President (2021–2023)**, giving DEQUAD a direct, trusted relationship with the university's senior management, safeguarding leads and student-services team. A pilot discussion is currently in progress; the 12-week (3-month) pilot is scheduled to launch in **Sep 2026 (M4 — academic year start)** and complete in **Nov 2026 (M6)**, with paid-conversion discussions opening in **Dec 2026 (M7)**.
 - **Two independent third-party validations.** DEQUAD completed the **Santander Universities Pre-Incubator programme in 2025** and was admitted to the **NatWest Accelerator (London cohort)** on **16 March 2026**. Both selection processes are competitive and explicitly assess team and product quality.
 - **Two founders with complementary skills**: product + safeguarding (Founder A) and engineering + data (Founder B). Each works full-time with founder commitment undertakings.
 - **Adjacent proof points**: Togetherall and TalkCampus charge UK universities £15k–£60k/year for inferior products and have 100+ UK customers between them — the willingness to pay is established.
@@ -212,11 +212,11 @@ The SME R&D Tax Credit scheme is expected to recoup approximately **16%** of qua
 
 ### 7.1 Founding team — Year 1
 
-**Compensation reality as of submission date:** No team member — not the founders, not Dr Gerald Marfo, not Adedapo Ajuwon, not Chinyere Jennifer — is currently drawing a salary from DEQUAD. The founders are funding personal cost-of-living from savings; the wider team is contributing time on a pure-equity basis pending the close of the pre-seed round in September Y1. This is a deliberate founder commitment.
+**Compensation reality as of submission date:** No team member — not the founders, not Dr Gerald Marfo, not Adedapo Ajuwon, not Chinyere Jennifer — is currently drawing a salary from DEQUAD. The founders are funding personal cost-of-living from savings; the wider team is contributing time on a pure-equity basis pending the close of the pre-seed round in **December 2026 (M7)**, immediately after the 3-month Bedfordshire pilot completes (Sep–Nov 2026) and conversion discussions open. This is a deliberate founder commitment.
 
 | Role | Name | Compensation Y1 | Why |
 |---|---|---|---|
-| **CEO / Product & Safeguarding** | **Yusuf Quadri** — University of Bedfordshire Student Union President 2021–2023; safeguarding-trained (Appendix O) | **£0 in Q1-Q2** (personal savings), **£1,500/mo from M7** (£9k total Y1, after pre-seed lands) | Founder commitment + cash preservation. |
+| **CEO / Product & Safeguarding** | **Yusuf Quadri** — University of Bedfordshire Student Union President 2021–2023; safeguarding-trained (Appendix O) | **£0 in M1–M6** (personal savings), **£1,500/mo from M7 (Dec 2026)** (£9k total Y1, after pre-seed lands) | Founder commitment + cash preservation. |
 | **CTO / Engineering & IT** | **Yusuff Adeagbo** — MSc IT with Project Management (UWS); HND Computer Science | Same — **£0 Q1-Q2, £1,500/mo from M7** | Founder commitment + cash preservation. |
 
 Both founders are UK-resident, full-time on DEQUAD, with signed founder commitment undertakings (Appendix C). Q3 onwards salaries are intentionally below market; founders accept this trade-off in exchange for ~10% each of equity.
@@ -355,13 +355,13 @@ This in-kind support is what makes the £6,000 founder capital sufficient — DE
 |---|---|---|---:|---|
 | **Founder equity** | Day 1 (Q1 Y1) | Yusuf (£3,000) + Co-Founder (£3,000) | **£6,000** | Incorporation, domains, IP filings, initial hosting. |
 | **R&D tax credit** | End Y1 | HMRC SME R&D | ~£3,600 | Recycled into engineering. |
-| **Pre-seed bridge** | M7 (Sep Y1) — *after* Bedfordshire pilot converts | UK pre-seed angels via UKES / NatWest network | **£150,000** at £1.2m post-money cap (12.5% equity) | First 4 hires, 18-month runway, dual mobile builds, R&D engineering. |
+| **Pre-seed bridge** | **M7 (Dec 2026)** — *after* the 3-month Bedfordshire pilot completes and conversion discussions open | UK pre-seed angels via UKES / NatWest network | **£150,000** at £1.2m post-money cap (12.5% equity) | First 4 hires, 18-month runway, dual mobile builds, R&D engineering. |
 | **Seed round** | Q2 Y2 | UK VCs (Forward Partners, Local Globe, Crane) | **£750,000** at £6m post (12.5% equity) | Scale to 20 universities, ML data team, NHS-ICB channel. |
 | **Series A** | Q1 Y4 | Growth-stage VCs | **£3–5m** | EU + AU launch, federated-learning infra, 30+ FTE. |
 
 ### 10.5 Founder Investment Statement (visa requirement)
 
-The lead applicant has personally invested **£3,000** of his own funds as founder share capital, with the co-founder contributing a matching **£3,000**, for a total of **£6,000** of founder share capital. This is evidenced by the share allotment return (Form SH01) to be filed with Companies House at incorporation. There are no third-party investments at the date of this application; further investment will be sought after the University of Bedfordshire pilot converts.
+The lead applicant has personally invested **£3,000** of his own funds as founder share capital, with the co-founder contributing a matching **£3,000**, for a total of **£6,000** of founder share capital. This is evidenced by the share allotment return (Form SH01) to be filed with Companies House at incorporation. There are no third-party investments at the date of this application; further investment will be sought in **December 2026 (M7)** — immediately after the 3-month University of Bedfordshire pilot completes (Sep–Nov 2026) and conversion conversations open.
 
 ---
 
@@ -406,7 +406,7 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 |---|---:|---:|---:|
 | Opening cash | 0 | 134,028 | 269,308 |
 | Founder equity injection | 6,000 | 0 | 0 |
-| Pre-seed equity (Sep Y1) | 150,000 | 0 | 0 |
+| Pre-seed equity (Dec 2026, M7) | 150,000 | 0 | 0 |
 | Seed equity (Q2 Y2) | 0 | 750,000 | 0 |
 | R&D tax credit received | 0 | 4,500 | 9,500 |
 | Cash from sales | 11,988 | 185,808 | 699,280 |
@@ -428,11 +428,11 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 
 The Y1 monthly schedule (in the Excel workbook, sheet "Cash Flow Y1 (mo)") shows that cash is **positive every single month**:
 
-- **M1–M6** (Mar–Aug Y1): operating cash burn ≈ £750–£1,400/month, funded entirely by the £3,000 founder injection. No founder salary in this period.
-- **M7** (Sep Y1): **£150,000 pre-seed bridge lands**, immediately after the first paying university converts.
-- **M7–M12**: founders draw £1,500/month each; monthly burn rises to ~£5,500 — still well within the pre-seed runway.
+- **M1–M6** (Jun–Nov 2026): operating cash burn ≈ £750–£1,400/month, funded entirely by the £6,000 founder injection. No founder salary in this period. The 12-week (3-month) Bedfordshire pilot launches in **Sep 2026 (M4)** and completes in **Nov 2026 (M6)**.
+- **M7** (Dec 2026): **£150,000 pre-seed bridge lands**, in step with pilot-conversion conversations opening immediately after pilot completion.
+- **M7–M12** (Dec 2026 – May 2027): founders draw £1,500/month each; monthly burn rises to ~£5,500 — still well within the pre-seed runway.
 
-This profile is one of the strongest evidences of viability for endorsement: DEQUAD survives on £3,000 of founder cash for 6 months *with positive monthly closing balances throughout*.
+This profile is one of the strongest evidences of viability for endorsement: DEQUAD survives on £6,000 of founder cash for 6 months (Jun–Nov 2026) *with positive monthly closing balances throughout* while the 3-month Bedfordshire pilot runs to completion.
 
 ---
 

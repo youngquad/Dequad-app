@@ -23,7 +23,7 @@
 | **Anchor pilot discussion currently in progress** | **University of Bedfordshire** — direct relationship via former SU presidency |
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders)** |
 | **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring) |
-| **Funding ask Y1** | £150,000 pre-seed bridge (Sep Y1, post-pilot conversion) |
+| **Funding ask Y1** | £150,000 pre-seed bridge — **Dec 2026 (M7)**, after the 3-month Bedfordshire pilot completes |
 | **3-yr revenue** | £12k → £186k → £699k |
 | **3-yr UK jobs** | 2 → 6 → 12 |
 | **Op profit positive** | Q3 Year 3 |
@@ -66,7 +66,7 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 ### Viability ✅
 
 - Production MVP is live, in beta with real students.
-- **Anchor pilot live with University of Bedfordshire** — the founder's former institution where he served two terms as SU President (2021–2023). Pilot target signature Q2 Y1, conversion to paid SaaS Q3 Y1 (Sep), which is also when the pre-seed bridge lands.
+- **Anchor pilot live with University of Bedfordshire** — the founder's former institution where he served two terms as SU President (2021–2023). The 12-week pilot launches **Sep 2026 (M4)** and completes **Nov 2026 (M6)**; conversion conversations open **Dec 2026 (M7)**, which is also when the pre-seed bridge lands.
 - Two independent UK-bank programme validations: **Santander Universities Pre-Incubator (2025)** + **NatWest Accelerator (joined 16 March 2026)**.
 - £6,000 founder cash (£3k each) + £31,000 in-kind NatWest support **carries the business through Y1 with positive monthly closing cash balances** (see Page 9).
 - B2B SaaS revenue model is proven in the adjacent market — Togetherall serves 60+ UK universities at ~£40k/year.
@@ -196,8 +196,8 @@ Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 
 ### Y1 founder compensation
 
-- £0 in Q1–Q2 (personal savings).
-- £1,500/month each from M7 (Sep Y1) once the £150k pre-seed bridge lands.
+- £0 in M1–M6 (Jun–Nov 2026) (personal savings).
+- £1,500/month each from **M7 (Dec 2026)** once the £150k pre-seed bridge lands.
 - Materially below market — signals genuine founder commitment.
 
 ---
@@ -208,11 +208,11 @@ Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 |---|---|---:|---|
 | Founder equity (£3,000 × 2) | Day 1 | **£6,000** | Incorporation, domains, IP filings, hosting. |
 | R&D tax credit | End Y1 | ~£3,600 | Recycled into engineering. |
-| **Pre-seed bridge** | **Sep Y1** (after Bedfordshire pilot converts) | **£150,000** | First 4 hires, 18-month runway, dual mobile builds. |
+| **Pre-seed bridge** | **Dec 2026 (M7)** — after the 3-month Bedfordshire pilot completes and conversion discussions open | **£150,000** | First 4 hires, 18-month runway, dual mobile builds. |
 | Seed round | Q2 Y2 | £750,000 | 20-uni scale, ML team, NHS-ICB channel. |
 | Series A | Q1 Y4 | £3–5m | EU + AU launch, federated-learning, 30+ FTE. |
 
-The **pre-seed is contingent on the University of Bedfordshire pilot converting** — the round will only be approached after that institution provides commercial validation. This is deliberate; it forces customer-led growth.
+The **pre-seed is gated on the 3-month Bedfordshire pilot completing in Nov 2026 (M6) with positive outcome data** — the round will only be approached after that institution provides commercial validation (pilot-conversion conversation opens Dec 2026). This is deliberate; it forces customer-led growth.
 
 ---
 
@@ -222,20 +222,20 @@ The **pre-seed is contingent on the University of Bedfordshire pilot converting*
 
 | Month | Inflows | Outflows | Closing balance |
 |---|---:|---:|---:|
-| M1 (Mar) — incorporation | £6,000 founder | (~£1,090) | **£4,910** |
-| M2 (Apr) | — | (~£820) | **£4,090** |
-| M3 (May) | £200 sales | (~£860) | **£3,430** |
-| M4 (Jun) | £350 | (~£780) | **£3,000** |
-| M5 (Jul) | £500 | (~£780) | **£2,720** |
-| M6 (Aug) | £700 | (~£750) | **£2,670** |
-| **M7 (Sep) — £150k pre-seed lands + Bedfordshire pilot converts** | **£150,800** | (£4,830) | **£148,640** |
-| M8 (Oct) | £1,100 | (£4,750) | **£144,990** |
-| M9 (Nov) | £1,350 | (£4,750) | **£141,590** |
-| M10 (Dec) | £1,700 | (£4,830) | **£138,460** |
-| M11 (Jan) | £2,100 | (£4,810) | **£135,750** |
-| M12 (Feb) | £3,188 | (£5,910) | **£133,028** |
+| **M1 (Jun 2026)** — incorporation | £6,000 founder | (~£1,090) | **£4,910** |
+| M2 (Jul 2026) | — | (~£820) | **£4,090** |
+| M3 (Aug 2026) | £200 sales | (~£860) | **£3,430** |
+| **M4 (Sep 2026)** — pilot launch (academic year start) | £350 | (~£780) | **£3,000** |
+| M5 (Oct 2026) — pilot month 2 | £500 | (~£780) | **£2,720** |
+| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | £700 | (~£750) | **£2,670** |
+| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£150,800** | (£4,830) | **£148,640** |
+| M8 (Jan 2027) | £1,100 | (£4,750) | **£144,990** |
+| M9 (Feb 2027) | £1,350 | (£4,750) | **£141,590** |
+| M10 (Mar 2027) | £1,700 | (£4,830) | **£138,460** |
+| M11 (Apr 2027) | £2,100 | (£4,810) | **£135,750** |
+| **M12 (May 2027)** — Y1 close | £3,188 | (£5,910) | **£133,028** |
 
-> **The £6,000 founder cash buffer means cash never dips below £2,500** in any month before the pre-seed bridge — a significantly more comfortable runway than the £3k starting case. The Bedfordshire pilot conversion in M7 is the single critical commercial event of Year 1, and the founders' direct relationship with the university (via the former SU presidency) is the principal de-risking factor.
+> **The £6,000 founder cash buffer means cash never dips below £2,500** in any month before the pre-seed bridge — a significantly more comfortable runway than the £3k starting case. The 3-month Bedfordshire pilot (Sep–Nov 2026, M4–M6) and the M7 (Dec 2026) conversion-conversation window is the single critical commercial event of Year 1, and the founders' direct relationship with the university (via the former SU presidency) is the principal de-risking factor.
 
 The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow Y1 (mo)".
 
@@ -323,7 +323,7 @@ The 12 key risks the founders have identified and their mitigations:
 
 | # | Risk | Impact | Mitigation |
 |---|---|---|---|
-| R1 | First-pilot conversion slips beyond Sep Y1 | High | 3 LOIs in parallel; pivot to NHS ICB pilot if HEI cycle delayed. |
+| R1 | First-pilot conversion slips beyond Dec 2026 (M7) | High | 3 LOIs in parallel; pivot to NHS ICB pilot if HEI cycle delayed. |
 | R2 | Co-founder hire delayed | High | Y1 build is solo-doable; founder personally covers technical work until co-founder onboarded. |
 | R3 | Pre-seed bridge slips | High | Tight Y1 burn means £3k carries 6 months; founders top up personal funds for any small gaps. |
 | R4 | Safeguarding incident (false negative) | High | Human-in-the-loop for all high-risk flags; insurance in place; clinical advisory board recruited Q2 Y2. |
@@ -347,14 +347,14 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 ### Three things this submission demonstrates
 
 1. **Real product, real users** — the MVP is live, has beta users at three universities, and is governed by a DPIA-cleared safeguarding policy that ships before public launch.
-2. **Capital efficiency** — the business can survive Year 1 on **£3,000 of founder cash** because of the NatWest Accelerator in-kind support and a 6-month no-salary founder commitment. The pre-seed bridge is conservatively timed for *after* the first paid pilot converts.
+2. **Capital efficiency** — the business can survive Year 1 on **£6,000 of founder cash** because of the NatWest Accelerator in-kind support and a 6-month no-salary founder commitment. The pre-seed bridge is conservatively timed for **Dec 2026 (M7)** — immediately after the 3-month Bedfordshire pilot completes (Nov 2026) and conversion conversations open.
 3. **Credible UK growth** — 2 to 12 UK jobs in 3 years, 1 to 20 paying universities, operating profit positive Q3 Y3.
 
 ### What endorsement enables
 
 - The lead applicant retains UK residency to continue building DEQUAD full-time.
 - The co-founder (UK-resident already) joins formally as CTO at incorporation.
-- £150k of UK pre-seed capital enters the company in Sep Y1, unlocking the first 4 UK hires.
+- £150k of UK pre-seed capital enters the company in **Dec 2026 (M7)**, unlocking the first 4 UK hires.
 - A measurable, defensible improvement in UK student wellbeing infrastructure.
 
 ---

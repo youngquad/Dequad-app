@@ -131,7 +131,7 @@ B2B subscriptions cover the fixed cost base. Premium and ICB contracts are the u
 - 📅 **Business start date: 15 June 2026** (incorporation).
 - 🛠️ **MVP live in production** at dequad.co.uk — no further build-cost in Y1.
 - 👥 **~50 beta users** active across 3 UK universities.
-- 🏛️ **Anchor pilot discussion currently in progress: University of Bedfordshire.** Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
+- 🏛️ **Anchor pilot — University of Bedfordshire** (discussion currently in progress). 12-week pilot launches **Sep 2026 (M4 — academic year start)**, runs through **Nov 2026 (M6)**. Paid-conversion conversations open **Dec 2026 (M7)**. Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
 - 🏦 **Santander Universities Pre-Incubator** — completed 2025.
 - 🏦 **NatWest Accelerator (London)** — joined **16 March 2026**. £31k of in-kind support delivered (office, legal, accountancy, mentoring).
 
@@ -184,14 +184,14 @@ UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
 
 | Month | Closing cash |
 |---|---:|
-| M1 (Mar) — incorporation, £6k founder cash | £4,910 |
-| M4 (Jun) | £3,000 |
-| M6 (Aug) — lowest point | **£2,670** |
-| **M7 (Sep) — £150k pre-seed + Bedfordshire pilot converts** | **£148,640** |
-| M12 (Feb) — Y1 close | **£137,028** |
+| **M1 (Jun 2026)** — incorporation, £6k founder cash | £4,910 |
+| **M4 (Sep 2026)** — pilot launch (academic year start) | £3,000 |
+| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | **£2,670** |
+| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£148,640** |
+| **M12 (May 2027)** — Y1 close | **£133,028** |
 
 > Cash is positive every single month of Year 1.
-> The £150k pre-seed bridge is the only critical commercial event — and the Bedfordshire relationship de-risks it.
+> The 3-month Bedfordshire pilot (Sep–Nov 2026) is the critical commercial test — the £150k pre-seed bridge closes immediately after, on the basis of pilot outcome data.
 
 </div>
 
@@ -202,7 +202,8 @@ UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
 ## 11 · The ask · £150,000 pre-seed
 
 **Round:** Pre-seed bridge at **£1.2m post-money cap** (~12.5% equity).
-**Trigger:** Anchor university pilot signature (University of Bedfordshire, target Sep 2026).
+**Trigger:** 3-month University of Bedfordshire pilot completes (Sep–Nov 2026); conversion conversations open Dec 2026.
+**Timing:** **M7 — Dec 2026.**
 **Lead via:** Envestors angel network + NatWest Accelerator demo day Q3 Y1.
 
 ### Use of funds (£150k → 18 months)

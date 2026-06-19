@@ -131,28 +131,32 @@ def merge_master_pdf() -> None:
         return
 
     order = [
-        # Cover-of-pack (most useful first read)
-        ("DEQUAD_UKES_Decision_Brief.pdf", "00 Decision-Maker Brief (15 pages)"),
+        # Cover email (what UKES sees first — sent as the email body itself)
+        ("UKES_Submission_Cover_Email.pdf", "00 Cover Email"),
+        # Decision Brief — 15-page UKES short-track summary
+        ("DEQUAD_UKES_Decision_Brief.pdf", "01 Decision-Maker Brief (15 pages)"),
         # Full plan
-        ("DEQUAD_UKES_Business_Plan.pdf", "01 Business Plan"),
+        ("DEQUAD_UKES_Business_Plan.pdf", "02 Business Plan"),
+        # Pitch deck (visual narrative)
+        ("DEQUAD_Pitch_Deck.pdf", "03 Pitch Deck (12 slides)"),
         # Risk register
-        ("DEQUAD_Risk_Register.pdf", "02 Risk Register (Appendix L)"),
+        ("DEQUAD_Risk_Register.pdf", "04 Risk Register"),
         # Founder CVs
-        ("B_founder_cv.pdf", "03 Appendix B — Yusuf Quadri CV"),
-        ("B_cofounder_cv.pdf", "04 Appendix B-2 — Yusuff Adeagbo CV"),
+        ("B_founder_cv.pdf", "05 Appendix B — Yusuf Quadri CV"),
+        ("B_cofounder_cv.pdf", "06 Appendix B-2 — Yusuff Adeagbo CV"),
         # New appendices
-        ("N_wider_team_cvs.pdf", "05 Appendix N — Wider Team CVs"),
-        ("O_safeguarding_certifications.pdf", "06 Appendix O — Safeguarding Certifications"),
+        ("N_wider_team_cvs.pdf", "07 Appendix N — Wider Team CVs"),
+        ("O_safeguarding_certifications.pdf", "08 Appendix O — Safeguarding Certifications"),
         # Original supporting appendices (built in prior session)
-        ("A_founder_academic_certificates.pdf", "07 Appendix A — Founder Academic Certificates"),
-        ("C_personal_commitment_undertaking.pdf", "08 Appendix C — Personal Commitment"),
-        ("D_wellbeing_baseline_methodology.pdf", "09 Appendix D — Wellbeing Baseline Methodology"),
-        ("E_dpia.pdf", "10 Appendix E — DPIA"),
-        ("G_job_descriptions.pdf", "11 Appendix G — Job Descriptions"),
-        ("H_university_letter_of_interest_template.pdf", "12 Appendix H — University LOI Template"),
-        ("I_online_safety_act_compliance.pdf", "13 Appendix I — Online Safety Act Compliance"),
-        ("J_architecture_diagram.pdf", "14 Appendix J — Architecture Diagram"),
-        ("K_product_screenshots.pdf", "15 Appendix K — Product Screenshots"),
+        ("A_founder_academic_certificates.pdf", "09 Appendix A — Founder Academic Certificates"),
+        ("C_personal_commitment_undertaking.pdf", "10 Appendix C — Personal Commitment"),
+        ("D_wellbeing_baseline_methodology.pdf", "11 Appendix D — Wellbeing Baseline Methodology"),
+        ("E_dpia.pdf", "12 Appendix E — DPIA"),
+        ("G_job_descriptions.pdf", "13 Appendix G — Job Descriptions"),
+        ("H_university_letter_of_interest_template.pdf", "14 Appendix H — University LOI Template"),
+        ("I_online_safety_act_compliance.pdf", "15 Appendix I — Online Safety Act Compliance"),
+        ("J_architecture_diagram.pdf", "16 Appendix J — Architecture Diagram"),
+        ("K_product_screenshots.pdf", "17 Appendix K — Product Screenshots"),
     ]
 
     writer = PdfWriter()
@@ -179,6 +183,12 @@ def merge_master_pdf() -> None:
 
 def main() -> None:
     jobs = [
+        (
+            APPDIR / "UKES_Submission_Cover_Email.md",
+            APPDIR / "UKES_Submission_Cover_Email.html",
+            APPDIR / "UKES_Submission_Cover_Email.pdf",
+            "DEQUAD — UKES Submission Cover Email",
+        ),
         (
             APPDIR / "DEQUAD_UKES_Business_Plan.md",
             APPDIR / "DEQUAD_UKES_Business_Plan.html",
