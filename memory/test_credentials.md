@@ -12,14 +12,23 @@
 
 ## DEQUAD Demo Accounts (2026-06, revised) — student-app login only
 For UKES / investor demos. Login via the regular student email/password flow at `/(auth)/login`.
-Public registration of `@dequad.com` is blocked by the `.ac.uk` policy — these accounts exist only because they are seeded by `seed.py`. Email format: `firstname.lastname@dequad.com` (case-insensitive at login).
+**These seeded accounts bypass OTP verification** (`email_verified=true` set in seed.py).
+
+Public registration of `@dequad.com` is blocked by the `.ac.uk` policy.
+
+### Email-verification (OTP) — new flow (2026-06)
+- Public registration via `POST /api/auth/register` → account created with `email_verified=false`, OTP sent to .ac.uk inbox.
+- Account cannot log in until OTP is entered at `/verify-email?email=...` → backend `POST /api/auth/verify-email`.
+- Resend: `POST /api/auth/resend-verification` (60s cooldown).
+- Code: 6-digit, 15-min TTL, max 5 attempts.
+- Dev: set `DEV_LOG_OTP=true` in backend `.env` to see the OTP in backend logs (currently enabled on preview).
 
 | Email | Name | Password | Notes |
 |---|---|---|---|
 | Yusuff.Adeagbo@dequad.com | Yusuff Adeagbo | `YusuffAdeagbo11@` | Real mailbox — CTO |
 | Gerald.Marfo@dequad.com | Dr Gerald Marfo | `DequadStaff2026!` | Demo only — CMO |
 | Chinyere.Jennifer@dequad.com | Chinyere Jennifer | `DequadStaff2026!` | Demo only — Advisor |
-| yusufquadri83@gmail.com | Yusuf Quadri | `Oluwatobi11@` | Founder's personal student-side account (separate from admin login) |
+| yusufquadri83@gmail.com | Yusuf Quadri | `Oluwatobi11@` | Founder's personal student-side account |
 
 **Blocked / removed from DB:**
 - `Adedapo.Ajuwon@dequad.com` (intentionally blocked from student login)

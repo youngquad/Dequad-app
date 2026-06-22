@@ -26,6 +26,105 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+# ---- Email-verification (OTP) helpers -----------------------------------
+
+OTP_TTL_MINUTES = 15
+OTP_MAX_ATTEMPTS = 5
+OTP_RESEND_COOLDOWN_SECONDS = 60
+
+
+def _generate_otp() -> str:
+    """6-digit numeric code, leading zeros preserved."""
+    return f"{secrets.randbelow(1_000_000):06d}"
+
+
+def _hash_otp(code: str) -> str:
+    return hashlib.sha256(code.encode()).hexdigest()
+
+
+def _build_otp_email(code: str) -> tuple[str, str]:
+    html = f"""
+<p>Hi,</p>
+<p>Welcome to DEQUAD. Use the code below to verify your university email:</p>
+<p style="text-align:center;font-size:36px;letter-spacing:10px;font-weight:800;color:#7B61FF;margin:24px 0;">
+  {code}
+</p>
+<p>This code expires in {OTP_TTL_MINUTES} minutes.</p>
+<p>If you didn't sign up to DEQUAD, you can safely ignore this email.</p>
+<p>— DEQUAD</p>
+""".strip()
+    text = (
+        f"Your DEQUAD verification code is: {code}\n\n"
+        f"It expires in {OTP_TTL_MINUTES} minutes.\n\n"
+        f"If you didn't sign up to DEQUAD, you can safely ignore this email.\n\n"
+        f"— DEQUAD"
+    )
+    return html, text
+
+
+async def _send_verification_otp(email: str, *, force: bool = False) -> dict:
+    """Create + email a fresh 6-digit verification code.
+
+    Returns dict with keys:
+      - sent (bool): whether SMTP actually delivered
+      - cooldown_seconds (int|None): seconds left if rate-limited
+    """
+    now = datetime.now(timezone.utc)
+    existing = await db.email_verifications.find_one({"email": email})
+    if existing and not force:
+        last_sent = existing.get("last_sent_at")
+        if isinstance(last_sent, datetime):
+            if last_sent.tzinfo is None:
+                last_sent = last_sent.replace(tzinfo=timezone.utc)
+            elapsed = (now - last_sent).total_seconds()
+            if elapsed < OTP_RESEND_COOLDOWN_SECONDS:
+                return {"sent": False, "cooldown_seconds": int(OTP_RESEND_COOLDOWN_SECONDS - elapsed)}
+
+    code = _generate_otp()
+    record = {
+        "email": email,
+        "code_hash": _hash_otp(code),
+        "expires_at": now + timedelta(minutes=OTP_TTL_MINUTES),
+        "attempts": 0,
+        "last_sent_at": now,
+        "created_at": existing.get("created_at") if existing else now,
+    }
+    await db.email_verifications.update_one(
+        {"email": email}, {"$set": record}, upsert=True
+    )
+
+    sent = False
+    if is_smtp_configured():
+        try:
+            html, text = _build_otp_email(code)
+            sent = await send_email_async(
+                [email],
+                subject="Your DEQUAD verification code",
+                html_body=html,
+                text_body=text,
+            )
+        except Exception as exc:
+            logger.warning(f"Failed to send verification OTP to {email}: {exc}")
+            sent = False
+    else:
+        logger.info("SMTP not configured — OTP generated but not emailed")
+
+    # Dev-mode: surface the code in logs so testers can verify without an inbox.
+    if os.environ.get("DEV_LOG_OTP", "").lower() in ("1", "true", "yes"):
+        logger.warning(f"[DEV_LOG_OTP] {email} -> {code}")
+
+    return {"sent": sent, "cooldown_seconds": None}
+
+
+class VerifyEmailRequest(BaseModel):
+    email: str
+    code: str
+
+
+class ResendVerificationRequest(BaseModel):
+    email: str
+
+
 @router.post("/auth/forgot-password")
 async def forgot_password(data: ForgotPasswordRequest):
     """Send a password-reset link to any registered user (admin OR student).
@@ -198,25 +297,107 @@ async def email_register(data: EmailRegisterRequest, response: Response):
         "student_attested_at": (
             datetime.now(timezone.utc) if verdict.verdict == "needs_attestation" else None
         ),
+        # Email-ownership verification (OTP). Account exists but cannot log in
+        # until the user proves they actually own the .ac.uk inbox by entering
+        # the 6-digit code we just emailed.
+        "email_verified": False,
     }
     await db.users.insert_one(user_doc)
     user_doc.pop("password_hash", None)
     user_doc.pop("_id", None)
 
+    # Fire-and-confirm the OTP email. `_send_verification_otp` is idempotent
+    # and rate-limited; on first signup the cooldown is irrelevant.
+    otp_result = await _send_verification_otp(email_lower, force=True)
+
+    # Do NOT issue a session token yet — login is blocked until the email is
+    # verified. The frontend should redirect to /verify-email after this call.
+    return {
+        "user": user_doc,
+        "email_verification_required": True,
+        "email_verification_sent": otp_result["sent"],
+    }
+
+
+@router.post("/auth/verify-email")
+async def verify_email(data: VerifyEmailRequest, response: Response):
+    """Consume the 6-digit OTP and activate the account."""
+    email_lower = (data.email or "").lower().strip()
+    code = (data.code or "").strip()
+    if not code.isdigit() or len(code) != 6:
+        raise HTTPException(status_code=400, detail="Enter the 6-digit code from your email.")
+
+    record = await db.email_verifications.find_one({"email": email_lower})
+    if not record:
+        raise HTTPException(status_code=404, detail="No pending verification for this email. Sign up first or resend the code.")
+
+    expires_at = record.get("expires_at")
+    if isinstance(expires_at, datetime) and expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < datetime.now(timezone.utc):
+        raise HTTPException(status_code=410, detail="That code has expired. Tap 'Resend code' to get a new one.")
+
+    attempts = int(record.get("attempts", 0))
+    if attempts >= OTP_MAX_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many incorrect attempts. Tap 'Resend code' for a new one.")
+
+    if _hash_otp(code) != record.get("code_hash"):
+        await db.email_verifications.update_one(
+            {"email": email_lower}, {"$inc": {"attempts": 1}}
+        )
+        remaining = OTP_MAX_ATTEMPTS - attempts - 1
+        raise HTTPException(
+            status_code=401,
+            detail=f"Incorrect code. {remaining} attempt(s) remaining."
+            if remaining > 0
+            else "Incorrect code. Please request a new one.",
+        )
+
+    user = await db.users.find_one({"email": email_lower}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Account not found.")
+
+    await db.users.update_one(
+        {"email": email_lower},
+        {"$set": {"email_verified": True, "email_verified_at": datetime.now(timezone.utc)}},
+    )
+    await db.email_verifications.delete_one({"email": email_lower})
+
+    user["email_verified"] = True
+    user.pop("password_hash", None)
+    user.pop("admin_password", None)
+
     session_token = secrets.token_urlsafe(32)
-    await db.user_sessions.delete_many({"user_id": user_id})
+    await db.user_sessions.delete_many({"user_id": user["user_id"]})
     await db.user_sessions.insert_one({
-        "user_id": user_id,
+        "user_id": user["user_id"],
         "session_token": session_token,
         "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
         "created_at": datetime.now(timezone.utc),
     })
-
     response.set_cookie(
         key="session_token", value=session_token,
         httponly=True, secure=True, samesite="none", path="/", max_age=7 * 24 * 60 * 60,
     )
-    return {"user": user_doc, "session_token": session_token}
+    return {"user": user, "session_token": session_token, "email_verified": True}
+
+
+@router.post("/auth/resend-verification")
+async def resend_verification(data: ResendVerificationRequest):
+    """Send a fresh OTP to a pending account. Rate-limited to once per 60s."""
+    email_lower = (data.email or "").lower().strip()
+    user = await db.users.find_one({"email": email_lower}, {"_id": 0})
+    # Uniform response regardless of existence — prevents account enumeration.
+    if not user or user.get("email_verified"):
+        return {"sent": True, "message": "If an unverified account exists for that email, a new code has been sent."}
+    result = await _send_verification_otp(email_lower)
+    if result.get("cooldown_seconds"):
+        return {
+            "sent": False,
+            "cooldown_seconds": result["cooldown_seconds"],
+            "message": f"Please wait {result['cooldown_seconds']}s before requesting another code.",
+        }
+    return {"sent": result["sent"], "message": "A new verification code has been sent."}
 
 
 @router.post("/auth/email-login")
@@ -229,6 +410,17 @@ async def email_login(data: EmailLoginRequest, response: Response):
 
     if hashlib.sha256(data.password.encode()).hexdigest() != user["password_hash"]:
         raise HTTPException(status_code=401, detail="Invalid email or password.")
+
+    # Block login for accounts that haven't completed the OTP verification yet.
+    # Pre-OTP-rollout accounts (no `email_verified` field at all) are grand-
+    # fathered in by treating missing-field as True. Seeded staff/test profiles
+    # are also marked verified in seed.py.
+    email_verified = user.get("email_verified", True)
+    if email_verified is False:
+        raise HTTPException(
+            status_code=403,
+            detail="Please verify your university email before signing in. Check your inbox for the 6-digit code.",
+        )
 
     user.pop("password_hash", None)
     user.pop("admin_password", None)

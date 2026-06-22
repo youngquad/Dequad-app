@@ -74,10 +74,15 @@ export default function LoginScreen() {
     try {
       if (mode === 'signin') {
         await loginWithEmail(email, password);
+        router.replace('/(main)/mood');
       } else {
-        await registerWithEmail(email, password, name || undefined, confirmStudent);
+        const result = await registerWithEmail(email, password, name || undefined, confirmStudent);
+        if (result?.requiresVerification) {
+          router.replace({ pathname: '/verify-email', params: { email: email.trim().toLowerCase() } } as any);
+        } else {
+          router.replace('/(main)/mood');
+        }
       }
-      router.replace('/(main)/mood');
     } catch (err: any) {
       const msg = err?.message || (mode === 'signin' ? 'Sign-in failed.' : 'Sign-up failed.');
       setEmailErr(msg.replace(/^Error:\s*/, ''));
@@ -125,29 +130,6 @@ export default function LoginScreen() {
 
             {/* Card */}
             <View style={styles.card}>
-              {/* Google */}
-              <TouchableOpacity
-                onPress={handleGoogle}
-                disabled={busy}
-                style={[styles.googleBtn, busy && styles.btnDisabled]}
-                data-testid="login-google"
-              >
-                {busy ? (
-                  <ActivityIndicator color="#FFFFFF" size="small" />
-                ) : (
-                  <>
-                    <Ionicons name="logo-google" size={18} color="#FFFFFF" />
-                    <Text style={styles.googleBtnText}>Continue with Google</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-
-              <View style={styles.divider}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>or use email</Text>
-                <View style={styles.dividerLine} />
-              </View>
-
               {mode === 'signup' && (
                 <View style={styles.inputWrap}>
                   <Ionicons name="person-outline" size={18} color="#4F6076" style={styles.inputIcon} />

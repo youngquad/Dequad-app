@@ -153,6 +153,8 @@ async def seed_admin_and_test_users():
     ]
 
     for profile in test_profiles:
+        # All seeded profiles bypass email verification — they're synthetic.
+        profile["email_verified"] = True
         existing = await db.users.find_one({"user_id": profile["user_id"]})
         if not existing:
             await db.users.insert_one(profile)
@@ -160,7 +162,8 @@ async def seed_admin_and_test_users():
         else:
             await db.users.update_one({"user_id": profile["user_id"]}, {"$set": {
                 "photos": profile["photos"], "picture": profile["picture"],
-                "role": "student", "interested_in": profile["interested_in"], "gender": profile["gender"]
+                "role": "student", "interested_in": profile["interested_in"], "gender": profile["gender"],
+                "email_verified": True,
             }})
             logger.info(f"Test profile updated: {profile['name']}")
 
@@ -269,6 +272,8 @@ async def seed_admin_and_test_users():
             "student_verification": "auto",
             "auth_method": "email",
             "is_demo_account": True,
+            # Seeded demos bypass OTP verification.
+            "email_verified": True,
         }
         if not existing_staff:
             staff_doc["user_id"] = f"staff-{uuid.uuid4().hex[:8]}"

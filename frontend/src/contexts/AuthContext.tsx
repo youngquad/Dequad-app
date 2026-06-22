@@ -24,7 +24,9 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: () => Promise<void>;
   loginWithEmail: (email: string, password: string) => Promise<void>;
-  registerWithEmail: (email: string, password: string, name?: string, confirmStudent?: boolean) => Promise<void>;
+  registerWithEmail: (email: string, password: string, name?: string, confirmStudent?: boolean) => Promise<{ requiresVerification: boolean }>;
+  verifyEmail: (email: string, code: string) => Promise<void>;
+  resendVerification: (email: string) => Promise<any>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   sessionToken: string | null;
@@ -189,17 +191,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
     name?: string,
     confirmStudent?: boolean,
-  ) => {
+  ): Promise<{ requiresVerification: boolean }> => {
     const res = await api.post('/auth/register', {
       email: email.trim().toLowerCase(),
       password,
       name,
       confirm_student: !!confirmStudent,
     });
+
+    // New flow: backend now requires OTP email verification before issuing a
+    // session. Surface that to the caller so the login screen can redirect to
+    // /verify-email instead of trying to enter the app.
+    if (res?.email_verification_required) {
+      return { requiresVerification: true };
+    }
+
+    // Legacy path — pre-OTP rollout: backend returned a session immediately.
     if (!res?.session_token || !res?.user) {
       throw new Error('Sign-up failed — no session returned.');
     }
     await _persistSession(res.session_token, res.user);
+    return { requiresVerification: false };
+  };
+
+  const verifyEmail = async (email: string, code: string) => {
+    const res = await api.post('/auth/verify-email', {
+      email: email.trim().toLowerCase(),
+      code: code.trim(),
+    });
+    if (!res?.session_token || !res?.user) {
+      throw new Error('Verification failed — no session returned.');
+    }
+    await _persistSession(res.session_token, res.user);
+  };
+
+  const resendVerification = async (email: string) => {
+    return api.post('/auth/resend-verification', { email: email.trim().toLowerCase() });
   };
 
   const login = async () => {
@@ -312,6 +339,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         loginWithEmail,
         registerWithEmail,
+        verifyEmail,
+        resendVerification,
         logout,
         refreshUser,
         sessionToken,
