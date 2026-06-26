@@ -600,3 +600,66 @@ async def logout(request: Request, response: Response):
     response.delete_cookie(key="session_token", path="/")
     response.delete_cookie(key="session_token", path="/", domain=None, secure=True, samesite="none")
     return {"message": "Logged out"}
+
+
+@router.delete("/auth/me")
+async def delete_my_account(
+    response: Response,
+    current_user: User = Depends(get_current_user),
+):
+    """Permanently delete the calling user and all data linked to them.
+
+    Required by Apple App Store guideline 5.1.1(v) — in-app account deletion.
+    Cascades across every collection the user owns. This is irreversible.
+    """
+    uid = current_user.user_id
+    email = (current_user.email or "").lower().strip()
+
+    # Cancel any active Stripe subscription first so we don't keep billing them.
+    user_doc = await db.users.find_one({"user_id": uid}, {"_id": 0}) or {}
+    stripe_customer_id = user_doc.get("stripe_customer_id")
+    if stripe_customer_id:
+        try:
+            import stripe as _stripe  # local import to avoid hard dep on this path
+            from config import STRIPE_SECRET_KEY as _SK
+            _stripe.api_key = _SK
+            subs = _stripe.Subscription.list(customer=stripe_customer_id, status="active", limit=5)
+            for s in subs.data:
+                try:
+                    _stripe.Subscription.cancel(s.id)
+                except Exception as exc:
+                    logger.warning(f"Failed to cancel Stripe sub {s.id} during delete: {exc}")
+        except Exception as exc:
+            logger.warning(f"Stripe cleanup skipped during delete for {email}: {exc}")
+
+    # Cascade-delete every collection that references the user.
+    deleted_counts = {
+        "users": (await db.users.delete_many({"user_id": uid})).deleted_count,
+        "user_sessions": (await db.user_sessions.delete_many({"user_id": uid})).deleted_count,
+        "sessions": (await db.sessions.delete_many({"user_id": uid})).deleted_count,
+        "matches": (await db.matches.delete_many(
+            {"$or": [{"user_id": uid}, {"matched_user_id": uid}, {"target_user_id": uid}]}
+        )).deleted_count,
+        "chat_messages": (await db.chat_messages.delete_many(
+            {"$or": [{"sender_id": uid}, {"recipient_id": uid}]}
+        )).deleted_count,
+        "mood_entries": (await db.mood_entries.delete_many({"user_id": uid})).deleted_count,
+        "feedback": (await db.feedback.delete_many({"user_id": uid})).deleted_count,
+        "reports": (await db.reports.delete_many(
+            {"$or": [{"reporter_id": uid}, {"reported_id": uid}]}
+        )).deleted_count,
+        "support_messages": (await db.support_messages.delete_many({"user_id": uid})).deleted_count,
+        "notifications": (await db.notifications.delete_many({"user_id": uid})).deleted_count,
+        "email_verifications": (await db.email_verifications.delete_many({"email": email})).deleted_count,
+        "safeguarding_alerts": (await db.safeguarding_alerts.delete_many({"user_id": uid})).deleted_count,
+    }
+
+    response.delete_cookie(key="session_token", path="/")
+    response.delete_cookie(key="session_token", path="/", domain=None, secure=True, samesite="none")
+
+    logger.info(f"Account permanently deleted: {email} ({uid}) — counts: {deleted_counts}")
+    return {
+        "success": True,
+        "message": "Your account and all associated data have been permanently deleted.",
+        "deleted": deleted_counts,
+    }

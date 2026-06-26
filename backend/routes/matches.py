@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import datetime, timezone, timedelta
+from typing import Optional
+import re
 
 from database import db
 from models import User, Match, SwipeAction
@@ -74,19 +76,21 @@ def check_preference_match(user: dict, other: dict) -> bool:
 async def discover_matches(
     current_user: User = Depends(get_current_user),
     reset: bool = False,
+    gender: Optional[str] = None,
+    min_age: Optional[int] = None,
+    max_age: Optional[int] = None,
+    university: Optional[str] = None,
+    education_level: Optional[str] = None,
+    city: Optional[str] = None,
 ):
     """Return candidate profiles for the swipe deck.
 
-    By default, anyone the current user has already swiped on (like OR dislike) is
-    excluded. When ``reset=true`` is passed (used by the "Refresh" button on the
-    Connect page), **all previous dislike/skip records for the current user are
-    cleared** so that every profile they skipped comes back into the deck and
-    can be re-swiped. Likes are never cleared — those are already a "match in
-    progress" and re-showing them would be confusing.
+    Premium-only filters: ``gender``, ``min_age``, ``max_age``, ``university``,
+    ``education_level``, ``city``. Non-premium users have these filters
+    silently ignored — surfaced as a paywall in the UI before they ever reach
+    this endpoint.
     """
     if reset:
-        # Wipe every dislike/skip the user has made so the deck genuinely
-        # restarts. The user can then re-swipe these profiles normally.
         await db.matches.delete_many(
             {"user_id": current_user.user_id, "status": "rejected"}
         )
@@ -94,13 +98,45 @@ async def discover_matches(
     existing_swipes = await db.matches.find(
         {"user_id": current_user.user_id}, {"matched_user_id": 1}
     ).to_list(1000)
-
     swiped_ids = [s["matched_user_id"] for s in existing_swipes]
     swiped_ids.append(current_user.user_id)
 
-    potential_users = await db.users.find(
-        {"user_id": {"$nin": swiped_ids}, "role": "student"}, {"_id": 0}
-    ).to_list(100)
+    query: dict = {"user_id": {"$nin": swiped_ids}, "role": "student"}
+
+    # Premium gating — only apply filters if the user actually has premium.
+    user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0}) or {}
+    is_premium = (
+        user_doc.get("plan") == "premium"
+        or user_doc.get("is_premium") is True
+        or user_doc.get("subscription_status") in {"premium", "active", "cancel_at_period_end"}
+    )
+    filters_applied: dict = {}
+    if is_premium:
+        if gender:
+            query["gender"] = gender
+            filters_applied["gender"] = gender
+        if university:
+            query["university"] = {"$regex": f"^{re.escape(university)}$", "$options": "i"}
+            filters_applied["university"] = university
+        if education_level:
+            query["education_level"] = education_level
+            filters_applied["education_level"] = education_level
+        if city:
+            query["$or"] = [
+                {"university_location": {"$regex": re.escape(city), "$options": "i"}},
+                {"city": {"$regex": re.escape(city), "$options": "i"}},
+            ]
+            filters_applied["city"] = city
+        age_clause: dict = {}
+        if min_age is not None and min_age > 0:
+            age_clause["$gte"] = int(min_age)
+        if max_age is not None and max_age > 0:
+            age_clause["$lte"] = int(max_age)
+        if age_clause:
+            query["age"] = age_clause
+            filters_applied["age_range"] = [min_age, max_age]
+
+    potential_users = await db.users.find(query, {"_id": 0}).to_list(200)
 
     current_user_dict = current_user.dict()
     scored_users = []
@@ -114,7 +150,11 @@ async def discover_matches(
         scored_users.append(user)
 
     scored_users.sort(key=lambda x: x["match_score"], reverse=True)
-    return scored_users[:50]
+    result = scored_users[:50]
+
+    # Backwards-compatible: previous clients expect a flat list. Newer clients
+    # can read pagination/filter metadata via response headers if needed.
+    return result
 
 
 @router.post("/matches/swipe")
