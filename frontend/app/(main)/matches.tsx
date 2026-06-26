@@ -24,6 +24,8 @@ import { api } from '../../src/services/api';
 import { useRouter } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
+import MatchFiltersModal from '../../src/components/MatchFiltersModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,8 +78,36 @@ export default function MatchesScreen() {
   const [isSending, setIsSending] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [reportTarget, setReportTarget] = useState<UserProfile | null>(null);
-  
+  // Premium-gated filter state (persisted in AsyncStorage across sessions)
+  const [filters, setFilters] = useState<{
+    gender?: string;
+    min_age?: number;
+    max_age?: number;
+    university?: string;
+    education_level?: string;
+    city?: string;
+  }>({});
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+
   const scrollRef = useRef<FlatList>(null);
+
+  // Load persisted filter prefs once on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const raw = await AsyncStorage.getItem('dequad_match_filters');
+        if (raw) setFilters(JSON.parse(raw));
+      } catch {}
+      setFiltersLoaded(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (filtersLoaded) {
+      AsyncStorage.setItem('dequad_match_filters', JSON.stringify(filters)).catch(() => {});
+    }
+  }, [filters, filtersLoaded]);
 
   useEffect(() => {
     loadProfiles();
@@ -96,14 +126,25 @@ export default function MatchesScreen() {
 
   const loadProfiles = async (reset: boolean = false) => {
     try {
-      // Hard-reset the deck so any stale already-swiped cards disappear from
-      // the UI before the new data arrives.
       if (reset) {
         setProfiles([]);
         setCurrentIndex(0);
         setIsLoading(true);
       }
-      const path = reset ? '/matches/discover?reset=true' : '/matches/discover';
+      // Build query string from active filters + reset flag
+      const params = new URLSearchParams();
+      if (reset) params.set('reset', 'true');
+      const isPremium = !!swipeInfo?.is_premium;
+      if (isPremium) {
+        if (filters.gender) params.set('gender', filters.gender);
+        if (filters.min_age) params.set('min_age', String(filters.min_age));
+        if (filters.max_age) params.set('max_age', String(filters.max_age));
+        if (filters.university) params.set('university', filters.university);
+        if (filters.education_level) params.set('education_level', filters.education_level);
+        if (filters.city) params.set('city', filters.city);
+      }
+      const qs = params.toString();
+      const path = qs ? `/matches/discover?${qs}` : '/matches/discover';
       const data = await api.get(path, sessionToken);
       setProfiles(data);
       setCurrentIndex(0);
@@ -489,6 +530,18 @@ export default function MatchesScreen() {
         sessionToken={sessionToken}
       />
 
+      {/* Match filters modal — premium gated */}
+      <MatchFiltersModal
+        visible={filterModalOpen}
+        initial={filters}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(next) => {
+          setFilters(next);
+          // Reload deck with the new filters applied
+          setTimeout(() => loadProfiles(false), 0);
+        }}
+      />
+
       {/* Comment Modal */}
       <Modal
         visible={commentModal !== null}
@@ -726,6 +779,29 @@ export default function MatchesScreen() {
             </TouchableOpacity>
           );
         })()}
+
+        {/* Filter button — premium gated */}
+        <TouchableOpacity
+          onPress={() => {
+            if (!swipeInfo?.is_premium) {
+              setShowUpgradePrompt(true);
+              return;
+            }
+            setFilterModalOpen(true);
+          }}
+          style={styles.filterPill}
+          data-testid="open-filters-button"
+        >
+          <Ionicons name="options-outline" size={16} color="#1F2937" />
+          <Text style={styles.filterPillText}>
+            {Object.values(filters).filter(Boolean).length > 0
+              ? `Filters · ${Object.values(filters).filter(Boolean).length}`
+              : 'Filters'}
+          </Text>
+          {!swipeInfo?.is_premium && (
+            <Ionicons name="lock-closed" size={12} color="#F59E0B" style={{ marginLeft: 4 }} />
+          )}
+        </TouchableOpacity>
       </View>
 
       {/* Profiles List */}
