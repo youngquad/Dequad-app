@@ -269,11 +269,30 @@ export default function SubscriptionScreen() {
                   <Text style={styles.cancelButtonText}>Cancel Subscription</Text>
                 </TouchableOpacity>
               </View>
+            ) : Platform.OS === 'ios' ? (
+              // Apple App Store policy compliance: do NOT offer in-app
+              // purchase of a digital subscription except via StoreKit. We
+              // direct iOS users to upgrade on the web instead.
+              <View style={styles.iosUpgradeNote} data-testid="ios-upgrade-note">
+                <Ionicons name="information-circle-outline" size={22} color="#4F6076" />
+                <Text style={styles.iosUpgradeText}>
+                  Manage your Premium subscription on the web at{' '}
+                  <Text
+                    style={styles.iosUpgradeLink}
+                    onPress={() => Linking.openURL('https://dequad.co.uk/subscription')}
+                    data-testid="ios-upgrade-link"
+                  >
+                    dequad.co.uk
+                  </Text>
+                  .
+                </Text>
+              </View>
             ) : (
               <TouchableOpacity 
                 style={styles.subscribeButton}
                 onPress={handleSubscribe}
                 disabled={isProcessing}
+                data-testid="upgrade-button"
               >
                 {isProcessing ? (
                   <ActivityIndicator color="#fff" />
@@ -503,6 +522,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#fff',
+  },
+  iosUpgradeNote: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: '#F2F5FA',
+    borderRadius: 12,
+    padding: 16,
+  },
+  iosUpgradeText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#4F6076',
+    lineHeight: 20,
+  },
+  iosUpgradeLink: {
+    color: '#0F2942',
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
   freeCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',

@@ -318,6 +318,97 @@ export default function ProfileScreen() {
     ]);
   };
 
+  /**
+   * Permanently delete the user's account and every piece of data linked to
+   * it. Required by Apple App Store guideline 5.1.1(v) (in-app deletion)
+   * and a Google Play Data Safety commitment too. Irreversible.
+   */
+  const handleDeleteAccount = async () => {
+    const confirmMessage =
+      "PERMANENTLY DELETE YOUR ACCOUNT?\n\n" +
+      "This is irreversible. You will lose:\n" +
+      "• Your profile, photos and bio\n" +
+      "• Every match and chat\n" +
+      "• All mood-tracker history\n" +
+      "• Your premium subscription (active subs are auto-cancelled — no refund)\n\n" +
+      "Type-to-confirm in the next prompt to proceed.";
+
+    const proceed = async () => {
+      try {
+        const apiBase =
+          process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+        const res = await fetch(`${apiBase}/api/auth/me`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${sessionToken}` },
+          credentials: 'include',
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.detail || `HTTP ${res.status}`);
+        }
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert('Your account has been deleted. Goodbye 👋');
+          window.location.href = '/';
+          return;
+        }
+        // Native: clear local state then bounce to landing
+        try { await logout(); } catch {}
+        router.replace('/');
+      } catch (err: any) {
+        const msg = err?.message || 'Failed to delete account.';
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert(`Error: ${msg}`);
+        } else {
+          Alert.alert('Error', msg);
+        }
+      }
+    };
+
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      if (!window.confirm(confirmMessage)) return;
+      const typed = window.prompt('Type DELETE (in capitals) to confirm.');
+      if (typed !== 'DELETE') {
+        window.alert('Cancelled — your account is safe.');
+        return;
+      }
+      await proceed();
+      return;
+    }
+
+    Alert.alert(
+      'Delete account',
+      confirmMessage,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete forever',
+          style: 'destructive',
+          onPress: async () => {
+            Alert.prompt(
+              'Final confirmation',
+              'Type DELETE (in capitals) to confirm permanent deletion.',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Delete forever',
+                  style: 'destructive',
+                  onPress: async (value?: string) => {
+                    if (value !== 'DELETE') {
+                      Alert.alert('Cancelled', 'Your account is safe.');
+                      return;
+                    }
+                    await proceed();
+                  },
+                },
+              ],
+              'plain-text',
+            );
+          },
+        },
+      ],
+    );
+  };
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -866,6 +957,20 @@ export default function ProfileScreen() {
               <Ionicons name="log-out-outline" size={24} color="#EF4444" />
               <Text style={styles.logoutButtonText}>Logout</Text>
             </TouchableOpacity>
+
+            {/* Delete Account — Apple App Store guideline 5.1.1(v) compliance */}
+            <TouchableOpacity
+              style={styles.deleteAccountButton}
+              onPress={handleDeleteAccount}
+              data-testid="delete-account-button"
+            >
+              <Ionicons name="trash-outline" size={20} color="#7F1D1D" />
+              <Text style={styles.deleteAccountButtonText}>Delete my account</Text>
+            </TouchableOpacity>
+            <Text style={styles.deleteAccountCaption}>
+              This will permanently erase your profile, matches, chats and mood history. Active premium
+              subscriptions are cancelled. This cannot be undone.
+            </Text>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -1369,12 +1474,35 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 12,
     marginTop: 8,
-    marginBottom: 32,
+    marginBottom: 12,
   },
   logoutButtonText: {
     color: '#EF4444',
     fontSize: 18,
     fontWeight: '600',
     marginLeft: 8,
+  },
+  deleteAccountButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(127, 29, 29, 0.10)',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 8,
+  },
+  deleteAccountButtonText: {
+    color: '#7F1D1D',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  deleteAccountCaption: {
+    fontSize: 12,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 32,
+    paddingHorizontal: 8,
+    lineHeight: 16,
   },
 });
