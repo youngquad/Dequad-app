@@ -115,8 +115,7 @@ export default function ChatListScreen() {
           <Text style={styles.matchSubtitle} numberOfLines={1}>{subtitle}</Text>
         </View>
         <View style={styles.lockIcon}>
-          <Ionicons name="lock-closed" size={16} color="#10B981" />
-          <Text style={styles.lockText}>E2E</Text>
+          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
         </View>
         <Ionicons name="chevron-forward" size={24} color="#6B7280" />
       </TouchableOpacity>
@@ -155,7 +154,7 @@ export default function ChatListScreen() {
           <View style={styles.header}>
             <Ionicons name="shield-checkmark" size={20} color="#10B981" />
             <Text style={styles.headerText}>
-              All conversations are end-to-end encrypted
+              Conversations are protected and monitored for safety
             </Text>
           </View>
           <FlatList

@@ -7,7 +7,7 @@ import os
 
 from database import db, client
 from helpers.safeguarding import load_approved_keywords
-from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware
+from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
 from scripts.migrate_dedupe_users import dedupe_users_and_index_email
@@ -55,6 +55,7 @@ app = FastAPI(title="DEQUAD API", lifespan=lifespan)
 # Middleware order: outermost runs first → CORS → Logging → Rate Limit → Route
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 # CORS: per spec, `allow_origins=["*"]` cannot be combined with `allow_credentials=True`.
 # Modern browsers reject the response and the client thinks the request "failed" even when
 # the server returned 200. Use an explicit allow-list (env-overridable) instead.

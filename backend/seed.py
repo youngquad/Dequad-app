@@ -1,4 +1,3 @@
-import hashlib
 import uuid
 import os
 import secrets
@@ -6,6 +5,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 
 from database import db
+from helpers.passwords import hash_password, is_legacy_sha256
 
 logger = logging.getLogger(__name__)
 
@@ -16,12 +16,22 @@ _rng = secrets.SystemRandom()
 
 
 async def seed_admin_and_test_users():
-    """Seed admin user and test profiles on startup"""
+    """Seed admin user and test profiles on startup.
+
+    SEC-001 hardening (2026-07): admin/staff/university-admin passwords MUST
+    come from environment variables. If ``SEED_ADMIN_PASSWORD`` is missing we
+    log a loud warning and skip the admin bootstrap rather than fall back to a
+    hard-coded literal that anyone reading the repo could use to log in.
+
+    Existing admin accounts are NEVER auto-overwritten on subsequent boots — a
+    rotated password stays rotated even if the container restarts. First-boot
+    creation still happens (so a fresh deployment gets an admin), but only
+    when both email + password env vars are supplied.
+    """
     # Defense-in-depth: read seed credentials from env so they aren't baked
-    # into source. Sensible fallbacks are kept for dev/local convenience.
+    # into source.
     admin_email = os.environ.get("SEED_ADMIN_EMAIL", "quadri.yusuf@dequad.com")
-    admin_password = os.environ.get("SEED_ADMIN_PASSWORD", "Oluwatobi11@")
-    admin_password_hash = hashlib.sha256(admin_password.encode()).hexdigest()
+    admin_password = os.environ.get("SEED_ADMIN_PASSWORD")
 
     # One-time migration: rename a legacy admin (yusufquadri83@gmail.com) to the new
     # email so user_id, sessions, and any related records (matches, chats, alerts) are
@@ -38,20 +48,42 @@ async def seed_admin_and_test_users():
 
     existing_admin = await db.users.find_one({"email": admin_email})
     if not existing_admin:
-        admin_user = {
-            "user_id": str(uuid.uuid4()), "email": admin_email, "name": "Yusuf Quadri",
-            "role": "admin", "admin_password": admin_password_hash, "password_hash": admin_password_hash,
-            "created_at": datetime.now(timezone.utc), "profile_completed": True,
-            "interests": [], "subscription_status": "premium", "is_premium": True
-        }
-        await db.users.insert_one(admin_user)
-        logger.info(f"Admin user created: {admin_email}")
+        if not admin_password:
+            # First boot with no admin in DB and no env var — refuse to invent
+            # one. The operator must set SEED_ADMIN_PASSWORD then restart.
+            logger.error(
+                "SEED_ADMIN_PASSWORD not set and no admin account exists. "
+                "Skipping admin bootstrap. Set SEED_ADMIN_PASSWORD env var and restart."
+            )
+        else:
+            admin_password_hash = hash_password(admin_password)
+            admin_user = {
+                "user_id": str(uuid.uuid4()), "email": admin_email, "name": "Yusuf Quadri",
+                "role": "admin", "admin_password": admin_password_hash, "password_hash": admin_password_hash,
+                "created_at": datetime.now(timezone.utc), "profile_completed": True,
+                "interests": [], "subscription_status": "premium", "is_premium": True
+            }
+            await db.users.insert_one(admin_user)
+            logger.info(f"Admin user created: {admin_email}")
     else:
-        await db.users.update_one({"email": admin_email}, {"$set": {
-            "admin_password": admin_password_hash, "password_hash": admin_password_hash,
-            "role": "admin", "subscription_status": "premium", "is_premium": True
-        }})
-        logger.info(f"Admin user updated: {admin_email}")
+        # Do NOT overwrite the existing admin password. Ever. If the operator
+        # sets SEED_ADMIN_PASSWORD *and* the stored hash is still the ancient
+        # unsalted SHA-256 format, opportunistically upgrade to bcrypt so the
+        # hash-at-rest matches the rest of the system — but only that one
+        # legacy case. All other properties (role/subscription flags) are safe
+        # to keep in sync on every boot.
+        set_fields = {
+            "role": "admin", "subscription_status": "premium", "is_premium": True,
+        }
+        if admin_password:
+            stored = existing_admin.get("admin_password") or existing_admin.get("password_hash")
+            if stored and is_legacy_sha256(stored):
+                new_hash = hash_password(admin_password)
+                set_fields["admin_password"] = new_hash
+                set_fields["password_hash"] = new_hash
+                logger.info(f"Admin {admin_email}: legacy SHA-256 upgraded to bcrypt")
+        await db.users.update_one({"email": admin_email}, {"$set": set_fields})
+        logger.info(f"Admin user metadata refreshed: {admin_email}")
 
     test_profiles = [
         {"user_id": "test-user-001", "email": "emma.wilson@test.edu", "name": "Emma Wilson", "age": 21, "gender": "female",
@@ -167,28 +199,45 @@ async def seed_admin_and_test_users():
             }})
             logger.info(f"Test profile updated: {profile['name']}")
 
-    # Seed university admin (credentials also env-overridable)
+    # Seed university admin (credentials also env-overridable). Do NOT
+    # overwrite an existing admin password on every boot — only bootstrap a
+    # fresh account if one doesn't already exist AND the env var is set.
     uni_admin_email = os.environ.get("SEED_UNI_ADMIN_EMAIL", "admin@manchesteruni.edu")
-    uni_admin_password = os.environ.get("SEED_UNI_ADMIN_PASSWORD", "UniAdmin123!")
-    uni_admin_password_hash = hashlib.sha256(uni_admin_password.encode()).hexdigest()
+    uni_admin_password = os.environ.get("SEED_UNI_ADMIN_PASSWORD")
 
     existing_uni_admin = await db.users.find_one({"email": uni_admin_email})
     if not existing_uni_admin:
-        uni_admin = {
-            "user_id": f"uni-admin-{str(uuid.uuid4())[:8]}", "email": uni_admin_email, "name": "Manchester Admin",
-            "role": "university_admin", "university_admin_for": "University of Manchester",
-            "university": "University of Manchester", "admin_password": uni_admin_password_hash,
-            "created_at": datetime.now(timezone.utc), "profile_completed": True,
-            "subscription_type": "university", "subscription_status": "active"
-        }
-        await db.users.insert_one(uni_admin)
-        logger.info(f"University admin created: {uni_admin_email}")
+        if not uni_admin_password:
+            logger.warning(
+                "SEED_UNI_ADMIN_PASSWORD not set — skipping university-admin bootstrap. "
+                "Set the env var to create the initial account."
+            )
+        else:
+            uni_admin_password_hash = hash_password(uni_admin_password)
+            uni_admin = {
+                "user_id": f"uni-admin-{str(uuid.uuid4())[:8]}", "email": uni_admin_email, "name": "Manchester Admin",
+                "role": "university_admin", "university_admin_for": "University of Manchester",
+                "university": "University of Manchester", "admin_password": uni_admin_password_hash,
+                "created_at": datetime.now(timezone.utc), "profile_completed": True,
+                "subscription_type": "university", "subscription_status": "active"
+            }
+            await db.users.insert_one(uni_admin)
+            logger.info(f"University admin created: {uni_admin_email}")
     else:
-        await db.users.update_one({"email": uni_admin_email}, {"$set": {
-            "admin_password": uni_admin_password_hash, "role": "university_admin",
-            "university_admin_for": "University of Manchester", "subscription_status": "active"
-        }})
-        logger.info(f"University admin updated: {uni_admin_email}")
+        # Refresh non-secret metadata only. Password stays untouched unless we
+        # detect a legacy SHA-256 hash and the operator supplied the env var
+        # (opportunistic upgrade path — same as the main admin seed above).
+        set_fields = {
+            "role": "university_admin",
+            "university_admin_for": "University of Manchester",
+            "subscription_status": "active",
+        }
+        stored = existing_uni_admin.get("admin_password")
+        if uni_admin_password and stored and is_legacy_sha256(stored):
+            set_fields["admin_password"] = hash_password(uni_admin_password)
+            logger.info(f"Uni admin {uni_admin_email}: legacy SHA-256 upgraded to bcrypt")
+        await db.users.update_one({"email": uni_admin_email}, {"$set": set_fields})
+        logger.info(f"University admin metadata refreshed: {uni_admin_email}")
 
     # Seed DEQUAD staff demo accounts (login-only — registration is blocked
     # by the .ac.uk UK student-email policy). These are used during UKES /
@@ -196,16 +245,20 @@ async def seed_admin_and_test_users():
     # walk a reviewer through the user experience without creating fresh
     # accounts on demand. Idempotent.
     #
+    # SEC-001 hardening (2026-07): passwords are read from env vars per-account.
+    # No hard-coded literals in source. Each demo account has its own env var:
+    #   SEED_STAFF_PASSWORD_YUSUFF_ADEAGBO
+    #   SEED_STAFF_PASSWORD_GERALD_MARFO
+    #   SEED_STAFF_PASSWORD_CHINYERE_JENNIFER
+    #   SEED_STAFF_PASSWORD_YUSUF_QUADRI
+    # If the env var is missing for a given demo account we (a) don't insert a
+    # new record and (b) leave any existing record's password untouched.
+    #
     # Email format: firstname.lastname@dequad.com.
-    # Only Yusuff.Adeagbo is a real, in-use mailbox; the other three are
-    # demo-only seeded profiles that share the firstname.lastname convention
-    # for visual consistency in screen-share walkthroughs. Each account has
-    # its own per-person password derived from the same convention.
-    generic_demo_password = os.environ.get("SEED_STAFF_PASSWORD", "DequadStaff2026!")
     staff_accounts = [
         {
             "email": "Yusuff.Adeagbo@dequad.com", "name": "Yusuff Adeagbo",
-            "password": "YusuffAdeagbo11@",
+            "password_env": "SEED_STAFF_PASSWORD_YUSUFF_ADEAGBO",
             "age": 27, "gender": "male", "course": "MSc IT with Project Management",
             "bio": "CTO @ DEQUAD. Builder, infra and ML enthusiast.",
             "interests": ["Engineering", "ML", "Football", "Tech", "Music"],
@@ -213,7 +266,7 @@ async def seed_admin_and_test_users():
         },
         {
             "email": "Gerald.Marfo@dequad.com", "name": "Dr Gerald Marfo",
-            "password": generic_demo_password,
+            "password_env": "SEED_STAFF_PASSWORD_GERALD_MARFO",
             "age": 34, "gender": "male", "course": "PhD Digital Marketing",
             "bio": "CMO @ DEQUAD. Digital marketing scholar, marathon runner. Demo account.",
             "interests": ["Marketing", "Running", "Reading", "Podcasts", "Travel"],
@@ -221,7 +274,7 @@ async def seed_admin_and_test_users():
         },
         {
             "email": "Chinyere.Jennifer@dequad.com", "name": "Chinyere Jennifer",
-            "password": generic_demo_password,
+            "password_env": "SEED_STAFF_PASSWORD_CHINYERE_JENNIFER",
             "age": 31, "gender": "female", "course": "Project Management (MIGSO-PCUBED)",
             "bio": "Senior PM Consultant. Advisor @ DEQUAD. LLM background. Demo account.",
             "interests": ["Project Management", "Books", "Yoga", "Cooking", "Mentoring"],
@@ -232,7 +285,7 @@ async def seed_admin_and_test_users():
         # student and walk reviewers through the full student journey.
         {
             "email": "yusufquadri83@gmail.com", "name": "Yusuf Quadri",
-            "password": "Oluwatobi11@",
+            "password_env": "SEED_STAFF_PASSWORD_YUSUF_QUADRI",
             "age": 26, "gender": "male", "course": "Business Administration",
             "bio": "Founder @ DEQUAD. Former University of Bedfordshire SU President.",
             "interests": ["Student Welfare", "Tech", "Football", "Travel", "Mentoring"],
@@ -252,12 +305,13 @@ async def seed_admin_and_test_users():
     for staff in staff_accounts:
         staff_email_lower = staff["email"].lower()
         existing_staff = await db.users.find_one({"email": staff_email_lower})
-        staff_password_hash = hashlib.sha256(staff["password"].encode()).hexdigest()
-        staff_doc = {
+        password_from_env = os.environ.get(staff["password_env"])
+
+        # Non-secret profile fields kept in sync on every boot.
+        staff_metadata = {
             "email": staff_email_lower,
             "display_email": staff["email"],
             "name": staff["name"],
-            "password_hash": staff_password_hash,
             "role": "student",
             "age": staff["age"], "gender": staff["gender"],
             "interested_in": ["male", "female", "non-binary"],
@@ -272,20 +326,34 @@ async def seed_admin_and_test_users():
             "student_verification": "auto",
             "auth_method": "email",
             "is_demo_account": True,
-            # Seeded demos bypass OTP verification.
             "email_verified": True,
         }
+
         if not existing_staff:
-            staff_doc["user_id"] = f"staff-{uuid.uuid4().hex[:8]}"
-            staff_doc["created_at"] = datetime.now(timezone.utc)
-            await db.users.insert_one(staff_doc)
+            if not password_from_env:
+                logger.warning(
+                    f"Staff demo bootstrap skipped for {staff['email']}: "
+                    f"{staff['password_env']} env var not set."
+                )
+                continue
+            staff_metadata["user_id"] = f"staff-{uuid.uuid4().hex[:8]}"
+            staff_metadata["created_at"] = datetime.now(timezone.utc)
+            staff_metadata["password_hash"] = hash_password(password_from_env)
+            await db.users.insert_one(staff_metadata)
             logger.info(f"Staff demo account created: {staff['email']}")
         else:
+            # Refresh non-secret metadata. Only touch password_hash if we can
+            # opportunistically upgrade a legacy SHA-256 hash to bcrypt (needs
+            # the env var so we can verify + rehash the same plaintext).
+            stored = existing_staff.get("password_hash")
+            if password_from_env and stored and is_legacy_sha256(stored):
+                staff_metadata["password_hash"] = hash_password(password_from_env)
+                logger.info(f"Staff {staff['email']}: legacy SHA-256 upgraded to bcrypt")
             await db.users.update_one(
                 {"email": staff_email_lower},
-                {"$set": staff_doc},
+                {"$set": staff_metadata},
             )
-            logger.info(f"Staff demo account updated: {staff['email']}")
+            logger.info(f"Staff demo account metadata refreshed: {staff['email']}")
 
     logger.info("Seed data initialization complete")
 

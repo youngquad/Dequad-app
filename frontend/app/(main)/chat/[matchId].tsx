@@ -126,14 +126,19 @@ export default function ChatScreen() {
     if (!inputText.trim()) return;
 
     setIsSending(true);
-    const encryptedText = encrypt(inputText.trim());
+    // SEC-005 (2026-07): send plaintext so the server-side safeguarding /
+    // language filter can actually inspect the content. The previous
+    // "client-side E2E encryption" used a public shared key shipped in the
+    // Expo bundle, so it added no confidentiality but silently broke the
+    // crisis-keyword scan. Messages are still protected in transit by TLS.
+    const messageText = inputText.trim();
 
     try {
       const response = await api.post(
         '/chat/send',
         {
           match_id: matchId,
-          text: encryptedText,
+          text: messageText,
         },
         sessionToken
       );
@@ -220,7 +225,7 @@ export default function ChatScreen() {
         <View style={styles.encryptionBanner}>
           <Ionicons name="shield-checkmark" size={16} color="#10B981" />
           <Text style={styles.encryptionText}>
-            Messages are end-to-end encrypted
+            Messages are protected in transit and monitored for safety
           </Text>
         </View>
 

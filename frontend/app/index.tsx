@@ -37,7 +37,7 @@ const FEATURES = [
   { 
     icon: 'chatbubbles-outline', 
     title: 'Safe Chat', 
-    description: 'End-to-end encrypted messaging',
+    description: 'Encrypted in transit, safety-monitored',
     gradient: ['#10B981', '#34D399'],
   },
 ];

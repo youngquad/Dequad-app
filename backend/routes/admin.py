@@ -103,7 +103,11 @@ async def block_user(user_id: str, admin: User = Depends(require_admin)):
 
 @router.get("/admin/users")
 async def get_all_users(admin: User = Depends(require_admin)):
-    users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    # Never expose password hashes / stripe IDs to admins — they don't need
+    # them and their staff sessions shouldn't carry that liability
+    # (SEC-audit P3, 2026-07).
+    _proj = {"_id": 0, "password_hash": 0, "admin_password": 0, "stripe_customer_id": 0, "push_token": 0}
+    users = await db.users.find({}, _proj).sort("created_at", -1).to_list(1000)
     return users
 
 

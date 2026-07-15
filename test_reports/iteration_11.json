@@ -1,0 +1,35 @@
+{
+  "summary": "Ran the full 18-case security regression suite against preview URL after the 2026-07 audit fixes. 17/18 pass. One CRITICAL PII leak still remains: /api/admin/analytics/student/{user_id} returns the raw user document (from admin.py line 964-972), which includes password_hash (bcrypt) and would also include admin_password/stripe_customer_id/push_token if set. Confirmed via live curl: leaked keys = ['password_hash']. All 11 pre-existing security_hardening tests still green (SEC-001 admin env-seeded login, SEC-002 discover/accepted/likes-received allowlist, SEC-003 bcrypt migration, SEC-004 ?token= rejection + CSV allowlist, SEC-005 chat plaintext filter, P3 headers + distance rounding + CORS regression guard). Added 7 new admin-side leak tests covering /admin/users, /admin/pending-verifications, /admin/university-admins, /admin/analytics/student/{id}, /admin/ai-risk-analysis/{id}, SEC-001 admin-login, and SEC-004 CSV token allowlist. Six pass; the analytics/student one fails and pinpoints the exact leak.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "GET /api/admin/analytics/student/{user_id}", "issue": "Returns raw user document in `student` field — leaks password_hash (bcrypt). Would also leak admin_password, stripe_customer_id, push_token if present on the doc. Regression: /api/admin/users was hardened with a projection at admin.py:109 but this sibling endpoint at admin.py:966 still does `db.users.find_one({...}, {\"_id\": 0})` and returns the whole thing. Fix: use the same _proj (password_hash, admin_password, stripe_customer_id, push_token = 0) as /admin/users.", "priority": "CRITICAL"}
+    ],
+    "minor": [
+      {"endpoint": "GET /api/university-admin/students", "issue": "Response includes `location` (GeoJSON {coordinates:[lng,lat]}) for each student. Uni admins are trusted, but precise coordinates are stalking-adjacent — consider stripping location or reducing to city label (same reasoning as SEC-002 P3-trilateration for peer discover)."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_security_hardening.py",
+    "/app/test_reports/pytest/iter11_security.xml"
+  ],
+  "action_items": [
+    "PATCH /app/backend/routes/admin.py line ~966 in get_student_analytics: change `find_one({\"user_id\": user_id}, {\"_id\": 0})` to `find_one({\"user_id\": user_id}, {\"_id\": 0, \"password_hash\": 0, \"admin_password\": 0, \"stripe_customer_id\": 0, \"push_token\": 0})`. Same projection you already applied on /admin/users at line 109.",
+    "Optional: strip `location.coordinates` from /api/university-admin/students response (routes/university_admin.py line 133) — currently returns raw GPS to uni admin. Trust boundary is admin/uni-admin but P3 rationale (trilateration) still applies weakly."
+  ],
+  "critical_code_review_comments": [
+    "Good: PUBLIC_PROFILE_FIELDS allowlist in matches.py is the correct pattern — projection-by-inclusion is far safer than projection-by-exclusion. Consider applying the same allowlist pattern to admin.py endpoints that return user docs.",
+    "Good: SEC-004 CSV allowlist verified — bogus ?token=deadbeef still 401s on /admin/export/students, real token 200s, and /admin/users?token= is correctly rejected 401.",
+    "Nit: /admin/pending-verifications includes password_hash in the query projection then converts to bool in Python (line 175-181). This is fine, but a single mistake (forgetting to pop it) would leak. Prefer `{'password_hash': {'$exists': True}}` projected via `$cond` in the query itself, or drop `password_hash` from the projection and use a second find with `{'password_hash': {'$exists': True}}`."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_security_hardening.py (added 7 new admin-side leak tests; total 18 cases)"
+  ],
+  "success_rate": {"backend": "94% (17/18)", "frontend": "not tested (backend-only per request)"},
+  "test_credentials": "Used /app/memory/test_credentials.md: student yusufquadri83@gmail.com / Oluwatobi11@; admin quadri.yusuf@dequad.com / Oluwatobi11@ / DEQUAD_ADMIN_2024; uni admin admin@manchesteruni.edu / UniAdmin123!. All working.",
+  "seed_data_creation": "none",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "After main agent patches admin.py get_student_analytics projection, re-run `cd /app/backend && REACT_APP_BACKEND_URL=<preview> pytest tests/test_security_hardening.py -v` — should be 18/18. All admin surface I checked otherwise clean: /admin/users, /admin/pending-verifications, /admin/university-admins, /admin/ai-risk-analysis, /support/admin/conversations (only projects user_id/name/email/university), /admin/university/{name}/students (manually cherry-picks fields into enriched_students). Lazy migration edge case (admin with both admin_password + password_hash on different hash algos) was NOT stress-tested at DB level — recommend a follow-up unit test on helpers/passwords.py that hashes plaintext with SHA-256, stores it, then confirms verify_and_maybe_rehash upgrades to $2b$ and preserves auth. All 47 other pre-existing regressions still green.",
+  "rca of the issue": "SEC-002 fix (PUBLIC_PROFILE_FIELDS allowlist) was correctly applied to /matches/* peer-facing endpoints, and P3 hardening applied a deny-list projection to /admin/users. But sibling admin endpoints returning per-user documents (specifically /admin/analytics/student/{user_id} in admin.py line 964) were missed during the sweep — they still do `find_one({...}, {'_id': 0})` and return the raw doc into `{'student': student}`. Reproduction: 1) admin-login to get session_token, 2) GET /api/admin/users → grab any student user_id, 3) GET /api/admin/analytics/student/{that_id}, 4) response.student.password_hash is a bcrypt string. Mitigation: apply the same `_proj = {'_id': 0, 'password_hash': 0, 'admin_password': 0, 'stripe_customer_id': 0, 'push_token': 0}` used on /admin/users at line 109 to the find_one on line 966."
+}
