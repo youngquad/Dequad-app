@@ -82,13 +82,19 @@ async def discover_matches(
     university: Optional[str] = None,
     education_level: Optional[str] = None,
     city: Optional[str] = None,
+    max_distance_km: Optional[float] = None,
 ):
     """Return candidate profiles for the swipe deck.
 
     Premium-only filters: ``gender``, ``min_age``, ``max_age``, ``university``,
-    ``education_level``, ``city``. Non-premium users have these filters
-    silently ignored — surfaced as a paywall in the UI before they ever reach
-    this endpoint.
+    ``education_level``, ``city``, ``max_distance_km``. Non-premium users have
+    these filters silently ignored — surfaced as a paywall in the UI before they
+    ever reach this endpoint.
+
+    ``max_distance_km`` is applied via a MongoDB ``$geoNear`` aggregation on
+    the ``users.location`` 2dsphere index. When active, each returned profile
+    includes a ``distance_km`` field (rounded to 1 decimal). Requires the
+    current user to have their own ``location`` set.
     """
     if reset:
         await db.matches.delete_many(
@@ -136,7 +142,41 @@ async def discover_matches(
             query["age"] = age_clause
             filters_applied["age_range"] = [min_age, max_age]
 
-    potential_users = await db.users.find(query, {"_id": 0}).to_list(200)
+    # Distance filter — only if premium, user shared their location, and a
+    # radius was requested. Uses $geoNear to compute per-doc distance in
+    # metres, then converts to km and rounds.
+    my_location = user_doc.get("location") if is_premium else None
+    use_geo = (
+        is_premium
+        and max_distance_km is not None
+        and max_distance_km > 0
+        and isinstance(my_location, dict)
+        and isinstance(my_location.get("coordinates"), list)
+        and len(my_location["coordinates"]) == 2
+    )
+
+    if use_geo:
+        pipeline = [
+            {
+                "$geoNear": {
+                    "near": my_location,
+                    "distanceField": "_distance_m",
+                    "maxDistance": float(max_distance_km) * 1000.0,
+                    "spherical": True,
+                    "query": query,
+                }
+            },
+            {"$limit": 200},
+            {"$project": {"_id": 0}},
+        ]
+        potential_users = await db.users.aggregate(pipeline).to_list(200)
+        for u in potential_users:
+            m = u.pop("_distance_m", None)
+            if m is not None:
+                u["distance_km"] = round(m / 1000.0, 1)
+        filters_applied["max_distance_km"] = max_distance_km
+    else:
+        potential_users = await db.users.find(query, {"_id": 0}).to_list(200)
 
     current_user_dict = current_user.dict()
     scored_users = []
@@ -149,7 +189,10 @@ async def discover_matches(
         user["match_score"] = score
         scored_users.append(user)
 
-    scored_users.sort(key=lambda x: x["match_score"], reverse=True)
+    # If distance-filtered, keep the nearest-first ordering ($geoNear already
+    # sorted by distance ASC). Otherwise fall back to compatibility-score DESC.
+    if not use_geo:
+        scored_users.sort(key=lambda x: x["match_score"], reverse=True)
     result = scored_users[:50]
 
     # Backwards-compatible: previous clients expect a flat list. Newer clients

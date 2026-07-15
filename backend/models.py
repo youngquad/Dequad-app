@@ -33,6 +33,12 @@ class User(BaseModel):
     stripe_customer_id: Optional[str] = None
     swipes_today: int = 0
     last_swipe_date: Optional[str] = None
+    # GeoJSON Point for GPS-based match distance filtering: {"type": "Point",
+    # "coordinates": [longitude, latitude]}. Backed by a 2dsphere index. Set
+    # via POST /api/profile/location when the user grants permission; omitted
+    # for accounts that opt out.
+    location: Optional[dict] = None
+    location_updated_at: Optional[datetime] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
@@ -157,6 +163,12 @@ class ProfileUpdate(BaseModel):
     push_token: Optional[str] = None
     notifications_enabled: Optional[bool] = None
     photos: Optional[List[str]] = None
+
+
+class LocationUpdate(BaseModel):
+    """Simple GPS coordinate payload for POST /api/profile/location."""
+    latitude: float
+    longitude: float
 
 
 class SwipeAction(BaseModel):

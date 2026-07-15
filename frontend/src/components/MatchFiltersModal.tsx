@@ -18,6 +18,7 @@ export interface MatchFilters {
   university?: string;
   education_level?: string;
   city?: string;
+  max_distance_km?: number;
 }
 
 interface Props {
@@ -25,6 +26,8 @@ interface Props {
   initial: MatchFilters;
   onClose: () => void;
   onApply: (filters: MatchFilters) => void;
+  hasLocation?: boolean;
+  onRequestLocation?: () => void;
 }
 
 const GENDER_OPTIONS = ['', 'male', 'female', 'non-binary'];
@@ -37,8 +40,17 @@ const EDUCATION_LEVELS = [
   'Masters',
   'PhD',
 ];
+const DISTANCE_STEPS: { label: string; value?: number }[] = [
+  { label: 'Any', value: undefined },
+  { label: '5 km', value: 5 },
+  { label: '10 km', value: 10 },
+  { label: '25 km', value: 25 },
+  { label: '50 km', value: 50 },
+  { label: '100 km', value: 100 },
+  { label: '250 km', value: 250 },
+];
 
-export default function MatchFiltersModal({ visible, initial, onClose, onApply }: Props) {
+export default function MatchFiltersModal({ visible, initial, onClose, onApply, hasLocation, onRequestLocation }: Props) {
   const [draft, setDraft] = useState<MatchFilters>(initial);
 
   // Sync `initial` -> draft when the modal opens (e.g. after editing previously)
@@ -149,6 +161,38 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply }
               style={styles.input}
               data-testid="filter-city"
             />
+
+            <Text style={styles.label}>Max distance</Text>
+            {hasLocation ? (
+              <View style={styles.chipRow}>
+                {DISTANCE_STEPS.map((opt) => {
+                  const active = draft.max_distance_km === opt.value;
+                  return (
+                    <Pressable
+                      key={opt.label}
+                      onPress={() => setDraft({ ...draft, max_distance_km: opt.value })}
+                      style={[styles.chip, active && styles.chipActive]}
+                      data-testid={`filter-distance-${opt.value ?? 'any'}`}
+                    >
+                      <Text style={[styles.chipText, active && styles.chipTextActive]}>
+                        {opt.label}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : (
+              <Pressable
+                onPress={onRequestLocation}
+                style={styles.locationCta}
+                data-testid="enable-location-cta"
+              >
+                <Ionicons name="location-outline" size={18} color="#0F2942" />
+                <Text style={styles.locationCtaText}>
+                  Turn on location to filter matches by distance
+                </Text>
+              </Pressable>
+            )}
           </ScrollView>
 
           <View style={styles.footer}>
@@ -235,4 +279,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   applyBtnText: { color: '#fff', fontWeight: '800', fontSize: 15 },
+  locationCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#DDE8F2',
+    backgroundColor: '#F6FAFE',
+  },
+  locationCtaText: {
+    flex: 1,
+    color: '#0F2942',
+    fontSize: 13,
+    fontWeight: '600',
+  },
 });
