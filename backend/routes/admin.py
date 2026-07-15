@@ -963,7 +963,11 @@ async def get_at_risk_students(admin: User = Depends(require_admin)):
 
 @router.get("/admin/analytics/student/{user_id}")
 async def get_student_analytics(user_id: str, admin: User = Depends(require_admin)):
-    student = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    # Same projection as /admin/users — never hand secret fields back to any
+    # admin session, even for staff drill-down analytics (SEC-002 sibling
+    # fix, testing-agent iteration_11).
+    _proj = {"_id": 0, "password_hash": 0, "admin_password": 0, "stripe_customer_id": 0, "push_token": 0}
+    student = await db.users.find_one({"user_id": user_id}, _proj)
     if not student: raise HTTPException(status_code=404, detail="Student not found")
     engagement = await calculate_student_engagement(user_id)
     mood_history = await db.mood_entries.find({"user_id": user_id}, {"_id": 0}).sort("created_at", -1).to_list(30)

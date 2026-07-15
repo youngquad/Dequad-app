@@ -129,8 +129,11 @@ async def get_university_students(
             {"course": {"$regex": needle, "$options": "i"}}
         ]
 
-    # Explicitly project out BOTH password fields so staff don't see hashes.
-    _proj = {"_id": 0, "admin_password": 0, "password_hash": 0}
+    # Explicitly project out password fields AND precise GPS coordinates —
+    # uni admins are trusted but there's no reason to hand them raw
+    # coordinates when they only ever need city-level context (P3
+    # trilateration hardening, testing-agent iteration_11).
+    _proj = {"_id": 0, "admin_password": 0, "password_hash": 0, "location": 0}
     students = await db.users.find(query, _proj).skip(offset).limit(limit).to_list(limit)
     total = await db.users.count_documents(query)
     return {"students": students, "total": total, "limit": limit, "offset": offset}

@@ -222,9 +222,41 @@ def test_cors_response_does_not_include_credentials_true() -> None:
     assert val in ("", "false"), f"access-control-allow-credentials={val!r}"
 
 
-# -----------------------------------------------------------------
-# P3 hardening: distance_km coarsened
-# -----------------------------------------------------------------
+def test_admin_analytics_student_does_not_leak_pii() -> None:
+    """Regression for testing-agent iteration_11 finding: /admin/analytics/student/{id}
+    used to return the raw user doc including password_hash. Must project it out
+    the same way /admin/users does."""
+    # Admin login
+    r = requests.post(
+        f"{API_URL}/api/auth/admin-login",
+        json={
+            "email": "quadri.yusuf@dequad.com",
+            "password": "Oluwatobi11@",
+            "admin_code": "DEQUAD_ADMIN_2024",
+        },
+        timeout=15,
+    )
+    assert r.status_code == 200, r.text
+    admin_token = r.json()["session_token"]
+    # Pick any student user_id
+    users = requests.get(
+        f"{API_URL}/api/admin/users",
+        headers={"Authorization": f"Bearer {admin_token}"},
+        timeout=15,
+    ).json()
+    student = next((u for u in users if u.get("role") == "student"), None)
+    assert student, "no student in /admin/users response"
+    uid = student["user_id"]
+    r = requests.get(
+        f"{API_URL}/api/admin/analytics/student/{uid}",
+        headers={"Authorization": f"Bearer {admin_token}"},
+        timeout=15,
+    )
+    assert r.status_code == 200, r.text
+    doc = (r.json() or {}).get("student") or {}
+    for k in ("password_hash", "admin_password", "stripe_customer_id", "push_token"):
+        assert k not in doc, f"/admin/analytics/student leaked {k}"
+
 
 def test_distance_km_is_integer_kilometres() -> None:
     """After the audit we round distance to whole kilometres to prevent
