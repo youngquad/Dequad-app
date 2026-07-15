@@ -84,12 +84,22 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 - Rebuild commands: `python /app/visa_appendices/build_ukes_pdf.py` and `python /app/visa_appendices/build_pitch_deck.py`.
 
 ## Backlog / Next Steps
+
+### Recently shipped (2026-07)
+- **Safari 'Load failed' login bug fix** — Kubernetes ingress emits `Access-Control-Allow-Origin: *` while FastAPI was emitting `Access-Control-Allow-Credentials: true`. Safari strictly rejects the wildcard+credentials CORS combo. Fixed by setting `allow_credentials=False` in `/app/backend/server.py` (safe because the frontend uses Bearer tokens with `credentials: 'omit'`). 14/14 backend tests pass.
+- **GPS distance-based match filter (v1)** — MongoDB 2dsphere index on `users.location`, new `POST/DELETE /api/profile/location` endpoints, `matches/discover?max_distance_km=N` uses `$geoNear` for nearest-first results with per-candidate `distance_km`. Frontend: `MatchFiltersModal` gained distance chips + "turn on location" CTA; profile cards show a distance badge. Cross-platform helper at `/app/frontend/src/utils/location.ts`. 5 pytest cases at `/app/backend/tests/test_location_filter.py`.
+
 - **P0**: Re-enable `.ac.uk` student email restriction before public launch (single block at top of `/api/auth/register` and the email-domain check in `/api/auth/session`).
 - **P0 (security)**: Migrate password hashing from plain SHA-256 → bcrypt/argon2 (applies to `password_hash` AND `admin_password`). Add a one-time migration on next login.
 - **P1**: Tighten email validation in `/api/auth/register` (use Pydantic `EmailStr` instead of the lax "@ and dot" check).
 - **P1**: Decide UX for Google-created users who later want a password-only login (today `/auth/register` 409s on their email — needs a "set password" flow).
 - **P1**: Refactor N+1 query patterns in `backend/routes/matches.py`.
 - **P1**: Reduce complexity of `swipe_action` in `matches.py` and `university_ai_analysis` in `admin.py`.
+- **P1**: Fix stale/pre-existing test failures — `test_email_auth.py` expects old non-OTP register response, `test_refactored_backend.py` has URL config bug, `test_logout_and_wellbeing.py` + `test_password_reset.py` need auth flow updates.
+- **P1**: Finalize UKES Visa Endorsement Cover Letter — awaiting user's UK mobile, LinkedIn URL, academic certificates, Companies House status.
+- **P1**: Add Twitter/Facebook social icons to landing page footer (awaiting URLs from user).
+- **P2**: BACS Direct Debit webhook handling (3-day mandate success/failure delays).
+- **P2**: Microsoft 365 OAuth (~70% UK universities) — awaiting Azure AD credentials.
 - **P2**: Break down massive frontend components (`dashboard.tsx`, `profile.tsx`, `matches.tsx`).
 - **P2**: Move JWT tokens from `localStorage` to `httpOnly` cookies / in-memory + refresh tokens in `src/services/api.ts`.
 - **P2**: Replace array-index keys with stable IDs in React lists (e.g. `matches.tsx`).
