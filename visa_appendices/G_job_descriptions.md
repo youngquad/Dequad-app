@@ -1,5 +1,7 @@
 # Appendix G — Job Descriptions & Salary Bands (42 UK FTE Roles)
 
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd.*
+
 This appendix documents every role in the 5-year hiring plan referenced in main document §7.3. All roles are **UK-based, PAYE, paying UK National Insurance contributions**, and recruited through fair and open processes.
 
 Salary bands are aligned with **London or hybrid-London** weighting where applicable (2026 baseline), with cost-of-living adjustments noted for any non-London hires.

@@ -1,5 +1,7 @@
 # Appendix J — Technology Architecture
 
+*Prepared by the founders — Yusuf Quadri (CEO) and Yusuff Adeagbo (CTO), who designed and built the architecture described below.*
+
 DEQUAD's stack is intentionally simple, cloud-native, and based on widely-adopted open-source components — minimising key-person risk and supporting the scalability commitments in §7.
 
 ---

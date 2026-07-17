@@ -2,7 +2,7 @@
 
 **Working title:** *Per-user wellbeing-baseline detection: a low-friction approach to early identification of student mental-health deterioration in a closed peer network*
 
-**Author:** Yusuf Quadri, DEQUAD
+**Author:** Yusuf Quadri, Founder & CEO, DEQUAD — written by the founder, drawing on his professional safeguarding practice (Change Grow Live / NHS)
 **Version:** v0.3 — draft for endorsement submission
 **Date:** ___________________
 

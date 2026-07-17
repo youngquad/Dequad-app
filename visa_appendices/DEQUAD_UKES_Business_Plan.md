@@ -618,4 +618,4 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 ---
 
-*End of business plan. All figures are forecasts, not guarantees of future performance. Prepared for submission to UKES as part of the UK Innovator Founder visa endorsement process — June 2026.*
+*End of business plan. All figures are forecasts, not guarantees of future performance. This business plan was written by Yusuf Quadri (Founder & CEO) with Yusuff Adeagbo (Co-Founder & CTO) and is submitted to UKES as part of the UK Innovator Founder visa endorsement process — June 2026.*

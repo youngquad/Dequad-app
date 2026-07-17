@@ -236,4 +236,6 @@ NatWest Accelerator · Santander Universities · University of Bedfordshire pilo
 
 *Thank you.*
 
+*Deck written and prepared by the founders — Yusuf Quadri (CEO) & Yusuff Adeagbo (CTO).*
+
 </div>

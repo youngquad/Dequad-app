@@ -79,4 +79,4 @@ I will not represent to any third party that endorsement carries any implication
 
 ---
 
-*This undertaking is given freely and without coercion. It is governed by the laws of England and Wales.*
+*This undertaking was drafted personally by the Founder, is given freely and without coercion, and is governed by the laws of England and Wales.*

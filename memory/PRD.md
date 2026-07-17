@@ -123,3 +123,4 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 - 17 Jul: Created Word (.docx) versions of the full UKES pack in /app/visa_appendices/docx/ (18 individual docs + combined DEQUAD_UKES_FULL_SUBMISSION.docx with page breaks + financial xlsx), zipped as DEQUAD_UKES_Word_Pack_v3.zip.
 - 17 Jul: Created UKES_Interview_Prep_Sheet (.md/.pdf/.docx) — key numbers table, 30-sec answers for 3 criteria, hard Q&A. Added to Word pack zip.
 - 17 Jul: User confirmed yusufquadri83@gmail.com login is now working — P0 login issue CLOSED.
+- 17 Jul: Added founder-authorship statements to all 16 pack documents (headers/footers now state written/prepared by Yusuf Quadri, Founder & CEO, with Yusuff Adeagbo CTO where relevant; co-founder CV credited to Yusuff Adeagbo; Feb 2026 footer dates updated to Jun 2026). Rebuilt all PDFs, master PDF, all docx and Word Pack zip. Verified via PDF extraction.

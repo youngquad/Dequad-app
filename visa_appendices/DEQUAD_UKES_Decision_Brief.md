@@ -372,5 +372,5 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 
 ---
 
-*Prepared for UKES short-track endorsement review — February 2026.*
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — for UKES short-track endorsement review, June 2026.*
 *Companion documents: `DEQUAD_UKES_Business_Plan.pdf`, `DEQUAD_Financial_Model.xlsx`, `DEQUAD_Risk_Register.pdf`.*

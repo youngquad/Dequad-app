@@ -151,7 +151,7 @@ Available on request. The applicant will provide three professional references c
 
 ---
 
-*This CV is current as at the date of submission. The original signed copy with full personal details is held by the applicant and will be produced on UKES request.*
+*This CV was written by the applicant and is current as at the date of submission. The original signed copy with full personal details is held by the applicant and will be produced on UKES request.*
 
 **Signature:** ___________________________________
 
