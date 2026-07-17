@@ -10,13 +10,13 @@
 **Headquarters:** London, United Kingdom — NatWest Accelerator (hosted)
 **Trading domain:** dequad.co.uk
 **Business start date:** **15 June 2026** (incorporation; trading from M1 = June 2026)
-**MVP status:** Production-ready (live at https://dequad.co.uk)
+**MVP status:** Production — live at https://dequad.co.uk
 **Founder starting capital:** £6,000 cash (£3,000 from each founder, pooled in the company bank)
-**Accelerator:** **NatWest Accelerator London** — joined **16 March 2026**;
-office co-working, legal advice and accountancy support provided in-kind for the first 12 months
+**Accelerator:** **NatWest Accelerator London** — joined **16 March 2026**; office co-working, legal advice and accountancy support provided in-kind for the first 12 months
 **Prior validation:** **Santander Universities Pre-Incubator programme** — completed 2025
-**Document version:** 2.0 (Bootstrap edition)
-**Date:** February 2026
+**Founder contact:** quadri.yusuf@dequad.com · 07928132617 · https://www.linkedin.com/in/quadri-yusuf/
+**Document version:** 3.0
+**Date:** June 2026
 **Endorsing body:** UKES
 
 ---
@@ -47,30 +47,38 @@ office co-working, legal advice and accountancy support provided in-kind for the
 
 ## 1. Executive Summary
 
-**DEQUAD** is a UK-headquartered software platform that helps university students build genuine peer connections, monitor their daily wellbeing, and access proactive safeguarding — all within a closed, identity-verified network of UK higher-education institutions.
+**DEQUAD** is a UK-built software platform that helps university students form genuine, verified peer connections, track their daily wellbeing, and receive proactive safeguarding — inside a closed network open only to identity-verified UK higher-education students.
 
-### The opportunity
+The product is not a concept. It is **live in production at dequad.co.uk**, with a working matching engine, daily mood telemetry, machine-assisted safeguarding triage and a university-facing insights dashboard.
+
+### The problem we solve
+
+UK universities face a structural student-wellbeing crisis:
 
 - **54%** of UK undergraduates report frequent loneliness (ONS, 2023).
 - **34%** experience a clinically-significant mental-health issue during their degree (Student Minds, 2024).
-- The average wait to see a university counsellor is **6 weeks**; only **23%** of UK universities offer 24/7 crisis support.
+- The average wait to see a university counsellor is **6.1 weeks**; only **23%** of UK universities offer 24/7 crisis support.
+- The Office for Students now imposes a statutory condition on student mental health — institutions must **evidence prevention**, not just reaction.
 
-DEQUAD is the **only** UK platform that combines `.ac.uk`-verified student-peer matching, daily mood telemetry and machine-assisted safeguarding triage into a single product. Universities and NHS ICBs pay an annual SaaS subscription; students use the core product free and can subscribe to **DEQUAD Premium** for £4.99/month.
+Existing tools each solve a fragment: anonymous forums (Togetherall), peer-chat apps (TalkCampus), pre-enrolment chat (UniBuddy), or generic social apps with zero safeguarding (Bumble BFF, Discord). None connects **verified student identity → real peer connection → wellbeing telemetry → institutional safeguarding action** in one loop. DEQUAD does.
 
-### Why this is investable now
+### The founder-market fit that most applications cannot claim
 
-| Item | Detail |
+The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding professional** — currently a Recovery Coordinator at Change Grow Live managing safeguarding referrals, dynamic risk assessments and multi-agency casework for vulnerable adults, with parallel NHS mental-health experience at East London NHS Foundation Trust. He also served **two consecutive terms as University of Bedfordshire Students' Union President (2021–2023)**, representing 10,000+ students and managing a £900,000 budget. DEQUAD's safeguarding pipeline was not designed from a textbook; it was designed by someone who files real safeguarding referrals every week.
+
+### Why this business is endorsable now
+
+| Evidence | Detail |
 |---|---|
-| **Founding team** | **Yusuf Quadri** (CEO) + **Yusuff Adeagbo** (CTO), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor — Project Management, MIGSO-PCUBED). |
-| **MVP already shipped** | Production deployment at dequad.co.uk with ~50 beta users across 3 universities. **No engineering build cost** in Y1. |
-| **Two independent validations** | (1) **Santander Universities Pre-Incubator** — completed 2025. (2) **NatWest Accelerator London** — joined 16 March 2026. Two UK high-street banks have independently selected the team. |
-| **Anchor pilot ready** | Pilot discussion currently in progress with **University of Bedfordshire** — the lead founder's alma mater and the university whose students he represented as SU President for two years. |
-| **NatWest in-kind support** | London office co-working, legal advice (Mishcon de Reya panel), accountancy and investor introductions delivered **in-kind**. Quantified value: **£31,000/yr** against £1,200 of cash cost. |
-| **Bootstrap-credible** | £6,000 founder cash (£3k each) + NatWest in-kind support carries the business through the first 6 months with **zero salary**. The 12-week (3-month) Bedfordshire pilot launches in Sep 2026 (M4) and completes in Nov 2026 (M6); pilot-conversion discussions and the **£150k pre-seed bridge close in Dec 2026 (M7)**. |
-| **Realistic forecast** | Y1 revenue £12k (Bedfordshire pilot + ~100 premium subs) → Y2 £186k → Y3 £699k. Operating profit reaches positive territory in **Q3 Y3**. |
-| **UK jobs created** | 2 (founders, Y1) → 6 (Y2) → 12 (Y3). All UK-based. |
+| **Working product** | Production deployment at dequad.co.uk with ~50 beta users across 3 universities. Engineering build cost in Y1: **zero** — the MVP is already built. |
+| **Founding team** | **Yusuf Quadri** (CEO — safeguarding professional, MBA with Data Analytics, 2× SU President) + **Yusuff Adeagbo** (CTO — MSc IT with Project Management), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor, MIGSO-PCUBED) — all wider team on equity-only terms. |
+| **Two independent validations** | **Santander Universities Pre-Incubator** (completed 2025) and **NatWest Accelerator London** (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes. |
+| **Anchor pilot in progress** | Pilot discussion under way with the **University of Bedfordshire** — the institution whose students the founder represented for two years. 12-week pilot scheduled Sep–Nov 2026. |
+| **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind, letting £6,000 of founder cash cover 6 months of positive-balance operation. |
+| **Conservative forecast** | Y1 revenue £11,988 → Y2 £185,808 → Y3 £699,280. Gross margin 92% by Y3; operating profit positive from Q3 Y3. Only ONE university pilot is assumed to convert in Y1. |
+| **UK jobs** | 2 (Y1) → 6 (Y2) → 12 (Y3), all UK-based, with EMI options and board-tracked diversity targets. |
 
-We meet all three Home Office criteria for Innovator Founder endorsement: **innovation**, **viability** and **scalability** — and we evidence it with a production MVP, accelerator validation and a financially conservative growth plan.
+We evidence all three Home Office endorsement criteria — **innovation, viability, scalability** — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.
 
 ---
 
@@ -78,22 +86,24 @@ We meet all three Home Office criteria for Innovator Founder endorsement: **inno
 
 ### 2.1 The DEQUAD platform
 
-Delivered as a cross-platform application (iOS, Android, web at dequad.co.uk) plus a FastAPI/MongoDB backend. Four shipped modules:
+DEQUAD ships as a cross-platform application (iOS, Android and web at dequad.co.uk) on a FastAPI / MongoDB backend. Four modules are live in production today:
 
-| Module | What it does | Innovation |
+| Module | What it does | Why it is different |
 |---|---|---|
-| **Verified peer matching** | Match students with compatible peers for friendship, study groups and peer support — only within `.ac.uk` student-email-verified accounts. | Closed-network identity + intent-based matching — not present in Bumble BFF, Hinge or Facebook Groups. |
-| **Daily wellbeing tracker** | 30-second daily mood check-in (mood, sleep, stress, connection). Personal trend dashboard. | Anonymised, opt-in, DPIA-cleared. Combined with peer-connection data to flag emerging isolation. |
-| **Machine-assisted safeguarding** | LLM-based classifier on mood + chat metadata flags suicide-risk, harassment, hate-speech and disordered-eating signals to university safeguarding leads via webhook. | First UK student platform combining `.ac.uk` identity verification with proactive safeguarding triage. |
-| **University Insights Dashboard** | Anonymised, aggregated wellbeing analytics for university staff: cohort mood trends, engagement, hotspot alerts. | Enables population-scale monitoring without breaching individual privacy. |
+| **Verified peer matching** | Matches students with compatible peers for friendship, study groups and peer support — exclusively within `.ac.uk` student-email-verified accounts, with distance-based and interest-based filters. | Closed-network identity plus intent-based matching. Not offered by Bumble BFF, Hinge or Facebook Groups. |
+| **Daily wellbeing tracker** | 30-second daily check-in (mood, sleep, stress, connection) feeding a personal trend dashboard. | Anonymised, opt-in, DPIA-cleared. Combined with connection data to flag emerging isolation before crisis. |
+| **Machine-assisted safeguarding** | LLM-based classifier over mood and chat signals flags suicide-risk, harassment, hate-speech and disordered-eating indicators to university safeguarding leads via webhook, with human review. | The first UK student platform pairing `.ac.uk` identity verification with proactive safeguarding triage — designed by a practising safeguarding professional. |
+| **University Insights Dashboard** | Anonymised, aggregated cohort wellbeing analytics for university staff: mood trends, engagement, hotspot alerts. | Population-scale early warning without breaching individual privacy. |
 
-### 2.2 What the customer buys
+### 2.2 What each customer buys
 
 | Customer | What they receive | Price |
 |---|---|---|
-| **UK university** | Site-licence to the Insights Dashboard, branded safeguarding webhook, dedicated success manager. | Annual SaaS from **£12,000/yr**, tiered by student headcount. |
-| **NHS Integrated Care Boards (ICBs)** | Population-level mood/engagement data for funded institutions; joint safeguarding referral path. | Annual contract from **£20,000/yr** per ICB. |
-| **Student (consumer)** | Free core product. Optional **DEQUAD Premium** for advanced filters, unlimited chats and profile boost. | **£4.99/month** via Stripe. |
+| **UK university** | Site licence to the Insights Dashboard, branded safeguarding webhook into their existing safeguarding team, dedicated success manager. | Annual SaaS from **£12,000/yr**, tiered by student headcount. |
+| **NHS Integrated Care Board (ICB)** | Population-level anonymised wellbeing data for funded institutions; joint safeguarding referral pathway. | Annual contract from **£20,000/yr** per ICB. |
+| **Student (consumer)** | Free core product. Optional **DEQUAD Premium**: advanced match filters, unlimited chats, profile boost. | **£4.99/month** via Stripe (live and processing payments today). |
+
+The dual-sided model matters: students adopt because the core product is free and genuinely useful; universities pay because DEQUAD gives their safeguarding teams the early-warning layer regulators now require.
 
 ---
 
@@ -101,110 +111,122 @@ Delivered as a cross-platform application (iOS, Android, web at dequad.co.uk) pl
 
 ### 3.1 Innovation
 
-- **Closed-network identity verification.** DEQUAD is the only UK app that enforces `.ac.uk` student-domain verification plus an explicit student-status attestation and routes ambiguous accounts to a human admin queue (see Appendix J — architecture diagram).
-- **Integrated safeguarding pipeline.** Our machine-assisted classifier feeds directly into existing university safeguarding teams via webhook — no competitor has this institutional integration.
-- **Wellbeing-first positioning.** Bumble BFF, Hinge and Discord are dating- or generic-social; UniBuddy is pre-enrolment chat; Togetherall is anonymous peer-support. DEQUAD owns the *verified university wellbeing community* category.
+1. **Closed-network identity verification.** DEQUAD is the only UK student platform enforcing `.ac.uk` student-domain verification with an explicit student-status attestation, a curated UK-student-domain allow-list, and a human admin review queue for ambiguous accounts (architecture at Appendix J). Generic social apps cannot retrofit this without abandoning their open-network model.
+2. **The verification → connection → telemetry → safeguarding loop.** Each element exists somewhere in the market; the **integrated loop** exists nowhere else. Wellbeing signals are only actionable when tied to a verified identity inside an institution that can respond — which is exactly the configuration DEQUAD ships.
+3. **Practitioner-designed safeguarding.** The triage thresholds, referral pathways and escalation policy were authored by a founder who performs statutory-adjacent safeguarding work weekly at Change Grow Live, modelled on UUK Stepchange and Suicide-Safer Universities guidance. Competing products bolt moderation on; DEQUAD is built outward from the safeguarding case-file.
+4. **Compliance as a feature.** Online Safety Act 2023 risk assessment, in-app reporting, UK GDPR DPIA and lawful-basis register shipped **before** first institutional sale — turning the sector's biggest procurement objection into our opening slide.
 
 ### 3.2 Viability
 
-- **Production MVP shipped** — engineering build risk is materially behind us.
-- **Anchor pilot identified.** The lead founder served two consecutive terms as **University of Bedfordshire Student Union President (2021–2023)**, giving DEQUAD a direct, trusted relationship with the university's senior management, safeguarding leads and student-services team. A pilot discussion is currently in progress; the 12-week (3-month) pilot is scheduled to launch in **Sep 2026 (M4 — academic year start)** and complete in **Nov 2026 (M6)**, with paid-conversion discussions opening in **Dec 2026 (M7)**.
-- **Two independent third-party validations.** DEQUAD completed the **Santander Universities Pre-Incubator programme in 2025** and was admitted to the **NatWest Accelerator (London cohort)** on **16 March 2026**. Both selection processes are competitive and explicitly assess team and product quality.
-- **Two founders with complementary skills**: product + safeguarding (Founder A) and engineering + data (Founder B). Each works full-time with founder commitment undertakings.
-- **Adjacent proof points**: Togetherall and TalkCampus charge UK universities £15k–£60k/year for inferior products and have 100+ UK customers between them — the willingness to pay is established.
-- **Modest capital required**: £6,000 founder equity at incorporation, supplemented by the £31k in-kind NatWest support, carries the business until the £150k pre-seed bridge.
+- **The product is built and live.** The largest single risk in most early-stage plans — can they ship? — is already retired. dequad.co.uk is in production with real beta users and live Stripe billing.
+- **The founder does this job professionally.** Safeguarding-first is not a marketing phrase: the CEO manages safeguarding caseloads at Change Grow Live and has NHS mental-health ward experience. This is decisive credibility in university procurement conversations, which are led by safeguarding and student-services professionals.
+- **A trusted route into the anchor customer.** Two years as Bedfordshire SU President gives DEQUAD direct, warm relationships with the Director of Student Services, safeguarding leads and senior leadership. The 12-week pilot is scheduled for **Sep–Nov 2026 (M4–M6)**, with conversion discussions from **Dec 2026 (M7)**.
+- **Two independent third-party validations.** Santander Universities Pre-Incubator (completed 2025) and NatWest Accelerator London (admitted 16 March 2026) — both competitive selection processes assessing team and product quality.
+- **Proven willingness to pay.** Togetherall and TalkCampus charge UK universities £15k–£60k/yr and hold 100+ UK customers between them, for products missing DEQUAD's verification and triage capabilities.
+- **A cash plan that survives scrutiny.** £6,000 founder capital plus £31,100 of NatWest in-kind support delivers positive month-end cash in every month of Y1 (Section 12), with zero founder salary until the pre-seed lands in M7.
 
 ### 3.3 Scalability
 
-- **Software-only marginal cost** — incremental student users cost ~£0.05/mo in hosting; gross margin reaches **92%** by Y3.
-- **Network effects within an institution** — each additional student raises the platform's value to every other student at the same university.
-- **Cross-institutional rollout** — each new university takes a 6-week implementation cycle; the model projects 20 paying institutions by end of Y3 (out of 285 UK total).
-- **International optionality** — closed-network model maps cleanly to `.edu` (US), `.edu.au` and EU university domains. £180m TAM in EN-language HE markets post-Y3.
+- **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **92.3%** by Y3.
+- **Intra-institution network effects.** Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).
+- **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. The model projects 14 average paying institutions in Y3 against 285 UK institutions — under 5% penetration.
+- **International optionality.** The closed-network model maps directly onto `.edu` (US), `.edu.au` (Australia) and EU academic domains — a £180m English-language HE TAM addressable post-Y3 without re-architecting the product.
+- **Team scale plan in place.** Job descriptions for the first six hires are already written (Appendix G); headcount grows 2 → 6 → 12 across the forecast, all UK-based.
 
 ---
 
 ## 4. Research and Development Activity
 
-R&D in Y1 is delivered entirely by the two founders (≈ 60% of combined founder time = approximately **£10,800** of attributable labour cost) plus tooling and safety-testing (£1,800). Total Y1 R&D investment **£22,500**, growing to **£60,000 in Y2** and **£110,000 in Y3** (see Section 17 and the financial workbook).
+R&D is the core of the innovation proposition: DEQUAD's defensibility rests on the verification engine and the safeguarding-inference pipeline, both of which are original engineering rather than assembled off-the-shelf parts.
 
-The SME R&D Tax Credit scheme is expected to recoup approximately **16%** of qualifying spend each year.
+Y1 R&D is delivered by the two founders (≈60% of combined founder time, ≈£10,800 attributable labour) plus tooling and safety-testing spend, for a total Y1 R&D investment of **£22,500**, rising to **£60,000 (Y2)** and **£110,000 (Y3)**. The SME R&D Tax Credit scheme is expected to recoup ~16% of qualifying spend annually.
 
 ### 4.1 Identity-and-intent verification engine
 
-| Activity | Status | UK R&D tax-relief eligible |
+| Activity | Status | R&D tax-relief eligible |
 |---|---|---|
-| `.ac.uk` student-subdomain classifier (allow-list, block-list, attestation flow). | Shipped Feb 2026 (`/app/backend/helpers/uk_student_email.py`). | Yes |
-| Admin "Pending Verification" queue with audit trail. | Shipped Feb 2026 (`AdminVerificationQueue.tsx`). | Yes |
-| Future: optical student-ID OCR with on-device redaction. | Planned Q3 Y1. | Yes |
+| `.ac.uk` student-subdomain classifier (allow-list, block-list, attestation flow) | **Shipped** Feb 2026 (`uk_student_email` verification module) | Yes |
+| Admin "Pending Verification" queue with audit trail | **Shipped** Feb 2026 | Yes |
+| Optical student-ID OCR with on-device redaction | Planned Q3 Y1 | Yes |
 
-### 4.2 Wellbeing inference & safeguarding triage
+### 4.2 Wellbeing inference and safeguarding triage
 
-| Activity | Status | UK R&D tax-relief eligible |
+| Activity | Status | R&D tax-relief eligible |
 |---|---|---|
-| Mood × engagement × text-signal classifier (PHQ-9 lite scoring + risk-signal NLU). | Prototype Feb 2026; production Q2 Y2. | Yes |
-| Federated learning so per-institution models tune without raw data leaving the platform. | Planned Q4 Y2. | Yes |
-| Real-time safeguarding webhook with adapter library for university SIS/CRM tools. | Production Q3 Y1. | Yes |
+| Mood × engagement × text-signal classifier (PHQ-9-lite scoring + risk-signal NLU) | Prototype Feb 2026; production Q2 Y2 | Yes |
+| Real-time safeguarding webhook with adapter library for university SIS/CRM systems | Production Q3 Y1 | Yes |
+| Federated learning so per-institution models improve without raw data leaving the platform | Planned Q4 Y2 | Yes |
 
-### 4.3 Privacy & compliance infrastructure
+The triage models are trained and threshold-tuned against the safeguarding decision frameworks the CEO applies professionally (CGL risk-assessment practice; UUK Suicide-Safer Universities), with every automated flag routed through human review — a deliberate safety-case design documented in Appendix D.
+
+### 4.3 Privacy and compliance infrastructure
 
 | Activity | Status |
 |---|---|
-| DPIA-cleared mood-data pipeline; ICO Code of Practice compliance. | Drafted Feb 2026 (Appendix E). |
-| Online Safety Act 2023 risk assessment & in-app reporting. | Shipped Feb 2026. |
-| Cryptographic data minimisation (hash-based de-identification of mood records for institutional reporting). | Planned Q2 Y2. |
+| DPIA-cleared mood-data pipeline; ICO Code of Practice alignment | Drafted Feb 2026 (Appendix E) |
+| Online Safety Act 2023 risk assessment and in-app reporting | **Shipped** Feb 2026 (Appendix I) |
+| Cryptographic data minimisation (hash-based de-identification of mood records for institutional reporting) | Planned Q2 Y2 |
 
 ---
 
 ## 5. Market Analysis
 
+### Market size and structure
+
 | Metric | Source | Figure |
 |---|---|---|
 | UK higher-education students (FT + PT) | HESA 2023/24 | **2.86 million** |
-| Number of UK higher-education institutions | HESA 2024 | **285** |
-| % UK undergrads with frequent loneliness | ONS 2023 | **54%** |
-| % UK undergrads with clinically-significant MH issue | Student Minds 2024 | **34%** |
-| Average UK uni student-services budget per FTE | UUK 2024 | **£123/yr** |
+| UK higher-education institutions | HESA 2024 | **285** |
+| UK undergrads reporting frequent loneliness | ONS 2023 | **54%** |
+| UK undergrads with clinically-significant MH issue | Student Minds 2024 | **34%** |
+| Average university student-services budget per FTE | UUK 2024 | **£123/yr** |
 | Average wait for university counselling | UUK 2024 | **6.1 weeks** |
 
 ### TAM / SAM / SOM
 
 | Tier | Definition | Size |
 |---|---|---|
-| **TAM** | All UK universities + ICBs + UK student premium subs | **£86m/yr** |
-| **SAM** | Russell-Group + post-92 unis with > 10k students + associated ICBs | **£28m/yr** |
+| **TAM** | All UK universities + ICBs + UK student premium subscriptions | **£86m/yr** |
+| **SAM** | Russell Group + post-92 universities with >10k students + associated ICBs | **£28m/yr** |
 | **SOM (5-yr)** | 12% SAM capture (matching Togetherall's Y5 share) | **£3.4m ARR by Y5** |
 
-### Trends supporting demand
+### Regulatory tailwinds
 
-- **Office for Students** introduced a statutory student-mental-health condition (2023) — institutions must evidence proactive prevention.
-- **Online Safety Act 2023** is now in force — student-facing platforms must implement risk assessments and reporting flows; DEQUAD ships with this built in.
-- **UUK Mental Health Charter** (100+ UK universities signed) requires data-driven wellbeing strategies — DEQUAD enables exactly this.
+Three regulatory forces are converting student wellbeing from discretionary spend into compliance spend:
+
+1. **Office for Students statutory condition on student mental health (2023)** — institutions must evidence *proactive prevention*, which requires exactly the early-warning data DEQUAD's dashboard produces.
+2. **Online Safety Act 2023, now in force** — student-facing platforms must implement risk assessments and reporting flows. DEQUAD ships OSA-compliant by design; informal alternatives (Discord servers, Facebook groups) expose universities to unmanaged risk.
+3. **UUK Mental Health Charter** — 100+ signatory universities have committed to data-driven wellbeing strategies and must now demonstrate delivery.
+
+Budget exists: at £123 per student FTE, a 20,000-student university spends ~£2.5m/yr on student services. DEQUAD's £12,000 entry price is under 0.5% of that budget while directly servicing a statutory obligation.
 
 ---
 
 ## 6. Competitor Analysis
 
-| # | Competitor | What they do | UK universities | ASP | DEQUAD differentiation |
+Five competitors, assessed comprehensively:
+
+| # | Competitor | Model | UK universities | ASP | Where DEQUAD wins |
 |---|---|---|---|---|---|
-| 1 | **Togetherall** | Anonymous moderated peer-support forum + self-help courses. | ~60 | ~£40k/yr | DEQUAD adds **identity-verified peer matching**, **daily mood telemetry** and **safeguarding webhooks** — Togetherall is anonymous-only. |
-| 2 | **TalkCampus** | Peer-support app; pre-trained moderation; CBT modules. | ~30 | ~£25k/yr | DEQUAD's **insights dashboard** and **machine-assisted triage** are absent from TalkCampus. |
-| 3 | **UniBuddy** | Prospective-student chat for course discovery. | 200+ | ~£18k/yr | UniBuddy is **pre-enrolment** only — orthogonal market. |
-| 4 | **Bumble BFF / Hinge** | Generic friendship/dating with student users. | n/a | Free + £15–£35/mo premium | No `.ac.uk` verification, no university partnership, no safeguarding. |
-| 5 | **Discord / Facebook Groups** | Generic chat servers used informally. | n/a | Free | Zero moderation, no safeguarding, no wellbeing telemetry. |
+| 1 | **Togetherall** | Anonymous moderated peer-support community + self-help courses | ~60 | ~£40k/yr | Anonymity prevents real-world connection and makes individual safeguarding escalation impossible. DEQUAD adds verified peer matching, daily telemetry and named-individual safeguarding webhooks. |
+| 2 | **TalkCampus** | Peer-support app with trained moderation and CBT modules | ~30 | ~£25k/yr | No institutional insights dashboard, no machine-assisted triage, no identity verification. Universities get a service, not a data-driven safeguarding capability. |
+| 3 | **UniBuddy** | Prospective-student chat for course discovery and recruitment | 200+ | ~£18k/yr | Pre-enrolment only — proves universities buy student-engagement SaaS at scale but competes in an orthogonal market. |
+| 4 | **Bumble BFF / Hinge** | Generic friendship/dating apps with student users | n/a | Free + £15–£35/mo premium | No `.ac.uk` verification, no university partnership, no safeguarding, no wellbeing layer. Open networks cannot pivot to closed-network institutional trust. |
+| 5 | **Discord / Facebook Groups** | Informal, unmoderated student communities | n/a | Free | Zero moderation, zero safeguarding, zero telemetry — and a growing OSA-2023 liability for universities that informally rely on them. |
 
-### Feature comparison
+### Feature-by-feature comparison
 
-| Feature | DEQUAD | Togetherall | TalkCampus | UniBuddy | Bumble BFF | Discord |
+| Capability | DEQUAD | Togetherall | TalkCampus | UniBuddy | Bumble BFF | Discord |
 |---|---|---|---|---|---|---|
 | `.ac.uk` student verification | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ |
 | Intent-based peer matching | ✅ | ❌ | Ltd | ❌ | Ltd | ❌ |
 | Daily mood telemetry | ✅ | ❌ | Ltd | ❌ | ❌ | ❌ |
-| Machine-assisted safeguarding | ✅ | Ltd | ❌ | ❌ | ❌ | ❌ |
+| Machine-assisted safeguarding triage | ✅ | Ltd | ❌ | ❌ | ❌ | ❌ |
 | University insights dashboard | ✅ | ✅ | ✅ | Ltd | ❌ | ❌ |
-| Safeguarding webhook | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| OSA-2023 ready | ✅ | ✅ | ✅ | ✅ | Partial | ❌ |
+| Safeguarding webhook to institution | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Online Safety Act 2023 ready | ✅ | ✅ | ✅ | ✅ | Partial | ❌ |
 
-**DEQUAD is the only product in the UK that combines all six top-row capabilities.**
+**DEQUAD is the only product in the UK market that holds all seven capabilities simultaneously.** Our closest substitutes are strong in exactly one column each.
 
 ---
 
@@ -212,32 +234,30 @@ The SME R&D Tax Credit scheme is expected to recoup approximately **16%** of qua
 
 ### 7.1 Founding team — Year 1
 
-**Compensation reality as of submission date:** No team member — not the founders, not Dr Gerald Marfo, not Adedapo Ajuwon, not Chinyere Jennifer — is currently drawing a salary from DEQUAD. The founders are funding personal cost-of-living from savings; the wider team is contributing time on a pure-equity basis pending the close of the pre-seed round in **December 2026 (M7)**, immediately after the 3-month Bedfordshire pilot completes (Sep–Nov 2026) and conversion discussions open. This is a deliberate founder commitment.
+**Compensation reality at submission:** no team member — founders included — currently draws a salary from DEQUAD. Founders fund personal living costs from employment income and savings; the wider team contributes on pure-equity terms pending the pre-seed close in **December 2026 (M7)**, immediately after the Bedfordshire pilot completes. This is a deliberate, evidenced founder commitment.
 
-| Role | Name | Compensation Y1 | Why |
+| Role | Name | Profile | Y1 compensation |
 |---|---|---|---|
-| **CEO / Product & Safeguarding** | **Yusuf Quadri** — University of Bedfordshire Student Union President 2021–2023; safeguarding-trained (Appendix O) | **£0 in M1–M6** (personal savings), **£1,500/mo from M7 (Dec 2026)** (£9k total Y1, after pre-seed lands) | Founder commitment + cash preservation. |
-| **CTO / Engineering & IT** | **Yusuff Adeagbo** — MSc IT with Project Management (UWS); HND Computer Science | Same — **£0 Q1-Q2, £1,500/mo from M7** | Founder commitment + cash preservation. |
+| **CEO — Product & Safeguarding** | **Yusuf Quadri** | Practising **Recovery Coordinator, Change Grow Live** (safeguarding referrals, risk assessment, multi-agency working); Clinical Support Worker & Assistant Duty Senior Nurse Administrator, **East London NHS Foundation Trust**; 2× **University of Bedfordshire SU President** (2021–23, £900k budget, 10,000+ students); **MBA with Data Analytics**; seven UK safeguarding/clinical certifications (Appendix O); B2B business-development experience (UGC Planet, Mavin Care). | **£0 M1–M6**; £1,500/mo from M7 (£9,000 total Y1) |
+| **CTO — Engineering & IT** | **Yusuff Adeagbo** | **MSc IT with Project Management** (University of the West of Scotland); HND Computer Science; full-stack, UI/UX, infrastructure (Appendix B-2). | Same — £0 M1–M6; £1,500/mo from M7 |
 
-Both founders are UK-resident, full-time on DEQUAD, with signed founder commitment undertakings (Appendix C). Q3 onwards salaries are intentionally below market; founders accept this trade-off in exchange for ~10% each of equity.
+Both founders are UK-resident, full-time on DEQUAD, with signed commitment undertakings (Appendix C).
 
-**Yusuf Quadri's two years as University of Bedfordshire SU President** is highly relevant: it gives DEQUAD founder-level credibility on student wellbeing policy, a trusted-broker status with the university's senior leadership, and a direct route into the institution's safeguarding team. It is also the basis of DEQUAD's anchor pilot discussion (currently in progress) (see Section 8). He holds **seven safeguarding and clinical-awareness certifications** (see Appendix O) covering Oliver McGowan Learning Disabilities & Autism, Adult Safeguarding Partnership Working, Suicide Prevention (2026), Data Protection and Information Security, and Safe Response to Challenging Situations.
+**Why this CEO profile matters to endorsement:** the person who designed DEQUAD's safeguarding triage files real safeguarding referrals every week and coordinates care with clinicians, probation, housing and social care. When a Director of Student Services asks "who wrote your escalation policy?", DEQUAD's answer is unique in this market. Combined with two years representing 10,000+ students inside the anchor-pilot university, this is founder-market fit of a kind that cannot be hired or bought.
 
-**Yusuff Adeagbo (CTO)** brings a **MSc in Information Technology with Project Management (University of the West of Scotland)** plus a HND in Computer Science, with applied skills across IT support, UI/UX, graphic design, digital marketing and IT business analysis (Appendix B-2).
-
-### 7.2 Wider founding team — joining at incorporation (no cash investment, EMI options, **no salary in Year 1**)
+### 7.2 Wider founding team — equity-only at incorporation
 
 | Role | Name | Background | Y1 compensation |
 |---|---|---|---|
-| **Chief Marketing Officer** | **Dr Gerald Marfo** | **PhD in Digital Marketing**; specialist in digital go-to-market for impact-led startups. | **£0** — equity-only via EMI options; salaried role to commence after seed close (Q2 Y2). |
-| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior engineer working on the DEQUAD platform alongside the CTO; full-stack and infrastructure scale-out. | **£0** — equity-only via EMI options; salaried role to commence Q1 Y2. |
-| **Senior Advisor — Programme & Delivery** | **Chinyere Jennifer** | Senior Project Management Consultant at **MIGSO-PCUBED** (global PM consultancy); LLM background. | **£0** — advisory engagement on EMI options (advisor vest); MIGSO-PCUBED remains her primary employer. |
+| **Chief Marketing Officer** | **Dr Gerald Marfo** | PhD in Digital Marketing; digital go-to-market for impact-led startups. | £0 — EMI options; salaried from Q2 Y2 (post-seed) |
+| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior full-stack engineer working on the platform alongside the CTO. | £0 — EMI options; salaried from Q1 Y2 |
+| **Senior Advisor — Programme & Delivery** | **Chinyere Jennifer** | Senior Project Management Consultant, **MIGSO-PCUBED**; LLM background. | £0 — advisor EMI vest; MIGSO-PCUBED remains primary employer |
 
-The presence of a PhD-credentialled CMO, a senior engineering contributor, and a MIGSO-PCUBED senior consultant as advisor — all working on equity-only terms — materially strengthens the team beyond the two named founders and signals deep belief in the mission. CVs for all three are in Appendix N.
+A PhD-credentialled CMO, a senior engineer and a MIGSO-PCUBED consultant all working equity-only signals deep conviction in the mission. CVs at Appendix N.
 
-### 7.2 Hiring plan
+### 7.3 Hiring plan
 
-| Role | Year of hire | Y2 gross | Y3 gross |
+| Role | Hire date | Y2 gross | Y3 gross |
 |---|---|---:|---:|
 | Customer Success Manager #1 | Q1 Y2 | £32,000 | £36,000 |
 | Senior Backend Engineer | Q1 Y2 | £48,000 | £56,000 |
@@ -249,14 +269,14 @@ The presence of a PhD-credentialled CMO, a senior engineering contributor, and a
 | Engineer #2 (backend) | Q4 Y3 | — | £12,000 (part-year) |
 | Customer Success Manager #2 | Q4 Y3 | — | £13,000 (part-year) |
 
-Headcount: **2 (Y1)** → **6 (Y2)** → **12 (Y3)**.
+Headcount: **2 (Y1) → 6 (Y2) → 12 (Y3)** — all UK-based roles.
 
-### 7.3 Recruitment strategy
+### 7.4 Recruitment strategy
 
-- **Direct pipeline:** Otta, LinkedIn, OnlyDev (engineering), university careers portals (placements). NatWest Accelerator alumni network has direct introductions.
-- **Diversity targets:** ≥ 40% female and ≥ 30% ethnic-minority hires across the first 10 employees — tracked as a board-level KPI.
-- **No cash hires until Y1 revenue ≥ £6k MRR** (achieved in M10 in the base model).
-- **Equity:** EMI share-option scheme (HMRC-approved) for all Y2+ hires.
+- **Channels:** Otta, LinkedIn, OnlyDev (engineering), university careers portals (placements), and warm introductions through the NatWest Accelerator alumni network.
+- **Diversity:** ≥40% female and ≥30% ethnic-minority hires across the first 10 employees, tracked as a board-level KPI.
+- **Discipline:** no cash hires until MRR ≥ £6,000 (reached M10 in the base model).
+- **Retention:** HMRC-approved EMI share-option scheme for all Y2+ hires (4-year vest, 1-year cliff).
 
 ---
 
@@ -270,35 +290,33 @@ Headcount: **2 (Y1)** → **6 (Y2)** → **12 (Y3)**.
 |---|---|
 | Students | "Verified UK uni students. Real connections. Wellbeing built in." |
 | Universities | "See loneliness early. Act before it becomes a crisis." |
-| NHS ICBs | "Population-level student wellbeing data, anonymised and audit-ready." |
+| NHS ICBs | "Population-level student wellbeing data — anonymised and audit-ready." |
 
 ### 8.2 Year-1 channel mix (£3,600 total)
 
-| Channel | Tactic | Spend Y1 |
+| Channel | Tactic | Y1 spend |
 |---|---|---:|
-| University partnership & PR | Direct outreach to 30 Directors of Student Services; webinar with UUK; NatWest Accelerator introductions. | £1,200 |
-| Content / SEO | Whitepaper "Loneliness in UK HE 2026" with academic co-author; Wonkhe op-eds. | £600 |
-| Instagram & TikTok | Organic founder content + 5 produced posts (assets in `/app/marketing/instagram`). | £600 |
-| Google Search ads | "UK student loneliness", "find friends university". | £300 |
-| Student-rep / ambassador programme | £150/uni × 6 partner unis × 2 reps each. | £900 |
+| University partnership & PR | Direct outreach to 30 Directors of Student Services; UUK webinar; NatWest Accelerator introductions | £1,200 |
+| Content / SEO | Whitepaper "Loneliness in UK HE 2026" with academic co-author; Wonkhe op-eds | £600 |
+| Instagram & TikTok | Organic founder content + 5 produced posts | £600 |
+| Google Search ads | "UK student loneliness", "find friends university" | £300 |
+| Student ambassador programme | £150/university × 6 partner universities × 2 reps | £900 |
 
-Marketing grows to **£28,000 (Y2)** and **£92,000 (Y3)** — see Section 16.
+Marketing grows to **£28,000 (Y2)** and **£92,000 (Y3)** — full breakdown in Section 16.
 
-### 8.3 Sales motion (B2B) — anchor pilot in progress
+### 8.3 B2B sales motion — anchor pilot under way
 
-**Anchor pilot:** **University of Bedfordshire**. The lead founder served two consecutive terms as Bedfordshire SU President (2021–2023). **Pilot discussion is currently in progress** with the university's student services and safeguarding leads.
+**Anchor pilot: University of Bedfordshire.** The CEO served two consecutive terms as the university's SU President; the pilot discussion is in progress with student services and safeguarding leads he worked alongside for two years.
 
-**Pilot timing (deliberate, conservative):**
-
-| Stage | Months | Detail |
+| Stage | Timing | Detail |
 |---|---|---|
-| Pilot launch | **Sep 2026 (M4)** — academic year start | 12-week no-fee pilot for one student cohort |
-| Pilot runs | **Sep – Nov 2026 (M4–M6)** | Founder-led implementation; weekly office hours; mid-pilot steering-group review |
-| Pilot review & conversion conversations begin | **Dec 2026 (M7) onwards** | Outcomes readout to steering group; commercial-conversion discussion opens |
-| Target paid-contract signature | **Q1 2027 (M8–M9)** | Paid SaaS agreement for academic year 2026/27 H2 + 2027/28 |
-| Pre-seed bridge close | **M7 (Dec 2026)** | Targeted off pilot-outcome signals + NatWest demo day, *ahead of* full paid signature — standard for UK pre-seed cycles |
+| Pilot launch | **Sep 2026 (M4)** — academic year start | 12-week no-fee pilot, one student cohort |
+| Pilot delivery | **Sep–Nov 2026 (M4–M6)** | Founder-led implementation; weekly office hours; mid-pilot steering-group review |
+| Review & conversion discussions | **Dec 2026 (M7) onwards** | Outcomes readout; commercial conversation opens |
+| Target paid signature | **Q1 2027 (M8–M9)** | Paid SaaS agreement covering AY 2026/27 H2 + 2027/28 |
+| Pre-seed bridge close | **M7 (Dec 2026)** | Raised off pilot-outcome signals + NatWest demo day — standard UK pre-seed sequencing |
 
-Y1 cash forecasts assume **only the Bedfordshire pilot converts in Y1** (others modelled as 0% conversion to be deliberately conservative). Two further pilots are being scoped at peer institutions to provide Q1 2027 upside.
+The Y1 forecast assumes **only the Bedfordshire pilot converts** (all other institutions modelled at 0% conversion). Two further pilots are being scoped at peer institutions as pure Q1-2027 upside.
 
 ---
 
@@ -306,19 +324,22 @@ Y1 cash forecasts assume **only the Bedfordshire pilot converts in Y1** (others 
 
 | **Strengths** | **Weaknesses** |
 |---|---|
-| MVP shipped and in beta with real students. | Cash-light start (£6,000 founder capital). |
-| **University of Bedfordshire pilot currently in progress** — direct relationship via former SU President role. | Two-person team — bus factor risk until Q1 Y2. |
-| **Two independent UK-bank validations:** Santander Pre-Incubator (completed 2025) + NatWest Accelerator (joined 16 March 2026). | No formal clinical advisory board yet (planned Q2 Y2). |
-| NatWest Accelerator membership → £31k of in-kind support and London office. | Limited brand awareness in the student consumer market. |
-| `.ac.uk` verification + safeguarding webhook are technical moats. | Cyber Essentials accreditation pending. |
-| Clear B2B SaaS revenue model proven by Togetherall/TalkCampus. | |
-| Online Safety Act 2023 compliance baked in. | |
+| Production MVP live with real beta students — build risk retired. | Cash-light start (£6,000 founder capital). |
+| CEO is a practising safeguarding professional (CGL + NHS) — unmatched credibility with university safeguarding buyers. | Two-person core team — key-person risk until Q1 Y2 hires. |
+| Bedfordshire anchor pilot in progress via the founder's SU-President relationships. | No formal clinical advisory board yet (planned Q2 Y2). |
+| Two independent UK-bank validations: Santander Pre-Incubator (2025) + NatWest Accelerator (Mar 2026). | Limited consumer brand awareness at launch. |
+| £31,100/yr NatWest in-kind support incl. London office. | Cyber Essentials accreditation pending. |
+| `.ac.uk` verification + safeguarding webhook are genuine technical moats. | |
+| B2B willingness-to-pay proven by Togetherall/TalkCampus (100+ UK customers combined). | |
+| OSA-2023 compliance shipped, not promised. | |
 | **Opportunities** | **Threats** |
-| OfS statutory student-MH condition forces universities to evidence prevention. | Togetherall / TalkCampus could replicate `.ac.uk` verification within 12 months. |
-| UUK Mental Health Charter (100+ unis) need evidenced strategies. | Large incumbent (Microsoft / Meta) launching student-only network. |
-| NHS ICB integration opens £20–60k/yr contract per ICB across 42 ICBs. | Negative press from a safeguarding incident if not handled correctly. |
-| International expansion to .edu / .edu.au / EU domains post-Y3 (£180m TAM). | Tighter UK immigration regime affecting non-UK co-founder talent. |
-| SME R&D tax credit recoups ~16% of qualifying R&D spend. | Cost-of-living squeeze reducing student premium uptake. |
+| OfS statutory MH condition forces universities to evidence prevention. | Togetherall/TalkCampus could attempt `.ac.uk` verification within 12 months. |
+| UUK Mental Health Charter: 100+ universities need evidenced strategies. | A large incumbent (Meta/Microsoft) launching a student-only network. |
+| 42 NHS ICBs at £20–60k/yr each once university data proves value. | Reputational damage from a mishandled safeguarding incident. |
+| International expansion: .edu / .edu.au / EU domains (£180m TAM post-Y3). | Cost-of-living pressure on student premium uptake. |
+| SME R&D tax credits recoup ~16% of qualifying spend. | Tighter UK immigration rules affecting international founder talent. |
+
+Mitigations for each threat are documented in the Risk Register (Appendix L) — including the safeguarding-incident playbook, which the CEO drafted from professional practice.
 
 ---
 
@@ -326,46 +347,48 @@ Y1 cash forecasts assume **only the Bedfordshire pilot converts in Y1** (others 
 
 ### 10.1 Founder commitment
 
-The two co-founders contribute **£6,000 of personal capital** (**£3,000 from each founder**) to incorporate the company, register `.uk`/`.co.uk` domains, file Trademark Class 9/41/45, and seed initial cloud-hosting credits. The MVP itself is **already built** and is contributed to the company as founders' work-product (zero further engineering capex required at incorporation).
+The co-founders contribute **£6,000 of personal capital (£3,000 each)** at incorporation to cover company formation, `.uk`/`.co.uk` domains, trademark filings (Classes 9/41/45) and initial cloud-hosting credits. The MVP is contributed as founders' work-product — **zero engineering capex is required at incorporation** because the product is already built and live.
 
-### 10.2 Programme support — independent third-party validation
+### 10.2 Independent third-party validation
 
-| Programme | Status | Value to DEQUAD |
+| Programme | Status | Value |
 |---|---|---|
-| **Santander Universities Pre-Incubator** | Completed 2025 | Validated the founding team and product thesis through a competitive UK university-affiliated programme. |
-| **NatWest Accelerator (London cohort)** | Joined **16 March 2026** — currently active | London office co-working, legal advice, accountancy, banking introductions and investor mentoring delivered in-kind for 12 months. |
+| **Santander Universities Pre-Incubator** | Completed 2025 | Competitive university-affiliated programme validating team and thesis. |
+| **NatWest Accelerator (London)** | Joined **16 March 2026** — active | Office, legal, accountancy, banking and investor mentoring in-kind for 12 months. |
 
-### 10.3 In-kind contribution from NatWest Accelerator (Y1)
+### 10.3 NatWest Accelerator in-kind contribution (Y1)
 
 | In-kind item | Annual value |
 |---|---:|
 | London office co-working (3 desks) | £12,000 |
 | Legal advice (Mishcon de Reya, DLA Piper panels) | £4,500 |
-| Accountancy support (PwC alumni network) | £3,600 |
+| Accountancy support | £3,600 |
 | Banking & business introductions | £2,000 |
 | Investor pitch coaching & mentoring | £5,000 |
-| Programme demo day & PR placement | £4,000 |
+| Demo day & PR placement | £4,000 |
 | **Total in-kind value (Y1)** | **£31,100** |
 
-This in-kind support is what makes the £6,000 founder capital sufficient — DEQUAD does not have to pay rent, lawyers or accountants in cash during Y1.
+This support is why £6,000 of founder cash is sufficient: DEQUAD pays no rent, lawyers or accountants in cash during Y1.
 
 ### 10.4 Funding ladder
 
 | Round | Timing | Source | Amount | Use of funds |
 |---|---|---|---:|---|
-| **Founder equity** | Day 1 (Q1 Y1) | Yusuf (£3,000) + Co-Founder (£3,000) | **£6,000** | Incorporation, domains, IP filings, initial hosting. |
-| **R&D tax credit** | End Y1 | HMRC SME R&D | ~£3,600 | Recycled into engineering. |
-| **Pre-seed bridge** | **M7 (Dec 2026)** — *after* the 3-month Bedfordshire pilot completes and conversion discussions open | UK pre-seed angels via UKES / NatWest network | **£150,000** at £1.2m post-money cap (12.5% equity) | First 4 hires, 18-month runway, dual mobile builds, R&D engineering. |
-| **Seed round** | Q2 Y2 | UK VCs (Forward Partners, Local Globe, Crane) | **£750,000** at £6m post (12.5% equity) | Scale to 20 universities, ML data team, NHS-ICB channel. |
-| **Series A** | Q1 Y4 | Growth-stage VCs | **£3–5m** | EU + AU launch, federated-learning infra, 30+ FTE. |
+| **Founder equity** | Day 1 (Q1 Y1) | Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000) | **£6,000** | Incorporation, domains, IP filings, hosting. |
+| **R&D tax credit** | End Y1 | HMRC SME scheme | ~£3,600 | Recycled into engineering. |
+| **Pre-seed bridge** | **M7 (Dec 2026)** — after pilot completion | UK pre-seed angels via UKES / NatWest network | **£150,000** at £1.2m post-money (12.5%) | First 4 hires, 18-month runway, dual mobile builds, R&D. |
+| **Seed** | Q2 Y2 | UK VCs (Forward Partners, LocalGlobe, Crane) | **£750,000** at £6m post (12.5%) | Scale to 20 universities, ML team, NHS-ICB channel. |
+| **Series A** | Q1 Y4 | Growth-stage VCs | **£3–5m** | EU + AU launch, federated-learning infrastructure, 30+ FTE. |
 
 ### 10.5 Founder Investment Statement (visa requirement)
 
-The lead applicant has personally invested **£3,000** of his own funds as founder share capital, with the co-founder contributing a matching **£3,000**, for a total of **£6,000** of founder share capital. This is evidenced by the share allotment return (Form SH01) to be filed with Companies House at incorporation. There are no third-party investments at the date of this application; further investment will be sought in **December 2026 (M7)** — immediately after the 3-month University of Bedfordshire pilot completes (Sep–Nov 2026) and conversion conversations open.
+The lead applicant has personally invested **£3,000** of his own funds as founder share capital, matched by the co-founder's **£3,000**, for total founder share capital of **£6,000**, evidenced by the share allotment return (Form SH01) filed with Companies House at incorporation. No third-party investment exists at the date of this application; external investment will be sought in **December 2026 (M7)**, immediately after the University of Bedfordshire pilot completes (Sep–Nov 2026) and conversion discussions open.
 
 ---
 
 ## 11. Revenue and Cost of Sales Forecast
+
+The forecast reflects customer-acquisition numbers directly: 0.5 average paying institutions in Y1 (the Bedfordshire pilot converting mid-year), 4 in Y2, 14 in Y3; and 100 → 1,600 → 6,000 average paying premium students.
 
 ### 11.1 Revenue forecast (annual, GBP)
 
@@ -373,17 +396,17 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 |---|---:|---:|---:|
 | **University SaaS** | | | |
 | Average contract value (£) | 12,000 | 14,000 | 16,000 |
-| Avg paying institutions during year | 0.5 | 4 | 14 |
+| Average paying institutions in year | 0.5 | 4 | 14 |
 | Subtotal | **£6,000** | **£90,000** | **£320,000** |
 | **DEQUAD Premium (B2C)** | | | |
-| Avg paying students | 100 | 1,600 | 6,000 |
+| Average paying students | 100 | 1,600 | 6,000 |
 | Price (£/mo) | 4.99 | 4.99 | 4.99 |
 | Subtotal | **£5,988** | **£95,808** | **£359,280** |
 | **NHS ICB pilot** | | | |
 | Subtotal | **£0** | **£0** | **£20,000** |
-| **Total Revenue** | **£11,988** | **£185,808** | **£699,280** |
+| **Total revenue** | **£11,988** | **£185,808** | **£699,280** |
 
-### 11.2 Cost of Sales
+### 11.2 Cost of sales
 
 | Driver | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
@@ -392,7 +415,7 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 | Stripe processing | £180 | £3,000 | £12,000 |
 | SMS & email | £180 | £1,800 | £6,000 |
 | Customer-success tooling | £240 | £1,200 | £3,600 |
-| **Total Cost of Sales** | **£1,440** | **£15,600** | **£54,000** |
+| **Total cost of sales** | **£1,440** | **£15,600** | **£54,000** |
 | **Gross profit** | **£10,548** | **£170,208** | **£645,280** |
 | **Gross margin %** | 88.0% | 91.6% | 92.3% |
 
@@ -404,35 +427,35 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | 0 | 134,028 | 269,308 |
+| Opening cash | 0 | 134,028 | 824,256 |
 | Founder equity injection | 6,000 | 0 | 0 |
 | Pre-seed equity (Dec 2026, M7) | 150,000 | 0 | 0 |
 | Seed equity (Q2 Y2) | 0 | 750,000 | 0 |
 | R&D tax credit received | 0 | 4,500 | 9,500 |
 | Cash from sales | 11,988 | 185,808 | 699,280 |
-| **Total Receipts** | **164,988** | **940,308** | **708,780** |
+| **Total receipts** | **164,988** | **940,308** | **708,780** |
 | Cost of sales | (1,440) | (15,600) | (54,000) |
 | Payroll (incl. NI, pension, benefits) | (20,340) | (180,680) | (437,660) |
 | Marketing | (3,600) | (28,000) | (92,000) |
 | Software subscriptions | (1,800) | (6,000) | (14,400) |
-| Office (in-kind — NatWest) | 0 | (6,000) | (12,000) |
+| Office (post-programme) | 0 | (6,000) | (12,000) |
 | Legal & accountancy (out-of-programme) | (1,200) | (5,400) | (11,000) |
 | Insurance | (480) | (1,800) | (3,200) |
 | Business support / misc | (1,200) | (3,600) | (9,000) |
 | Fixed assets & R&D capex | (900) | (3,000) | (9,000) |
-| **Total Expenditure** | **(30,960)** | **(250,080)** | **(642,260)** |
-| **Cash surplus / (deficit)** | **134,028** | **690,228** | **66,520** |
+| **Total expenditure** | **(30,960)** | **(250,080)** | **(642,260)** |
+| **Net cash movement** | **134,028** | **690,228** | **66,520** |
 | **Closing cash balance** | **134,028** | **824,256** | **890,776** |
 
 ### 12.2 Year 1 monthly cash flow — the critical view
 
-The Y1 monthly schedule (in the Excel workbook, sheet "Cash Flow Y1 (mo)") shows that cash is **positive every single month**:
+The monthly Y1 schedule (financial workbook, sheet "Cash Flow Y1 (mo)") shows **positive closing cash in every single month**:
 
-- **M1–M6** (Jun–Nov 2026): operating cash burn ≈ £750–£1,400/month, funded entirely by the £6,000 founder injection. No founder salary in this period. The 12-week (3-month) Bedfordshire pilot launches in **Sep 2026 (M4)** and completes in **Nov 2026 (M6)**.
-- **M7** (Dec 2026): **£150,000 pre-seed bridge lands**, in step with pilot-conversion conversations opening immediately after pilot completion.
-- **M7–M12** (Dec 2026 – May 2027): founders draw £1,500/month each; monthly burn rises to ~£5,500 — still well within the pre-seed runway.
+- **M1–M6 (Jun–Nov 2026):** operating burn of ≈£750–£1,400/month, funded entirely by the £6,000 founder injection. No founder salary. The 12-week Bedfordshire pilot runs Sep–Nov 2026 (M4–M6).
+- **M7 (Dec 2026):** the **£150,000 pre-seed bridge lands**, timed with pilot-conversion conversations opening.
+- **M7–M12 (Dec 2026–May 2027):** founders draw £1,500/month each; total burn rises to ≈£5,500/month — comfortably within pre-seed runway.
 
-This profile is one of the strongest evidences of viability for endorsement: DEQUAD survives on £6,000 of founder cash for 6 months (Jun–Nov 2026) *with positive monthly closing balances throughout* while the 3-month Bedfordshire pilot runs to completion.
+For endorsement purposes this is the strongest viability evidence in the plan: the business survives its pre-revenue phase on £6,000 with positive month-end balances throughout, and every subsequent funding event is sequenced to a delivered milestone rather than hope.
 
 ---
 
@@ -441,26 +464,26 @@ This profile is one of the strongest evidences of viability for endorsement: DEQ
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
 | Revenue | 11,988 | 185,808 | 699,280 |
-| Cost of Sales (W2) | (1,440) | (15,600) | (54,000) |
-| **Gross Profit** | **10,548** | **170,208** | **645,280** |
-| Salaries (W3) | (18,000) | (156,000) | (372,000) |
+| Cost of sales | (1,440) | (15,600) | (54,000) |
+| **Gross profit** | **10,548** | **170,208** | **645,280** |
+| Salaries | (18,000) | (156,000) | (372,000) |
 | Employer NI | (1,200) | (14,000) | (38,500) |
 | Employer pension (3%) | (540) | (4,680) | (11,160) |
 | Other employment costs | (600) | (6,000) | (16,000) |
 | Software subscriptions | (1,800) | (6,000) | (14,400) |
-| Office (in-kind — NatWest) | 0 | (6,000) | (12,000) |
+| Office | 0 | (6,000) | (12,000) |
 | Legal & accountancy | (1,200) | (5,400) | (11,000) |
-| Marketing (W4) | (3,600) | (28,000) | (92,000) |
+| Marketing | (3,600) | (28,000) | (92,000) |
 | Insurance | (480) | (1,800) | (3,200) |
 | Business support / misc | (1,200) | (3,600) | (9,000) |
-| **Total Overheads** | **(28,620)** | **(231,480)** | **(579,260)** |
+| **Total overheads** | **(28,620)** | **(231,480)** | **(579,260)** |
 | **EBITDA** | **(18,072)** | **(61,272)** | **66,020** |
 | Depreciation & amortisation | (300) | (1,500) | (4,500) |
 | **Operating profit / (loss)** | **(18,372)** | **(62,772)** | **61,520** |
-| Corporation Tax (forecast) | 0 | 0 | 0 |
+| Corporation tax | 0 | 0 | 0 |
 | **Profit / (loss) after tax** | **(18,372)** | **(62,772)** | **61,520** |
 
-**Operating profit positive from Q3 Year 3** — far earlier than the previous draft because Y1 overheads are 70% lower thanks to the NatWest in-kind support and lean founder compensation.
+**Operating profit turns positive in Q3 Y3.** Y1 overheads are deliberately lean — ~70% below a conventional funded-startup cost base — because of the NatWest in-kind support and zero-salary founder period.
 
 ---
 
@@ -480,13 +503,13 @@ This profile is one of the strongest evidences of viability for endorsement: DEQ
 | Profit & loss reserve | (18,372) | (81,144) | (19,624) |
 | **Shareholders' funds** | **134,028** | **820,656** | **882,176** |
 
-(Small rounding differences in the balance check are reconciled in the workbook.)
+(Minor rounding differences are reconciled in the financial workbook, Appendix F.)
 
 ---
 
 ## 15. Forecasted Stock Levels
 
-DEQUAD is a pure software business and **does not hold inventory**. Stock balance is **£0** across the forecast period. The line is included in the workbook for template completeness only.
+DEQUAD is a pure software business and **holds no inventory**. Stock is **£0** across the entire forecast period. The line is retained in the workbook for template completeness only.
 
 ---
 
@@ -499,27 +522,29 @@ DEQUAD is a pure software business and **does not hold inventory**. Stock balanc
 | LinkedIn / paid B2B | £0 | £4,000 | £14,000 |
 | Instagram / TikTok | £600 | £7,500 | £22,000 |
 | Google Search ads | £300 | £3,000 | £10,000 |
-| Student-rep / ambassador | £900 | £4,000 | £16,000 |
+| Student ambassador programme | £900 | £4,000 | £16,000 |
 | **Total** | **£3,600** | **£28,000** | **£92,000** |
 | Marketing as % of revenue | 30% | 15% | 13% |
 
-CAC reduces materially as the brand matures: institutional CAC drops from £3,600 (Y1) to £1,200 (Y3); premium-student CAC drops from £4.50 to £2.10.
+CAC compresses as the brand matures and network effects compound: institutional CAC falls from £3,600 (Y1) to £1,200 (Y3); premium-student CAC falls from £4.50 to £2.10.
 
 ---
 
 ## 17. Forecasted Fixed Asset Schedule
 
-| Asset class | Depn. rate | Y1 add. | Y2 add. | Y3 add. | Y3 NBV |
+| Asset class | Depreciation rate | Y1 additions | Y2 additions | Y3 additions | Y3 NBV |
 |---|---:|---:|---:|---:|---:|
-| Tangible — Laptops & equipment | 33% | £600 | £1,800 | £5,000 | £4,000 |
-| Intangible — Capitalised R&D (W5) | 20% | £300 | £1,200 | £4,000 | £2,900 |
+| Tangible — laptops & equipment | 33% | £600 | £1,800 | £5,000 | £4,000 |
+| Intangible — capitalised R&D | 20% | £300 | £1,200 | £4,000 | £2,900 |
 | **Total CAPEX** | | **£900** | **£3,000** | **£9,000** | **£6,900** |
 
-The MVP itself is **already built and contributed by the founders** — no upfront capitalisation. Y1 hardware additions are two laptops + one spare.
+The MVP is already built and contributed by the founders, so no upfront capitalisation is required. Y1 hardware is two laptops plus one spare.
 
 ---
 
 ## 18. Forecasted Staff Costs
+
+All figures include the associated employer National Insurance and pension obligations, stated separately below.
 
 ### 18.1 Y1 — bootstrap
 
@@ -529,7 +554,7 @@ The MVP itself is **already built and contributed by the founders** — no upfro
 | Founder B (CTO) — £1,500/mo from M7 | £9,000 | 6 |
 | **Total Y1 gross** | **£18,000** | |
 
-Y1 employer NI £1,200 + pension £540 + benefits £600 = **£20,340 total Y1 employment cost.**
+Employer NI £1,200 + pension £540 + benefits £600 = **£20,340 total Y1 employment cost**.
 
 ### 18.2 Y2 — first hires
 
@@ -543,7 +568,7 @@ Y1 employer NI £1,200 + pension £540 + benefits £600 = **£20,340 total Y1 em
 | Marketing & Partnerships (Q3) | £10,000 |
 | **Total Y2 gross** | **£156,000** |
 
-Add NI £14,000 + pension £4,680 + benefits £6,000 = **£180,680 total Y2 employment cost.**
+Employer NI £14,000 + pension £4,680 + benefits £6,000 = **£180,680 total Y2 employment cost**.
 
 ### 18.3 Y3 — full team
 
@@ -562,11 +587,11 @@ Add NI £14,000 + pension £4,680 + benefits £6,000 = **£180,680 total Y2 empl
 | Customer Success Manager #2 (Q4 start) | £13,000 |
 | **Total Y3 gross** | **£372,000** |
 
-Add NI £38,500 + pension £11,160 + benefits £16,000 = **£437,660 total Y3 employment cost.**
+Employer NI £38,500 + pension £11,160 + benefits £16,000 = **£437,660 total Y3 employment cost**.
 
 ### 18.4 Equity
 
-All Y2+ hires receive EMI options (HMRC-approved) — 4-year vest, 1-year cliff. Founders sign customary investor-friendly vesting at the pre-seed close.
+All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Founders adopt customary investor-friendly reverse vesting at the pre-seed close.
 
 ---
 
@@ -574,9 +599,9 @@ All Y2+ hires receive EMI options (HMRC-approved) — 4-year vest, 1-year cliff.
 
 | Ref | Document | File |
 |---|---|---|
-| A | Founder A academic certificates (Yusuf Quadri) | `A_founder_academic_certificates.md` |
-| B | Founder A CV — Yusuf Quadri (full) | `B_founder_cv.md` |
-| **B-2** | **Co-Founder CV — Yusuff Adeagbo (CTO)** | `B_cofounder_cv.md` |
+| A | Founder academic certificates (Yusuf Quadri) | `A_founder_academic_certificates.md` |
+| B | **Founder CV — Yusuf Quadri (updated June 2026)** | `B_founder_cv.md` |
+| B-2 | Co-Founder CV — Yusuff Adeagbo (CTO) | `B_cofounder_cv.md` |
 | C | Personal commitment & undertaking | `C_personal_commitment_undertaking.md` |
 | D | Wellbeing baseline methodology | `D_wellbeing_baseline_methodology.md` |
 | E | Data Protection Impact Assessment (DPIA) | `E_dpia.md` |
@@ -588,9 +613,9 @@ All Y2+ hires receive EMI options (HMRC-approved) — 4-year vest, 1-year cliff.
 | K | Product screenshots | `K_product_screenshots.md` |
 | L | Risk Register (UKES) | `DEQUAD_Risk_Register.md` |
 | M | Decision-Maker Brief (UKES short track) | `DEQUAD_UKES_Decision_Brief.md` |
-| **N** | **Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior SWE), Chinyere Jennifer (Advisor)** | `N_wider_team_cvs.md` |
-| **O** | **Yusuf Quadri — Safeguarding & Clinical-Awareness Certifications** | `O_safeguarding_certifications.md` |
+| N | Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior SWE), Chinyere Jennifer (Advisor) | `N_wider_team_cvs.md` |
+| O | Yusuf Quadri — Safeguarding & Clinical-Awareness Certifications | `O_safeguarding_certifications.md` |
 
 ---
 
-*End of business plan. All figures are forecasts and not guarantees of future performance. Prepared for submission to UKES as part of the UK Innovator Founder visa endorsement process — February 2026.*
+*End of business plan. All figures are forecasts, not guarantees of future performance. Prepared for submission to UKES as part of the UK Innovator Founder visa endorsement process — June 2026.*

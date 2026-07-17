@@ -112,3 +112,10 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 ## Build / Deploy
 - Mobile builds: see `/app/EAS_BUILD_GUIDE.md` (Node 20, yarn, EAS commands, iOS/Android signing checklists).
 - Helper: `/app/scripts/build.sh`.
+
+## Update — 17 July 2026 (Visa Pack v3.0)
+- Rewrote DEQUAD_UKES_Business_Plan.md from scratch (19-section UKES template, v3.0, June 2026 date). Financial figures unchanged for consistency with DEQUAD_Financial_Model.xlsx.
+- Rewrote B_founder_cv.md with real career history from user-uploaded CVs: Recovery Coordinator (Change Grow Live), Clinical Support Worker + Assistant Duty Senior Nurse Administrator (East London NHS FT), UGC Planet BDE, Mavin Care, Falcon Recruitment, 2x SU President. Education: MBA w/ Data Analytics 2024, MSc IR Mgmt 2020, BSc IR & Diplomacy 2017. Contact: quadri.yusuf@dequad.com, 07928132617, linkedin.com/in/quadri-yusuf. All placeholders removed.
+- Founder frontline safeguarding career now woven through Exec Summary, Sections 3, 4, 7 as core credibility pillar.
+- Regenerated full PDF pack: 18 PDFs + DEQUAD_UKES_FULL_SUBMISSION.pdf (2.0MB, bookmarked). Installed pandoc.
+- No app code changed; app untouched.
