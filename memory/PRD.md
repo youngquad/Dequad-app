@@ -120,3 +120,4 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 - Regenerated full PDF pack: 18 PDFs + DEQUAD_UKES_FULL_SUBMISSION.pdf (2.0MB, bookmarked). Installed pandoc.
 - No app code changed; app untouched.
 - 17 Jul: Finalized UKES_Submission_Cover_Email.md — real contact details (07928132617, LinkedIn), safeguarding-professional credibility in Viability para, v3.0 pack references. Only remaining placeholders: [insert date] and [insert reference] (payment ref). Master PDF re-merged.
+- 17 Jul: Created Word (.docx) versions of the full UKES pack in /app/visa_appendices/docx/ (18 individual docs + combined DEQUAD_UKES_FULL_SUBMISSION.docx with page breaks + financial xlsx), zipped as DEQUAD_UKES_Word_Pack_v3.zip.
