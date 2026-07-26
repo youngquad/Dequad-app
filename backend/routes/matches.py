@@ -144,7 +144,13 @@ async def discover_matches(
     swiped_ids = [s["matched_user_id"] for s in existing_swipes]
     swiped_ids.append(current_user.user_id)
 
-    query: dict = {"user_id": {"$nin": swiped_ids}, "role": "student"}
+    query: dict = {
+        "user_id": {"$nin": swiped_ids},
+        "role": "student",
+        # Seeded demo / founder personal accounts are hidden from real users'
+        # discover deck. Real users never have this flag set.
+        "hidden_from_discovery": {"$ne": True},
+    }
 
     # Premium gating — only apply filters if the user actually has premium.
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0}) or {}
@@ -469,8 +475,13 @@ async def get_likes_received(current_user: User = Depends(get_current_user)):
     already_responded = {r["matched_user_id"] for r in my_responses}
 
     # Batch: fetch all liker user docs in one query.
+    # Hidden demo/founder-personal accounts are never surfaced in likes-received.
     users = await db.users.find(
-        {"user_id": {"$in": liker_ids}}, {"_id": 0}
+        {
+            "user_id": {"$in": liker_ids},
+            "hidden_from_discovery": {"$ne": True},
+        },
+        {"_id": 0},
     ).to_list(len(liker_ids))
     user_map = {u["user_id"]: u for u in users}
 

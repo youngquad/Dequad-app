@@ -187,6 +187,11 @@ async def seed_admin_and_test_users():
     for profile in test_profiles:
         # All seeded profiles bypass email verification — they're synthetic.
         profile["email_verified"] = True
+        # PROD hardening (2026-08): seeded demo profiles are hidden from real
+        # users' discover deck / likes-received feed. They still exist for
+        # investor/UKES walkthrough demos but are invisible to public traffic.
+        profile["hidden_from_discovery"] = True
+        profile["is_demo_account"] = True
         existing = await db.users.find_one({"user_id": profile["user_id"]})
         if not existing:
             await db.users.insert_one(profile)
@@ -196,6 +201,8 @@ async def seed_admin_and_test_users():
                 "photos": profile["photos"], "picture": profile["picture"],
                 "role": "student", "interested_in": profile["interested_in"], "gender": profile["gender"],
                 "email_verified": True,
+                "hidden_from_discovery": True,
+                "is_demo_account": True,
             }})
             logger.info(f"Test profile updated: {profile['name']}")
 
@@ -326,6 +333,7 @@ async def seed_admin_and_test_users():
             "student_verification": "auto",
             "auth_method": "email",
             "is_demo_account": True,
+            "hidden_from_discovery": True,
             "email_verified": True,
         }
 
@@ -356,6 +364,43 @@ async def seed_admin_and_test_users():
             logger.info(f"Staff demo account metadata refreshed: {staff['email']}")
 
     logger.info("Seed data initialization complete")
+
+    # One-time migration (2026-08): backfill the `hidden_from_discovery` and
+    # `is_demo_account` flags on any pre-existing seeded/demo profile that was
+    # written before the flag existed. This guarantees NO real user can see
+    # demo profiles in their discover deck once the app is opened to the
+    # public. Idempotent — safe to re-run on every boot.
+    demo_email_domains_or_ids = {
+        # Any @test.edu profile (the twelve original test students)
+        "email_suffix": "@test.edu",
+        # Any @dequad.com staff/demo profile
+        "email_dequad_suffix": "@dequad.com",
+        # Founder's personal student-side account
+        "founder_personal_email": "yusufquadri83@gmail.com",
+    }
+    hide_result = await db.users.update_many(
+        {
+            "$or": [
+                {"email": {"$regex": r"@test\.edu$", "$options": "i"}},
+                {"email": {"$regex": r"@dequad\.com$", "$options": "i"}, "role": "student"},
+                {"email": "yusufquadri83@gmail.com"},
+                {"user_id": {"$regex": r"^test-user-"}},
+                {"user_id": {"$regex": r"^staff-"}},
+            ],
+            "$and": [
+                {"$or": [
+                    {"hidden_from_discovery": {"$exists": False}},
+                    {"hidden_from_discovery": False},
+                ]},
+            ],
+        },
+        {"$set": {"hidden_from_discovery": True, "is_demo_account": True}},
+    )
+    if hide_result.modified_count:
+        logger.info(
+            f"Backfilled hidden_from_discovery on {hide_result.modified_count} demo/founder profiles"
+        )
+    _ = demo_email_domains_or_ids  # documentation-only
 
     # Seed demo mood entries
     mood_count = await db.mood_entries.count_documents({})

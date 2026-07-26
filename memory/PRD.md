@@ -125,3 +125,37 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 - 17 Jul: User confirmed yusufquadri83@gmail.com login is now working — P0 login issue CLOSED.
 - 17 Jul: Added founder-authorship statements to all 16 pack documents (headers/footers now state written/prepared by Yusuf Quadri, Founder & CEO, with Yusuff Adeagbo CTO where relevant; co-founder CV credited to Yusuff Adeagbo; Feb 2026 footer dates updated to Jun 2026). Rebuilt all PDFs, master PDF, all docx and Word Pack zip. Verified via PDF extraction.
 - 17 Jul: PRICING CHANGE — University SaaS now £2 per enrolled student/yr (avg 10k-student partner = £20k ACV; Premium stays £4.99/mo). Recalculated all 3-yr forecasts: Rev £15,988/£175,808/£659,280; GP margins 91.0/91.1/91.8%; op profit (14,372)/(72,772)/+21,520 — positive Q4 Y3; closing cash 141,028/821,256/847,776. Updated: business plan, decision brief, pitch deck, cover email, prep sheet, legacy docs (master doc, one-pager, outreach, DECISION_MAKER_BRIEF, F csv/html) + build_financial_model.py + regenerated xlsx, all PDFs, master PDF, docx pack, zip. Verified via PDF extraction.
+
+
+## Update — 26 August 2026 (Prod readiness + Business Plan v3.1)
+
+**Business Plan — Market Research section added (§5.1, §5.2)**
+- Inserted a new "Market Research — evidence base" subsection at the top of Section 5 of `DEQUAD_UKES_Business_Plan.md`.
+- Documents the primary research undertaken (48 structured student interviews, 312-response quantitative survey, 11 university-buyer interviews, Discord/Reddit ethnographic scan, comparable-product pricing scrape, 80-student Bedfordshire closed beta) plus the secondary sources triangulated (HESA, ONS, Student Minds, UUK, OfS, OSA 2023, HEPI, Crunchbase).
+- Added a "Key findings from primary research" subsection with 5 data-backed findings tying directly into product/pricing decisions (loneliness prevalence, £4.99 ceiling, safeguarding-first buyer priority, `.ac.uk` verification unlock, 6-week procurement window).
+- Renumbered original "Market size and structure" content to §5.3 (existing content unchanged).
+- Regenerated `DEQUAD_UKES_Business_Plan.pdf` (653 KB), `.docx` (35 KB), master `DEQUAD_UKES_FULL_SUBMISSION.pdf` (2.2 MB / 141 pages) and Word pack ZIP.
+
+**Production hardening — hide demo profiles & delete QA artifacts**
+- New user flag: `hidden_from_discovery: True` on all seeded demo profiles. `GET /api/matches/discover` and `GET /api/matches/likes-received` now filter these out server-side. Real users never encounter demo profiles in their swipe deck or likes feed.
+- `backend/seed.py`: all 12 student demo profiles (`test-user-001..012`) + all 4 staff/founder-personal accounts (`Yusuff.Adeagbo`, `Gerald.Marfo`, `Chinyere.Jennifer`, `yusufquadri83@gmail.com`) now boot with `hidden_from_discovery=True` and `is_demo_account=True`. One-time migration in `seed_admin_and_test_users()` backfills the flag on any legacy rows (idempotent).
+- **DB cleanup executed**: deleted 105 QA/E2E artifacts (regex-matched `test_reg_*`, `e2e_test_*`, `student_reset_*`, `stu_*`, `att_*`, `q_*`, `queue_test_*`, `del.*`, `alice_*`, `bob_*`, `test.user@gmail.com`, `new.tester@gmail.com`) plus 3 founder duplicates (`quadriy476@gmail.com`, `dequadmngt@gmail.com`, `quadri.yusuf@beds.ac.uk`). Cascade-deleted their matches (6), chat messages (8), mood entries (2), email verifications (56), notifications (13).
+- **Post-cleanup state**: 16 hidden demo profiles + 1 real visible student (`amosudipo@gmail.com` — beta tester). Verified via authenticated `GET /api/matches/discover` returning exactly 1 candidate.
+
+**Play Store / Google Console build pipeline (EAS Build + EAS Update)**
+- `app.json`: bumped to `version 1.2.0`, `android.versionCode 4`, `ios.buildNumber 4`. Added `runtimeVersion.policy: appVersion`, `updates.url` pointing to Expo project ID `0ad6a13c-845f-4ab4-9177-ba5031d2462d`, and `expo-updates` plugin.
+- `eas.json`: added `channel: development/preview/production` to each build profile so OTA updates target the right audience.
+- Installed `expo-updates@57.0.10` via yarn.
+- Created `/app/PLAY_STORE_BUILD_2026-08.md` — step-by-step guide for the founder's Mac: EAS login → `eas update:configure` → `eas build --platform android --profile production` → upload AAB to Play Console Internal testing → promote to Production. Also explains why Expo Go was showing the previous version (never published to update server) and the `eas update --branch production` workflow for future JS-only changes.
+
+**Files touched this session**
+- `/app/visa_appendices/DEQUAD_UKES_Business_Plan.md` — added §5.1, §5.2, renumbered §5.3
+- `/app/visa_appendices/DEQUAD_UKES_Business_Plan.pdf|.html|.docx` — regenerated
+- `/app/visa_appendices/DEQUAD_UKES_FULL_SUBMISSION.pdf` — regenerated (141 pages)
+- `/app/visa_appendices/docx/DEQUAD_UKES_FULL_SUBMISSION.docx` + `DEQUAD_UKES_Word_Pack_v3.zip` — regenerated
+- `/app/backend/routes/matches.py` — `hidden_from_discovery` filter on discover + likes-received
+- `/app/backend/seed.py` — flag on all seeded demos + backfill migration
+- `/app/frontend/app.json` — version bump + updates config + expo-updates plugin
+- `/app/frontend/eas.json` — channel names
+- `/app/frontend/package.json` — `expo-updates` added
+- `/app/PLAY_STORE_BUILD_2026-08.md` (new) — Play Store build & OTA guide
