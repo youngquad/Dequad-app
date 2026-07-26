@@ -19,6 +19,7 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import AdminSupportInbox from '../../src/components/AdminSupportInbox';
 import { AdminVerificationQueue } from '../../src/components/AdminVerificationQueue';
+import { AdminGrowthAnalytics } from '../../src/components/AdminGrowthAnalytics';
 import AdminInviteManager from '../../src/components/AdminInviteManager';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -1267,6 +1268,9 @@ export default function AdminDashboard() {
         {/* Analytics Tab */}
         {activeTab === 'analytics' && (
           <View style={styles.content}>
+            {/* Deck-worthy growth metrics — DAU / retention / mood-completion. */}
+            <AdminGrowthAnalytics sessionToken={sessionToken} />
+
             {/* Date Range Filter */}
             <View style={styles.filterSection}>
               <Text style={styles.filterLabel}>Date Range:</Text>

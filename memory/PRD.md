@@ -159,3 +159,15 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 - `/app/frontend/eas.json` — channel names
 - `/app/frontend/package.json` — `expo-updates` added
 - `/app/PLAY_STORE_BUILD_2026-08.md` (new) — Play Store build & OTA guide
+
+
+## Update — 26 August 2026 (Growth Analytics dashboard)
+
+**Growth Analytics admin page — deck-worthy KPIs**
+- New backend endpoint: `GET /api/admin/growth-analytics` (real students only — excludes `hidden_from_discovery`).
+  - **Metrics**: total real students · active in last 24h · 30-day DAU series + 7d/28d rolling averages · stickiness (DAU/MAU proxy) · 30-day signup series · WoW signup growth % · mood-completion (7d + 30d) · cohort retention (D1/D7/D30) · engagement (total accepted matches, matches last 7d, chat messages last 7d).
+  - Cohort retention calculated by cross-joining `users.created_at` with `user_sessions.created_at` (window: last 30–60 days).
+- New frontend component: `/app/frontend/src/components/AdminGrowthAnalytics.tsx` — 4-KPI hero row, WoW growth delta, dual sparklines (signups + DAU), colour-coded retention cells (green ≥40%, amber ≥20%, red <20%), mood-completion cards, engagement row.
+- Wired into existing `analytics` tab in `app/(admin)/dashboard.tsx` (added component above the existing mood-trends section — legacy content preserved).
+- Verified: admin logged in via UI → screenshot confirms full render with sparklines, KPI cards, retention grid all visible.
+- **Also**: demonstrates the modular pattern for the pending `dashboard.tsx` refactor — new admin surfaces should be self-contained components under `src/components/` and consumed via a single JSX line inside `dashboard.tsx`.
