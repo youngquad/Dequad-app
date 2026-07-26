@@ -75,7 +75,7 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 | **Two independent validations** | **Santander Universities Pre-Incubator** (completed 2025) and **NatWest Accelerator London** (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes. |
 | **Anchor pilot in progress** | Pilot discussion under way with the **University of Bedfordshire** — the institution whose students the founder represented for two years. 12-week pilot scheduled Sep–Nov 2026. |
 | **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind, letting £6,000 of founder cash cover 6 months of positive-balance operation. |
-| **Conservative forecast** | Y1 revenue £11,988 → Y2 £185,808 → Y3 £699,280. Gross margin 92% by Y3; operating profit positive from Q3 Y3. Only ONE university pilot is assumed to convert in Y1. |
+| **Conservative forecast** | Y1 revenue £15,988 → Y2 £175,808 → Y3 £659,280. Gross margin ~92% by Y3; operating profit positive in Q4 Y3. Only ONE university pilot is assumed to convert in Y1. |
 | **UK jobs** | 2 (Y1) → 6 (Y2) → 12 (Y3), all UK-based, with EMI options and board-tracked diversity targets. |
 
 We evidence all three Home Office endorsement criteria — **innovation, viability, scalability** — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.
@@ -99,7 +99,7 @@ DEQUAD ships as a cross-platform application (iOS, Android and web at dequad.co.
 
 | Customer | What they receive | Price |
 |---|---|---|
-| **UK university** | Site licence to the Insights Dashboard, branded safeguarding webhook into their existing safeguarding team, dedicated success manager. | Annual SaaS from **£12,000/yr**, tiered by student headcount. |
+| **UK university** | Site licence to the Insights Dashboard, branded safeguarding webhook into their existing safeguarding team, dedicated success manager. | **£2 per enrolled student per year** — a 10,000-student university pays £20,000/yr. Simple, transparent, headcount-based. |
 | **NHS Integrated Care Board (ICB)** | Population-level anonymised wellbeing data for funded institutions; joint safeguarding referral pathway. | Annual contract from **£20,000/yr** per ICB. |
 | **Student (consumer)** | Free core product. Optional **DEQUAD Premium**: advanced match filters, unlimited chats, profile boost. | **£4.99/month** via Stripe (live and processing payments today). |
 
@@ -127,7 +127,7 @@ The dual-sided model matters: students adopt because the core product is free an
 
 ### 3.3 Scalability
 
-- **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **92.3%** by Y3.
+- **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **91.8%** by Y3.
 - **Intra-institution network effects.** Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).
 - **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. The model projects 14 average paying institutions in Y3 against 285 UK institutions — under 5% penetration.
 - **International optionality.** The closed-network model maps directly onto `.edu` (US), `.edu.au` (Australia) and EU academic domains — a £180m English-language HE TAM addressable post-Y3 without re-architecting the product.
@@ -198,7 +198,7 @@ Three regulatory forces are converting student wellbeing from discretionary spen
 2. **Online Safety Act 2023, now in force** — student-facing platforms must implement risk assessments and reporting flows. DEQUAD ships OSA-compliant by design; informal alternatives (Discord servers, Facebook groups) expose universities to unmanaged risk.
 3. **UUK Mental Health Charter** — 100+ signatory universities have committed to data-driven wellbeing strategies and must now demonstrate delivery.
 
-Budget exists: at £123 per student FTE, a 20,000-student university spends ~£2.5m/yr on student services. DEQUAD's £12,000 entry price is under 0.5% of that budget while directly servicing a statutory obligation.
+Budget exists: at £123 per student FTE, a 20,000-student university spends ~£2.5m/yr on student services. DEQUAD's £2-per-student price (£40,000/yr for that university) is ~1.6% of that budget — and roughly **half Togetherall's effective per-student cost** — while directly servicing a statutory obligation.
 
 ---
 
@@ -275,7 +275,7 @@ Headcount: **2 (Y1) → 6 (Y2) → 12 (Y3)** — all UK-based roles.
 
 - **Channels:** Otta, LinkedIn, OnlyDev (engineering), university careers portals (placements), and warm introductions through the NatWest Accelerator alumni network.
 - **Diversity:** ≥40% female and ≥30% ethnic-minority hires across the first 10 employees, tracked as a board-level KPI.
-- **Discipline:** no cash hires until MRR ≥ £6,000 (reached M10 in the base model).
+- **Discipline:** no cash hires until the pre-seed has closed and institutional revenue is contracted — first hires deferred to Q1 Y2.
 - **Retention:** HMRC-approved EMI share-option scheme for all Y2+ hires (4-year vest, 1-year cliff).
 
 ---
@@ -395,16 +395,18 @@ The forecast reflects customer-acquisition numbers directly: 0.5 average paying 
 | Line item | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
 | **University SaaS** | | | |
-| Average contract value (£) | 12,000 | 14,000 | 16,000 |
+| Price per enrolled student (£/yr) | 2.00 | 2.00 | 2.00 |
+| Average enrolled students per partner institution | 10,000 | 10,000 | 10,000 |
+| Average contract value (£) | 20,000 | 20,000 | 20,000 |
 | Average paying institutions in year | 0.5 | 4 | 14 |
-| Subtotal | **£6,000** | **£90,000** | **£320,000** |
+| Subtotal | **£10,000** | **£80,000** | **£280,000** |
 | **DEQUAD Premium (B2C)** | | | |
 | Average paying students | 100 | 1,600 | 6,000 |
 | Price (£/mo) | 4.99 | 4.99 | 4.99 |
 | Subtotal | **£5,988** | **£95,808** | **£359,280** |
 | **NHS ICB pilot** | | | |
 | Subtotal | **£0** | **£0** | **£20,000** |
-| **Total revenue** | **£11,988** | **£185,808** | **£699,280** |
+| **Total revenue** | **£15,988** | **£175,808** | **£659,280** |
 
 ### 11.2 Cost of sales
 
@@ -416,8 +418,8 @@ The forecast reflects customer-acquisition numbers directly: 0.5 average paying 
 | SMS & email | £180 | £1,800 | £6,000 |
 | Customer-success tooling | £240 | £1,200 | £3,600 |
 | **Total cost of sales** | **£1,440** | **£15,600** | **£54,000** |
-| **Gross profit** | **£10,548** | **£170,208** | **£645,280** |
-| **Gross margin %** | 88.0% | 91.6% | 92.3% |
+| **Gross profit** | **£14,548** | **£160,208** | **£605,280** |
+| **Gross margin %** | 91.0% | 91.1% | 91.8% |
 
 ---
 
@@ -427,13 +429,13 @@ The forecast reflects customer-acquisition numbers directly: 0.5 average paying 
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | 0 | 134,028 | 824,256 |
+| Opening cash | 0 | 141,028 | 821,256 |
 | Founder equity injection | 6,000 | 0 | 0 |
 | Pre-seed equity (Dec 2026, M7) | 150,000 | 0 | 0 |
 | Seed equity (Q2 Y2) | 0 | 750,000 | 0 |
 | R&D tax credit received | 0 | 4,500 | 9,500 |
-| Cash from sales | 11,988 | 185,808 | 699,280 |
-| **Total receipts** | **164,988** | **940,308** | **708,780** |
+| Cash from sales | 15,988 | 175,808 | 659,280 |
+| **Total receipts** | **171,988** | **930,308** | **668,780** |
 | Cost of sales | (1,440) | (15,600) | (54,000) |
 | Payroll (incl. NI, pension, benefits) | (20,340) | (180,680) | (437,660) |
 | Marketing | (3,600) | (28,000) | (92,000) |
@@ -444,16 +446,16 @@ The forecast reflects customer-acquisition numbers directly: 0.5 average paying 
 | Business support / misc | (1,200) | (3,600) | (9,000) |
 | Fixed assets & R&D capex | (900) | (3,000) | (9,000) |
 | **Total expenditure** | **(30,960)** | **(250,080)** | **(642,260)** |
-| **Net cash movement** | **134,028** | **690,228** | **66,520** |
-| **Closing cash balance** | **134,028** | **824,256** | **890,776** |
+| **Net cash movement** | **141,028** | **680,228** | **26,520** |
+| **Closing cash balance** | **141,028** | **821,256** | **847,776** |
 
 ### 12.2 Year 1 monthly cash flow — the critical view
 
 The monthly Y1 schedule (financial workbook, sheet "Cash Flow Y1 (mo)") shows **positive closing cash in every single month**:
 
-- **M1–M6 (Jun–Nov 2026):** operating burn of ≈£750–£1,400/month, funded entirely by the £6,000 founder injection. No founder salary. The 12-week Bedfordshire pilot runs Sep–Nov 2026 (M4–M6).
+- **M1–M6 (Jun–Nov 2026):** operating burn of ≈£350–£1,500/month, funded entirely by the £6,000 founder injection. No founder salary. The 12-week Bedfordshire pilot runs Sep–Nov 2026 (M4–M6).
 - **M7 (Dec 2026):** the **£150,000 pre-seed bridge lands**, timed with pilot-conversion conversations opening.
-- **M7–M12 (Dec 2026–May 2027):** founders draw £1,500/month each; total burn rises to ≈£5,500/month — comfortably within pre-seed runway.
+- **M7–M12 (Dec 2026–May 2027):** founders draw £1,500/month each; total burn rises to ≈£4,500/month — comfortably within pre-seed runway.
 
 For endorsement purposes this is the strongest viability evidence in the plan: the business survives its pre-revenue phase on £6,000 with positive month-end balances throughout, and every subsequent funding event is sequenced to a delivered milestone rather than hope.
 
@@ -463,9 +465,9 @@ For endorsement purposes this is the strongest viability evidence in the plan: t
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | 11,988 | 185,808 | 699,280 |
+| Revenue | 15,988 | 175,808 | 659,280 |
 | Cost of sales | (1,440) | (15,600) | (54,000) |
-| **Gross profit** | **10,548** | **170,208** | **645,280** |
+| **Gross profit** | **14,548** | **160,208** | **605,280** |
 | Salaries | (18,000) | (156,000) | (372,000) |
 | Employer NI | (1,200) | (14,000) | (38,500) |
 | Employer pension (3%) | (540) | (4,680) | (11,160) |
@@ -477,13 +479,13 @@ For endorsement purposes this is the strongest viability evidence in the plan: t
 | Insurance | (480) | (1,800) | (3,200) |
 | Business support / misc | (1,200) | (3,600) | (9,000) |
 | **Total overheads** | **(28,620)** | **(231,480)** | **(579,260)** |
-| **EBITDA** | **(18,072)** | **(61,272)** | **66,020** |
+| **EBITDA** | **(14,072)** | **(71,272)** | **26,020** |
 | Depreciation & amortisation | (300) | (1,500) | (4,500) |
-| **Operating profit / (loss)** | **(18,372)** | **(62,772)** | **61,520** |
+| **Operating profit / (loss)** | **(14,372)** | **(72,772)** | **21,520** |
 | Corporation tax | 0 | 0 | 0 |
-| **Profit / (loss) after tax** | **(18,372)** | **(62,772)** | **61,520** |
+| **Profit / (loss) after tax** | **(14,372)** | **(72,772)** | **21,520** |
 
-**Operating profit turns positive in Q3 Y3.** Y1 overheads are deliberately lean — ~70% below a conventional funded-startup cost base — because of the NatWest in-kind support and zero-salary founder period.
+**Operating profit turns positive in Q4 Y3.** Y1 overheads are deliberately lean — ~70% below a conventional funded-startup cost base — because of the NatWest in-kind support and zero-salary founder period.
 
 ---
 
@@ -492,16 +494,16 @@ For endorsement purposes this is the strongest viability evidence in the plan: t
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
 | Fixed assets (net) | 600 | 2,100 | 6,900 |
-| Cash at bank | 134,028 | 824,256 | 890,776 |
+| Cash at bank | 141,028 | 821,256 | 847,776 |
 | Trade receivables | 800 | 6,200 | 22,000 |
 | Stock / inventory | 0 | 0 | 0 |
-| **Total assets** | **135,428** | **832,556** | **919,676** |
+| **Total assets** | **142,428** | **829,556** | **876,676** |
 | Trade payables | (1,400) | (4,200) | (9,800) |
-| **Net assets** | **134,028** | **828,356** | **909,876** |
+| **Net assets** | **141,028** | **825,356** | **866,876** |
 | Share capital | 3,000 | 3,000 | 3,000 |
-| Share premium | 149,400 | 898,800 | 898,800 |
-| Profit & loss reserve | (18,372) | (81,144) | (19,624) |
-| **Shareholders' funds** | **134,028** | **820,656** | **882,176** |
+| Share premium | 150,000 | 900,000 | 900,000 |
+| Profit & loss reserve | (14,372) | (87,144) | (65,624) |
+| **Shareholders' funds** | **138,628** | **815,856** | **837,376** |
 
 (Minor rounding differences are reconciled in the financial workbook, Appendix F.)
 
@@ -524,7 +526,7 @@ DEQUAD is a pure software business and **holds no inventory**. Stock is **£0** 
 | Google Search ads | £300 | £3,000 | £10,000 |
 | Student ambassador programme | £900 | £4,000 | £16,000 |
 | **Total** | **£3,600** | **£28,000** | **£92,000** |
-| Marketing as % of revenue | 30% | 15% | 13% |
+| Marketing as % of revenue | 23% | 16% | 14% |
 
 CAC compresses as the brand matures and network effects compound: institutional CAC falls from £3,600 (Y1) to £1,200 (Y3); premium-student CAC falls from £4.50 to £2.10.
 

@@ -159,7 +159,7 @@ def sheet_readme(wb):
 # ============================================================
 PL = {
     # Revenue
-    "rev_uni":     (6_000, 90_000, 320_000),    # Y1 1 paid (Q4), Y2 6, Y3 20
+    "rev_uni":     (10_000, 80_000, 280_000),   # £2/enrolled student/yr × 10k avg students × 0.5 / 4 / 14 institutions
     "rev_premium": (5_988, 95_808, 359_280),    # 100 / 1,600 / 6,000 avg subs
     "rev_icb":     (0, 0, 20_000),
 
@@ -403,7 +403,7 @@ def sheet_cf_monthly(wb):
         r += 1
     ws.cell(row=r+1, column=1,
             value="Cash is positive every month: the £3,000 founder equity covers operating costs "
-                  "until the pre-seed bridge lands in M7 (September). Q1 marketing spend is intentionally "
+                  "until the pre-seed bridge lands in M7 (December). Q1 marketing spend is intentionally "
                   "£0 — early traction is from founder-led university outreach and the existing beta cohort.").font = italic_small
     ws.merge_cells(start_row=r+1, start_column=1, end_row=r+1, end_column=14)
 
@@ -493,7 +493,9 @@ def sheet_w1(wb):
         ("Service 1 — University SaaS subscription", None, "sub"),
         ("Paying institutions (avg active during year)", [0.5, 4, 14], False),
         ("Paying institutions (end of year)", [1, 6, 20], False),
-        ("Average contract value (£/yr)", [12_000, 14_000, 16_000], False),
+        ("Price per enrolled student (£/yr)", [2, 2, 2], False),
+        ("Average enrolled students per institution", [10_000, 10_000, 10_000], False),
+        ("Average contract value (£/yr)", [20_000, 20_000, 20_000], False),
         ("Subtotal revenue", PL["rev_uni"], "total"),
         ("", None, False),
         ("Service 2 — DEQUAD Premium (B2C)", None, "sub"),

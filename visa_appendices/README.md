@@ -123,7 +123,7 @@ pdfunite /app/INNOVATOR_VISA_DEQUAD.pdf /app/visa_appendices/A_*.pdf /app/visa_a
 
 UKES assessors are quick to reject applications that look "AI-generated startup hype". The package above is deliberately:
 
-- **Conservative on numbers** — £4.6m ARR by Y5 is below what a comparable SaaS would project; chosen for credibility, not aspirational drama.
+- **Conservative on numbers** — £3.6m ARR by Y5 is below what a comparable SaaS would project; chosen for credibility, not aspirational drama.
 - **Specific on UK regulation** — references OfS B3, OSA 2023 schedules, DPA 2018 Sch 1, NICE NG133, NHS DSPT, Cyber Essentials Plus. These are the touch-points UKES expects.
 - **Honest about what's not done** — DPO not yet appointed, external OSA opinion not yet commissioned, formal LOIs not yet collected. All flagged as "ETA Month N post-endorsement" rather than hidden.
 - **Verifiable** — the live product at `dequad.co.uk` is the strongest credibility signal an Innovator Founder can present. Mention it everywhere.

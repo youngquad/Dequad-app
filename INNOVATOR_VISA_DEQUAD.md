@@ -270,7 +270,7 @@ DEQUAD is **infrastructure-light by design**:
 
 - **Target:** 25 partner universities by end of Year 2
 - **Cohort coverage:** ~250,000 verified students (≈9% of UK HE population)
-- **Revenue model:** Institutional subscription, £1.50 / student / year (priced below cost of equivalent in-house counselling expansion)
+- **Revenue model:** Institutional subscription, £2 / student / year (priced below cost of equivalent in-house counselling expansion)
 - **Channel:** Direct sales to Heads of Student Services; partnerships with UUK, AMOSSHE (Student Services Organisation), HE Mental Health Charter network
 
 #### Horizon 2 — UK NHS & Public Sector (Years 2–4)
@@ -304,13 +304,13 @@ All hires will be UK-based and contribute to UK PAYE/NI. Job descriptions, salar
 
 | Year | Universities | Students reached | Institutional ARR | Premium ARR | Total Revenue |
 |---|---|---|---|---|---|
-| Y1 | 3 | 15,000 | £22,500 | £0 | £22,500 |
-| Y2 | 10 | 80,000 | £120,000 | £30,000 | £150,000 |
-| Y3 | 25 | 200,000 | £450,000 | £150,000 | £600,000 |
-| Y4 | 50 + 2 ICBs | 500,000 | £1,350,000 | £450,000 | £1,800,000 |
-| Y5 | 100 + 5 ICBs + 10 intl | 1,200,000 | £3,400,000 | £1,200,000 | £4,600,000 |
+| Y1 | 3 | 15,000 | £30,000 | £0 | £30,000 |
+| Y2 | 10 | 80,000 | £160,000 | £30,000 | £190,000 |
+| Y3 | 25 | 200,000 | £400,000 | £150,000 | £550,000 |
+| Y4 | 50 + 2 ICBs | 500,000 | £1,000,000 | £450,000 | £1,450,000 |
+| Y5 | 100 + 5 ICBs + 10 intl | 1,200,000 | £2,400,000 | £1,200,000 | £3,600,000 |
 
-Assumptions are documented in Appendix F. The model breaks even in Q3 of Year 3 and is cash-positive thereafter.
+Assumptions are documented in Appendix F. The model reaches operating break-even in Q4 of Year 3 and is cash-positive thereafter.
 
 ---
 
@@ -320,11 +320,11 @@ Assumptions are documented in Appendix F. The model breaks even in Q3 of Year 3 
 
 | Segment | Population | Spend / unit / year | TAM |
 |---|---|---|---|
-| UK HE students (institutional) | 2.86m | £1.50 | £4.3m |
+| UK HE students (institutional) | 2.86m | £2.00 | £5.7m |
 | UK FE college students | 1.6m | £1.20 | £1.9m |
 | NHS 16–25 wellbeing commissioning | ~12m people 16–25 in UK | £0.40 (per-engaged) | £4.8m |
-| International HE (Phase 3 markets only) | ~5.5m | £1.50 | £8.3m |
-| **Combined TAM** | | | **~£19.3m** |
+| International HE (Phase 3 markets only) | ~5.5m | £2.00 | £11.0m |
+| **Combined TAM** | | | **~£23.4m** |
 
 ### 8.2 Serviceable obtainable market (SOM)
 
@@ -366,7 +366,7 @@ A realistic 5-year SOM, capturing **15% of UK HE + 5% of NHS ICB**, equals **~£
 
 | Stream | Description | Pricing | % of Year 5 revenue |
 |---|---|---|---|
-| **Institutional subscription** | University pays per enrolled student per year | £1.50 / student / year | 65% |
+| **Institutional subscription** | University pays per enrolled student per year | £2 / student / year | 65% |
 | **NHS ICB commissioning** | ICB pays per engaged 16–25 user | £8 / engaged user / year | 15% |
 | **Student Premium (optional)** | Advanced filters, group events, deeper analytics | £2.99 / month, £19.99 / year | 12% |
 | **Anonymised research data licence** | Aggregated mental-health trends for research bodies (NIHR, MQ Mental Health) under ethics review | £25k–£75k per project | 6% |
@@ -398,7 +398,7 @@ _Summary; full P&L, cashflow, and balance sheet in Appendix F._
 | Cumulative cash | (161) | (458) | (686) | (390) | 1,462 |
 | Headcount (FTE) | 4 | 10 | 19 | 30 | 42 |
 
-**Break-even:** Q3 Year 3
+**Break-even:** Q4 Year 3
 **Funding required to break-even:** ~£900k (mix of founder, grant, seed)
 
 ---
@@ -552,7 +552,7 @@ Because students are end-users but universities are paying customers, marketing 
 | Safeguarding escalations | Confirmed high-risk events triaged | 100% within SLA |
 | Net Promoter Score (students) | Standard NPS | > 40 |
 | Net Promoter Score (universities) | Standard NPS | > 50 |
-| Annual recurring revenue | ARR | £22,500 |
+| Annual recurring revenue | ARR | £30,000 |
 
 ---
 

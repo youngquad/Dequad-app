@@ -10,14 +10,14 @@
 |---|---|
 | Founder capital invested | **£6,000** total — **£3,000 each** founder, evidenced by Form SH01 at incorporation |
 | Business start date | **15 June 2026** (incorporation; trading month M1 = June 2026) |
-| Revenue forecast | Y1 **£11,988** → Y2 **£185,808** → Y3 **£699,280** |
-| University price point | From **£12,000/yr** SaaS (vs Togetherall ~£40k, TalkCampus ~£25k) |
+| Revenue forecast | Y1 **£15,988** → Y2 **£175,808** → Y3 **£659,280** |
+| University price point | **£2 per enrolled student per year** (10k-student uni = £20,000/yr; Togetherall ~£40k flat, TalkCampus ~£25k) |
 | Premium price | **£4.99/month** via Stripe — live and processing today |
-| Gross margin | 88% (Y1) → **92.3% (Y3)** |
+| Gross margin | 91% (Y1) → **91.8% (Y3)** |
 | Pre-seed raise | **£150,000 in Dec 2026 (M7)** at £1.2m post-money (12.5%) — timed AFTER pilot completes |
 | Seed raise | **£750,000, Q2 Y2** at £6m post |
 | Pilot dates | **Sep–Nov 2026 (M4–M6)**, 12-week no-fee pilot at University of Bedfordshire; conversion talks from **Dec 2026 (M7)** |
-| Profitability | Operating profit positive from **Q3 Year 3** (£61,520 Y3 operating profit) |
+| Profitability | Operating profit positive from **Q4 Year 3** (£21,520 Y3 operating profit) |
 | UK jobs | **2 → 6 → 12** across three years, all UK-based, EMI options |
 | Market size | TAM **£86m/yr** UK · SAM **£28m** · SOM **£3.4m ARR by Y5** |
 | In-kind support | NatWest Accelerator: **£31,100/yr** (office, legal, accountancy) — why £6k lasts 6 months |

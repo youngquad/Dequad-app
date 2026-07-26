@@ -33,7 +33,7 @@ I am writing to formally submit my application for an **Innovator Founder endors
 
 2. **Viability.** The MVP is already live in production with ~50 beta users across three UK universities. The safeguarding pipeline was designed by the lead applicant, a practising safeguarding professional — currently a Recovery Coordinator at Change Grow Live (safeguarding referrals, dynamic risk assessment, multi-agency working) with concurrent NHS mental-health experience at East London NHS Foundation Trust. The first commercial pilot is the **University of Bedfordshire** — a 12-week (3-month) pilot launching in **September 2026 (M4)** and completing in **November 2026 (M6)**, with paid-conversion conversations opening in **December 2026 (M7)**. Year-1 cash flow remains positive every single month on a £6,000 founder-capital base, supported by £31,000 of in-kind benefits from the NatWest Accelerator (London).
 
-3. **Scalability.** Three-year UK revenue forecast £12k → £186k → £699k, growing to 12 UK FTE by Year 3 and approaching 30+ FTE following the Year-2 seed round. The business model is software-only (92% gross margin by Year 3) and addresses a £28m UK SAM expanding to £180m TAM internationally post-Year 3.
+3. **Scalability.** Three-year UK revenue forecast £16k → £176k → £659k, growing to 12 UK FTE by Year 3 and approaching 30+ FTE following the Year-2 seed round. University pricing is a simple **£2 per enrolled student per year** — roughly half the effective per-student cost of the closest incumbent. The business model is software-only (~92% gross margin by Year 3) and addresses a £28m UK SAM expanding to £180m TAM internationally post-Year 3.
 
 ### Document pack enclosed
 

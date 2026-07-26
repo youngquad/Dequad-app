@@ -6,7 +6,7 @@
 **Live product:** https://dequad.co.uk
 **Date:** ___________________
 
-> **The 60-second read:** DEQUAD is the only UK platform combining `.ac.uk`-verified peer matching, per-user wellbeing baselines, and safeguarding-led messaging. Built end-to-end by a single founder to a live, working product. Two-sided business model — free for students, paid by universities. 5-year plan: 100 partner universities, 42 UK jobs, £4.6m ARR, break-even Q3 Y3.
+> **The 60-second read:** DEQUAD is the only UK platform combining `.ac.uk`-verified peer matching, per-user wellbeing baselines, and safeguarding-led messaging. Built end-to-end by a single founder to a live, working product. Two-sided business model — free for students, paid by universities. 5-year plan: 100 partner universities, 42 UK jobs, £3.6m ARR, break-even Q4 Y3.
 
 ---
 
@@ -20,7 +20,7 @@
 2. **Daily 10-second mood check-in** building a per-user wellbeing baseline.
 3. **Safeguarding-led messaging** with real-time crisis-keyword scanning + escalation to a trained DSL.
 
-**The business model.** Free for students. Universities pay £1.50–£2.80 per student per year — **below the cost of expanding in-house counselling**. NHS ICB commissioning from Year 3.
+**The business model.** Free for students. Universities pay **£2 per student per year** — **below the cost of expanding in-house counselling**. NHS ICB commissioning from Year 3.
 
 **The ask.** Endorsement under the Innovator Founder route to formally launch DEQUAD Ltd from a UK base, hire 42 UK FTE over 5 years, and deliver measurable mental-health outcomes for UK university students.
 
@@ -155,9 +155,9 @@ These targets align with **JISC HE procurement-cycle data** (4–6 month decisio
 | EBITDA | (193) | (494) | (648) | (180) | 2,194 |
 | Cumulative cash | (197) | (699) | (1,393) | (1,663) | **+386** |
 
-**Break-even: Q3 Year 3.** Total funding to break-even: **~£900k**.
+**Break-even: Q4 Year 3.** Total funding to break-even: **~£900k**.
 
-**Pricing rationale:** £1.50–£2.80 per student per year sits below the cost of expanding in-house counselling (typically £40+ per student equivalent). Validated against JISC 2024 HE procurement data.
+**Pricing rationale:** £2 per student per year sits below the cost of expanding in-house counselling (typically £40+ per student equivalent). Validated against JISC 2024 HE procurement data.
 
 **Premium subscriber conversion:** modelled at 3–5% of verified base — below Calm (5.7%) and Headspace (4.2%) consumer benchmarks (conservative).
 
@@ -265,10 +265,10 @@ The applicant commits to deliver and evidence the following by the **12-month UK
 |---|---|
 | Innovation (genuine, original, market-need) | ✅ Only UK product combining verified peer matching + wellbeing baseline + institutional safeguarding |
 | Viability (founder skills, resources, plan) | ✅ Live product built end-to-end; conservative funding plan; first university conversation opened |
-| Scalability (national + international growth, UK jobs) | ✅ 3-horizon plan UK→NHS→International; 42 UK FTE; £4.6m ARR by Y5 |
+| Scalability (national + international growth, UK jobs) | ✅ 3-horizon plan UK→NHS→International; 42 UK FTE; £3.6m ARR by Y5 |
 | Genuine UK base | ✅ Founder commitment signed; UK-only operations; UK PAYE for all hires |
 | Public benefit | ✅ Free for students; aligns with OfS B3, HE Mental Health Charter, NHS Long Term Plan |
-| Realism of plan | ✅ Conservative pricing, conservative conversion, break-even modelled to Q3 Y3 (not Y1) |
+| Realism of plan | ✅ Conservative pricing, conservative conversion, break-even modelled to Q4 Y3 (not Y1) |
 
 ---
 

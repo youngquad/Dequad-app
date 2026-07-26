@@ -32,8 +32,8 @@ A short summary of the business:
 
 - **Live, working product** at https://dequad.co.uk (FastAPI backend, React Native / Expo native + web frontends, MongoDB persistence). I have built the platform end-to-end as sole technical founder.
 - **Verified-student peer network** (`.ac.uk` email gate), per-user wellbeing baseline detection, safeguarding pipeline with escalation to a Designated Safeguarding Lead, and 24/7 support chat.
-- **Two-sided business model:** free for students, paid by universities (£1.50–£2.80 per student per year) and NHS Integrated Care Boards from Year 3.
-- **5-year UK plan:** 100 partner universities, 42 UK FTE jobs created, break-even Q3 Year 3.
+- **Two-sided business model:** free for students, paid by universities (£2 per student per year) and NHS Integrated Care Boards from Year 3.
+- **5-year UK plan:** 100 partner universities, 42 UK FTE jobs created, break-even Q4 Year 3.
 
 A full endorsement submission document plus 13 supporting appendices is ready to share.
 
