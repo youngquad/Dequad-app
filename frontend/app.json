@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.dequad.wellbeing",
-      "versionCode": 3,
+      "versionCode": 8,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
@@ -41,7 +41,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {}
-    }
+      "router": {},
+      "eas": {
+        "projectId": "6f957baf-c80f-4809-b784-8306c547529b"
+      }
+    },
+    "owner": "youngquad"
   }
 }
