@@ -44,9 +44,8 @@ const FEATURES = [
 
 export default function LandingScreen() {
   const router = useRouter();
-  const { isLoading, login } = useAuth();
-  const [isSigningIn, setIsSigningIn] = React.useState(false);
-  
+  const { isLoading } = useAuth();
+
   // Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -102,15 +101,11 @@ export default function LandingScreen() {
     }).start();
   };
 
-  const handleLogin = async () => {
-    setIsSigningIn(true);
-    try {
-      await login();
-    } catch (error) {
-      console.error('Login error:', error);
-    } finally {
-      setIsSigningIn(false);
-    }
+  // Route to the in-app login screen which offers BOTH Google sign-in and
+  // email + password (sign-in or sign-up) — mirrors the web landing page fix,
+  // which previously had this same "Google only" bug (see index.web.tsx).
+  const handleGetStarted = () => {
+    router.push('/(auth)/login' as any);
   };
 
   if (isLoading) {
@@ -206,8 +201,7 @@ export default function LandingScreen() {
           <Pressable
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
-            onPress={handleLogin}
-            disabled={isSigningIn || isLoading}
+            onPress={handleGetStarted}
           >
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
               <LinearGradient
@@ -216,15 +210,8 @@ export default function LandingScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.loginButton}
               >
-                {isSigningIn || isLoading ? (
-                  <ActivityIndicator color="#fff" size="small" />
-                ) : (
-                  <>
-                    <Ionicons name="logo-google" size={22} color="#fff" />
-                    <Text style={styles.loginButtonText}>Continue with Google</Text>
-                    <Ionicons name="arrow-forward" size={20} color="#fff" />
-                  </>
-                )}
+                <Text style={styles.loginButtonText}>Get Started</Text>
+                <Ionicons name="arrow-forward" size={20} color="#fff" />
               </LinearGradient>
             </Animated.View>
           </Pressable>
