@@ -7,9 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "dequad",
     "userInterfaceStyle": "light",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.2.0",
     "updates": {
       "url": "https://u.expo.dev/0ad6a13c-845f-4ab4-9177-ba5031d2462d",
       "enabled": true,
@@ -31,7 +29,7 @@
     },
     "android": {
       "package": "com.dequad.wellbeing",
-      "versionCode": 8,
+      "versionCode": 12,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"

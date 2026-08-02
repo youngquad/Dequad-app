@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C7A29CD89187E99E173C366 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C7743119207DAFA1A02FFB68 /* PrivacyInfo.xcprivacy */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		33BB3BA9BF730C89C6246055 /* libPods-DEQUAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146999AE1135022C9F7525BE /* libPods-DEQUAD.a */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		822283226C37C9D8376F3A9B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FA247540F0BE9866526EDCB7 /* PrivacyInfo.xcprivacy */; };
-		A0A08477C2BD1E2EC7C42840 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092179EADB570DA2BC272B34 /* ExpoModulesProvider.swift */; };
+		9F776933696F8623A4946EFA /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E29832C8CAF8776E302F2A /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		E46BA416E170DFB28587BCB0 /* libPods-DEQUAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FC001534D243FC804DDB435 /* libPods-DEQUAD.a */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		092179EADB570DA2BC272B34 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-DEQUAD/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		0BE8962AF72D34A7955841CA /* Pods-DEQUAD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DEQUAD.debug.xcconfig"; path = "Target Support Files/Pods-DEQUAD/Pods-DEQUAD.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* DEQUAD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DEQUAD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DEQUAD/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DEQUAD/Info.plist; sourceTree = "<group>"; };
-		146999AE1135022C9F7525BE /* libPods-DEQUAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DEQUAD.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5AC391B48FD291360D7F5D23 /* Pods-DEQUAD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DEQUAD.release.xcconfig"; path = "Target Support Files/Pods-DEQUAD/Pods-DEQUAD.release.xcconfig"; sourceTree = "<group>"; };
+		1FC001534D243FC804DDB435 /* libPods-DEQUAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DEQUAD.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		74E29832C8CAF8776E302F2A /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-DEQUAD/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = DEQUAD/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		C7743119207DAFA1A02FFB68 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = DEQUAD/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EDED4FE71175221788AB0E45 /* Pods-DEQUAD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DEQUAD.debug.xcconfig"; path = "Target Support Files/Pods-DEQUAD/Pods-DEQUAD.debug.xcconfig"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = DEQUAD/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* DEQUAD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "DEQUAD-Bridging-Header.h"; path = "DEQUAD/DEQUAD-Bridging-Header.h"; sourceTree = "<group>"; };
-		FA247540F0BE9866526EDCB7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = DEQUAD/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		F321C7E95E91442BFD4F8F6D /* Pods-DEQUAD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DEQUAD.release.xcconfig"; path = "Target Support Files/Pods-DEQUAD/Pods-DEQUAD.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33BB3BA9BF730C89C6246055 /* libPods-DEQUAD.a in Frameworks */,
+				E46BA416E170DFB28587BCB0 /* libPods-DEQUAD.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				FA247540F0BE9866526EDCB7 /* PrivacyInfo.xcprivacy */,
+				C7743119207DAFA1A02FFB68 /* PrivacyInfo.xcprivacy */,
 			);
 			name = DEQUAD;
 			sourceTree = "<group>";
@@ -62,19 +62,17 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				146999AE1135022C9F7525BE /* libPods-DEQUAD.a */,
+				1FC001534D243FC804DDB435 /* libPods-DEQUAD.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		773098D8E972DBEB7E9581C9 /* Pods */ = {
+		4AA92190BD4C443D925E41F8 /* DEQUAD */ = {
 			isa = PBXGroup;
 			children = (
-				EDED4FE71175221788AB0E45 /* Pods-DEQUAD.debug.xcconfig */,
-				5AC391B48FD291360D7F5D23 /* Pods-DEQUAD.release.xcconfig */,
+				74E29832C8CAF8776E302F2A /* ExpoModulesProvider.swift */,
 			);
-			name = Pods;
-			path = Pods;
+			name = DEQUAD;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -91,8 +89,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				773098D8E972DBEB7E9581C9 /* Pods */,
-				C531EFD28C3B2A2873E4EFAE /* ExpoModulesProviders */,
+				AA9DF8724BF0E637A3F225A1 /* Pods */,
+				BD28114800258F54E618E20E /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -107,6 +105,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		AA9DF8724BF0E637A3F225A1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0BE8962AF72D34A7955841CA /* Pods-DEQUAD.debug.xcconfig */,
+				F321C7E95E91442BFD4F8F6D /* Pods-DEQUAD.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,20 +124,12 @@
 			path = DEQUAD/Supporting;
 			sourceTree = "<group>";
 		};
-		C531EFD28C3B2A2873E4EFAE /* ExpoModulesProviders */ = {
+		BD28114800258F54E618E20E /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				D5DAD2A6EB5D2497BC1FEF4B /* DEQUAD */,
+				4AA92190BD4C443D925E41F8 /* DEQUAD */,
 			);
 			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		D5DAD2A6EB5D2497BC1FEF4B /* DEQUAD */ = {
-			isa = PBXGroup;
-			children = (
-				092179EADB570DA2BC272B34 /* ExpoModulesProvider.swift */,
-			);
-			name = DEQUAD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "DEQUAD" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				E52039EE0279911666626C2E /* [Expo] Configure project */,
+				A3873DC11F5596D2B498F2C9 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				CFBE1B885988403B6E2C347C /* [CP] Embed Pods Frameworks */,
+				96EF70D343CC95B81283CF61 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				822283226C37C9D8376F3A9B /* PrivacyInfo.xcprivacy in Resources */,
+				0C7A29CD89187E99E173C366 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,7 +302,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DEQUAD/Pods-DEQUAD-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CFBE1B885988403B6E2C347C /* [CP] Embed Pods Frameworks */ = {
+		96EF70D343CC95B81283CF61 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -324,7 +324,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DEQUAD/Pods-DEQUAD-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E52039EE0279911666626C2E /* [Expo] Configure project */ = {
+		A3873DC11F5596D2B498F2C9 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -356,7 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				A0A08477C2BD1E2EC7C42840 /* ExpoModulesProvider.swift in Sources */,
+				9F776933696F8623A4946EFA /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +365,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EDED4FE71175221788AB0E45 /* Pods-DEQUAD.debug.xcconfig */;
+			baseConfigurationReference = 0BE8962AF72D34A7955841CA /* Pods-DEQUAD.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -401,7 +401,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5AC391B48FD291360D7F5D23 /* Pods-DEQUAD.release.xcconfig */;
+			baseConfigurationReference = F321C7E95E91442BFD4F8F6D /* Pods-DEQUAD.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
