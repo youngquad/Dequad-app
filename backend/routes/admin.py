@@ -85,6 +85,206 @@ async def get_admin_stats(admin: User = Depends(require_admin)):
     }
 
 
+# ==================== GROWTH ANALYTICS ====================
+
+@router.get("/admin/growth-analytics")
+async def get_growth_analytics(admin: User = Depends(require_admin)):
+    """Deck-worthy growth metrics: DAU, retention, mood-completion, signups.
+
+    Real users only — excludes seeded demo profiles (``hidden_from_discovery``)
+    and non-student roles so the numbers match what you'd tell an investor or a
+    UKES endorser. All figures use UTC day boundaries.
+    """
+    now = datetime.now(timezone.utc)
+    today = datetime(now.year, now.month, now.day, tzinfo=timezone.utc)
+
+    def _day(offset_days: int) -> datetime:
+        return today - timedelta(days=offset_days)
+
+    # Real, non-hidden students form the denominator for every rate below.
+    real_student_filter = {
+        "role": "student",
+        "hidden_from_discovery": {"$ne": True},
+    }
+    total_students = await db.users.count_documents(real_student_filter)
+
+    # Set of real user_ids used to filter session/mood aggregations to real users.
+    real_ids_docs = await db.users.find(real_student_filter, {"_id": 0, "user_id": 1}).to_list(100000)
+    real_ids = [d["user_id"] for d in real_ids_docs]
+    real_ids_set = set(real_ids)
+
+    # ---------- Daily Active Users (last 30 days) ----------
+    # DAU = unique real users with any session created that UTC day.
+    thirty_days_ago = _day(29)
+    session_pipeline = [
+        {"$match": {
+            "created_at": {"$gte": thirty_days_ago},
+            "user_id": {"$in": real_ids},
+        }},
+        {"$group": {
+            "_id": {
+                "day": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}},
+                "user_id": "$user_id",
+            }
+        }},
+        {"$group": {"_id": "$_id.day", "active_users": {"$sum": 1}}},
+        {"$sort": {"_id": 1}},
+    ]
+    dau_by_day_raw = await db.user_sessions.aggregate(session_pipeline).to_list(60)
+    dau_by_day = {row["_id"]: row["active_users"] for row in dau_by_day_raw}
+    dau_series = []
+    for i in range(29, -1, -1):
+        d = _day(i).strftime("%Y-%m-%d")
+        dau_series.append({"date": d, "active_users": dau_by_day.get(d, 0)})
+
+    # Rolling averages for context
+    last_7d_dau = [x["active_users"] for x in dau_series[-7:]]
+    last_28d_dau = [x["active_users"] for x in dau_series[-28:]] or [0]
+    avg_dau_7d = round(sum(last_7d_dau) / max(1, len(last_7d_dau)), 1)
+    avg_dau_28d = round(sum(last_28d_dau) / max(1, len(last_28d_dau)), 1)
+    stickiness = round((avg_dau_7d / avg_dau_28d) * 100, 1) if avg_dau_28d > 0 else 0.0
+
+    # ---------- Signups (last 30 days) ----------
+    signup_pipeline = [
+        {"$match": {
+            **real_student_filter,
+            "created_at": {"$gte": thirty_days_ago},
+        }},
+        {"$group": {
+            "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}},
+            "new_signups": {"$sum": 1},
+        }},
+        {"$sort": {"_id": 1}},
+    ]
+    signup_raw = await db.users.aggregate(signup_pipeline).to_list(60)
+    signup_by_day = {row["_id"]: row["new_signups"] for row in signup_raw}
+    signup_series = []
+    for i in range(29, -1, -1):
+        d = _day(i).strftime("%Y-%m-%d")
+        signup_series.append({"date": d, "new_signups": signup_by_day.get(d, 0)})
+
+    signups_this_week = sum(x["new_signups"] for x in signup_series[-7:])
+    signups_last_week = sum(x["new_signups"] for x in signup_series[-14:-7])
+    growth_pct = (
+        round(((signups_this_week - signups_last_week) / signups_last_week) * 100, 1)
+        if signups_last_week > 0 else None
+    )
+
+    # ---------- Mood-check completion ----------
+    # % of real students who logged at least one mood entry in the window.
+    def _pct(numerator: int) -> float:
+        return round((numerator / total_students) * 100, 1) if total_students > 0 else 0.0
+
+    mood_7d = await db.mood_entries.distinct(
+        "user_id",
+        {"created_at": {"$gte": _day(6)}, "user_id": {"$in": real_ids}},
+    )
+    mood_30d = await db.mood_entries.distinct(
+        "user_id",
+        {"created_at": {"$gte": _day(29)}, "user_id": {"$in": real_ids}},
+    )
+    mood_completion = {
+        "last_7d_users": len(mood_7d),
+        "last_7d_percentage": _pct(len(mood_7d)),
+        "last_30d_users": len(mood_30d),
+        "last_30d_percentage": _pct(len(mood_30d)),
+    }
+
+    # ---------- Retention (cohort-based, real users only) ----------
+    # For each user who signed up ≥ N days ago, did they open the app on
+    # exactly day N+1? We approximate "open" as any session created that day.
+    async def _retention_for(n_days: int, window_days: int = 30) -> dict:
+        cohort_start = _day(window_days + n_days)
+        cohort_end = _day(n_days)  # signups older than N days ago but within window
+        cohort = await db.users.find(
+            {
+                **real_student_filter,
+                "created_at": {"$gte": cohort_start, "$lt": cohort_end},
+            },
+            {"_id": 0, "user_id": 1, "created_at": 1},
+        ).to_list(10000)
+        if not cohort:
+            return {"cohort_size": 0, "returned": 0, "rate_pct": 0.0}
+        cohort_ids = [u["user_id"] for u in cohort]
+        # A user is retained if they have a session between (signup + N days)
+        # and (signup + N + 1 days). We use a simpler approximation: session on
+        # the calendar day N days after signup (UTC).
+        retained = 0
+        sessions_by_user = {}
+        cursor = db.user_sessions.find(
+            {"user_id": {"$in": cohort_ids}},
+            {"_id": 0, "user_id": 1, "created_at": 1},
+        )
+        async for s in cursor:
+            sessions_by_user.setdefault(s["user_id"], []).append(s["created_at"])
+        for u in cohort:
+            signup_day = u["created_at"]
+            target_start = signup_day + timedelta(days=n_days)
+            target_end = target_start + timedelta(days=1)
+            for ts in sessions_by_user.get(u["user_id"], []):
+                if target_start <= ts < target_end:
+                    retained += 1
+                    break
+        return {
+            "cohort_size": len(cohort),
+            "returned": retained,
+            "rate_pct": round((retained / len(cohort)) * 100, 1) if cohort else 0.0,
+        }
+
+    retention = {
+        "d1": await _retention_for(1),
+        "d7": await _retention_for(7),
+        "d30": await _retention_for(30, window_days=60),
+    }
+
+    # ---------- Active-now (last 24h) ----------
+    active_now = await db.user_sessions.distinct(
+        "user_id",
+        {"created_at": {"$gte": now - timedelta(hours=24)}, "user_id": {"$in": real_ids}},
+    )
+
+    # ---------- Engagement: matches, chats ----------
+    total_matches_accepted = await db.matches.count_documents({
+        "status": "accepted",
+        "user_id": {"$in": real_ids},
+    })
+    matches_last_7d = await db.matches.count_documents({
+        "status": "accepted",
+        "user_id": {"$in": real_ids},
+        "created_at": {"$gte": _day(6)},
+    })
+    chats_last_7d = await db.chat_messages.count_documents({
+        "sender_id": {"$in": real_ids},
+        "created_at": {"$gte": _day(6)},
+    })
+
+    # Reference to real_ids_set silences unused-variable analysers while
+    # documenting that we intentionally computed the set even though we use
+    # the list for $in clauses above.
+    _ = real_ids_set
+
+    return {
+        "generated_at": now.isoformat(),
+        "total_real_students": total_students,
+        "active_now_24h": len(active_now),
+        "dau_series": dau_series,
+        "avg_dau_7d": avg_dau_7d,
+        "avg_dau_28d": avg_dau_28d,
+        "stickiness_pct": stickiness,  # DAU/MAU proxy — >20% is world-class
+        "signup_series": signup_series,
+        "signups_this_week": signups_this_week,
+        "signups_last_week": signups_last_week,
+        "signup_growth_pct": growth_pct,
+        "mood_completion": mood_completion,
+        "retention": retention,
+        "engagement": {
+            "total_matches_accepted": total_matches_accepted,
+            "matches_last_7d": matches_last_7d,
+            "chat_messages_last_7d": chats_last_7d,
+        },
+    }
+
+
 # ==================== ADMIN USER MANAGEMENT ====================
 
 @router.get("/admin/reports")
@@ -103,7 +303,11 @@ async def block_user(user_id: str, admin: User = Depends(require_admin)):
 
 @router.get("/admin/users")
 async def get_all_users(admin: User = Depends(require_admin)):
-    users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    # Never expose password hashes / stripe IDs to admins — they don't need
+    # them and their staff sessions shouldn't carry that liability
+    # (SEC-audit P3, 2026-07).
+    _proj = {"_id": 0, "password_hash": 0, "admin_password": 0, "stripe_customer_id": 0, "push_token": 0}
+    users = await db.users.find({}, _proj).sort("created_at", -1).to_list(1000)
     return users
 
 
@@ -959,7 +1163,11 @@ async def get_at_risk_students(admin: User = Depends(require_admin)):
 
 @router.get("/admin/analytics/student/{user_id}")
 async def get_student_analytics(user_id: str, admin: User = Depends(require_admin)):
-    student = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    # Same projection as /admin/users — never hand secret fields back to any
+    # admin session, even for staff drill-down analytics (SEC-002 sibling
+    # fix, testing-agent iteration_11).
+    _proj = {"_id": 0, "password_hash": 0, "admin_password": 0, "stripe_customer_id": 0, "push_token": 0}
+    student = await db.users.find_one({"user_id": user_id}, _proj)
     if not student: raise HTTPException(status_code=404, detail="Student not found")
     engagement = await calculate_student_engagement(user_id)
     mood_history = await db.mood_entries.find({"user_id": user_id}, {"_id": 0}).sort("created_at", -1).to_list(30)

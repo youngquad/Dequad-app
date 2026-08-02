@@ -13,6 +13,43 @@ from config import FREE_LIKES_PER_WEEK
 router = APIRouter()
 
 
+# SEC-002 (2026-07): explicit allowlist of fields that are safe to return to
+# other users. Anything outside this set — password_hash, admin_password,
+# stripe_customer_id, raw email, push_token, session bookkeeping, precise GPS
+# location, is_demo_account, moderation notes, etc. — MUST NOT leak through
+# discover / likes-received / accepted-matches responses.
+#
+# Precise `location` (GeoJSON `{coordinates:[lng,lat]}`) is intentionally NOT
+# in this list. Callers get `distance_km` instead — rounded to 1 km — so a
+# malicious user cannot trilaterate someone's home from three swipes.
+PUBLIC_PROFILE_FIELDS = frozenset({
+    "user_id", "name", "age", "gender", "interested_in",
+    "university", "campus_name", "university_location", "city",
+    "course", "study_style", "education_level",
+    "bio", "interests",
+    "picture", "photos",
+    "match_score", "distance_km",
+    # Non-sensitive display metadata
+    "verified", "email_verified", "student_verification",
+    "is_premium", "subscription_status",
+})
+
+
+def _public_profile(user: dict) -> dict:
+    """Project a raw user document down to the safe public field set.
+
+    Also snaps ``distance_km`` to 1 km precision to reduce stalking surface
+    (SEC-audit P3: trilateration).
+    """
+    out = {k: user[k] for k in PUBLIC_PROFILE_FIELDS if k in user}
+    if isinstance(out.get("distance_km"), (int, float)):
+        # Round UP to the nearest kilometre — precise 100 m distances make it
+        # possible to trilaterate the target from a few swipes. Sub-1km
+        # results still render as "<1 km away" in the UI.
+        out["distance_km"] = max(1, round(out["distance_km"]))
+    return out
+
+
 def _week_start_iso(now: datetime = None) -> str:
     """Return the ISO Monday date (YYYY-MM-DD) for the week containing `now`."""
     now = now or datetime.now(timezone.utc)
@@ -82,13 +119,19 @@ async def discover_matches(
     university: Optional[str] = None,
     education_level: Optional[str] = None,
     city: Optional[str] = None,
+    max_distance_km: Optional[float] = None,
 ):
     """Return candidate profiles for the swipe deck.
 
     Premium-only filters: ``gender``, ``min_age``, ``max_age``, ``university``,
-    ``education_level``, ``city``. Non-premium users have these filters
-    silently ignored — surfaced as a paywall in the UI before they ever reach
-    this endpoint.
+    ``education_level``, ``city``, ``max_distance_km``. Non-premium users have
+    these filters silently ignored — surfaced as a paywall in the UI before they
+    ever reach this endpoint.
+
+    ``max_distance_km`` is applied via a MongoDB ``$geoNear`` aggregation on
+    the ``users.location`` 2dsphere index. When active, each returned profile
+    includes a ``distance_km`` field (rounded to 1 decimal). Requires the
+    current user to have their own ``location`` set.
     """
     if reset:
         await db.matches.delete_many(
@@ -101,7 +144,13 @@ async def discover_matches(
     swiped_ids = [s["matched_user_id"] for s in existing_swipes]
     swiped_ids.append(current_user.user_id)
 
-    query: dict = {"user_id": {"$nin": swiped_ids}, "role": "student"}
+    query: dict = {
+        "user_id": {"$nin": swiped_ids},
+        "role": "student",
+        # Seeded demo / founder personal accounts are hidden from real users'
+        # discover deck. Real users never have this flag set.
+        "hidden_from_discovery": {"$ne": True},
+    }
 
     # Premium gating — only apply filters if the user actually has premium.
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0}) or {}
@@ -136,7 +185,41 @@ async def discover_matches(
             query["age"] = age_clause
             filters_applied["age_range"] = [min_age, max_age]
 
-    potential_users = await db.users.find(query, {"_id": 0}).to_list(200)
+    # Distance filter — only if premium, user shared their location, and a
+    # radius was requested. Uses $geoNear to compute per-doc distance in
+    # metres, then converts to km and rounds.
+    my_location = user_doc.get("location") if is_premium else None
+    use_geo = (
+        is_premium
+        and max_distance_km is not None
+        and max_distance_km > 0
+        and isinstance(my_location, dict)
+        and isinstance(my_location.get("coordinates"), list)
+        and len(my_location["coordinates"]) == 2
+    )
+
+    if use_geo:
+        pipeline = [
+            {
+                "$geoNear": {
+                    "near": my_location,
+                    "distanceField": "_distance_m",
+                    "maxDistance": float(max_distance_km) * 1000.0,
+                    "spherical": True,
+                    "query": query,
+                }
+            },
+            {"$limit": 200},
+            {"$project": {"_id": 0}},
+        ]
+        potential_users = await db.users.aggregate(pipeline).to_list(200)
+        for u in potential_users:
+            m = u.pop("_distance_m", None)
+            if m is not None:
+                u["distance_km"] = round(m / 1000.0, 1)
+        filters_applied["max_distance_km"] = max_distance_km
+    else:
+        potential_users = await db.users.find(query, {"_id": 0}).to_list(200)
 
     current_user_dict = current_user.dict()
     scored_users = []
@@ -149,8 +232,11 @@ async def discover_matches(
         user["match_score"] = score
         scored_users.append(user)
 
-    scored_users.sort(key=lambda x: x["match_score"], reverse=True)
-    result = scored_users[:50]
+    # If distance-filtered, keep the nearest-first ordering ($geoNear already
+    # sorted by distance ASC). Otherwise fall back to compatibility-score DESC.
+    if not use_geo:
+        scored_users.sort(key=lambda x: x["match_score"], reverse=True)
+    result = [_public_profile(u) for u in scored_users[:50]]
 
     # Backwards-compatible: previous clients expect a flat list. Newer clients
     # can read pagination/filter metadata via response headers if needed.
@@ -332,7 +418,7 @@ async def get_accepted_matches(current_user: User = Depends(get_current_user)):
             last_at = ca.isoformat() if hasattr(ca, "isoformat") else str(ca)
         result.append({
             "match_id": match["id"],
-            "user": user,
+            "user": _public_profile(user),
             "comment": match.get("comment"),
             "liked_section": match.get("liked_section"),
             "last_message": lm.get("text") if lm else None,
@@ -389,8 +475,13 @@ async def get_likes_received(current_user: User = Depends(get_current_user)):
     already_responded = {r["matched_user_id"] for r in my_responses}
 
     # Batch: fetch all liker user docs in one query.
+    # Hidden demo/founder-personal accounts are never surfaced in likes-received.
     users = await db.users.find(
-        {"user_id": {"$in": liker_ids}}, {"_id": 0}
+        {
+            "user_id": {"$in": liker_ids},
+            "hidden_from_discovery": {"$ne": True},
+        },
+        {"_id": 0},
     ).to_list(len(liker_ids))
     user_map = {u["user_id"]: u for u in users}
 
@@ -402,7 +493,7 @@ async def get_likes_received(current_user: User = Depends(get_current_user)):
         if user:
             result.append({
                 "like_id": like["id"],
-                "user": user,
+                "user": _public_profile(user),
                 "comment": like.get("comment"),
                 "liked_section": like.get("liked_section"),
                 "created_at": like.get("created_at")

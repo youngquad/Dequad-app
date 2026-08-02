@@ -1,15 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from typing import Optional
 from datetime import datetime, timezone, timedelta
-import hashlib
+import re
 import uuid
 import csv
 import io
+import logging
 
 from database import db
 from models import User, UserSession, UniversityAdminCreate, UniversityAdminLogin
 from helpers.auth import get_current_user, require_admin, require_university_admin
+from helpers.passwords import hash_password, verify_and_maybe_rehash
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -19,7 +22,7 @@ async def register_university_admin(data: UniversityAdminCreate, admin: User = D
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+    password_hash = hash_password(data.password)
     uni_admin = {
         "user_id": str(uuid.uuid4()),
         "email": data.email, "name": data.name,
@@ -34,12 +37,22 @@ async def register_university_admin(data: UniversityAdminCreate, admin: User = D
 @router.post("/university-admin/login")
 async def university_admin_login(data: UniversityAdminLogin):
     user = await db.users.find_one({"email": data.email, "role": "university_admin"}, {"_id": 0})
-    if not user:
+    if not user or not user.get("admin_password"):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
-    if user.get("admin_password") != password_hash:
+    ok, new_hash = verify_and_maybe_rehash(data.password, user["admin_password"])
+    if not ok:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    if new_hash:
+        try:
+            await db.users.update_one(
+                {"user_id": user["user_id"]},
+                {"$set": {"admin_password": new_hash}},
+            )
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"Lazy uni-admin rehash failed for {data.email}: {e}")
+    # Never return the password hash to the client, even on the login response.
+    user.pop("admin_password", None)
 
     session_token = f"uni_admin_session_{uuid.uuid4().hex}"
     session = UserSession(
@@ -107,13 +120,21 @@ async def get_university_students(
     university = current_user.university_admin_for
     query = {"role": "student", "university": university}
     if search:
+        # re.escape neutralises regex metachars in user input — prevents ReDoS
+        # via crafted patterns and avoids accidental matches (SEC-audit P3).
+        needle = re.escape(search)
         query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"email": {"$regex": search, "$options": "i"}},
-            {"course": {"$regex": search, "$options": "i"}}
+            {"name": {"$regex": needle, "$options": "i"}},
+            {"email": {"$regex": needle, "$options": "i"}},
+            {"course": {"$regex": needle, "$options": "i"}}
         ]
 
-    students = await db.users.find(query, {"_id": 0, "admin_password": 0}).skip(offset).limit(limit).to_list(limit)
+    # Explicitly project out password fields AND precise GPS coordinates —
+    # uni admins are trusted but there's no reason to hand them raw
+    # coordinates when they only ever need city-level context (P3
+    # trilateration hardening, testing-agent iteration_11).
+    _proj = {"_id": 0, "admin_password": 0, "password_hash": 0, "location": 0}
+    students = await db.users.find(query, _proj).skip(offset).limit(limit).to_list(limit)
     total = await db.users.count_documents(query)
     return {"students": students, "total": total, "limit": limit, "offset": offset}
 
@@ -176,7 +197,7 @@ async def acknowledge_university_alert(alert_id: str, current_user: User = Depen
 async def export_university_students(current_user: User = Depends(require_university_admin)):
     university = current_user.university_admin_for
     students = await db.users.find(
-        {"role": "student", "university": university}, {"_id": 0, "admin_password": 0}
+        {"role": "student", "university": university}, {"_id": 0, "admin_password": 0, "password_hash": 0}
     ).to_list(10000)
 
     output = io.StringIO()

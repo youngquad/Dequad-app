@@ -1,5 +1,7 @@
 # Appendix H — University Letter of Interest (Template)
 
+*Template drafted by Yusuf Quadri, Founder & CEO, DEQUAD Ltd.*
+
 This appendix provides the template used by DEQUAD when seeking a Letter of Interest or formal Memorandum of Understanding (MOU) from a pilot university. Letters returned by partner institutions will be attached to this appendix as they arrive.
 
 The template below is co-signed by the partner-university point of contact (typically the Director of Student Services or Head of Wellbeing Services) and the DEQUAD founder.

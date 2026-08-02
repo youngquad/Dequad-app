@@ -1,5 +1,7 @@
 # Appendix K — Product Screenshots Register
 
+*Compiled by Yusuf Quadri, Founder & CEO, DEQUAD Ltd.*
+
 This appendix lists the product screenshots that accompany the endorsement application. The screenshots are taken from the live application at https://dequad.co.uk and from the preview iOS / Android builds.
 
 UKES assessors are encouraged to access the live web app directly with the credentials provided at the application interview.

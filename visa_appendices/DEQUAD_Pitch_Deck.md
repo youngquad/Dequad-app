@@ -78,7 +78,7 @@ Built with FastAPI + MongoDB + Expo (universal iOS / Android / web).
 | Machine-assisted safeguarding | ✅ | Ltd | ❌ | ❌ | ❌ | ❌ |
 | Safeguarding webhook to uni | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | UK universities served | growing | ~60 | ~30 | 200+ | n/a | n/a |
-| ASP per uni | **£12–20k** | £40k+ | £25k | £18k | n/a | n/a |
+| ASP per uni | **£2/student/yr (~£20k)** | £40k+ | £25k | £18k | n/a | n/a |
 
 **DEQUAD is the only product combining all five top-row capabilities.**
 
@@ -114,7 +114,7 @@ Three revenue lines — software-only, **92% gross margin** by Y3.
 
 | Customer | What they receive | Price |
 |---|---|---:|
-| **UK university** | Site-licence + safeguarding webhook + success manager | **£12,000 / yr** (tiered) |
+| **UK university** | Site-licence + safeguarding webhook + success manager | **£2 / enrolled student / yr** (10k-student uni = £20,000/yr) |
 | **NHS Integrated Care Board** | Population-level analytics + joint safeguarding pathway | **£20,000 / yr** |
 | **Student (B2C)** | Free core. Optional **DEQUAD Premium** | **£4.99 / month** |
 
@@ -165,12 +165,12 @@ A **founding team of five** — two named co-founders contributing £3,000 each 
 
 | (£) | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | 11,988 | 185,808 | **699,280** |
-| Gross profit | 10,548 | 170,208 | 645,280 |
-| Gross margin | 88% | 92% | **92%** |
-| Operating profit / (loss) | (18,372) | (62,772) | **61,520** |
+| Revenue | 15,988 | 175,808 | **659,280** |
+| Gross profit | 14,548 | 160,208 | 605,280 |
+| Gross margin | 91% | 91% | **92%** |
+| Operating profit / (loss) | (14,372) | (72,772) | **21,520** |
 
-**Operating profit positive Q3 Y3.** Cumulative loss before profitability ≈ **£81k** — exceptionally capital-efficient because the NatWest in-kind support and 6-month no-salary founder commitment hold Y1 burn to single digits.
+**Operating profit positive Q4 Y3.** Cumulative loss before profitability ≈ **£87k** — exceptionally capital-efficient because the NatWest in-kind support and 6-month no-salary founder commitment hold Y1 burn to single digits.
 
 UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
 
@@ -184,11 +184,11 @@ UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
 
 | Month | Closing cash |
 |---|---:|
-| **M1 (Jun 2026)** — incorporation, £6k founder cash | £4,910 |
-| **M4 (Sep 2026)** — pilot launch (academic year start) | £3,000 |
-| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | **£2,670** |
-| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£148,640** |
-| **M12 (May 2027)** — Y1 close | **£133,028** |
+| **M1 (Jun 2026)** — incorporation, £6k founder cash | £4,540 |
+| **M4 (Sep 2026)** — pilot launch (academic year start) | £3,670 |
+| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | **£3,550** |
+| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£149,680** |
+| **M12 (May 2027)** — Y1 close | **£141,028** |
 
 > Cash is positive every single month of Year 1.
 > The 3-month Bedfordshire pilot (Sep–Nov 2026) is the critical commercial test — the £150k pre-seed bridge closes immediately after, on the basis of pilot outcome data.
@@ -235,5 +235,7 @@ NatWest Accelerator · Santander Universities · University of Bedfordshire pilo
 **Yusuff Adeagbo** — yusuff@dequad.co.uk
 
 *Thank you.*
+
+*Deck written and prepared by the founders — Yusuf Quadri (CEO) & Yusuff Adeagbo (CTO).*
 
 </div>

@@ -7,7 +7,7 @@ import os
 
 from database import db, client
 from helpers.safeguarding import load_approved_keywords
-from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware
+from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
 from scripts.migrate_dedupe_users import dedupe_users_and_index_email
@@ -31,6 +31,13 @@ async def lifespan(app: FastAPI):
         logger.error(f"user dedupe migration failed (non-fatal): {e}")
     await seed_admin_and_test_users()
     await load_approved_keywords()
+    # 2dsphere index on users.location powers distance-based match filtering
+    # ($near / $geoNear). Idempotent — Mongo no-ops if the index already exists.
+    try:
+        await db.users.create_index([("location", "2dsphere")], sparse=True)
+        logger.info("users.location 2dsphere index ensured")
+    except Exception as e:
+        logger.error(f"users.location 2dsphere index failed (non-fatal): {e}")
     # Idempotent chat migration: backfills pair_id on legacy messages and
     # ensures the supporting index exists. Safe to run on every boot.
     try:
@@ -48,6 +55,7 @@ app = FastAPI(title="DEQUAD API", lifespan=lifespan)
 # Middleware order: outermost runs first → CORS → Logging → Rate Limit → Route
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 # CORS: per spec, `allow_origins=["*"]` cannot be combined with `allow_credentials=True`.
 # Modern browsers reject the response and the client thinks the request "failed" even when
 # the server returned 200. Use an explicit allow-list (env-overridable) instead.
@@ -62,12 +70,21 @@ _default_origins = [
 _extra = [o.strip() for o in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()]
 ALLOWED_ORIGINS = list({*_default_origins, *_extra})
 
+# NOTE: The Kubernetes ingress in front of this backend already emits
+#   Access-Control-Allow-Origin: *
+# on every response. Per the CORS spec, `*` origin CANNOT be combined with
+# `Access-Control-Allow-Credentials: true` — Safari strictly enforces this and
+# fails the fetch with "Load failed" (Chrome sometimes lets it through, which is
+# why the bug only showed up on iOS/macOS Safari).
+#
+# The frontend authenticates via the `Authorization: Bearer <token>` header and
+# uses `credentials: 'omit'` on all fetches, so we don't actually need the
+# browser to send cookies cross-origin. Disable credentials mode on CORS so the
+# combined response is spec-compliant and Safari stops rejecting it.
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_origins=ALLOWED_ORIGINS,
-    # Match any *.emergentagent.com / *.emergent.host / *.dequad.co.uk subdomain so future
-    # custom domains and EAS update previews don't need a code change.
     allow_origin_regex=r"^https://([a-zA-Z0-9-]+\.)*(emergentagent\.com|emergent\.host|dequad\.co\.uk)$",
     allow_methods=["*"],
     allow_headers=["*"],

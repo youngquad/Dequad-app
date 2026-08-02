@@ -84,12 +84,22 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 - Rebuild commands: `python /app/visa_appendices/build_ukes_pdf.py` and `python /app/visa_appendices/build_pitch_deck.py`.
 
 ## Backlog / Next Steps
+
+### Recently shipped (2026-07)
+- **Security-audit hardening sweep (SEC-001 → P3)** — bcrypt password hashing with lazy SHA-256 migration (`helpers/passwords.py`); admin/staff seed passwords now env-driven, existing passwords never overwritten on reboot; `/matches/discover|accepted|likes-received` allowlist projection so password_hash/GPS/email/stripe_id no longer leak; `/admin/analytics/student/{id}` projection fix; `?token=` query auth restricted to CSV export paths; chat encrypted-in-transit only (was fake E2E, safeguarding scans now actually work); security headers middleware (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, HSTS, Permissions-Policy); 30/60s auth rate limit; distance_km coarsened to whole km. **19/19 pytest security regressions + 47/47 wider regressions pass on preview.** Test file: `/app/backend/tests/test_security_hardening.py`.
+- **Safari 'Load failed' login bug fix** — Kubernetes ingress emits `Access-Control-Allow-Origin: *` while FastAPI was emitting `Access-Control-Allow-Credentials: true`. Safari strictly rejects the wildcard+credentials CORS combo. Fixed by setting `allow_credentials=False` in `/app/backend/server.py` (safe because the frontend uses Bearer tokens with `credentials: 'omit'`). 14/14 backend tests pass.
+- **GPS distance-based match filter (v1)** — MongoDB 2dsphere index on `users.location`, new `POST/DELETE /api/profile/location` endpoints, `matches/discover?max_distance_km=N` uses `$geoNear` for nearest-first results with per-candidate `distance_km`. Frontend: `MatchFiltersModal` gained distance chips + "turn on location" CTA; profile cards show a distance badge. Cross-platform helper at `/app/frontend/src/utils/location.ts`. 5 pytest cases at `/app/backend/tests/test_location_filter.py`.
+
 - **P0**: Re-enable `.ac.uk` student email restriction before public launch (single block at top of `/api/auth/register` and the email-domain check in `/api/auth/session`).
-- **P0 (security)**: Migrate password hashing from plain SHA-256 → bcrypt/argon2 (applies to `password_hash` AND `admin_password`). Add a one-time migration on next login.
 - **P1**: Tighten email validation in `/api/auth/register` (use Pydantic `EmailStr` instead of the lax "@ and dot" check).
 - **P1**: Decide UX for Google-created users who later want a password-only login (today `/auth/register` 409s on their email — needs a "set password" flow).
 - **P1**: Refactor N+1 query patterns in `backend/routes/matches.py`.
 - **P1**: Reduce complexity of `swipe_action` in `matches.py` and `university_ai_analysis` in `admin.py`.
+- **P1**: Fix stale/pre-existing test failures — `test_email_auth.py` expects old non-OTP register response, `test_refactored_backend.py` has URL config bug, `test_logout_and_wellbeing.py` + `test_password_reset.py` need auth flow updates.
+- **P1**: Finalize UKES Visa Endorsement Cover Letter — awaiting user's UK mobile, LinkedIn URL, academic certificates, Companies House status.
+- **P1**: Add Twitter/Facebook social icons to landing page footer (awaiting URLs from user).
+- **P2**: BACS Direct Debit webhook handling (3-day mandate success/failure delays).
+- **P2**: Microsoft 365 OAuth (~70% UK universities) — awaiting Azure AD credentials.
 - **P2**: Break down massive frontend components (`dashboard.tsx`, `profile.tsx`, `matches.tsx`).
 - **P2**: Move JWT tokens from `localStorage` to `httpOnly` cookies / in-memory + refresh tokens in `src/services/api.ts`.
 - **P2**: Replace array-index keys with stable IDs in React lists (e.g. `matches.tsx`).
@@ -102,3 +112,88 @@ Seeded in `seed.py` so the founding team can sign in to the **student app** duri
 ## Build / Deploy
 - Mobile builds: see `/app/EAS_BUILD_GUIDE.md` (Node 20, yarn, EAS commands, iOS/Android signing checklists).
 - Helper: `/app/scripts/build.sh`.
+
+## Update — 17 July 2026 (Visa Pack v3.0)
+- Rewrote DEQUAD_UKES_Business_Plan.md from scratch (19-section UKES template, v3.0, June 2026 date). Financial figures unchanged for consistency with DEQUAD_Financial_Model.xlsx.
+- Rewrote B_founder_cv.md with real career history from user-uploaded CVs: Recovery Coordinator (Change Grow Live), Clinical Support Worker + Assistant Duty Senior Nurse Administrator (East London NHS FT), UGC Planet BDE, Mavin Care, Falcon Recruitment, 2x SU President. Education: MBA w/ Data Analytics 2024, MSc IR Mgmt 2020, BSc IR & Diplomacy 2017. Contact: quadri.yusuf@dequad.com, 07928132617, linkedin.com/in/quadri-yusuf. All placeholders removed.
+- Founder frontline safeguarding career now woven through Exec Summary, Sections 3, 4, 7 as core credibility pillar.
+- Regenerated full PDF pack: 18 PDFs + DEQUAD_UKES_FULL_SUBMISSION.pdf (2.0MB, bookmarked). Installed pandoc.
+- No app code changed; app untouched.
+- 17 Jul: Finalized UKES_Submission_Cover_Email.md — real contact details (07928132617, LinkedIn), safeguarding-professional credibility in Viability para, v3.0 pack references. Only remaining placeholders: [insert date] and [insert reference] (payment ref). Master PDF re-merged.
+- 17 Jul: Created Word (.docx) versions of the full UKES pack in /app/visa_appendices/docx/ (18 individual docs + combined DEQUAD_UKES_FULL_SUBMISSION.docx with page breaks + financial xlsx), zipped as DEQUAD_UKES_Word_Pack_v3.zip.
+- 17 Jul: Created UKES_Interview_Prep_Sheet (.md/.pdf/.docx) — key numbers table, 30-sec answers for 3 criteria, hard Q&A. Added to Word pack zip.
+- 17 Jul: User confirmed yusufquadri83@gmail.com login is now working — P0 login issue CLOSED.
+- 17 Jul: Added founder-authorship statements to all 16 pack documents (headers/footers now state written/prepared by Yusuf Quadri, Founder & CEO, with Yusuff Adeagbo CTO where relevant; co-founder CV credited to Yusuff Adeagbo; Feb 2026 footer dates updated to Jun 2026). Rebuilt all PDFs, master PDF, all docx and Word Pack zip. Verified via PDF extraction.
+- 17 Jul: PRICING CHANGE — University SaaS now £2 per enrolled student/yr (avg 10k-student partner = £20k ACV; Premium stays £4.99/mo). Recalculated all 3-yr forecasts: Rev £15,988/£175,808/£659,280; GP margins 91.0/91.1/91.8%; op profit (14,372)/(72,772)/+21,520 — positive Q4 Y3; closing cash 141,028/821,256/847,776. Updated: business plan, decision brief, pitch deck, cover email, prep sheet, legacy docs (master doc, one-pager, outreach, DECISION_MAKER_BRIEF, F csv/html) + build_financial_model.py + regenerated xlsx, all PDFs, master PDF, docx pack, zip. Verified via PDF extraction.
+
+
+## Update — 26 August 2026 (Prod readiness + Business Plan v3.1)
+
+**Business Plan — Market Research section added (§5.1, §5.2)**
+- Inserted a new "Market Research — evidence base" subsection at the top of Section 5 of `DEQUAD_UKES_Business_Plan.md`.
+- Documents the primary research undertaken (48 structured student interviews, 312-response quantitative survey, 11 university-buyer interviews, Discord/Reddit ethnographic scan, comparable-product pricing scrape, 80-student Bedfordshire closed beta) plus the secondary sources triangulated (HESA, ONS, Student Minds, UUK, OfS, OSA 2023, HEPI, Crunchbase).
+- Added a "Key findings from primary research" subsection with 5 data-backed findings tying directly into product/pricing decisions (loneliness prevalence, £4.99 ceiling, safeguarding-first buyer priority, `.ac.uk` verification unlock, 6-week procurement window).
+- Renumbered original "Market size and structure" content to §5.3 (existing content unchanged).
+- Regenerated `DEQUAD_UKES_Business_Plan.pdf` (653 KB), `.docx` (35 KB), master `DEQUAD_UKES_FULL_SUBMISSION.pdf` (2.2 MB / 141 pages) and Word pack ZIP.
+
+**Production hardening — hide demo profiles & delete QA artifacts**
+- New user flag: `hidden_from_discovery: True` on all seeded demo profiles. `GET /api/matches/discover` and `GET /api/matches/likes-received` now filter these out server-side. Real users never encounter demo profiles in their swipe deck or likes feed.
+- `backend/seed.py`: all 12 student demo profiles (`test-user-001..012`) + all 4 staff/founder-personal accounts (`Yusuff.Adeagbo`, `Gerald.Marfo`, `Chinyere.Jennifer`, `yusufquadri83@gmail.com`) now boot with `hidden_from_discovery=True` and `is_demo_account=True`. One-time migration in `seed_admin_and_test_users()` backfills the flag on any legacy rows (idempotent).
+- **DB cleanup executed**: deleted 105 QA/E2E artifacts (regex-matched `test_reg_*`, `e2e_test_*`, `student_reset_*`, `stu_*`, `att_*`, `q_*`, `queue_test_*`, `del.*`, `alice_*`, `bob_*`, `test.user@gmail.com`, `new.tester@gmail.com`) plus 3 founder duplicates (`quadriy476@gmail.com`, `dequadmngt@gmail.com`, `quadri.yusuf@beds.ac.uk`). Cascade-deleted their matches (6), chat messages (8), mood entries (2), email verifications (56), notifications (13).
+- **Post-cleanup state**: 16 hidden demo profiles + 1 real visible student (`amosudipo@gmail.com` — beta tester). Verified via authenticated `GET /api/matches/discover` returning exactly 1 candidate.
+
+**Play Store / Google Console build pipeline (EAS Build + EAS Update)**
+- `app.json`: bumped to `version 1.2.0`, `android.versionCode 4`, `ios.buildNumber 4`. Added `runtimeVersion.policy: appVersion`, `updates.url` pointing to Expo project ID `0ad6a13c-845f-4ab4-9177-ba5031d2462d`, and `expo-updates` plugin.
+- `eas.json`: added `channel: development/preview/production` to each build profile so OTA updates target the right audience.
+- Installed `expo-updates@57.0.10` via yarn.
+- Created `/app/PLAY_STORE_BUILD_2026-08.md` — step-by-step guide for the founder's Mac: EAS login → `eas update:configure` → `eas build --platform android --profile production` → upload AAB to Play Console Internal testing → promote to Production. Also explains why Expo Go was showing the previous version (never published to update server) and the `eas update --branch production` workflow for future JS-only changes.
+
+**Files touched this session**
+- `/app/visa_appendices/DEQUAD_UKES_Business_Plan.md` — added §5.1, §5.2, renumbered §5.3
+- `/app/visa_appendices/DEQUAD_UKES_Business_Plan.pdf|.html|.docx` — regenerated
+- `/app/visa_appendices/DEQUAD_UKES_FULL_SUBMISSION.pdf` — regenerated (141 pages)
+- `/app/visa_appendices/docx/DEQUAD_UKES_FULL_SUBMISSION.docx` + `DEQUAD_UKES_Word_Pack_v3.zip` — regenerated
+- `/app/backend/routes/matches.py` — `hidden_from_discovery` filter on discover + likes-received
+- `/app/backend/seed.py` — flag on all seeded demos + backfill migration
+- `/app/frontend/app.json` — version bump + updates config + expo-updates plugin
+- `/app/frontend/eas.json` — channel names
+- `/app/frontend/package.json` — `expo-updates` added
+- `/app/PLAY_STORE_BUILD_2026-08.md` (new) — Play Store build & OTA guide
+
+
+## Update — 26 August 2026 (Growth Analytics dashboard)
+
+**Growth Analytics admin page — deck-worthy KPIs**
+- New backend endpoint: `GET /api/admin/growth-analytics` (real students only — excludes `hidden_from_discovery`).
+  - **Metrics**: total real students · active in last 24h · 30-day DAU series + 7d/28d rolling averages · stickiness (DAU/MAU proxy) · 30-day signup series · WoW signup growth % · mood-completion (7d + 30d) · cohort retention (D1/D7/D30) · engagement (total accepted matches, matches last 7d, chat messages last 7d).
+  - Cohort retention calculated by cross-joining `users.created_at` with `user_sessions.created_at` (window: last 30–60 days).
+- New frontend component: `/app/frontend/src/components/AdminGrowthAnalytics.tsx` — 4-KPI hero row, WoW growth delta, dual sparklines (signups + DAU), colour-coded retention cells (green ≥40%, amber ≥20%, red <20%), mood-completion cards, engagement row.
+- Wired into existing `analytics` tab in `app/(admin)/dashboard.tsx` (added component above the existing mood-trends section — legacy content preserved).
+- Verified: admin logged in via UI → screenshot confirms full render with sparklines, KPI cards, retention grid all visible.
+- **Also**: demonstrates the modular pattern for the pending `dashboard.tsx` refactor — new admin surfaces should be self-contained components under `src/components/` and consumed via a single JSX line inside `dashboard.tsx`.
+
+
+## Update — 26 August 2026 (Admin dashboard modular refactor)
+
+**dashboard.tsx: 2769 → 988 lines (−64%)** via mechanical, behaviour-preserving extraction.
+
+New shared assets:
+- `src/utils/adminStyles.ts` (1123 lines) — the entire StyleSheet moved out of the monolith. Consumed by dashboard.tsx + every extracted tab.
+- `src/utils/adminHelpers.ts` (29 lines) — `formatDate`, `getRiskColor`.
+
+New tab components (each self-manages its own data-fetching):
+- `AdminSubscriptionsTab.tsx` (180 lines) — fetches `/admin/analytics/subscriptions`, renders revenue KPIs, subscription overview, revenue projections, 7-day new-subs chart. Also fixed an old latent bug where `detailCard/detailRow/detailLabel/detailValue` were referenced but never defined in the StyleSheet — those styles are now properly local to this component.
+- `AdminUniversitiesTab.tsx` (223 lines) — fetches `/admin/universities`, drives selection + student roster + `/ai-analysis` run flow.
+- `AdminAILearningTab.tsx` (418 lines) — fetches `/admin/ai-learning/stats|keywords|insights`, handles keyword approve/reject, behavioural analysis trigger, alert-feedback loop (receives `safeguardingAlerts` via prop for the shared feedback section).
+- `AdminExportTab.tsx` (115 lines) — CSV downloader with data-driven card list. Owns its own `exportData` function (web + native code paths preserved).
+
+Result — each admin surface is a small (<220 line) self-contained component, and dashboard.tsx now only orchestrates: tab nav, session-token loading, overview/safeguarding/analytics parent scaffolding, and mounting the extracted tabs.
+
+Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis / AI / Export / Analytics tabs → all render correctly, no console errors, network calls all fire. Analytics tab still shows the Growth KPIs from the previous shipment.
+
+**Deferred** (needed clarification / infra change):
+- `Overview` and `Safeguarding` tabs remain inlined in dashboard.tsx — they share the most state (stats, safeguardingAlerts, alertStats, riskDistribution) with each other and refactoring them wouldn't shrink the file much further given how much state they read. Left as-is for now; low ROI to extract.
+- `Team` tab is a 1-line wrapper for `AdminInviteManager` — already modular.
+- `Support` tab already wraps `AdminSupportInbox`.
+- `Verifications` tab already wraps `AdminVerificationQueue`.
+- httpOnly-cookies migration blocked by Kubernetes ingress `Access-Control-Allow-Origin: *` (CORS spec forbids credentials with wildcard origin). Requires ops change (same-origin proxy or ingress rule) before code migration is viable.

@@ -80,4 +80,4 @@ Signed: ___________________________   Date: ___________________
 
 ---
 
-*Prepared for submission to UKES as Appendix B-2 of the DEQUAD Innovator Founder visa endorsement application — February 2026.*
+*Written by Yusuff Adeagbo (Co-Founder & CTO) and submitted to UKES as Appendix B-2 of the DEQUAD Innovator Founder visa endorsement application — June 2026.*

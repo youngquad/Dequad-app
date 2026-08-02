@@ -15,7 +15,6 @@ Security properties:
 """
 from __future__ import annotations
 
-import hashlib
 import logging
 import os
 import secrets
@@ -29,6 +28,7 @@ from pydantic import BaseModel, EmailStr
 from database import db
 from helpers.auth import require_admin
 from helpers.email import is_smtp_configured, send_email_async
+from helpers.passwords import hash_password
 from models import User
 
 logger = logging.getLogger(__name__)
@@ -244,7 +244,7 @@ async def accept_admin_invite(data: AdminInviteAccept):
         raise HTTPException(status_code=410, detail="Invitation has expired")
 
     email = doc["email"]
-    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+    password_hash = hash_password(data.password)
     now = datetime.now(timezone.utc)
 
     existing = await db.users.find_one({"email": email})

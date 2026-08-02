@@ -1,5 +1,7 @@
 # Appendix A — Founder Academic Certificates
 
+*Declared and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd.*
+
 This appendix lists the qualifications relied upon in the Founder Profile (main document §2.2) and confirms how the originals will be made available to the endorsing body.
 
 ---

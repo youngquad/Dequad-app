@@ -1,0 +1,28 @@
+{
+  "summary": "Iteration_12 backend-only regression — both fixes verified on preview. (1) GET /api/admin/analytics/student/{user_id} no longer leaks password_hash/admin_password/stripe_customer_id/push_token — projection at admin.py:969 matches /admin/users. (2) GET /api/university-admin/students no longer returns raw `location` GeoJSON — location: 0 confirmed in projection at university_admin.py:136. Full pytest suite 19/19 passing (previously 17/18 in iter_11). Also added and passed a stress test for the lazy-migration edge case where an admin doc has BOTH admin_password (legacy SHA-256) AND password_hash (bcrypt): admin_login correctly rehashes admin_password to bcrypt without mutating password_hash, and a second login on the freshly-migrated bcrypt hash still succeeds. Spot-checked other admin surfaces — clean: /admin/users, /admin/pending-verifications, /admin/university-admins, /admin/ai-risk-analysis/{id}, /admin/analytics/student/{id}.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_security_hardening.py",
+    "/app/backend/tests/test_lazy_migration_admin_edge.py",
+    "/app/test_reports/pytest/iter12_security.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Both projections are correct and match the /admin/users pattern. Consider extracting `SAFE_USER_PROJECTION = {\"_id\": 0, \"password_hash\": 0, \"admin_password\": 0, \"stripe_customer_id\": 0, \"push_token\": 0}` as a constant in one shared module (e.g. helpers/projections.py) so future admin endpoints returning user docs can import it — reduces the risk of a fifth sibling endpoint being added later without the projection.",
+    "Note: /admin/analytics/student `student` response also strips `location` implicitly (the current admin projection doesn't remove it, and the raw student doc did contain GeoJSON `location`, but after this test's response inspection the key wasn't returned because the seeded student doc has no location). If admins should never see coordinates either, add `location: 0` to the admin _proj too. Low priority — admins are more trusted than uni admins."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_lazy_migration_admin_edge.py (new — stress test for admin_login lazy migration when both admin_password + password_hash coexist)"
+  ],
+  "success_rate": {"backend": "100% (19/19 security suite + 1/1 lazy-migration edge case)", "frontend": "not tested (backend-only per request)"},
+  "test_credentials": "From /app/memory/test_credentials.md — admin quadri.yusuf@dequad.com / Oluwatobi11@ / DEQUAD_ADMIN_2024, uni-admin admin@manchesteruni.edu / UniAdmin123!, student yusufquadri83@gmail.com / Oluwatobi11@. All working.",
+  "seed_data_creation": "none — lazy migration test mutates ONE admin doc and restores it in finally block.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Preview URL https://review-extractor-2.preview.emergentagent.com fully clean on admin PII surface as of iter_12. Suite is `pytest /app/backend/tests/test_security_hardening.py` (19 cases, ~8s) + `pytest /app/backend/tests/test_lazy_migration_admin_edge.py` (1 case, ~1s, requires MONGO_URL + DB_NAME env). No open bugs.",
+  "rca of the issue": "Iteration_11 CRITICAL fix confirmed applied at /app/backend/routes/admin.py:969 — get_student_analytics now uses the same _proj = {'_id':0, 'password_hash':0, 'admin_password':0, 'stripe_customer_id':0, 'push_token':0} as /admin/users. Iteration_11 P3 fix confirmed applied at /app/backend/routes/university_admin.py:136 — location: 0 added to _proj so GeoJSON coordinates no longer reach uni admins. Curl-verified on preview: analytics/student response `student` field only contains public+admin-relevant keys (created_at, email, email_verified, interests, name, role, student_verification, user_id, verified_at, verified_by, etc.) — no hashes/stripe/push_token. Uni-admin students endpoint returned 4 students, zero with `location` key, zero with password fields."
+}

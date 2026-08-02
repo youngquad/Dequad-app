@@ -16,6 +16,7 @@ from models import (
     AdminLoginRequest, ForgotPasswordRequest, ResetPasswordRequest
 )
 from helpers.auth import get_session_token, get_current_user
+from helpers.passwords import hash_password, verify_and_maybe_rehash
 from helpers.email import (
     is_smtp_configured, send_email_async, create_password_reset_email_html
 )
@@ -207,7 +208,8 @@ async def reset_password(data: ResetPasswordRequest):
     if len(data.new_password) < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
 
-    password_hash = hashlib.sha256(data.new_password.encode()).hexdigest()
+    # Bcrypt hash for the new password (SEC-003).
+    password_hash = hash_password(data.new_password)
     # Update the correct field based on the role captured when the token was
     # issued. Falls back to admin_password for legacy records that don't carry
     # a role (pre-existing admin reset tokens).
@@ -280,7 +282,7 @@ async def email_register(data: EmailRegisterRequest, response: Response):
     if existing:
         raise HTTPException(status_code=409, detail="An account with this email already exists. Try signing in instead.")
 
-    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+    password_hash = hash_password(data.password)
     user_id = f"user_{uuid.uuid4().hex[:12]}"
     # "auto" → known student subdomain, no review needed.
     # "self_declared" → bare .ac.uk + checkbox ticked. Flagged for admin review.
@@ -408,8 +410,20 @@ async def email_login(data: EmailLoginRequest, response: Response):
     if not user or not user.get("password_hash"):
         raise HTTPException(status_code=401, detail="Invalid email or password.")
 
-    if hashlib.sha256(data.password.encode()).hexdigest() != user["password_hash"]:
+    ok, new_hash = verify_and_maybe_rehash(data.password, user["password_hash"])
+    if not ok:
         raise HTTPException(status_code=401, detail="Invalid email or password.")
+    if new_hash:
+        # Legacy SHA-256 hash matched — persist the fresh bcrypt hash so the
+        # next login uses the strong scheme. Fire-and-forget style; on DB
+        # error we still allow the login through.
+        try:
+            await db.users.update_one(
+                {"user_id": user["user_id"]},
+                {"$set": {"password_hash": new_hash}},
+            )
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"Lazy password rehash failed for {email_lower}: {e}")
 
     # Block login for accounts that haven't completed the OTP verification yet.
     # Pre-OTP-rollout accounts (no `email_verified` field at all) are grand-
@@ -457,7 +471,7 @@ async def admin_login(data: AdminLoginRequest):
     stored_password = user.get("admin_password")
 
     if data.admin_code == ADMIN_SECRET_CODE:
-        password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+        password_hash = hash_password(data.password)
         await db.users.update_one(
             {"email": email_lower},
             {"$set": {"role": "admin", "admin_password": password_hash}}
@@ -468,9 +482,17 @@ async def admin_login(data: AdminLoginRequest):
     if not stored_password:
         raise HTTPException(status_code=401, detail="Admin password not set. Use admin code to set up.")
 
-    password_hash = hashlib.sha256(data.password.encode()).hexdigest()
-    if stored_password != password_hash:
+    ok, new_hash = verify_and_maybe_rehash(data.password, stored_password)
+    if not ok:
         raise HTTPException(status_code=401, detail="Invalid email or password")
+    if new_hash:
+        try:
+            await db.users.update_one(
+                {"email": email_lower},
+                {"$set": {"admin_password": new_hash}},
+            )
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"Lazy admin password rehash failed for {email_lower}: {e}")
 
     if user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="This account does not have admin privileges")

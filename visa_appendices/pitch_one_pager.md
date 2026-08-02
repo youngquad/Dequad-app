@@ -29,12 +29,12 @@ DEQUAD is a **closed**, identity-verified social network for UK university stude
 
 ### How we make money
 
-- **Universities pay** £1.50–£2.80 per student per year (below the cost of expanding in-house counselling).
+- **Universities pay** £2 per student per year (below the cost of expanding in-house counselling).
 - **NHS Integrated Care Boards** commission from Year 3.
 - **Premium student features** (groups, events) — £19.99 / year.
 - **Anonymised research data licences** to NIHR / MQ Mental Health (Year 4+).
 
-> **Year 5 ARR target: £4.6m.** Break-even Q3 Year 3. Funding required: £900k to break-even.
+> **Year 5 ARR target: £3.6m.** Break-even Q4 Year 3. Funding required: £900k to break-even.
 
 ### Why DEQUAD wins
 
@@ -64,7 +64,7 @@ DEQUAD is the **only** UK platform combining `.ac.uk` verification + peer matchi
 | Partner universities | 3 | 10 | 25 | 50 | 100 |
 | Students reached | 15k | 80k | 200k | 500k | 1.2m |
 | UK FTE jobs created | 4 | 10 | 19 | 30 | **42** |
-| ARR | £22.5k | £150k | £600k | £2.0m | **£4.6m** |
+| ARR | £30k | £190k | £550k | £1.45m | **£3.6m** |
 
 ### The ask
 

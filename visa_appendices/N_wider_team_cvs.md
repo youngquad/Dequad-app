@@ -104,4 +104,4 @@ Three appointments to a founding team alongside two co-founders is unusually dee
 
 ---
 
-*Prepared for UKES as Appendix N to the Innovator Founder visa endorsement application — February 2026.*
+*Compiled by Yusuf Quadri, Founder & CEO — CV content supplied and approved by each named team member. Submitted to UKES as Appendix N to the Innovator Founder visa endorsement application, June 2026.*

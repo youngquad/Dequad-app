@@ -23,6 +23,7 @@ I am writing to formally submit my application for an **Innovator Founder endors
 **Business:** DEQUAD Ltd — UK-headquartered student-wellbeing software platform
 **Live product:** https://dequad.co.uk
 **Business start date:** 15 June 2026 (incorporation)
+**Applicant contact:** quadri.yusuf@dequad.com · 07928132617 · https://www.linkedin.com/in/quadri-yusuf/
 **Submission date:** [insert date]
 **Assessment fee:** Paid in full — payment reference [insert reference]
 
@@ -30,9 +31,9 @@ I am writing to formally submit my application for an **Innovator Founder endors
 
 1. **Innovation.** DEQUAD is the only UK platform combining `.ac.uk`-verified peer matching, daily wellbeing telemetry and machine-assisted safeguarding triage in a single product. The safeguarding webhook escalates risk signals to a university's Designated Safeguarding Lead in under 60 seconds — a capability no incumbent (Togetherall, TalkCampus, UniBuddy) offers.
 
-2. **Viability.** The MVP is already live in production with ~50 beta users across three UK universities. The first commercial pilot is the **University of Bedfordshire** — a 12-week (3-month) pilot launching in **September 2026 (M4)** and completing in **November 2026 (M6)**, with paid-conversion conversations opening in **December 2026 (M7)**. Year-1 cash flow remains positive every single month on a £6,000 founder-capital base, supported by £31,000 of in-kind benefits from the NatWest Accelerator (London).
+2. **Viability.** The MVP is already live in production with ~50 beta users across three UK universities. The safeguarding pipeline was designed by the lead applicant, a practising safeguarding professional — currently a Recovery Coordinator at Change Grow Live (safeguarding referrals, dynamic risk assessment, multi-agency working) with concurrent NHS mental-health experience at East London NHS Foundation Trust. The first commercial pilot is the **University of Bedfordshire** — a 12-week (3-month) pilot launching in **September 2026 (M4)** and completing in **November 2026 (M6)**, with paid-conversion conversations opening in **December 2026 (M7)**. Year-1 cash flow remains positive every single month on a £6,000 founder-capital base, supported by £31,000 of in-kind benefits from the NatWest Accelerator (London).
 
-3. **Scalability.** Three-year UK revenue forecast £12k → £186k → £699k, growing to 12 UK FTE by Year 3 and approaching 30+ FTE following the Year-2 seed round. The business model is software-only (92% gross margin by Year 3) and addresses a £28m UK SAM expanding to £180m TAM internationally post-Year 3.
+3. **Scalability.** Three-year UK revenue forecast £16k → £176k → £659k, growing to 12 UK FTE by Year 3 and approaching 30+ FTE following the Year-2 seed round. University pricing is a simple **£2 per enrolled student per year** — roughly half the effective per-student cost of the closest incumbent. The business model is software-only (~92% gross margin by Year 3) and addresses a £28m UK SAM expanding to £180m TAM internationally post-Year 3.
 
 ### Document pack enclosed
 
@@ -40,7 +41,7 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 
 | # | Document | File |
 |---|---|---|
-| 1 | UKES Business Plan (full, 19 sections) | `DEQUAD_UKES_Business_Plan.pdf` |
+| 1 | UKES Business Plan (full, 19 sections, v3.0 — June 2026) | `DEQUAD_UKES_Business_Plan.pdf` |
 | 2 | Decision-Maker Brief (15-page short-track companion) | `DEQUAD_UKES_Decision_Brief.pdf` |
 | 3 | Pitch Deck (12 slides) | `DEQUAD_Pitch_Deck.pdf` |
 | 4 | Financial Model (12-sheet Excel workbook) | `DEQUAD_Financial_Model.xlsx` |
@@ -81,14 +82,13 @@ Kind regards,
 **Yusuf Quadri**
 Founder & CEO, DEQUAD Ltd
 quadri.yusuf@dequad.com · https://dequad.co.uk
-+44 _____________ (UK mobile)
+07928132617 · https://www.linkedin.com/in/quadri-yusuf/
 
 ---
 
 ## Notes for the applicant (do not send)
 
-- Replace `[insert date]` and `[insert reference]` immediately before sending.
-- Replace the placeholder UK mobile number.
+- Replace `[insert date]` and `[insert reference]` immediately before sending — these are the ONLY two placeholders left in this email.
 - Send from `quadri.yusuf@dequad.com` (not a personal gmail address — UKES screens for business-domain alignment).
 - Attach `DEQUAD_UKES_FULL_SUBMISSION.pdf` (the merged master) plus `DEQUAD_Financial_Model.xlsx`. Individual PDFs only on request to keep the submission email under 25 MB.
 - If UKES's portal accepts uploads, paste the table of contents into the cover note field and upload all files individually so the assessor can navigate them.

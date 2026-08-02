@@ -26,6 +26,7 @@ import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
 import MatchFiltersModal from '../../src/components/MatchFiltersModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { requestCurrentLocation } from '../../src/utils/location';
 
 const { width, height } = Dimensions.get('window');
 
@@ -48,6 +49,7 @@ interface UserProfile {
   pronouns?: string;
   show_pronouns?: boolean;
   match_score?: number;
+  distance_km?: number;
 }
 
 interface SwipeInfo {
@@ -86,9 +88,15 @@ export default function MatchesScreen() {
     university?: string;
     education_level?: string;
     city?: string;
+    max_distance_km?: number;
   }>({});
   const [filtersLoaded, setFiltersLoaded] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+  // Cached "does the current user have a location on file?" flag. Populated
+  // from /subscription/status or from a successful location share. Drives the
+  // distance-chip vs "enable location" CTA in MatchFiltersModal.
+  const [hasLocation, setHasLocation] = useState(false);
+  const [locationBusy, setLocationBusy] = useState(false);
 
   const scrollRef = useRef<FlatList>(null);
 
@@ -142,6 +150,9 @@ export default function MatchesScreen() {
         if (filters.university) params.set('university', filters.university);
         if (filters.education_level) params.set('education_level', filters.education_level);
         if (filters.city) params.set('city', filters.city);
+        if (filters.max_distance_km && hasLocation) {
+          params.set('max_distance_km', String(filters.max_distance_km));
+        }
       }
       const qs = params.toString();
       const path = qs ? `/matches/discover?${qs}` : '/matches/discover';
@@ -166,6 +177,41 @@ export default function MatchesScreen() {
       });
     } catch (error) {
       console.error('Error loading swipe status:', error);
+    }
+  };
+
+  // Prime hasLocation from the user's stored profile so the distance chip in
+  // the filter modal reflects reality on load (not just after we ask again).
+  useEffect(() => {
+    (async () => {
+      try {
+        const me = await api.get('/auth/me', sessionToken);
+        const coords = me?.location?.coordinates;
+        if (Array.isArray(coords) && coords.length === 2) setHasLocation(true);
+      } catch {
+        /* auth not ready yet — ignore */
+      }
+    })();
+  }, [sessionToken]);
+
+  const requestAndSaveLocation = async () => {
+    setLocationBusy(true);
+    try {
+      const res = await requestCurrentLocation();
+      if (!res.ok || !res.coords) {
+        alert(res.error || 'Could not get your location.');
+        return;
+      }
+      await api.post(
+        '/profile/location',
+        { latitude: res.coords.latitude, longitude: res.coords.longitude },
+        sessionToken,
+      );
+      setHasLocation(true);
+    } catch (e: any) {
+      alert(e?.message || 'Failed to save your location.');
+    } finally {
+      setLocationBusy(false);
     }
   };
 
@@ -383,6 +429,16 @@ export default function MatchesScreen() {
                   <Text style={styles.universityText}>{profile.university}</Text>
                 </View>
               )}
+              {typeof profile.distance_km === 'number' && (
+                <View style={styles.distanceBadge} data-testid={`profile-distance-${profile.user_id}`}>
+                  <Ionicons name="location" size={12} color="#fff" />
+                  <Text style={styles.distanceText}>
+                    {profile.distance_km < 1
+                      ? '<1 km away'
+                      : `${Math.round(profile.distance_km)} km away`}
+                  </Text>
+                </View>
+              )}
             </View>
             <LikeButton 
               onPress={() => {}} 
@@ -535,6 +591,8 @@ export default function MatchesScreen() {
         visible={filterModalOpen}
         initial={filters}
         onClose={() => setFilterModalOpen(false)}
+        hasLocation={hasLocation}
+        onRequestLocation={requestAndSaveLocation}
         onApply={(next) => {
           setFilters(next);
           // Reload deck with the new filters applied
@@ -944,6 +1002,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
+  distanceBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(91, 155, 213, 0.85)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    marginTop: 6,
+    alignSelf: 'flex-start',
+    gap: 4,
+  },
+  distanceText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
   pronounsBadge: {
     backgroundColor: 'rgba(91, 155, 213, 0.3)',
     paddingHorizontal: 8,
@@ -1261,6 +1336,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  filterPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#F2F5FA',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 999,
+    marginLeft: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  filterPillText: { fontSize: 13, color: '#1F2937', fontWeight: '700' },
   modalOverlay: {
     position: 'absolute',
     top: 0,

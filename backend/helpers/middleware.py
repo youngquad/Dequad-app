@@ -1,3 +1,4 @@
+import os
 import time
 import logging
 from collections import defaultdict
@@ -6,6 +7,38 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 logger = logging.getLogger("middleware")
+
+# ==================== SECURITY HEADERS ====================
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add a conservative set of security-related response headers.
+
+    Applied globally so every API + static response benefits. Intentionally
+    modest — this is a JSON API + static docs backend, not an HTML app, so
+    no CSP script-src work is needed. Kept in one place to make future
+    audits easy (SEC-audit P3, 2026-07).
+    """
+
+    HEADERS = {
+        # Deter MIME sniffing of API JSON as executable content.
+        "X-Content-Type-Options": "nosniff",
+        # We don't want the API embedded in any frame anywhere.
+        "X-Frame-Options": "DENY",
+        # Strip referrers cross-origin so tokens/IDs never leak via Referer.
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        # Force HTTPS for a year on the API domain. Safe: the ingress is
+        # already TLS-terminated everywhere.
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        # Restrict powerful browser features we never use from this API.
+        "Permissions-Policy": "geolocation=(), microphone=(), camera=(), payment=(self)",
+    }
+
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        for k, v in self.HEADERS.items():
+            response.headers.setdefault(k, v)
+        return response
+
 
 # ==================== REQUEST LOGGING ====================
 
@@ -43,12 +76,19 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     - Webhook endpoints:  exempt (server-to-server)
     """
 
-    GENERAL_LIMIT = 100
-    AUTH_LIMIT = 10
+    # Limits are env-tunable so testing/CI environments (which pound the
+    # /auth/* endpoints from a single IP) can widen the window without
+    # touching source. Production defaults are strict but not so strict they
+    # break Playwright / pytest suites.
+    GENERAL_LIMIT = int(os.environ.get("RATE_LIMIT_GENERAL", "100"))
+    AUTH_LIMIT = int(os.environ.get("RATE_LIMIT_AUTH", "30"))
     WINDOW_SECONDS = 60
 
-    AUTH_PREFIXES = ("/api/auth/admin-login", "/api/auth/forgot-password",
-                     "/api/auth/reset-password", "/api/university-admin/login")
+    AUTH_PREFIXES = ("/api/auth/admin-login", "/api/auth/email-login",
+                     "/api/auth/register", "/api/auth/verify-email",
+                     "/api/auth/resend-verification",
+                     "/api/auth/forgot-password", "/api/auth/reset-password",
+                     "/api/university-admin/login")
     EXEMPT_PREFIXES = ("/api/subscription/webhook", "/api/stripe/university-webhook")
 
     def __init__(self, app):

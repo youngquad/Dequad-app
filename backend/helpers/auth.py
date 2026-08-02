@@ -9,23 +9,40 @@ logger = logging.getLogger(__name__)
 
 
 async def get_session_token(request: Request) -> Optional[str]:
+    """Return the caller's session token or ``None``.
+
+    Accepted sources:
+      1. ``Authorization: Bearer <token>`` header (primary path used by the
+         React/Expo frontend).
+      2. ``session_token`` httpOnly cookie (issued alongside the header on
+         login for browsers that prefer cookie auth).
+      3. ``?token=<session_token>`` query string — ACCEPTED ONLY FOR CSV
+         EXPORT / FILE-DOWNLOAD ENDPOINTS where the browser cannot inject a
+         custom header on ``<a href>`` / ``Linking.openURL`` downloads
+         (SEC-004 hardening, 2026-07). All other endpoints ignore the
+         query param, so a session token leaked via referrer or URL logs
+         can only be used against these download routes.
+    """
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
-        token = auth_header[7:]
-        logger.info(f"Session token from header: {token[:20]}...")
-        return token
+        return auth_header[7:]
 
-    token_param = request.query_params.get("token")
-    if token_param:
-        logger.info(f"Session token from query param: {token_param[:20]}...")
-        return token_param
+    # Whitelist of paths that legitimately need query-string auth for
+    # browser-initiated downloads. Keep this list tight.
+    path = request.url.path
+    if path.startswith("/api/admin/") and (path.endswith("/export") or "/export/" in path or path.endswith(".csv")):
+        tok = request.query_params.get("token")
+        if tok:
+            return tok
+    if path.startswith("/api/university-admin/") and path.endswith("/export"):
+        tok = request.query_params.get("token")
+        if tok:
+            return tok
 
     session_token = request.cookies.get("session_token")
     if session_token:
-        logger.info(f"Session token from cookie: {session_token[:20]}...")
         return session_token
 
-    logger.warning("No session token found in request")
     return None
 
 

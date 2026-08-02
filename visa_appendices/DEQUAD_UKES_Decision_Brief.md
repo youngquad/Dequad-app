@@ -24,9 +24,9 @@
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders)** |
 | **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring) |
 | **Funding ask Y1** | £150,000 pre-seed bridge — **Dec 2026 (M7)**, after the 3-month Bedfordshire pilot completes |
-| **3-yr revenue** | £12k → £186k → £699k |
+| **3-yr revenue** | £16k → £176k → £659k |
 | **3-yr UK jobs** | 2 → 6 → 12 |
-| **Op profit positive** | Q3 Year 3 |
+| **Op profit positive** | Q4 Year 3 |
 | **Endorsement criteria met** | ✅ Innovation · ✅ Viability · ✅ Scalability |
 
 ---
@@ -114,7 +114,7 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 | Safeguarding webhook to uni team | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Online Safety Act 2023 ready | ✅ | ✅ | ✅ | ✅ | Partial | ❌ |
 | UK universities served | growing | ~60 | ~30 | 200+ | n/a | n/a |
-| ASP per uni | £12k–£20k | £40k+ | £25k | £18k | n/a | n/a |
+| ASP per uni | **£2/enrolled student/yr** (~£20k for a 10k-student uni) | £40k+ | £25k | £18k | n/a | n/a |
 
 **DEQUAD displaces** Togetherall and TalkCampus (price/feature) on the B2B side, and **co-exists** with UniBuddy (orthogonal pre-enrolment market). Consumer competitors (Bumble BFF, Discord) lack institutional features entirely.
 
@@ -222,20 +222,20 @@ The **pre-seed is gated on the 3-month Bedfordshire pilot completing in Nov 2026
 
 | Month | Inflows | Outflows | Closing balance |
 |---|---:|---:|---:|
-| **M1 (Jun 2026)** — incorporation | £6,000 founder | (~£1,090) | **£4,910** |
-| M2 (Jul 2026) | — | (~£820) | **£4,090** |
-| M3 (Aug 2026) | £200 sales | (~£860) | **£3,430** |
-| **M4 (Sep 2026)** — pilot launch (academic year start) | £350 | (~£780) | **£3,000** |
-| M5 (Oct 2026) — pilot month 2 | £500 | (~£780) | **£2,720** |
-| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | £700 | (~£750) | **£2,670** |
-| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£150,800** | (£4,830) | **£148,640** |
-| M8 (Jan 2027) | £1,100 | (£4,750) | **£144,990** |
-| M9 (Feb 2027) | £1,350 | (£4,750) | **£141,590** |
-| M10 (Mar 2027) | £1,700 | (£4,830) | **£138,460** |
-| M11 (Apr 2027) | £2,100 | (£4,810) | **£135,750** |
-| **M12 (May 2027)** — Y1 close | £3,188 | (£5,910) | **£133,028** |
+| **M1 (Jun 2026)** — incorporation | £6,000 founder | (~£1,460) | **£4,540** |
+| M2 (Jul 2026) | — | (~£330) | **£4,210** |
+| M3 (Aug 2026) | £200 sales | (~£460) | **£3,950** |
+| **M4 (Sep 2026)** — pilot launch (academic year start) | £350 | (~£630) | **£3,670** |
+| M5 (Oct 2026) — pilot month 2 | £500 | (~£600) | **£3,570** |
+| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | £700 | (~£720) | **£3,550** |
+| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£150,800** | (£4,670) | **£149,680** |
+| M8 (Jan 2027) | £1,600 | (£4,430) | **£146,850** |
+| M9 (Feb 2027) | £2,100 | (£4,390) | **£144,560** |
+| M10 (Mar 2027) | £2,700 | (£4,420) | **£142,840** |
+| M11 (Apr 2027) | £3,100 | (£4,390) | **£141,550** |
+| **M12 (May 2027)** — Y1 close | £3,938 | (£4,460) | **£141,028** |
 
-> **The £6,000 founder cash buffer means cash never dips below £2,500** in any month before the pre-seed bridge — a significantly more comfortable runway than the £3k starting case. The 3-month Bedfordshire pilot (Sep–Nov 2026, M4–M6) and the M7 (Dec 2026) conversion-conversation window is the single critical commercial event of Year 1, and the founders' direct relationship with the university (via the former SU presidency) is the principal de-risking factor.
+> **The £6,000 founder cash buffer means cash never dips below £3,500** in any month before the pre-seed bridge — a significantly more comfortable runway than the £3k starting case. The 3-month Bedfordshire pilot (Sep–Nov 2026, M4–M6) and the M7 (Dec 2026) conversion-conversation window is the single critical commercial event of Year 1, and the founders' direct relationship with the university (via the former SU presidency) is the principal de-risking factor.
 
 The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow Y1 (mo)".
 
@@ -245,15 +245,15 @@ The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow 
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | £11,988 | £185,808 | £699,280 |
+| Revenue | £15,988 | £175,808 | £659,280 |
 | Cost of Sales | (£1,440) | (£15,600) | (£54,000) |
-| Gross Profit | £10,548 | £170,208 | £645,280 |
-| Gross margin % | 88.0% | 91.6% | 92.3% |
+| Gross Profit | £14,548 | £160,208 | £605,280 |
+| Gross margin % | 91.0% | 91.1% | 91.8% |
 | Total overheads | (£28,620) | (£231,480) | (£579,260) |
-| **EBITDA** | **(£18,072)** | **(£61,272)** | **£66,020** |
-| **Operating profit** | **(£18,372)** | **(£62,772)** | **£61,520** |
+| **EBITDA** | **(£14,072)** | **(£71,272)** | **£26,020** |
+| **Operating profit** | **(£14,372)** | **(£72,772)** | **£21,520** |
 
-**Operating profit positive in Q3 Year 3.** Cumulative loss before profitability ≈ £81k — small for a venture-funded company because the NatWest Accelerator + lean founder pay materially reduce Y1 + Y2 burn.
+**Operating profit positive in Q4 Year 3.** Cumulative loss before profitability ≈ £87k — small for a venture-funded company because the NatWest Accelerator + lean founder pay materially reduce Y1 + Y2 burn.
 
 ---
 
@@ -348,7 +348,7 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 
 1. **Real product, real users** — the MVP is live, has beta users at three universities, and is governed by a DPIA-cleared safeguarding policy that ships before public launch.
 2. **Capital efficiency** — the business can survive Year 1 on **£6,000 of founder cash** because of the NatWest Accelerator in-kind support and a 6-month no-salary founder commitment. The pre-seed bridge is conservatively timed for **Dec 2026 (M7)** — immediately after the 3-month Bedfordshire pilot completes (Nov 2026) and conversion conversations open.
-3. **Credible UK growth** — 2 to 12 UK jobs in 3 years, 1 to 20 paying universities, operating profit positive Q3 Y3.
+3. **Credible UK growth** — 2 to 12 UK jobs in 3 years, 1 to 20 paying universities, operating profit positive Q4 Y3.
 
 ### What endorsement enables
 
@@ -372,5 +372,5 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 
 ---
 
-*Prepared for UKES short-track endorsement review — February 2026.*
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — for UKES short-track endorsement review, June 2026.*
 *Companion documents: `DEQUAD_UKES_Business_Plan.pdf`, `DEQUAD_Financial_Model.xlsx`, `DEQUAD_Risk_Register.pdf`.*
