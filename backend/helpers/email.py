@@ -395,6 +395,71 @@ async def send_support_inbound_email_to_admins(
         return False
 
 
+def create_welcome_email_html(name: str, app_url: str) -> str:
+    import html as _html
+    safe_name = _html.escape((name or "there").split(" ")[0])
+    cta = f'''
+        <tr><td align="center" style="padding:8px 0 24px;">
+          <a href="{app_url}" style="display:inline-block;background:#0F2942;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 36px;border-radius:999px;">Open DEQUAD</a>
+        </td></tr>''' if app_url else ''
+    return f"""
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F7FB;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
+  <tr><td align="center">
+    <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;">
+      <tr><td style="background:#0F2942;padding:28px 32px;">
+        <span style="color:#ffffff;font-size:22px;font-weight:900;letter-spacing:6px;">DEQUAD</span>
+      </td></tr>
+      <tr><td style="padding:32px;">
+        <p style="color:#4FB89F;font-size:12px;font-weight:800;letter-spacing:3px;margin:0 0 8px;">YOU'RE VERIFIED</p>
+        <h1 style="color:#0F2942;font-size:26px;font-weight:900;margin:0 0 16px;">Welcome to DEQUAD, {safe_name} 🎓</h1>
+        <p style="color:#4F6076;font-size:15px;line-height:24px;margin:0 0 16px;">
+          Your university email is confirmed and your account is live. DEQUAD connects you with fellow UK students for friendship, study support and community — safely.
+        </p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+          <tr><td style="padding:10px 0;border-bottom:1px solid #EAEFF5;color:#0F2942;font-size:14px;"><strong>💬 Match &amp; chat</strong> — discover students who share your interests</td></tr>
+          <tr><td style="padding:10px 0;border-bottom:1px solid #EAEFF5;color:#0F2942;font-size:14px;"><strong>🧠 Mood check-ins</strong> — track how you're feeling, day by day</td></tr>
+          <tr><td style="padding:10px 0;color:#0F2942;font-size:14px;"><strong>🛟 24/7 support</strong> — our team is one message away if you ever need help</td></tr>
+        </table>
+      </td></tr>
+      {cta}
+      <tr><td style="background:#F4F7FB;padding:20px 32px;">
+        <p style="color:#94A3B0;font-size:12px;line-height:18px;margin:0;">
+          You're receiving this because you verified an account on DEQUAD with this email address.
+          Your safety matters — every profile is a verified UK university student.
+        </p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+""".strip()
+
+
+def create_welcome_email_text(name: str, app_url: str) -> str:
+    first = (name or "there").split(" ")[0]
+    return (
+        f"Welcome to DEQUAD, {first}!\n\n"
+        "Your university email is confirmed and your account is live.\n\n"
+        "- Match & chat with fellow UK students who share your interests\n"
+        "- Track your mood with daily check-ins\n"
+        "- Reach our support team 24/7 if you ever need help\n\n"
+        + (f"Open DEQUAD: {app_url}\n\n" if app_url else "")
+        + "— The DEQUAD team"
+    )
+
+
+async def send_welcome_email(email: str, name: str, app_url: str = "") -> bool:
+    try:
+        return await send_email_async(
+            [email],
+            "Welcome to DEQUAD — you're in! 🎓",
+            create_welcome_email_html(name, app_url),
+            create_welcome_email_text(name, app_url),
+        )
+    except Exception as e:
+        logger.error(f"Failed to send welcome email to {email}: {e}")
+        return False
+
+
 def create_password_reset_email_html(name: str, reset_url: str) -> str:
     return f"""
     <!DOCTYPE html>
