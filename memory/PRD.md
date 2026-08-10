@@ -197,3 +197,22 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - `Support` tab already wraps `AdminSupportInbox`.
 - `Verifications` tab already wraps `AdminVerificationQueue`.
 - httpOnly-cookies migration blocked by Kubernetes ingress `Access-Control-Allow-Origin: *` (CORS spec forbids credentials with wildcard origin). Requires ops change (same-origin proxy or ingress rule) before code migration is viable.
+
+
+## Update — 26 August 2026 (Safeguarding hotfix + Android 15/16 config)
+
+**🚨 CRITICAL — Gmail SMTP credentials rejected in production**
+- Discovered via live pipeline test: every outbound email is failing with `535 5.7.8 Username and Password not accepted`.
+- **This is the single root cause for BOTH the OTP verification codes not arriving AND the safeguarding alert emails not being received.**
+- The app-password `meuaypdkgcigezlg` for `yusufquadri83@gmail.com` has been revoked / expired.
+- No code fix available — user needs to rotate `SMTP_PASSWORD` env var in production.
+
+**Safeguarding pipeline restored**
+- Backend: expanded `SAFEGUARDING_KEYWORDS` in `helpers/safeguarding.py` to also catch generic distress language — `depressed`, `depression`, `panic attack`, `can't cope`, `worthless`, `abused`, `harassed`, `bullied`, `stalked`, etc. Verified end-to-end.
+- Frontend: fixed runtime crash on Safeguarding tab (referenced `universities` + `runUniversityAnalysis` removed during refactor). Restored both. Tab now renders correctly.
+
+**Android 15/16 Play Console warnings — fixed in app.json**
+- Removed `"orientation": "portrait"` — Android 16 ignores restrictions on large screens.
+- Added `"android.edgeToEdgeEnabled": true` — Android 15 edge-to-edge.
+- Added `"android.resizeableActivity": true` — foldables / multi-window.
+- Bumped `version 1.2.0 → 1.2.1`, `versionCode 4 → 5`, `buildNumber 4 → 5`.

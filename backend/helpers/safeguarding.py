@@ -29,7 +29,25 @@ SAFEGUARDING_KEYWORDS = [
     "can't take it anymore", "cant take it anymore", "no way out",
     "hopeless", "no hope", "nobody cares", "no one cares",
     "nobody would miss me", "no one would miss me", "better without me",
-    "world would be better", "everyone hates me"
+    "world would be better", "everyone hates me",
+    # Distress / low-mood terms — added 2026-08 after admin reported that a
+    # student saying "I'm feeling depressed" produced no alert. Depression is
+    # not always a crisis, but combined with our tiered risk scoring (1
+    # keyword = medium risk, 2+ = high) it correctly surfaces a low-severity
+    # alert admins can triage rather than missing it entirely.
+    "depressed", "depression", "so depressed", "feeling depressed",
+    "really depressed", "very depressed", "clinically depressed",
+    "i'm depressed", "im depressed",
+    "anxious all the time", "panic attack", "panic attacks",
+    "can't cope", "cant cope", "can't sleep", "cant sleep",
+    "haven't slept", "havent slept", "burnt out", "burned out",
+    "breaking down", "falling apart", "on the edge",
+    "crying every day", "crying myself to sleep",
+    "worthless", "i'm worthless", "im worthless",
+    "empty inside", "numb inside", "so alone", "completely alone",
+    "abused", "being abused", "assaulted", "attacked me",
+    "harassed", "being harassed", "stalked", "someone is following me",
+    "bullied", "being bullied", "threatened",
 ]
 
 CRISIS_RESOURCES = {
