@@ -2,6 +2,8 @@
 
 > **2026-08-10 — Email provider switched to Resend**: Backend now sends all email (OTP verification, password reset, safeguarding alerts, support replies) via Resend API (`RESEND_API_KEY` + `RESEND_SENDER_EMAIL` in backend/.env). Gmail SMTP kept as fallback. **PENDING**: user must verify `dequad.com` (or `dequad.co.uk`) at resend.com/domains — until then Resend test mode only delivers to yusufquadri83@gmail.com; after verification update `RESEND_SENDER_EMAIL` to e.g. `verify@dequad.com`. ac.uk-only registration policy already enforced (no change needed).
 
+> **2026-08-10 — Verify-email countdown timer**: `verify-email.tsx` starts a visible 60s countdown pill on load (matches backend `OTP_RESEND_COOLDOWN_SECONDS=60`); resend button appears only when it reaches 0. Domain `dequad.com` STILL NOT verified on Resend (rechecked, 403) — user action pending.
+
 ## Original Problem Statement
 "Get app review from GitHub" — User imported existing GitHub repo `https://github.com/youngquad/Educare-updated-app`. Subsequent requests added: report-a-profile, racism/curse-word language filter, live customer support chat, swipe limits with countdown, match-back fix, unread badges, EAS mobile build guide.
 
