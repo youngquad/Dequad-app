@@ -42,5 +42,9 @@ SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
 SMTP_FROM_EMAIL = os.environ.get('SMTP_FROM_EMAIL', 'noreply@dequad.com')
 SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'DEQUAD Safeguarding')
 
+# Resend (preferred email provider when configured)
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+RESEND_SENDER_EMAIL = os.environ.get('RESEND_SENDER_EMAIL', '')
+
 # Admin
 ADMIN_SECRET_CODE = os.environ.get('ADMIN_SECRET_CODE', '')

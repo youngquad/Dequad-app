@@ -4,17 +4,43 @@ from email.mime.multipart import MIMEMultipart
 import asyncio
 import logging
 from typing import List
-from config import SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL, SMTP_FROM_NAME
+import resend
+from config import (
+    SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL, SMTP_FROM_NAME,
+    RESEND_API_KEY, RESEND_SENDER_EMAIL,
+)
 from database import db
 
 logger = logging.getLogger(__name__)
 
 
 def is_smtp_configured() -> bool:
-    return bool(SMTP_HOST and SMTP_USERNAME and SMTP_PASSWORD)
+    # True when any outbound email provider is configured (Resend preferred, SMTP fallback)
+    return bool(RESEND_API_KEY and RESEND_SENDER_EMAIL) or bool(SMTP_HOST and SMTP_USERNAME and SMTP_PASSWORD)
+
+
+def send_email_via_resend(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+    try:
+        resend.api_key = RESEND_API_KEY
+        params = {
+            "from": f"{SMTP_FROM_NAME} <{RESEND_SENDER_EMAIL}>",
+            "to": to_emails,
+            "subject": subject,
+            "html": html_body,
+        }
+        if text_body:
+            params["text"] = text_body
+        result = resend.Emails.send(params)
+        logger.info(f"Resend email sent to {to_emails} (id={result.get('id')})")
+        return True
+    except Exception as e:
+        logger.error(f"Resend failed to send email to {to_emails}: {e}")
+        return False
 
 
 def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+    if RESEND_API_KEY and RESEND_SENDER_EMAIL:
+        return send_email_via_resend(to_emails, subject, html_body, text_body)
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
