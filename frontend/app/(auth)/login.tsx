@@ -85,7 +85,13 @@ export default function LoginScreen() {
       }
     } catch (err: any) {
       const msg = err?.message || (mode === 'signin' ? 'Sign-in failed.' : 'Sign-up failed.');
-      setEmailErr(msg.replace(/^Error:\s*/, ''));
+      const clean = msg.replace(/^Error:\s*/, '');
+      // Unverified account → send them straight to the code screen (a fresh code was just emailed)
+      if (mode === 'signin' && /verify your university email/i.test(clean)) {
+        router.replace({ pathname: '/verify-email', params: { email: email.trim().toLowerCase() } } as any);
+        return;
+      }
+      setEmailErr(clean);
     } finally {
       setIsSigningIn(false);
     }

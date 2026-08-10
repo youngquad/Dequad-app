@@ -438,9 +438,14 @@ async def email_login(data: EmailLoginRequest, response: Response):
     # are also marked verified in seed.py.
     email_verified = user.get("email_verified", True)
     if email_verified is False:
+        # Auto-resend a fresh code (rate-limited) so the user isn't dead-ended.
+        try:
+            await _send_verification_otp(email_lower)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Auto-resend OTP on login failed for {email_lower}: {exc}")
         raise HTTPException(
             status_code=403,
-            detail="Please verify your university email before signing in. Check your inbox for the 6-digit code.",
+            detail="Please verify your university email before signing in. We've just sent a fresh 6-digit code to your inbox.",
         )
 
     user.pop("password_hash", None)
