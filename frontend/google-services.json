@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "393021233937",
+    "project_id": "dequad-3f000",
+    "storage_bucket": "dequad-3f000.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393021233937:android:71befae62aaad2c4f64ab0",
+        "android_client_info": {
+          "package_name": "com.dequad.wellbeing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG_8coLsG_vpp_KjUAgb4F9YqSN8pu1B8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
