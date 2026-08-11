@@ -20,6 +20,13 @@ expo-env.d.ts
 
 # Metro
 .metro-health-check*
+.metro-cache/
+
+# Android/Gradle build output
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
 
 # debug
 npm-debug.*
