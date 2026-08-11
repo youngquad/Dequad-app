@@ -9,6 +9,7 @@ import os
 from database import db, client
 from helpers.safeguarding import load_approved_keywords
 from helpers.first_match_nudge import first_match_nudge_worker
+from helpers.mood_reminder import mood_reminder_worker
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
@@ -49,13 +50,16 @@ async def lifespan(app: FastAPI):
         logger.error(f"chat pair_id migration failed (non-fatal): {e}")
     # Background worker: push a "first match" nudge 24h after signup.
     nudge_task = asyncio.create_task(first_match_nudge_worker())
+    # Background worker: daily 6 PM UK mood check-in reminder.
+    mood_task = asyncio.create_task(mood_reminder_worker())
     yield
     # Shutdown
-    nudge_task.cancel()
-    try:
-        await nudge_task
-    except asyncio.CancelledError:
-        pass
+    for task in (nudge_task, mood_task):
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
     client.close()
 
 
