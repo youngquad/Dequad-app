@@ -11,6 +11,11 @@ export default function PrivacyNative() {
         https://dequad.co.uk/privacy in your browser.
       </Text>
       <Text style={styles.p}>
+        DEQUAD uses only essential cookies needed to keep you signed in and to operate the
+        service securely. We do not use advertising or third-party tracking cookies. The full
+        Cookies Policy is included in the privacy policy at https://dequad.co.uk/privacy.
+      </Text>
+      <Text style={styles.p}>
         Email quadri.yusuf@dequad.com for any data-protection requests.
       </Text>
     </ScrollView>

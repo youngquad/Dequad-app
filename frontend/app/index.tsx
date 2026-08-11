@@ -118,24 +118,42 @@ export default function LandingScreen() {
             <Text style={styles.subtitle}>Your wellbeing companion for university life</Text>
           </View>
 
-          <Pressable
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-            onPress={() => router.push('/(auth)/login' as any)}
-            data-testid="get-started-btn"
-          >
-            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-              <LinearGradient
-                colors={['#5B9BD5', '#4A90C2']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.ctaButton}
-              >
-                <Text style={styles.ctaText}>Get Started</Text>
-                <Ionicons name="arrow-forward" size={20} color="#fff" />
-              </LinearGradient>
-            </Animated.View>
-          </Pressable>
+          <View>
+            <Pressable
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
+              onPress={() => router.push('/(auth)/login' as any)}
+              data-testid="get-started-btn"
+            >
+              <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                <LinearGradient
+                  colors={['#5B9BD5', '#4A90C2']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.ctaButton}
+                >
+                  <Text style={styles.ctaText}>Get Started</Text>
+                  <Ionicons name="arrow-forward" size={20} color="#fff" />
+                </LinearGradient>
+              </Animated.View>
+            </Pressable>
+
+            <Text style={styles.legalText} data-testid="legal-disclaimer">
+              By clicking on Get Started you agree to our{' '}
+              <Text style={styles.legalLink} onPress={() => router.push('/terms' as any)}>
+                Terms of Service
+              </Text>
+              . Understand how your data is processed in our{' '}
+              <Text style={styles.legalLink} onPress={() => router.push('/privacy' as any)}>
+                Privacy Policy
+              </Text>{' '}
+              and{' '}
+              <Text style={styles.legalLink} onPress={() => router.push('/privacy' as any)}>
+                Cookies Policy
+              </Text>
+              .
+            </Text>
+          </View>
         </Animated.View>
       </LinearGradient>
     </SafeAreaView>
@@ -231,4 +249,17 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   ctaText: { color: '#fff', fontSize: 17, fontWeight: '800' },
+  legalText: {
+    color: 'rgba(255,255,255,0.45)',
+    fontSize: 12,
+    lineHeight: 18,
+    textAlign: 'center',
+    marginTop: 16,
+    paddingHorizontal: 8,
+  },
+  legalLink: {
+    color: 'rgba(255,255,255,0.75)',
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
 });
