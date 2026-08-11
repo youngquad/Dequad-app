@@ -2,11 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
+import asyncio
 import logging
 import os
 
 from database import db, client
 from helpers.safeguarding import load_approved_keywords
+from helpers.first_match_nudge import first_match_nudge_worker
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
@@ -45,8 +47,15 @@ async def lifespan(app: FastAPI):
         logger.info(f"chat pair_id migration: {result}")
     except Exception as e:
         logger.error(f"chat pair_id migration failed (non-fatal): {e}")
+    # Background worker: push a "first match" nudge 24h after signup.
+    nudge_task = asyncio.create_task(first_match_nudge_worker())
     yield
     # Shutdown
+    nudge_task.cancel()
+    try:
+        await nudge_task
+    except asyncio.CancelledError:
+        pass
     client.close()
 
 

@@ -44,7 +44,13 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
-      "expo-updates"
+      "expo-updates",
+      [
+        "expo-notifications",
+        {
+          "color": "#5B9BD5"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

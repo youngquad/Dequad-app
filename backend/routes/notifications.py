@@ -1,10 +1,35 @@
 from fastapi import APIRouter, Depends, HTTPException
+import re
+from datetime import datetime, timezone
+from pydantic import BaseModel
 
 from database import db
 from models import User
 from helpers.auth import get_current_user
 
 router = APIRouter()
+
+EXPO_TOKEN_RE = re.compile(r"^Expo(nent)?PushToken\[.+\]$")
+
+
+class PushTokenRequest(BaseModel):
+    token: str
+    platform: str = "android"
+
+
+@router.post("/notifications/register-push-token")
+async def register_push_token(data: PushTokenRequest, current_user: User = Depends(get_current_user)):
+    if not EXPO_TOKEN_RE.match(data.token or ""):
+        raise HTTPException(status_code=400, detail="Invalid Expo push token format.")
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {
+            "push_token": data.token,
+            "push_token_platform": data.platform,
+            "push_token_updated_at": datetime.now(timezone.utc),
+        }},
+    )
+    return {"success": True}
 
 
 @router.get("/notifications")
