@@ -31,7 +31,8 @@ export default function VerifyEmail() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
+  // A code was just sent (at signup or via resend), so the 60s cooldown starts immediately
+  const [cooldown, setCooldown] = useState(60);
 
   const inputs = useRef<Array<TextInput | null>>([]);
 
@@ -204,16 +205,19 @@ export default function VerifyEmail() {
             )}
           </Pressable>
 
-          <Pressable
-            onPress={handleResend}
-            disabled={cooldown > 0}
-            style={styles.resendBtn}
-            data-testid="verify-resend"
-          >
-            <Text style={[styles.resendText, cooldown > 0 && styles.resendTextDisabled]}>
-              {cooldown > 0 ? `Resend code in ${cooldown}s` : "Didn't get it? Resend code"}
-            </Text>
-          </Pressable>
+          {cooldown > 0 ? (
+            <View style={styles.cooldownPill} data-testid="verify-cooldown-timer">
+              <Ionicons name="time-outline" size={16} color="#4F6076" />
+              <Text style={styles.cooldownText}>
+                You can request a new code in{' '}
+                <Text style={styles.cooldownSeconds}>{cooldown}s</Text>
+              </Text>
+            </View>
+          ) : (
+            <Pressable onPress={handleResend} style={styles.resendBtn} data-testid="verify-resend">
+              <Text style={styles.resendText}>Didn't get it? Resend code</Text>
+            </Pressable>
+          )}
 
           <Text style={styles.helper}>
             Wrong email?{' '}
@@ -284,6 +288,20 @@ const styles = StyleSheet.create({
   submitDisabled: { opacity: 0.45 },
   submitText: { color: '#fff', fontWeight: '800', fontSize: 16 },
   resendBtn: { paddingVertical: 12, alignItems: 'center' },
+  cooldownPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    alignSelf: 'center',
+    backgroundColor: '#EAEFF5',
+    borderRadius: 999,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    marginTop: 4,
+  },
+  cooldownText: { color: '#4F6076', fontSize: 14, fontWeight: '600' },
+  cooldownSeconds: { color: '#0F2942', fontWeight: '900' },
   resendText: { color: '#4FB89F', fontWeight: '700', fontSize: 14 },
   resendTextDisabled: { color: '#94A3B0' },
   helper: { color: '#4F6076', fontSize: 13, textAlign: 'center', marginTop: 8 },

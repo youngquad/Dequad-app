@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
+import { registerPushToken } from '../../src/utils/push';
 
 // Custom Tab Bar Icon with indicator + optional unread badge
 function TabIcon({
@@ -33,6 +34,12 @@ export default function MainLayout() {
   const { sessionToken } = useAuth();
   const [chatUnread, setChatUnread] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
+
+  // Register the device for push notifications once signed in (no-op on web).
+  useEffect(() => {
+    if (!sessionToken || Platform.OS === 'web') return;
+    registerPushToken(sessionToken);
+  }, [sessionToken]);
 
   // Poll unread chat + pending likes so the Chat and Connect tab badges update
   // even while the user is on another tab. Cheap aggregations on indexed fields.

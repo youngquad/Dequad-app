@@ -1,5 +1,23 @@
 # DEQUAD / Educare App - PRD
 
+> **2026-08-10 — Email provider switched to Resend**: Backend now sends all email (OTP verification, password reset, safeguarding alerts, support replies) via Resend API (`RESEND_API_KEY` + `RESEND_SENDER_EMAIL` in backend/.env). Gmail SMTP kept as fallback. **PENDING**: user must verify domain (RESOLVED same day — see below). ac.uk-only registration policy already enforced (no change needed).
+
+> **2026-08-10 — Resend domain VERIFIED & live**: `noreply.dequad.co.uk` verified on Resend (new API key in backend/.env, sender `noreply@noreply.dequad.co.uk`). E2E confirmed: registration with ac.uk email → OTP delivered to real ac.uk inbox (`email_verification_sent: true`). Email system fully operational. Test account created during E2E was deleted after testing (2026-08-10).
+
+> **2026-08-10 — Welcome email**: After successful OTP verification, `verify_email` fires a branded welcome email (fire-and-forget `asyncio.create_task`) via `send_welcome_email` in `helpers/email.py` (navy/teal DEQUAD branding, feature highlights, optional APP_URL CTA). E2E tested: register → OTP → verify → welcome email delivered via Resend.
+
+> **2026-08-10 — Unverified login dead-end fixed**: `/auth/email-login` now auto-resends a fresh OTP (rate-limited) when an unverified account tries to sign in, and `login.tsx` redirects to `/verify-email` instead of showing a dead-end error. Tested E2E. **NOTE**: user's production site (www.dequad.co.uk) still runs pre-Resend code — needs redeploy to get Resend email + these fixes.
+
+> **2026-08-11 — Native welcome screen redesign**: `app/index.tsx` (native only, web uses index.web.tsx) rebuilt — dark navy 3D background (floating gradient spheres + glow ring, animated drift), glass logo card with new transparent logo asset (`assets/images/dequad-logo-transparent.png`), DEQUAD wordmark, tagline, single "Get Started" pill → routes to /(auth)/login. Removed: features grid, trust badges, footer text, "Are you a university? Get dashboard access" link. Visually verified via temp web route. Requires new EAS build or `eas update` (OTA) to appear on phones.
+
+> **2026-08-11 — First-Match Nudge (push notification)**: 24h after signup, students get a push notification (+ in-app bell notification) suggesting a first match. Backend: `helpers/first_match_nudge.py` (worker loop every 10 min, atomic claim via `first_match_nudge_sent` flag, 24–72h window, same-university candidate preferred), wired into `server.py` lifespan; `POST /api/notifications/register-push-token` stores Expo token on user doc. Frontend: `src/utils/push.ts` (web no-op, Android channel, permission, `getExpoPushTokenAsync`), called from `(main)/_layout.tsx` after login; `expo-notifications` plugin added to app.json. All backend flows tested (register token valid/invalid, nudge idempotency, in-app notif stored). **USER ACTION for real Android delivery**: upload FCM V1 service account key to EAS credentials (Firebase project) + new EAS build (push doesn't work in Expo Go / old builds).
+
+> **2026-08-11 — Legal disclaimer + match push alerts**: Native welcome screen now shows "By clicking on Get Started you agree to our Terms of Service..." with tappable Terms/Privacy/Cookies links under the CTA (Cookies → /privacy, which covers cookies; native privacy.tsx fallback updated to mention cookies). Match push alerts required NO new code — swipe endpoint already fires "Someone likes you!" (new_like) and "New Match!" (new_match) via send_push_notification, which now delivers real phone pushes since devices register tokens.
+
+> **2026-08-11 — Daily mood reminder**: `helpers/mood_reminder.py` worker (in server.py lifespan) sends a daily 6 PM UK push ("How are you feeling today?" — 3 rotating messages) to students with push tokens who haven't logged mood that day; per-user-per-day atomic claim via `mood_reminder_last_sent`. Tested: sends once, skips mood-logged users and users without tokens, idempotent. Chat message push alerts already existed in chat/send ("New message from {name}") — live on phones now that tokens register.
+
+> **2026-08-11 — Firebase wired**: user's `google-services.json` (Firebase project `dequad-3f000`, package `com.dequad.wellbeing` ✓) saved to `frontend/google-services.json` and referenced in app.json (`android.googleServicesFile`); versionCode bumped to 5 for next Play upload. REMAINING user steps: upload FCM V1 service-account key via `eas credentials` (Android → production → Google Service Account), then `eas build --platform android --profile production`. `verify-email.tsx` shows a visible 60s countdown pill on load (matches backend `OTP_RESEND_COOLDOWN_SECONDS=60`); resend button appears only when it reaches 0.
+
 ## Original Problem Statement
 "Get app review from GitHub" — User imported existing GitHub repo `https://github.com/youngquad/Educare-updated-app`. Subsequent requests added: report-a-profile, racism/curse-word language filter, live customer support chat, swipe limits with countdown, match-back fix, unread badges, EAS mobile build guide.
 
@@ -197,3 +215,22 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - `Support` tab already wraps `AdminSupportInbox`.
 - `Verifications` tab already wraps `AdminVerificationQueue`.
 - httpOnly-cookies migration blocked by Kubernetes ingress `Access-Control-Allow-Origin: *` (CORS spec forbids credentials with wildcard origin). Requires ops change (same-origin proxy or ingress rule) before code migration is viable.
+
+
+## Update — 26 August 2026 (Safeguarding hotfix + Android 15/16 config)
+
+**🚨 CRITICAL — Gmail SMTP credentials rejected in production**
+- Discovered via live pipeline test: every outbound email is failing with `535 5.7.8 Username and Password not accepted`.
+- **This is the single root cause for BOTH the OTP verification codes not arriving AND the safeguarding alert emails not being received.**
+- The app-password `meuaypdkgcigezlg` for `yusufquadri83@gmail.com` has been revoked / expired.
+- No code fix available — user needs to rotate `SMTP_PASSWORD` env var in production.
+
+**Safeguarding pipeline restored**
+- Backend: expanded `SAFEGUARDING_KEYWORDS` in `helpers/safeguarding.py` to also catch generic distress language — `depressed`, `depression`, `panic attack`, `can't cope`, `worthless`, `abused`, `harassed`, `bullied`, `stalked`, etc. Verified end-to-end.
+- Frontend: fixed runtime crash on Safeguarding tab (referenced `universities` + `runUniversityAnalysis` removed during refactor). Restored both. Tab now renders correctly.
+
+**Android 15/16 Play Console warnings — fixed in app.json**
+- Removed `"orientation": "portrait"` — Android 16 ignores restrictions on large screens.
+- Added `"android.edgeToEdgeEnabled": true` — Android 15 edge-to-edge.
+- Added `"android.resizeableActivity": true` — foldables / multi-window.
+- Bumped `version 1.2.0 → 1.2.1`, `versionCode 4 → 5`, `buildNumber 4 → 5`.

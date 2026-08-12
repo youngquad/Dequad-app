@@ -7,6 +7,7 @@ import hashlib
 import secrets
 import uuid
 import os
+import asyncio
 import httpx
 import logging
 
@@ -18,7 +19,8 @@ from models import (
 from helpers.auth import get_session_token, get_current_user
 from helpers.passwords import hash_password, verify_and_maybe_rehash
 from helpers.email import (
-    is_smtp_configured, send_email_async, create_password_reset_email_html
+    is_smtp_configured, send_email_async, create_password_reset_email_html,
+    send_welcome_email,
 )
 from helpers.uk_student_email import classify_email
 from config import ADMIN_SECRET_CODE
@@ -369,6 +371,11 @@ async def verify_email(data: VerifyEmailRequest, response: Response):
     user.pop("password_hash", None)
     user.pop("admin_password", None)
 
+    # Fire-and-forget branded welcome email — must not delay the login response.
+    if is_smtp_configured():
+        app_url = os.environ.get("APP_URL", "").rstrip("/")
+        asyncio.create_task(send_welcome_email(email_lower, user.get("name", ""), app_url))
+
     session_token = secrets.token_urlsafe(32)
     await db.user_sessions.delete_many({"user_id": user["user_id"]})
     await db.user_sessions.insert_one({
@@ -431,9 +438,14 @@ async def email_login(data: EmailLoginRequest, response: Response):
     # are also marked verified in seed.py.
     email_verified = user.get("email_verified", True)
     if email_verified is False:
+        # Auto-resend a fresh code (rate-limited) so the user isn't dead-ended.
+        try:
+            await _send_verification_otp(email_lower)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Auto-resend OTP on login failed for {email_lower}: {exc}")
         raise HTTPException(
             status_code=403,
-            detail="Please verify your university email before signing in. Check your inbox for the 6-digit code.",
+            detail="Please verify your university email before signing in. We've just sent a fresh 6-digit code to your inbox.",
         )
 
     user.pop("password_hash", None)

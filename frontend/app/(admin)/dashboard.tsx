@@ -140,6 +140,11 @@ export default function AdminDashboard() {
   const [bulkAnalysis, setBulkAnalysis] = useState<BulkAnalysisResult[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  // Kept at parent level because the Safeguarding tab embeds a per-university
+  // AI-analysis quick widget (`Analyze by University` section). The dedicated
+  // Universities tab (`AdminUniversitiesTab`) fetches its own independent copy.
+  const [universities, setUniversities] = useState<{ name: string; student_count: number }[]>([]);
+
   // Date filters
   const [dateRange, setDateRange] = useState('30'); // days
 
@@ -167,6 +172,7 @@ export default function AdminDashboard() {
         loadMoodTrends(),
         loadUniversityComparison(),
         loadRiskDistribution(),
+        loadUniversitiesList(),
       ]);
       console.log('All admin data loaded successfully');
     } catch (error) {
@@ -235,6 +241,31 @@ export default function AdminDashboard() {
       setRiskDistribution(data);
     } catch (error) {
       console.error('Error loading risk distribution:', error);
+    }
+  };
+
+  const loadUniversitiesList = async () => {
+    try {
+      const data = await api.get('/admin/universities', sessionToken);
+      setUniversities(data.universities || []);
+    } catch (error) {
+      console.error('Error loading universities list:', error);
+    }
+  };
+
+  const runUniversityAnalysis = async (universityName: string) => {
+    setIsAnalyzing(true);
+    try {
+      const data = await api.post(`/admin/university/${encodeURIComponent(universityName)}/ai-analysis`, {});
+      Alert.alert(
+        'Analysis Complete',
+        `${universityName}\n\nWellbeing Score: ${data.ai_analysis?.overall_wellbeing_score || 'N/A'}/100\nTrend: ${data.ai_analysis?.wellbeing_trend || 'N/A'}`
+      );
+    } catch (error) {
+      console.error('Error running university analysis:', error);
+      Alert.alert('Error', 'Failed to run university analysis');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
