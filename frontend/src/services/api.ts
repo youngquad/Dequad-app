@@ -5,7 +5,6 @@ import Constants from 'expo-constants';
 // Preview/dev env vars take precedence; production builds and local `expo start`
 // (where .env is absent) fall back to the URL baked into app.json extra.
 const BACKEND_URL =
-  process.env.REACT_APP_BACKEND_URL ||
   process.env.EXPO_PUBLIC_BACKEND_URL ||
   Constants.expoConfig?.extra?.backendUrl ||
   '';
@@ -81,7 +80,6 @@ class ApiService {
     
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
-      console.log(`API ${method} ${endpoint} - Token:`, authToken.substring(0, 25) + '...');
     }
 
     try {
