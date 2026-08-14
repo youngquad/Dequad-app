@@ -133,7 +133,7 @@ export default function FeedbackScreen() {
           <View style={styles.content}>
             {/* Header */}
             <View style={styles.headerCard}>
-              <Ionicons name="chatbox-ellipses" size={32} color="#6366F1" />
+              <Ionicons name="chatbox-ellipses" size={32} color="#5B9BD5" />
               <Text style={styles.headerTitle}>Lecture Feedback</Text>
               <Text style={styles.headerSubtitle}>
                 Share your thoughts about your lectures to help us improve your experience
@@ -212,7 +212,7 @@ export default function FeedbackScreen() {
 
             {/* Info Box */}
             <View style={styles.infoBox}>
-              <Ionicons name="information-circle" size={20} color="#6366F1" />
+              <Ionicons name="information-circle" size={20} color="#5B9BD5" />
               <Text style={styles.infoText}>
                 Your feedback helps us understand how you're doing and improve the learning experience. 
                 All feedback is confidential.
@@ -223,7 +223,7 @@ export default function FeedbackScreen() {
             <View style={styles.historySection}>
               <Text style={styles.historyTitle}>Your Feedback History</Text>
               {isLoading ? (
-                <ActivityIndicator color="#6366F1" style={{ marginTop: 20 }} />
+                <ActivityIndicator color="#5B9BD5" style={{ marginTop: 20 }} />
               ) : feedbackHistory.length === 0 ? (
                 <View style={styles.emptyState}>
                   <Ionicons name="document-text-outline" size={48} color="#4B5563" />
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headerCard: {
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6366F1',
+    backgroundColor: '#5B9BD5',
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 32,
     backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: 12,
+    borderRadius: 20,
   },
   emptyText: {
     fontSize: 16,
@@ -422,10 +422,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   historyItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    borderRadius: 20,
     padding: 16,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
   },
   historyHeader: {
     flexDirection: 'row',
