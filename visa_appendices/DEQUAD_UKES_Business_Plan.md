@@ -15,8 +15,8 @@
 **Accelerator:** **NatWest Accelerator London** — joined **16 March 2026**; office co-working, legal advice and accountancy support provided in-kind for the first 12 months
 **Prior validation:** **Santander Universities Pre-Incubator programme** — completed 2025
 **Founder contact:** quadri.yusuf@dequad.com · 07928132617 · https://www.linkedin.com/in/quadri-yusuf/
-**Document version:** 3.0
-**Date:** June 2026
+**Document version:** 4.0
+**Date:** August 2026
 **Endorsing body:** UKES
 
 ---
@@ -70,10 +70,10 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 
 | Evidence | Detail |
 |---|---|
-| **Working product** | Production deployment at dequad.co.uk with ~50 beta users across 3 universities. Engineering build cost in Y1: **zero** — the MVP is already built. |
+| **Working product — fully featured** | Production deployment at dequad.co.uk with ~50 beta users across 3 universities. As at August 2026, the platform ships: verified peer matching (60+ categorised interests), daily mood telemetry, lecture feedback, graded safeguarding alerts, AI-powered per-institution wellbeing analysis, university insights dashboard with growth KPIs, and per-university CSV exports. Engineering build cost in Y1: **zero** — the MVP and all Y1 features are already built. |
 | **Founding team** | **Yusuf Quadri** (CEO — safeguarding professional, MBA with Data Analytics, 2× SU President) + **Yusuff Adeagbo** (CTO — MSc IT with Project Management), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor, MIGSO-PCUBED) — all wider team on equity-only terms. |
 | **Two independent validations** | **Santander Universities Pre-Incubator** (completed 2025) and **NatWest Accelerator London** (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes. |
-| **Anchor pilot in progress** | Pilot discussion under way with the **University of Bedfordshire** — the institution whose students the founder represented for two years. 12-week pilot scheduled Sep–Nov 2026. |
+| **Anchor pilot imminent** | Pilot confirmed with the **University of Bedfordshire** — the institution whose students the founder represented for two years. 12-week pilot launches Sep 2026 (M4); the platform is already built and ready for institutional onboarding. |
 | **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind, letting £6,000 of founder cash cover 6 months of positive-balance operation. |
 | **Conservative forecast** | Y1 revenue £15,988 → Y2 £175,808 → Y3 £659,280. Gross margin ~92% by Y3; operating profit positive in Q4 Y3. Only ONE university pilot is assumed to convert in Y1. |
 | **UK jobs** | 2 (Y1) → 6 (Y2) → 12 (Y3), all UK-based, with EMI options and board-tracked diversity targets. |
@@ -90,10 +90,11 @@ DEQUAD ships as a cross-platform application (iOS, Android and web at dequad.co.
 
 | Module | What it does | Why it is different |
 |---|---|---|
-| **Verified peer matching** | Matches students with compatible peers for friendship, study groups and peer support — exclusively within `.ac.uk` student-email-verified accounts, with distance-based and interest-based filters. | Closed-network identity plus intent-based matching. Not offered by Bumble BFF, Hinge or Facebook Groups. |
+| **Verified peer matching** | Matches students with compatible peers for friendship, study groups and peer support — exclusively within `.ac.uk` student-email-verified accounts, with distance-based and interest-based filters. Students select from **60+ categorised interests across 6 life-domains** (Academic, Creative, Tech, Lifestyle, Social, Entertainment) — up to 15 interests per profile — enabling richer compatibility scoring than any generic app. | Closed-network identity plus intent-based matching. Not offered by Bumble BFF, Hinge or Facebook Groups. |
 | **Daily wellbeing tracker** | 30-second daily check-in (mood, sleep, stress, connection) feeding a personal trend dashboard. | Anonymised, opt-in, DPIA-cleared. Combined with connection data to flag emerging isolation before crisis. |
-| **Machine-assisted safeguarding** | LLM-based classifier over mood and chat signals flags suicide-risk, harassment, hate-speech and disordered-eating indicators to university safeguarding leads via webhook, with human review. | The first UK student platform pairing `.ac.uk` identity verification with proactive safeguarding triage — designed by a practising safeguarding professional. |
-| **University Insights Dashboard** | Anonymised, aggregated cohort wellbeing analytics for university staff: mood trends, engagement, hotspot alerts. | Population-scale early warning without breaching individual privacy. |
+| **Machine-assisted safeguarding** | LLM-based classifier over mood and chat signals flags suicide-risk, harassment, hate-speech and disordered-eating indicators to university safeguarding leads via webhook, with human review. Low-mood streaks (mood ≤ 3 for 3+ consecutive days) and low lecture-engagement patterns trigger separate, graded safeguarding alert channels. | The first UK student platform pairing `.ac.uk` identity verification with proactive safeguarding triage — designed by a practising safeguarding professional. |
+| **University Insights Dashboard** | Anonymised, aggregated cohort wellbeing analytics for university staff: mood trends, engagement rates, platform growth KPIs (DAU/WAU/MAU, retention cohorts), and **AI-powered per-institution wellbeing analysis** that surfaces key concerns, positive indicators and prioritised intervention recommendations. | Population-scale early warning without breaching individual privacy. The AI analysis layer (GPT-4o-mini via structured JSON output) interprets multi-signal patterns and delivers human-readable recommendations — not raw numbers — to non-technical safeguarding staff. |
+| **Institutional data exports** | CSV export of feedback history, student data, mood entries and safeguarding alerts — with per-university filtering so each institution receives only its own cohort's data. | Closes the audit-trail requirement for OfS Condition B3 compliance; no comparable export tool exists in Togetherall or TalkCampus. |
 
 ### 2.2 What each customer buys
 
@@ -113,8 +114,9 @@ The dual-sided model matters: students adopt because the core product is free an
 
 1. **Closed-network identity verification.** DEQUAD is the only UK student platform enforcing `.ac.uk` student-domain verification with an explicit student-status attestation, a curated UK-student-domain allow-list, and a human admin review queue for ambiguous accounts (architecture at Appendix J). Generic social apps cannot retrofit this without abandoning their open-network model.
 2. **The verification → connection → telemetry → safeguarding loop.** Each element exists somewhere in the market; the **integrated loop** exists nowhere else. Wellbeing signals are only actionable when tied to a verified identity inside an institution that can respond — which is exactly the configuration DEQUAD ships.
-3. **Practitioner-designed safeguarding.** The triage thresholds, referral pathways and escalation policy were authored by a founder who performs statutory-adjacent safeguarding work weekly at Change Grow Live, modelled on UUK Stepchange and Suicide-Safer Universities guidance. Competing products bolt moderation on; DEQUAD is built outward from the safeguarding case-file.
-4. **Compliance as a feature.** Online Safety Act 2023 risk assessment, in-app reporting, UK GDPR DPIA and lawful-basis register shipped **before** first institutional sale — turning the sector's biggest procurement objection into our opening slide.
+3. **Practitioner-designed safeguarding.** The triage thresholds, referral pathways and escalation policy were authored by a founder who performs statutory-adjacent safeguarding work weekly at Change Grow Live, modelled on UUK Stepchange and Suicide-Safer Universities guidance. Competing products bolt moderation on; DEQUAD is built outward from the safeguarding case-file. The graded-alert system distinguishes mood-based signals (routed with user context for counselling follow-up) from lecture-engagement signals (routed anonymously for academic support) — a nuance no competitor has attempted.
+4. **AI-powered per-institution wellbeing intelligence.** The University Insights Dashboard now incorporates a GPT-4o-mini inference layer that reads multi-signal cohort data and generates a structured wellbeing analysis: a 0–100 wellbeing score (colour-coded with trend arrows), a ranked list of key concerns, a list of positive indicators, and prioritised, actionable recommendations — all rendered in human-readable English for safeguarding staff who are not data analysts. This converts a raw-numbers dashboard into a decision-support tool — a capability no university wellbeing platform currently provides.
+5. **Compliance as a feature.** Online Safety Act 2023 risk assessment, in-app reporting, UK GDPR DPIA and lawful-basis register shipped **before** first institutional sale — turning the sector's biggest procurement objection into our opening slide. Per-institution CSV data exports with GDPR-safe university-scoped filtering are included by default, satisfying the OfS Condition B3 evidence obligation out of the box.
 
 ### 3.2 Viability
 
@@ -154,6 +156,9 @@ Y1 R&D is delivered by the two founders (≈60% of combined founder time, ≈£1
 | Activity | Status | R&D tax-relief eligible |
 |---|---|---|
 | Mood × engagement × text-signal classifier (PHQ-9-lite scoring + risk-signal NLU) | Prototype Feb 2026; production Q2 Y2 | Yes |
+| Graded-alert pipeline: low-mood streak detector (≤3, 3+ consecutive days) → admin safeguarding alert | **Shipped** Aug 2026 | Yes |
+| Low lecture-engagement signal → anonymous academic-support alert | **Shipped** Aug 2026 | Yes |
+| AI-powered per-institution wellbeing analysis (GPT-4o-mini structured JSON — wellbeing score, concerns, recommendations) | **Shipped** Aug 2026 | Yes |
 | Real-time safeguarding webhook with adapter library for university SIS/CRM systems | Production Q3 Y1 | Yes |
 | Federated learning so per-institution models improve without raw data leaving the platform | Planned Q4 Y2 | Yes |
 
@@ -255,14 +260,17 @@ Five competitors, assessed comprehensively:
 | Capability | DEQUAD | Togetherall | TalkCampus | UniBuddy | Bumble BFF | Discord |
 |---|---|---|---|---|---|---|
 | `.ac.uk` student verification | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| Intent-based peer matching | ✅ | ❌ | Ltd | ❌ | Ltd | ❌ |
+| Intent-based peer matching (60+ interests, 6 categories) | ✅ | ❌ | Ltd | ❌ | Ltd | ❌ |
 | Daily mood telemetry | ✅ | ❌ | Ltd | ❌ | ❌ | ❌ |
 | Machine-assisted safeguarding triage | ✅ | Ltd | ❌ | ❌ | ❌ | ❌ |
+| Graded-alert safeguarding (mood vs engagement) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | University insights dashboard | ✅ | ✅ | ✅ | Ltd | ❌ | ❌ |
+| AI-powered per-institution wellbeing analysis | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Per-university CSV export with GDPR filtering | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Safeguarding webhook to institution | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Online Safety Act 2023 ready | ✅ | ✅ | ✅ | ✅ | Partial | ❌ |
 
-**DEQUAD is the only product in the UK market that holds all seven capabilities simultaneously.** Our closest substitutes are strong in exactly one column each.
+**DEQUAD is the only product in the UK market that holds all ten capabilities simultaneously.** Our closest substitutes are strong in exactly one column each.
 
 ---
 
@@ -346,11 +354,13 @@ Marketing grows to **£28,000 (Y2)** and **£92,000 (Y3)** — full breakdown in
 
 | Stage | Timing | Detail |
 |---|---|---|
-| Pilot launch | **Sep 2026 (M4)** — academic year start | 12-week no-fee pilot, one student cohort |
-| Pilot delivery | **Sep–Nov 2026 (M4–M6)** | Founder-led implementation; weekly office hours; mid-pilot steering-group review |
-| Review & conversion discussions | **Dec 2026 (M7) onwards** | Outcomes readout; commercial conversation opens |
-| Target paid signature | **Q1 2027 (M8–M9)** | Paid SaaS agreement covering AY 2026/27 H2 + 2027/28 |
-| Pre-seed bridge close | **M7 (Dec 2026)** | Raised off pilot-outcome signals + NatWest demo day — standard UK pre-seed sequencing |
+| Company incorporated | **Jun 2026 (M1)** — ✅ Complete | DEQUAD Ltd registered at Companies House. |
+| Platform feature buildout | **Jun–Aug 2026 (M1–M3)** — ✅ Complete | University AI analytics, graded safeguarding alerts, categorised interest matching, per-university data exports all shipped and live. |
+| Pilot launch | **Sep 2026 (M4)** — academic year start | 12-week no-fee pilot, one student cohort at University of Bedfordshire. |
+| Pilot delivery | **Sep–Nov 2026 (M4–M6)** | Founder-led implementation; weekly office hours; mid-pilot steering-group review. University AI analysis dashboard live for safeguarding staff. |
+| Review & conversion discussions | **Dec 2026 (M7) onwards** | Outcomes readout; commercial conversation opens. |
+| Target paid signature | **Q1 2027 (M8–M9)** | Paid SaaS agreement covering AY 2026/27 H2 + 2027/28. |
+| Pre-seed bridge close | **M7 (Dec 2026)** | Raised off pilot-outcome signals + NatWest demo day — standard UK pre-seed sequencing. |
 
 The Y1 forecast assumes **only the Bedfordshire pilot converts** (all other institutions modelled at 0% conversion). Two further pilots are being scoped at peer institutions as pure Q1-2027 upside.
 
@@ -656,4 +666,4 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 ---
 
-*End of business plan. All figures are forecasts, not guarantees of future performance. This business plan was written by Yusuf Quadri (Founder & CEO) with Yusuff Adeagbo (Co-Founder & CTO) and is submitted to UKES as part of the UK Innovator Founder visa endorsement process — June 2026.*
+*End of business plan. All figures are forecasts, not guarantees of future performance. This business plan was written by Yusuf Quadri (Founder & CEO) with Yusuff Adeagbo (Co-Founder & CTO) and is submitted to UKES as part of the UK Innovator Founder visa endorsement process — August 2026 (v4.0).*
