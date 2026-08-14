@@ -81,7 +81,6 @@ export default function MatchesScreen() {
   const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
   const [comment, setComment] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [likesCount, setLikesCount] = useState(0);
   const [reportTarget, setReportTarget] = useState<UserProfile | null>(null);
   // Premium-gated filter state (persisted in AsyncStorage across sessions)
   const [filters, setFilters] = useState<{
@@ -123,17 +122,7 @@ export default function MatchesScreen() {
   useEffect(() => {
     loadProfiles();
     loadSwipeStatus();
-    loadLikesCount();
   }, []);
-
-  const loadLikesCount = async () => {
-    try {
-      const data = await api.get('/matches/likes-received', sessionToken);
-      setLikesCount(data.length);
-    } catch (error) {
-      console.error('Error loading likes count:', error);
-    }
-  };
 
   const loadProfiles = async (reset: boolean = false) => {
     try {
@@ -397,15 +386,6 @@ export default function MatchesScreen() {
               style={styles.photoGradient}
             />
             
-            {/* Skip Button - Top Left */}
-            <TouchableOpacity 
-              style={styles.topSkipButton}
-              onPress={() => handleSkip(profile)}
-              disabled={!isCurrentProfile}
-            >
-              <Ionicons name="close" size={28} color="#fff" />
-            </TouchableOpacity>
-
             {/* Report Button - Top Right */}
             <TouchableOpacity
               style={styles.topReportButton}
@@ -518,22 +498,6 @@ export default function MatchesScreen() {
             </View>
           )}
 
-          {/* Match Score */}
-          {profile.match_score !== undefined && (
-            <View style={styles.matchScoreSection}>
-              <LinearGradient
-                colors={['rgba(245, 158, 11, 0.15)', 'rgba(251, 191, 36, 0.1)']}
-                style={styles.matchScoreCard}
-              >
-                <Ionicons name="star" size={24} color="#F59E0B" />
-                <Text style={styles.matchScoreText}>
-                  {Math.round(profile.match_score * 100)}% Match
-                </Text>
-                <Text style={styles.matchScoreSubtext}>Based on shared interests & preferences</Text>
-              </LinearGradient>
-            </View>
-          )}
-
           {/* Additional Photos */}
           {profile.photos && profile.photos.length > 1 && (
             <View style={styles.additionalPhotos}>
@@ -551,14 +515,14 @@ export default function MatchesScreen() {
             </View>
           )}
 
-          {/* Skip Button */}
-          <TouchableOpacity 
+          {/* Next / Skip Signpost */}
+          <TouchableOpacity
             style={styles.skipButton}
             onPress={() => handleSkip(profile)}
             disabled={!isCurrentProfile}
           >
-            <Ionicons name="close" size={24} color={t.textFaint} />
-            <Text style={styles.skipButtonText}>Skip</Text>
+            <Ionicons name="arrow-forward-circle" size={28} color={t.textFaint} />
+            <Text style={styles.skipButtonText}>Next</Text>
           </TouchableOpacity>
 
           <View style={styles.bottomSpacer} />
@@ -776,28 +740,8 @@ export default function MatchesScreen() {
         </View>
       )}
 
-      {/* Top Banner with Likes You & Swipe Counter */}
+      {/* Top Banner with Swipe Counter */}
       <View style={styles.topBanner}>
-        {/* Likes You Button */}
-        <TouchableOpacity 
-          style={styles.likesYouButton}
-          onPress={() => router.push('/(main)/likes-you')}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={['rgba(236, 72, 153, 0.2)', 'rgba(244, 114, 182, 0.1)']}
-            style={styles.likesYouGradient}
-          >
-            <Ionicons name="heart" size={18} color="#EC4899" />
-            <Text style={styles.likesYouText}>Likes You</Text>
-            {likesCount > 0 && (
-              <View style={styles.likesCountBadge}>
-                <Text style={styles.likesCountText}>{likesCount}</Text>
-              </View>
-            )}
-          </LinearGradient>
-        </TouchableOpacity>
-
         {/* Weekly Likes Counter — switches to a refresh-countdown when limit is hit */}
         {!swipeInfo.is_premium && (() => {
           const remaining = swipeInfo.remaining_likes_this_week ?? 0;
@@ -1110,28 +1054,6 @@ const createStyles = (t: Theme) => StyleSheet.create({
     color: '#818CF8',
     fontWeight: '500',
   },
-  matchScoreSection: {
-    marginHorizontal: 16,
-    marginTop: 16,
-  },
-  matchScoreCard: {
-    alignItems: 'center',
-    padding: 20,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
-  },
-  matchScoreText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#F59E0B',
-    marginTop: 8,
-  },
-  matchScoreSubtext: {
-    fontSize: 13,
-    color: t.textMuted,
-    marginTop: 4,
-  },
   additionalPhotos: {
     flexDirection: 'row',
     marginHorizontal: 16,
@@ -1164,18 +1086,6 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontSize: 16,
     color: t.textFaint,
     fontWeight: '600',
-  },
-  topSkipButton: {
-    position: 'absolute',
-    top: 16,
-    left: 16,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
   },
   topReportButton: {
     position: 'absolute',
@@ -1480,38 +1390,6 @@ const createStyles = (t: Theme) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 10,
-  },
-  likesYouButton: {
-    flex: 1,
-  },
-  likesYouGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(236, 72, 153, 0.3)',
-    gap: 8,
-  },
-  likesYouText: {
-    color: '#EC4899',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  likesCountBadge: {
-    backgroundColor: '#EC4899',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 10,
-    minWidth: 22,
-    alignItems: 'center',
-  },
-  likesCountText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '700',
   },
   swipeBanner: {
     flexDirection: 'row',
