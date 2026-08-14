@@ -366,7 +366,11 @@ function AnalyticsPanel({
         <Text style={localStyles.dividerLabel}>Export Data</Text>
         <View style={localStyles.dividerLine} />
       </View>
-      <AdminExportTab backendUrl={backendUrl} sessionToken={sessionToken} />
+      <AdminExportTab
+        backendUrl={backendUrl}
+        sessionToken={sessionToken}
+        preselectedUniversity={analysis?.university}
+      />
     </View>
   );
 }
