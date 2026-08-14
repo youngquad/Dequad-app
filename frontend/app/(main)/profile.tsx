@@ -134,7 +134,6 @@ export default function ProfileScreen() {
     // Push notifications only work on physical devices with development builds
     // Expo Go has limitations with push notifications since SDK 53
     if (!Device.isDevice) {
-      console.log('Push notifications require a physical device');
       return;
     }
 
@@ -148,7 +147,6 @@ export default function ProfileScreen() {
       }
       
       if (finalStatus !== 'granted') {
-        console.log('Push notification permission denied');
         return;
       }
       
@@ -162,11 +160,10 @@ export default function ProfileScreen() {
         // Save push token to backend
         if (token && sessionToken) {
           await api.put('/profile', { push_token: token }, sessionToken);
-          console.log('Push token registered successfully');
         }
       } catch (tokenError) {
         // This is expected in Expo Go - push notifications require a development build
-        console.log('Push notifications require a development build. Using Expo Go has limitations.');
+        console.error('Push notifications require a development build.');
       }
     } catch (error) {
       console.error('Error registering for push notifications:', error);
