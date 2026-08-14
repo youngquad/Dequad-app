@@ -22,23 +22,37 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 
-const INTERESTS = [
-  'Computer Science',
-  'Mathematics',
-  'Physics',
-  'Biology',
-  'Chemistry',
-  'Literature',
-  'History',
-  'Psychology',
-  'Economics',
-  'Art',
-  'Music',
-  'Sports',
-  'Gaming',
-  'Photography',
-  'Travel',
-  'Cooking',
+const INTEREST_CATEGORIES: { label: string; icon: string; items: string[] }[] = [
+  {
+    label: 'Academic',
+    icon: 'school-outline',
+    items: ['Computer Science', 'Mathematics', 'Physics', 'Biology', 'Chemistry', 'Literature', 'History', 'Psychology', 'Economics', 'Philosophy', 'Law', 'Medicine', 'Engineering', 'Architecture', 'Education', 'Data Science'],
+  },
+  {
+    label: 'Creative',
+    icon: 'color-palette-outline',
+    items: ['Art', 'Music', 'Photography', 'Film', 'Graphic Design', 'Writing', 'Dance', 'Theatre', 'Fashion', 'Crafts', 'Illustration', 'Podcasting'],
+  },
+  {
+    label: 'Tech',
+    icon: 'code-slash-outline',
+    items: ['Programming', 'AI & Machine Learning', 'Cybersecurity', 'Robotics', 'Web Development', 'Game Dev', 'Blockchain', '3D Printing'],
+  },
+  {
+    label: 'Lifestyle',
+    icon: 'heart-outline',
+    items: ['Travel', 'Cooking', 'Fitness', 'Yoga', 'Mindfulness', 'Gardening', 'Reading', 'Hiking', 'Cycling', 'Running', 'Swimming', 'Nutrition'],
+  },
+  {
+    label: 'Social',
+    icon: 'people-outline',
+    items: ['Volunteering', 'Politics', 'Entrepreneurship', 'Debating', 'Networking', 'Activism', 'Community', 'Sustainability'],
+  },
+  {
+    label: 'Entertainment',
+    icon: 'game-controller-outline',
+    items: ['Gaming', 'Sports', 'Esports', 'Anime', 'Board Games', 'Comedy', 'Concerts', 'Festivals', 'Binge-watching'],
+  },
 ];
 
 const STUDY_STYLES = [
@@ -114,6 +128,7 @@ export default function ProfileScreen() {
   
   // Preferences
   const [selectedInterests, setSelectedInterests] = useState<string[]>(user?.interests || []);
+  const [customInterest, setCustomInterest] = useState('');
   const [studyStyle, setStudyStyle] = useState(user?.study_style || '');
   const [ethnicity, setEthnicity] = useState(user?.ethnicity || '');
   const [interestedIn, setInterestedIn] = useState<string[]>(user?.interested_in || []);
@@ -215,11 +230,26 @@ export default function ProfileScreen() {
   const toggleInterest = (interest: string) => {
     if (selectedInterests.includes(interest)) {
       setSelectedInterests(selectedInterests.filter((i) => i !== interest));
-    } else if (selectedInterests.length < 5) {
+    } else if (selectedInterests.length < 15) {
       setSelectedInterests([...selectedInterests, interest]);
     } else {
-      Alert.alert('Limit Reached', 'You can select up to 5 interests');
+      Alert.alert('Limit Reached', 'You can select up to 15 interests');
     }
+  };
+
+  const addCustomInterest = () => {
+    const trimmed = customInterest.trim();
+    if (!trimmed) return;
+    if (selectedInterests.includes(trimmed)) {
+      setCustomInterest('');
+      return;
+    }
+    if (selectedInterests.length >= 15) {
+      Alert.alert('Limit Reached', 'You can select up to 15 interests');
+      return;
+    }
+    setSelectedInterests([...selectedInterests, trimmed]);
+    setCustomInterest('');
   };
 
   const toggleInterestedIn = (option: string) => {
@@ -789,43 +819,91 @@ export default function ProfileScreen() {
 
   const renderInterestsSection = () => (
     <View style={styles.section}>
-      <Text style={styles.fieldLabel}>
-        Interests {isEditing && `(${selectedInterests.length}/5)`}
-      </Text>
-      {isEditing ? (
-        <View style={styles.interestsGrid}>
-          {INTERESTS.map((interest) => (
-            <TouchableOpacity
-              key={interest}
-              style={[
-                styles.interestChip,
-                selectedInterests.includes(interest) && styles.interestChipSelected,
-              ]}
-              onPress={() => toggleInterest(interest)}
-            >
-              <Text
-                style={[
-                  styles.interestChipText,
-                  selectedInterests.includes(interest) && styles.interestChipTextSelected,
-                ]}
+      <View style={styles.interestsHeader}>
+        <Text style={styles.fieldLabel}>Interests</Text>
+        <View style={styles.interestCountBadge}>
+          <Text style={styles.interestCountText}>
+            {selectedInterests.length}/15 selected
+          </Text>
+        </View>
+      </View>
+
+      {/* Selected interests summary (always visible) */}
+      {selectedInterests.length > 0 && (
+        <View style={styles.selectedSummary}>
+          <View style={styles.interestsDisplay}>
+            {selectedInterests.map((interest) => (
+              <TouchableOpacity
+                key={interest}
+                style={styles.interestTagRemovable}
+                onPress={() => isEditing && toggleInterest(interest)}
+                disabled={!isEditing}
               >
-                {interest}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ) : (
-        <View style={styles.interestsDisplay}>
-          {user?.interests && user.interests.length > 0 ? (
-            user.interests.map((interest) => (
-              <View key={interest} style={styles.interestTag}>
                 <Text style={styles.interestTagText}>{interest}</Text>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.fieldValue}>No interests added</Text>
-          )}
+                {isEditing && (
+                  <Ionicons name="close-circle" size={14} color="#818CF8" style={{ marginLeft: 4 }} />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
+      )}
+
+      {isEditing && (
+        <>
+          {/* Custom interest input */}
+          <View style={styles.customInterestRow}>
+            <TextInput
+              style={styles.customInterestInput}
+              value={customInterest}
+              onChangeText={setCustomInterest}
+              placeholder="Add your own interest…"
+              placeholderTextColor={t.textFaint}
+              onSubmitEditing={addCustomInterest}
+              returnKeyType="done"
+            />
+            <TouchableOpacity
+              style={[styles.customInterestBtn, !customInterest.trim() && { opacity: 0.4 }]}
+              onPress={addCustomInterest}
+              disabled={!customInterest.trim()}
+            >
+              <Ionicons name="add" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Categorised interest grid */}
+          {INTEREST_CATEGORIES.map((cat) => (
+            <View key={cat.label} style={styles.interestCategory}>
+              <View style={styles.interestCategoryHeader}>
+                <Ionicons name={cat.icon as any} size={14} color={t.textMuted} />
+                <Text style={styles.interestCategoryLabel}>{cat.label}</Text>
+              </View>
+              <View style={styles.interestsGrid}>
+                {cat.items.map((interest) => {
+                  const selected = selectedInterests.includes(interest);
+                  return (
+                    <TouchableOpacity
+                      key={interest}
+                      style={[styles.interestChip, selected && styles.interestChipSelected]}
+                      onPress={() => toggleInterest(interest)}
+                    >
+                      {selected && (
+                        <Ionicons name="checkmark" size={12} color="#818CF8" style={{ marginRight: 4 }} />
+                      )}
+                      <Text style={[styles.interestChipText, selected && styles.interestChipTextSelected]}>
+                        {interest}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          ))}
+        </>
+      )}
+
+      {!isEditing && selectedInterests.length === 0 && (
+        <Text style={styles.fieldValue}>No interests added</Text>
       )}
     </View>
   );
@@ -1432,16 +1510,82 @@ const createStyles = (t: Theme) => StyleSheet.create({
     color: t.textMuted,
     fontSize: 14,
   },
+  interestsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  interestCountBadge: {
+    backgroundColor: 'rgba(129, 140, 248, 0.15)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(129, 140, 248, 0.3)',
+  },
+  interestCountText: {
+    color: '#818CF8',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  selectedSummary: {
+    marginBottom: 14,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.07)',
+  },
+  customInterestRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  customInterestInput: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    color: t.text,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(129, 140, 248, 0.2)',
+  },
+  customInterestBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 10,
+    backgroundColor: t.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  interestCategory: {
+    marginBottom: 14,
+  },
+  interestCategoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
+  interestCategoryLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: t.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
   interestsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 8,
   },
   interestChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: 'transparent',
@@ -1452,16 +1596,26 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   interestChipText: {
     color: t.textMuted,
-    fontSize: 14,
+    fontSize: 13,
   },
   interestChipTextSelected: {
     color: '#818CF8',
+    fontWeight: '600',
   },
   interestsDisplay: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 8,
+  },
+  interestTagRemovable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(129, 140, 248, 0.4)',
   },
   interestTag: {
     backgroundColor: 'rgba(91, 155, 213, 0.2)',
@@ -1471,7 +1625,8 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   interestTagText: {
     color: '#818CF8',
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: '500',
   },
   saveButton: {
     flexDirection: 'row',
