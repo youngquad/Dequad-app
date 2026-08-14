@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
-import { api } from '../../src/services/api';
+import { api, API_URL } from '../../src/services/api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
@@ -335,8 +335,7 @@ export default function ProfileScreen() {
 
     const proceed = async () => {
       try {
-        const apiBase =
-          process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+        const apiBase = API_URL;
         const res = await fetch(`${apiBase}/api/auth/me`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${sessionToken}` },

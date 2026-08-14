@@ -41,7 +41,7 @@ export default function UniversitySubscribePage() {
   const [contactPhone, setContactPhone] = useState('');
   const [expectedStudents, setExpectedStudents] = useState('');
   
-  const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+  const backendUrl = process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || '';
   
   useEffect(() => {
     loadPricing();

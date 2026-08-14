@@ -148,7 +148,7 @@ export default function AdminDashboard() {
   // Date filters
   const [dateRange, setDateRange] = useState('30'); // days
 
-  const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+  const backendUrl = process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || '';
 
   useEffect(() => {
     // Only load data when sessionToken is available and token loading is complete
@@ -892,7 +892,7 @@ export default function AdminDashboard() {
             </Text>
             <AdminInviteManager
               sessionToken={sessionToken}
-              apiBaseUrl={process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || ''}
+              apiBaseUrl={process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || ''}
             />
           </View>
         )}
