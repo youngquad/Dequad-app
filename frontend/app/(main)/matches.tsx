@@ -521,8 +521,8 @@ export default function MatchesScreen() {
             onPress={() => handleSkip(profile)}
             disabled={!isCurrentProfile}
           >
-            <Ionicons name="arrow-forward-circle" size={28} color={t.textFaint} />
-            <Text style={styles.skipButtonText}>Next</Text>
+            <Ionicons name="close-circle" size={28} color={t.textFaint} />
+            <Text style={styles.skipButtonText}>Skip</Text>
           </TouchableOpacity>
 
           <View style={styles.bottomSpacer} />
