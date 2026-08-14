@@ -951,7 +951,13 @@ async def university_ai_analysis(university_name: str, admin: User = Depends(req
         response = await chat.send_message(UserMessage(
             text=f"University: {university_decoded}\nStudents: {len(students)}\nAvg Mood: {university_avg_mood:.1f}/10\nSummaries: {student_summaries[:20]}"
         ))
-        try: ai_analysis = json.loads(response)
+        try:
+            clean = response.strip()
+            if clean.startswith("```"):
+                clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
+            if clean.endswith("```"):
+                clean = clean.rsplit("```", 1)[0]
+            ai_analysis = json.loads(clean.strip())
         except json.JSONDecodeError:
             ai_analysis = {"overall_wellbeing_score": round(university_avg_mood * 10), "wellbeing_trend": "stable",
                            "key_concerns": ["Unable to parse AI response"], "positive_aspects": [], "recommendations": [response[:500]],
