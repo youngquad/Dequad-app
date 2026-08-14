@@ -32,6 +32,8 @@ export default function ChatScreen() {
   const { matchId, name } = useLocalSearchParams<{ matchId: string; name: string }>();
   const navigation = useNavigation();
   const { sessionToken, user, isAuthenticated } = useAuth();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(true);

@@ -1351,7 +1351,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
-  filterPillText: { fontSize: 13, color: t.card, fontWeight: '700' },
+  filterPillText: { fontSize: 13, color: t.text, fontWeight: '700' },
   modalOverlay: {
     position: 'absolute',
     top: 0,

@@ -426,7 +426,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   swipeProgressText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: t.text,
     textAlign: 'center',
   },
   premiumCard: {

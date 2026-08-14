@@ -355,7 +355,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderBottomLeftRadius: 4,
   },
   senderLabel: { color: t.textMuted, fontSize: 11, fontWeight: '600', marginBottom: 2 },
-  msgText: { color: '#E2E8F0', fontSize: 14, lineHeight: 20 },
+  msgText: { color: t.text, fontSize: 14, lineHeight: 20 },
   msgTextMine: { color: '#fff' },
   msgTime: { color: 'rgba(226,232,240,0.5)', fontSize: 10, marginTop: 4, alignSelf: 'flex-end' },
   msgTimeMine: { color: 'rgba(255,255,255,0.7)' },

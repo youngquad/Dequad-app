@@ -929,10 +929,10 @@ export default function ProfileScreen() {
             </TouchableOpacity>
 
             {/* Appearance (theme) selector */}
-            <View style={themeRowStyles.row} data-testid="appearance-selector">
+            <View style={[themeRowStyles.row, { backgroundColor: t.card, borderColor: t.border }]} data-testid="appearance-selector">
               <View style={themeRowStyles.labelWrap}>
-                <Ionicons name={isDark ? 'moon' : 'sunny'} size={20} color="#5B9BD5" />
-                <Text style={themeRowStyles.label}>Appearance</Text>
+                <Ionicons name={isDark ? 'moon' : 'sunny'} size={20} color={t.accent} />
+                <Text style={[themeRowStyles.label, { color: t.text }]}>Appearance</Text>
               </View>
               <View style={themeRowStyles.pills}>
                 {(['light', 'dark', 'system'] as const).map((m) => (
@@ -942,7 +942,7 @@ export default function ProfileScreen() {
                     style={[themeRowStyles.pill, themeMode === m && themeRowStyles.pillActive]}
                     data-testid={`theme-${m}`}
                   >
-                    <Text style={[themeRowStyles.pillText, themeMode === m && themeRowStyles.pillTextActive]}>
+                    <Text style={[themeRowStyles.pillText, { color: t.textMuted }, themeMode === m && themeRowStyles.pillTextActive]}>
                       {m === 'light' ? 'Light' : m === 'dark' ? 'Dark' : 'Auto'}
                     </Text>
                   </TouchableOpacity>
