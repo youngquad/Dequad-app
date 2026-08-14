@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { BlurView } from 'expo-blur';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
@@ -79,8 +78,8 @@ export default function MainLayout() {
           borderTopWidth: 1,
           borderTopColor: t.border,
           paddingTop: 8,
-          paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-          height: Platform.OS === 'ios' ? 88 : 70,
+          paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+          height: Platform.OS === 'ios' ? 88 : 76,
           position: 'absolute',
           elevation: 0,
         },
