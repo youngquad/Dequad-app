@@ -42,7 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const processSessionId = useCallback(async (sessionId: string) => {
     try {
-      console.log('Processing session_id:', sessionId);
       const response = await api.post('/auth/session', { session_id: sessionId });
       
       if (response.user && response.session_token) {
@@ -57,7 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           localStorage.setItem('session_token', response.session_token);
         }
         
-        console.log('Auth successful, user:', response.user.name);
       }
     } catch (error) {
       console.error('Session exchange error:', error);
@@ -77,7 +75,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSessionToken(token);
         const userData = await api.get('/auth/me', token);
         setUser(userData);
-        console.log('Restored session for:', userData.name);
       }
     } catch (error) {
       console.error('Session check error:', error);
@@ -106,8 +103,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         sessionId = url.split('session_id=')[1]?.split('&')[0];
       }
       
-      console.log('Parsed session_id:', sessionId);
-      
       if (sessionId) {
         setIsLoading(true);
         await processSessionId(sessionId);
@@ -128,9 +123,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const fullUrl = window.location.href;
       const hash = window.location.hash;
       const search = window.location.search;
-      
-      console.log('Web URL check - Full URL:', fullUrl);
-      console.log('Hash:', hash, 'Search:', search);
       
       if (hash.includes('session_id=') || search.includes('session_id=') || fullUrl.includes('session_id=')) {
         handleUrl(fullUrl).then(() => {
