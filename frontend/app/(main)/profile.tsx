@@ -156,7 +156,7 @@ export default function ProfileScreen() {
       // In Expo Go, this will fail gracefully
       try {
         const token = (await Notifications.getExpoPushTokenAsync({
-          projectId: 'dequad-app'
+          projectId: '0ad6a13c-845f-4ab4-9177-ba5031d2462d'
         })).data;
         
         // Save push token to backend
