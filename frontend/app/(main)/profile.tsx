@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
-import { useTheme } from '../../src/contexts/ThemeContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api, API_URL } from '../../src/services/api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -89,6 +89,8 @@ const ETHNICITIES = [
 ];
 
 export default function ProfileScreen() {
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const router = useRouter();
   const { user, logout, refreshUser, sessionToken } = useAuth();
   const { mode: themeMode, setMode: setThemeMode, isDark } = useTheme();
@@ -574,7 +576,7 @@ export default function ProfileScreen() {
             value={age}
             onChangeText={setAge}
             placeholder="Enter your age"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
             keyboardType="numeric"
             maxLength={2}
           />
@@ -591,7 +593,7 @@ export default function ProfileScreen() {
             value={university}
             onChangeText={setUniversity}
             placeholder="Enter your university"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.university || 'Not specified'}</Text>
@@ -606,7 +608,7 @@ export default function ProfileScreen() {
             value={universityLocation}
             onChangeText={setUniversityLocation}
             placeholder="City, Country"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.university_location || 'Not specified'}</Text>
@@ -621,7 +623,7 @@ export default function ProfileScreen() {
             value={campusName}
             onChangeText={setCampusName}
             placeholder="e.g., Main Campus, North Campus"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.campus_name || 'Not specified'}</Text>
@@ -636,7 +638,7 @@ export default function ProfileScreen() {
             value={course}
             onChangeText={setCourse}
             placeholder="e.g., Computer Science"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.course || 'Not specified'}</Text>
@@ -651,7 +653,7 @@ export default function ProfileScreen() {
             value={bio}
             onChangeText={setBio}
             placeholder="Tell us about yourself..."
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
             multiline
             numberOfLines={3}
             maxLength={200}
@@ -860,7 +862,7 @@ export default function ProfileScreen() {
             <View style={styles.editRow}>
               {!isEditing ? (
                 <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-                  <Ionicons name="pencil" size={18} color="#6366F1" />
+                  <Ionicons name="pencil" size={18} color={t.accent} />
                   <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
               ) : (
@@ -879,7 +881,7 @@ export default function ProfileScreen() {
               >
                 <Ionicons name="analytics" size={24} color="#F59E0B" />
                 <Text style={styles.adminButtonText}>Admin Dashboard</Text>
-                <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+                <Ionicons name="chevron-forward" size={20} color={t.textMuted} />
               </TouchableOpacity>
             )}
 
@@ -899,7 +901,7 @@ export default function ProfileScreen() {
               </View>
               {user?.plan === 'premium' ? (
                 <View style={styles.premiumActiveBadge}>
-                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={16} color={t.success} />
                   <Text style={styles.premiumActiveText}>Active</Text>
                 </View>
               ) : (
@@ -914,7 +916,7 @@ export default function ProfileScreen() {
               data-testid="contact-support-btn"
             >
               <View style={styles.supportIconContainer}>
-                <Ionicons name="headset" size={22} color="#6366F1" />
+                <Ionicons name="headset" size={22} color={t.accent} />
               </View>
               <View style={styles.supportInfo}>
                 <Text style={styles.supportTitle}>Contact Support</Text>
@@ -923,7 +925,7 @@ export default function ProfileScreen() {
                 </Text>
               </View>
               <View style={styles.supportLiveDot} />
-              <Ionicons name="chevron-forward" size={20} color="#6366F1" />
+              <Ionicons name="chevron-forward" size={20} color={t.accent} />
             </TouchableOpacity>
 
             {/* Appearance (theme) selector */}
@@ -1001,10 +1003,10 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: t.bg,
   },
   keyboardView: {
     flex: 1,
@@ -1023,7 +1025,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -1036,12 +1038,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: t.text,
     marginBottom: 4,
   },
   email: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: t.textMuted,
   },
   adminBadge: {
     flexDirection: 'row',
@@ -1065,13 +1067,13 @@ const styles = StyleSheet.create({
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: 'rgba(91, 155, 213, 0.15)',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
   },
   editButtonText: {
-    color: '#6366F1',
+    color: t.accent,
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
@@ -1133,7 +1135,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   premiumSubtitle: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 2,
   },
@@ -1154,18 +1156,18 @@ const styles = StyleSheet.create({
   supportButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: 'rgba(99, 102, 241, 0.3)',
+    borderColor: 'rgba(91, 155, 213, 0.3)',
   },
   supportIconContainer: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -1179,7 +1181,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   supportSubtitle: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 2,
   },
@@ -1192,7 +1194,7 @@ const styles = StyleSheet.create({
   },
   photoHint: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -1227,7 +1229,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     left: 8,
-    backgroundColor: 'rgba(99, 102, 241, 0.9)',
+    backgroundColor: 'rgba(91, 155, 213, 0.9)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -1248,7 +1250,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   addPhotoText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 8,
     textAlign: 'center',
@@ -1267,12 +1269,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   activeTab: {
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
   },
   sectionTabText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: t.textMuted,
   },
   activeTabText: {
     color: '#fff',
@@ -1288,19 +1290,19 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 8,
     fontWeight: '600',
   },
   fieldValue: {
     fontSize: 16,
-    color: '#fff',
+    color: t.text,
   },
   input: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 8,
     padding: 12,
-    color: '#fff',
+    color: t.text,
     fontSize: 16,
   },
   textArea: {
@@ -1321,11 +1323,11 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   optionSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-    borderColor: '#6366F1',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    borderColor: t.accent,
   },
   optionText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -1345,11 +1347,11 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   ethnicityChipSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-    borderColor: '#6366F1',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    borderColor: t.accent,
   },
   ethnicityText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
   },
   ethnicityTextSelected: {
@@ -1370,17 +1372,17 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   studyStyleSelected: {
-    borderColor: '#6366F1',
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderColor: t.accent,
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
   },
   studyStyleLabel: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 8,
     textAlign: 'center',
   },
   studyStyleLabelSelected: {
-    color: '#6366F1',
+    color: t.accent,
   },
   notificationRow: {
     flexDirection: 'row',
@@ -1389,19 +1391,19 @@ const styles = StyleSheet.create({
   },
   notificationDesc: {
     fontSize: 12,
-    color: '#6B7280',
+    color: t.textFaint,
     marginTop: 2,
   },
   toggle: {
     width: 50,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#374151',
+    backgroundColor: t.border,
     padding: 2,
     justifyContent: 'center',
   },
   toggleActive: {
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
   },
   toggleKnob: {
     width: 24,
@@ -1422,7 +1424,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#374151',
+    backgroundColor: t.border,
     padding: 2,
     justifyContent: 'center',
   },
@@ -1430,7 +1432,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#5B9BD5',
   },
   toggleLabel: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
   },
   interestsGrid: {
@@ -1448,11 +1450,11 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   interestChipSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-    borderColor: '#6366F1',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    borderColor: t.accent,
   },
   interestChipText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
   },
   interestChipTextSelected: {
@@ -1465,7 +1467,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   interestTag: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -1478,7 +1480,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     paddingVertical: 16,
     borderRadius: 12,
     marginBottom: 16,
@@ -1521,7 +1523,7 @@ const styles = StyleSheet.create({
   },
   deleteAccountCaption: {
     fontSize: 12,
-    color: '#6B7280',
+    color: t.textFaint,
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 32,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
 
 interface SubscriptionStatus {
@@ -26,6 +27,8 @@ interface SubscriptionStatus {
 }
 
 export default function SubscriptionScreen() {
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const { sessionToken, refreshUser } = useAuth();
   const [status, setStatus] = useState<SubscriptionStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -146,7 +149,7 @@ export default function SubscriptionScreen() {
     return (
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#6366F1" />
+          <ActivityIndicator size="large" color={t.accent} />
         </View>
       </SafeAreaView>
     );
@@ -207,7 +210,7 @@ export default function SubscriptionScreen() {
               
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
-                  <Ionicons name="infinite" size={24} color="#10B981" />
+                  <Ionicons name="infinite" size={24} color={t.success} />
                 </View>
                 <View style={styles.featureContent}>
                   <Text style={styles.featureTitle}>Unlimited Swipes</Text>
@@ -231,7 +234,7 @@ export default function SubscriptionScreen() {
 
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
-                  <Ionicons name="eye" size={24} color="#6366F1" />
+                  <Ionicons name="eye" size={24} color={t.accent} />
                 </View>
                 <View style={styles.featureContent}>
                   <Text style={styles.featureTitle}>See Who Liked You</Text>
@@ -258,7 +261,7 @@ export default function SubscriptionScreen() {
             {status?.is_premium ? (
               <View style={styles.premiumActions}>
                 <View style={styles.activeSubscription}>
-                  <Ionicons name="checkmark-circle" size={24} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={24} color={t.success} />
                   <Text style={styles.activeText}>Subscription Active</Text>
                 </View>
                 <TouchableOpacity 
@@ -311,15 +314,15 @@ export default function SubscriptionScreen() {
             <View style={styles.freeCard}>
               <Text style={styles.freeTitle}>Free Plan</Text>
               <View style={styles.freeFeature}>
-                <Ionicons name="checkmark" size={18} color="#9CA3AF" />
+                <Ionicons name="checkmark" size={18} color={t.textMuted} />
                 <Text style={styles.freeFeatureText}>5 swipes per day</Text>
               </View>
               <View style={styles.freeFeature}>
-                <Ionicons name="checkmark" size={18} color="#9CA3AF" />
+                <Ionicons name="checkmark" size={18} color={t.textMuted} />
                 <Text style={styles.freeFeatureText}>Basic matching</Text>
               </View>
               <View style={styles.freeFeature}>
-                <Ionicons name="checkmark" size={18} color="#9CA3AF" />
+                <Ionicons name="checkmark" size={18} color={t.textMuted} />
                 <Text style={styles.freeFeatureText}>Chat with matches</Text>
               </View>
               <View style={styles.freeFeature}>
@@ -352,10 +355,10 @@ export default function SubscriptionScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: t.bg,
   },
   loadingContainer: {
     flex: 1,
@@ -390,7 +393,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   freeBadgeText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
   },
   premiumBadgeText: {
     color: '#F59E0B',
@@ -403,7 +406,7 @@ const styles = StyleSheet.create({
   },
   swipeCounterTitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 12,
   },
   swipeProgressContainer: {
@@ -411,13 +414,13 @@ const styles = StyleSheet.create({
   },
   swipeProgressBar: {
     height: 8,
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
     borderRadius: 4,
     overflow: 'hidden',
   },
   swipeProgressFill: {
     height: '100%',
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     borderRadius: 4,
   },
   swipeProgressText: {
@@ -427,7 +430,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   premiumCard: {
-    backgroundColor: '#1F2937',
+    backgroundColor: t.card,
     borderRadius: 20,
     padding: 24,
     borderWidth: 2,
@@ -441,7 +444,7 @@ const styles = StyleSheet.create({
   premiumTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: t.text,
     marginTop: 12,
     marginBottom: 4,
   },
@@ -456,7 +459,7 @@ const styles = StyleSheet.create({
   featuresTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 16,
   },
   featureItem: {
@@ -479,12 +482,12 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: t.text,
     marginBottom: 2,
   },
   featureDesc: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     lineHeight: 20,
   },
   premiumActions: {
@@ -551,7 +554,7 @@ const styles = StyleSheet.create({
   freeTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 16,
   },
   freeFeature: {
@@ -561,17 +564,17 @@ const styles = StyleSheet.create({
   },
   freeFeatureText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginLeft: 10,
   },
   freeFeatureTextDisabled: {
     fontSize: 14,
-    color: '#6B7280',
+    color: t.textFaint,
     marginLeft: 10,
     textDecorationLine: 'line-through',
   },
   infoSection: {
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 32,
@@ -584,7 +587,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 4,
     lineHeight: 20,
   },

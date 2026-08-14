@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
 
 interface SupportMessage {
@@ -36,6 +37,8 @@ const QUICK_ACTIONS = [
 ];
 
 export default function SupportScreen() {
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const router = useRouter();
   const { user, sessionToken } = useAuth();
   const [messages, setMessages] = useState<SupportMessage[]>([]);
@@ -145,11 +148,11 @@ export default function SupportScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} data-testid="support-back-btn">
-          <Ionicons name="chevron-back" size={26} color="#F8FAFC" />
+          <Ionicons name="chevron-back" size={26} color={t.text} />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <View style={styles.headerAvatar}>
-            <Ionicons name="headset" size={20} color="#6366F1" />
+            <Ionicons name="headset" size={20} color={t.accent} />
           </View>
           <View>
             <Text style={styles.headerTitle}>DEQUAD Support</Text>
@@ -169,7 +172,7 @@ export default function SupportScreen() {
       >
         {isLoading ? (
           <View style={styles.loadingWrap}>
-            <ActivityIndicator color="#6366F1" />
+            <ActivityIndicator color={t.accent} />
           </View>
         ) : messages.length === 0 ? (
           <View style={styles.emptyWrap}>
@@ -221,7 +224,7 @@ export default function SupportScreen() {
             value={input}
             onChangeText={setInput}
             placeholder="Type your message..."
-            placeholderTextColor="#64748B"
+            placeholderTextColor={t.textFaint}
             multiline
             maxLength={2000}
             data-testid="support-input"
@@ -248,29 +251,29 @@ export default function SupportScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0F172A' },
+const createStyles = (t: Theme) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: t.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(148, 163, 184, 0.1)',
+    borderBottomColor: t.border,
   },
   headerCenter: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
   headerAvatar: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: 'rgba(91, 155, 213, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: { color: '#F8FAFC', fontSize: 16, fontWeight: '700' },
+  headerTitle: { color: t.text, fontSize: 16, fontWeight: '700' },
   statusRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 },
   statusDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#10B981' },
-  statusText: { color: '#94A3B8', fontSize: 11 },
+  statusText: { color: t.textMuted, fontSize: 11 },
 
   loadingWrap: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 
@@ -283,16 +286,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 14,
   },
-  emptyTitle: { color: '#F8FAFC', fontSize: 22, fontWeight: '700', textAlign: 'center' },
+  emptyTitle: { color: t.text, fontSize: 22, fontWeight: '700', textAlign: 'center' },
   emptySubtitle: {
-    color: '#94A3B8',
+    color: t.textMuted,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 8,
     lineHeight: 20,
   },
   quickLabel: {
-    color: '#CBD5E1',
+    color: t.textMuted,
     marginTop: 28,
     marginBottom: 10,
     fontSize: 12,
@@ -305,9 +308,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: 'rgba(99, 102, 241, 0.10)',
+    backgroundColor: 'rgba(91, 155, 213, 0.10)',
     borderWidth: 1,
-    borderColor: 'rgba(99, 102, 241, 0.30)',
+    borderColor: 'rgba(91, 155, 213, 0.30)',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -331,7 +334,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatarAI: { backgroundColor: '#6366F1' },
+  avatarAI: { backgroundColor: t.accent },
   avatarAgent: { backgroundColor: '#10B981' },
   bubble: {
     maxWidth: '78%',
@@ -340,18 +343,18 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   bubbleMine: {
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     borderBottomRightRadius: 4,
   },
   bubbleAI: {
-    backgroundColor: 'rgba(99, 102, 241, 0.18)',
+    backgroundColor: 'rgba(91, 155, 213, 0.18)',
     borderBottomLeftRadius: 4,
   },
   bubbleAgent: {
     backgroundColor: 'rgba(16, 185, 129, 0.18)',
     borderBottomLeftRadius: 4,
   },
-  senderLabel: { color: '#CBD5E1', fontSize: 11, fontWeight: '600', marginBottom: 2 },
+  senderLabel: { color: t.textMuted, fontSize: 11, fontWeight: '600', marginBottom: 2 },
   msgText: { color: '#E2E8F0', fontSize: 14, lineHeight: 20 },
   msgTextMine: { color: '#fff' },
   msgTime: { color: 'rgba(226,232,240,0.5)', fontSize: 10, marginTop: 4, alignSelf: 'flex-end' },
@@ -363,8 +366,8 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(148, 163, 184, 0.1)',
-    backgroundColor: '#0F172A',
+    borderTopColor: t.border,
+    backgroundColor: t.bg,
   },
   input: {
     flex: 1,
@@ -374,7 +377,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    color: '#F8FAFC',
+    color: t.text,
     fontSize: 15,
   },
   sendBtn: {
