@@ -1056,7 +1056,7 @@ export default function AdminDashboard() {
 
         {/* Universities Tab */}
         {activeTab === 'universities' && (
-          <AdminUniversitiesTab sessionToken={sessionToken} />
+          <AdminUniversitiesTab sessionToken={sessionToken} backendUrl={backendUrl} />
         )}
 
         {/* Analytics Tab */}

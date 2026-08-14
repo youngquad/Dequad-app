@@ -10,8 +10,9 @@ import { api } from '../services/api';
 import { adminStyles as styles } from '../utils/adminStyles';
 import { getRiskColor } from '../utils/adminHelpers';
 import { AdminGrowthAnalytics } from './AdminGrowthAnalytics';
+import AdminExportTab from './AdminExportTab';
 
-type Props = { sessionToken: string | null };
+type Props = { sessionToken: string | null; backendUrl?: string };
 
 type UniversityAnalysis = {
   university: string;
@@ -33,7 +34,7 @@ type UniversityAnalysis = {
   };
 };
 
-export default function AdminUniversitiesTab({ sessionToken }: Props) {
+export default function AdminUniversitiesTab({ sessionToken, backendUrl = '' }: Props) {
   const [universities, setUniversities] = useState<{ name: string; student_count: number }[]>([]);
   const [selectedUniversity, setSelectedUniversity] = useState<string | null>(null);
   const [universityStudents, setUniversityStudents] = useState<any[]>([]);
@@ -112,6 +113,7 @@ export default function AdminUniversitiesTab({ sessionToken }: Props) {
         onBack={handleBack}
         onRefresh={() => selectedUniversity && runUniversityAnalysis(selectedUniversity)}
         sessionToken={sessionToken}
+        backendUrl={backendUrl}
       />
     );
   }
@@ -169,6 +171,7 @@ function AnalyticsPanel({
   onBack,
   onRefresh,
   sessionToken,
+  backendUrl,
 }: {
   analysis: UniversityAnalysis | null;
   students: any[];
@@ -177,6 +180,7 @@ function AnalyticsPanel({
   onBack: () => void;
   onRefresh: () => void;
   sessionToken: string | null;
+  backendUrl: string;
 }) {
   const ai = analysis?.ai_analysis;
   const stats = analysis?.stats;
@@ -355,6 +359,14 @@ function AnalyticsPanel({
         <View style={localStyles.dividerLine} />
       </View>
       <AdminGrowthAnalytics sessionToken={sessionToken} />
+
+      {/* Export */}
+      <View style={localStyles.growthAnalyticsDivider}>
+        <View style={localStyles.dividerLine} />
+        <Text style={localStyles.dividerLabel}>Export Data</Text>
+        <View style={localStyles.dividerLine} />
+      </View>
+      <AdminExportTab backendUrl={backendUrl} sessionToken={sessionToken} />
     </View>
   );
 }
