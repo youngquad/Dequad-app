@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from datetime import datetime, timezone
+import asyncio
 
 from database import db
-from models import User, FeedbackEntry, FeedbackCreate
+from models import User, FeedbackEntry, FeedbackCreate, SafeguardingAlert
 from helpers.auth import get_current_user
 from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert
+from helpers.email import send_safeguarding_email_to_admins
 
 router = APIRouter()
 
@@ -34,6 +36,32 @@ async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get
 
     if safeguarding_result["flagged"]:
         await create_safeguarding_alert(current_user, "feedback", data.feedback, safeguarding_result)
+
+    # Anonymous low-rating alert — admin sees the feedback but not who submitted it
+    if data.mood < 5:
+        topic_note = f" (Lecture: {data.lecture_topic})" if data.lecture_topic else ""
+        alert = SafeguardingAlert(
+            user_id=current_user.user_id,
+            user_name="Anonymous Student",
+            user_email="anonymous",
+            source="low_lecture_rating",
+            content=f"Rating: {data.mood}/10{topic_note}\n\n{data.feedback}",
+            risk_level="low",
+            matched_keywords=[f"Lecture rating {data.mood}/10"],
+        )
+        await db.safeguarding_alerts.insert_one(alert.dict())
+        alert_data = {
+            "alert_id": alert.alert_id,
+            "user_id": "anonymous",
+            "user_name": "Anonymous Student",
+            "user_email": "anonymous",
+            "source": "low_lecture_rating",
+            "content": alert.content,
+            "risk_level": "low",
+            "matched_keywords": alert.matched_keywords,
+            "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        }
+        asyncio.create_task(send_safeguarding_email_to_admins(alert_data))
 
     response = {
         "entry_id": feedback_entry.id, "mood": feedback_entry.mood,
