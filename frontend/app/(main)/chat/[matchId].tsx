@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../../src/contexts/ThemeContext';
 import { api } from '../../../src/services/api';
 import { encrypt, decrypt } from '../../../src/utils/encryption';
 import SafeguardingAlert from '../../../src/components/SafeguardingAlert';
@@ -183,13 +184,13 @@ export default function ChatScreen() {
             isOwnMessage ? styles.ownBubble : styles.otherBubble,
           ]}
         >
-          <Text style={styles.messageText}>{decryptedText}</Text>
+          <Text style={[styles.messageText, !isOwnMessage && styles.otherMessageText]}>{decryptedText}</Text>
           <View style={styles.messageFooter}>
-            <Text style={styles.messageTime}>{formatTime(item.created_at)}</Text>
+            <Text style={[styles.messageTime, !isOwnMessage && styles.otherMessageTime]}>{formatTime(item.created_at)}</Text>
             <Ionicons
               name="lock-closed"
               size={10}
-              color="#6B7280"
+              color={isOwnMessage ? 'rgba(255,255,255,0.6)' : t.textFaint}
               style={styles.lockIcon}
             />
           </View>
@@ -202,7 +203,7 @@ export default function ChatScreen() {
     return (
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#6366F1" />
+          <ActivityIndicator size="large" color={t.accent} />
         </View>
       </SafeAreaView>
     );
@@ -223,7 +224,7 @@ export default function ChatScreen() {
         keyboardVerticalOffset={100}
       >
         <View style={styles.encryptionBanner}>
-          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+          <Ionicons name="shield-checkmark" size={16} color={t.success} />
           <Text style={styles.encryptionText}>
             Messages are protected in transit and monitored for safety
           </Text>
@@ -240,7 +241,7 @@ export default function ChatScreen() {
           }
           ListEmptyComponent={
             <View style={styles.emptyChat}>
-              <Ionicons name="chatbubble-ellipses-outline" size={48} color="#4B5563" />
+              <Ionicons name="chatbubble-ellipses-outline" size={48} color={t.textFaint} />
               <Text style={styles.emptyChatText}>No messages yet</Text>
               <Text style={styles.emptyChatSubtext}>
                 Send a message to start the conversation
@@ -253,7 +254,7 @@ export default function ChatScreen() {
           <TextInput
             style={styles.input}
             placeholder="Type a message..."
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
             value={inputText}
             onChangeText={setInputText}
             multiline
@@ -279,10 +280,10 @@ export default function ChatScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: t.bg,
   },
   keyboardView: {
     flex: 1,
@@ -297,10 +298,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 8,
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    backgroundColor: t.isDark ? 'rgba(79, 184, 159, 0.1)' : 'rgba(15, 122, 94, 0.08)',
   },
   encryptionText: {
-    color: '#10B981',
+    color: t.success,
     fontSize: 12,
     marginLeft: 6,
   },
@@ -319,21 +320,26 @@ const styles = StyleSheet.create({
   },
   messageBubble: {
     maxWidth: '80%',
-    borderRadius: 16,
+    borderRadius: 18,
     padding: 12,
   },
   ownBubble: {
-    backgroundColor: '#6366F1',
+    backgroundColor: t.isDark ? '#5B9BD5' : '#0F2942',
     borderBottomRightRadius: 4,
   },
   otherBubble: {
-    backgroundColor: '#1F2937',
+    backgroundColor: t.card,
+    borderWidth: t.isDark ? 0 : 1,
+    borderColor: t.border,
     borderBottomLeftRadius: 4,
   },
   messageText: {
     color: '#fff',
     fontSize: 16,
     lineHeight: 22,
+  },
+  otherMessageText: {
+    color: t.text,
   },
   messageFooter: {
     flexDirection: 'row',
@@ -345,6 +351,9 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.6)',
     fontSize: 10,
   },
+  otherMessageTime: {
+    color: t.textFaint,
+  },
   lockIcon: {
     marginLeft: 4,
   },
@@ -355,13 +364,13 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   emptyChatText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 18,
     fontWeight: '600',
     marginTop: 16,
   },
   emptyChatSubtext: {
-    color: '#6B7280',
+    color: t.textFaint,
     fontSize: 14,
     marginTop: 8,
   },
@@ -369,17 +378,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     padding: 12,
-    backgroundColor: '#1F2937',
+    backgroundColor: t.surface,
     borderTopWidth: 1,
-    borderTopColor: '#374151',
+    borderTopColor: t.border,
   },
   input: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: t.bg,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    color: '#fff',
+    color: t.text,
     fontSize: 16,
     maxHeight: 100,
     marginRight: 8,
@@ -388,11 +397,11 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#6366F1',
+    backgroundColor: t.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   sendButtonDisabled: {
-    backgroundColor: '#374151',
+    backgroundColor: t.border,
   },
 });

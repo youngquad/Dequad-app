@@ -63,3 +63,8 @@ Use credentials from `/app/backend/seed.py` for individual student logins.
 - General endpoints: **100 requests / 60 s** per IP (env: `RATE_LIMIT_GENERAL`).
 - Webhooks (Stripe): exempt.
 
+
+## UI Test Student (created 2026-08-14 for UI refresh testing)
+- Email: ui.tester@student.beds.ac.uk
+- Password: UiTester123!
+- Verified: yes (can log in at /(auth)/login)

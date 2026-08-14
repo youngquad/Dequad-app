@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme } from '../../src/contexts/ThemeContext';
 import { api, API_URL } from '../../src/services/api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -90,6 +91,7 @@ const ETHNICITIES = [
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, logout, refreshUser, sessionToken } = useAuth();
+  const { mode: themeMode, setMode: setThemeMode, isDark } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<'photos' | 'basic' | 'preferences' | 'interests'>('photos');
@@ -924,6 +926,28 @@ export default function ProfileScreen() {
               <Ionicons name="chevron-forward" size={20} color="#6366F1" />
             </TouchableOpacity>
 
+            {/* Appearance (theme) selector */}
+            <View style={themeRowStyles.row} data-testid="appearance-selector">
+              <View style={themeRowStyles.labelWrap}>
+                <Ionicons name={isDark ? 'moon' : 'sunny'} size={20} color="#5B9BD5" />
+                <Text style={themeRowStyles.label}>Appearance</Text>
+              </View>
+              <View style={themeRowStyles.pills}>
+                {(['light', 'dark', 'system'] as const).map((m) => (
+                  <TouchableOpacity
+                    key={m}
+                    onPress={() => setThemeMode(m)}
+                    style={[themeRowStyles.pill, themeMode === m && themeRowStyles.pillActive]}
+                    data-testid={`theme-${m}`}
+                  >
+                    <Text style={[themeRowStyles.pillText, themeMode === m && themeRowStyles.pillTextActive]}>
+                      {m === 'light' ? 'Light' : m === 'dark' ? 'Dark' : 'Auto'}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+
             {/* Section Tabs */}
             {renderSectionTabs()}
 
@@ -1504,4 +1528,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     lineHeight: 16,
   },
+});
+
+const themeRowStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(91, 155, 213, 0.08)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(91, 155, 213, 0.25)',
+    padding: 14,
+    marginBottom: 16,
+  },
+  labelWrap: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  label: { color: '#F8FAFC', fontSize: 15, fontWeight: '600' },
+  pills: { flexDirection: 'row', gap: 6 },
+  pill: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 999,
+    backgroundColor: 'rgba(148, 163, 184, 0.12)',
+  },
+  pillActive: { backgroundColor: '#5B9BD5' },
+  pillText: { color: '#94A3B8', fontSize: 12, fontWeight: '700' },
+  pillTextActive: { color: '#fff' },
 });

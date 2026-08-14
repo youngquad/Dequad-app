@@ -3,6 +3,7 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
+import { ThemeProvider, useTheme } from '../src/contexts/ThemeContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRole?: string) {
@@ -49,32 +50,33 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
 
 function RootLayoutNav() {
   const { isLoading, isAuthenticated, user } = useAuth();
+  const { theme: t, isDark } = useTheme();
 
   // Apply route protection
   useProtectedRoute(isAuthenticated, isLoading, user?.role);
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6366F1" />
+      <View style={[styles.loadingContainer, { backgroundColor: t.bg }]}>
+        <ActivityIndicator size="large" color={t.accent} />
       </View>
     );
   }
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#1F2937',
+            backgroundColor: t.headerBg,
           },
-          headerTintColor: '#fff',
+          headerTintColor: t.text,
           headerTitleStyle: {
             fontWeight: 'bold',
           },
           contentStyle: {
-            backgroundColor: '#111827',
+            backgroundColor: t.bg,
           },
         }}
       >
@@ -114,9 +116,11 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <RootLayoutNav />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <RootLayoutNav />
+        </AuthProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
@@ -126,6 +130,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#111827',
   },
 });
