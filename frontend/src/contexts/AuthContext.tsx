@@ -90,8 +90,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Handle URL callback
   useEffect(() => {
     const handleUrl = async (url: string) => {
-      console.log('Handling URL:', url);
-      
       // Parse session_id from hash or query
       let sessionId = null;
       
