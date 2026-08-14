@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -13,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { api } from '../../../src/services/api';
 import { decrypt } from '../../../src/utils/encryption';
+import { MoodCardSkeleton } from '../../../src/components/SkeletonLoader';
 
 interface MatchedUser {
   match_id: string;
@@ -125,8 +125,10 @@ export default function ChatListScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container} edges={['bottom']}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#6366F1" />
+        <View style={styles.listContent}>
+          {[1, 2, 3, 4].map((i) => (
+            <MoodCardSkeleton key={i} />
+          ))}
         </View>
       </SafeAreaView>
     );
@@ -172,12 +174,7 @@ export default function ChatListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#0F172A',
   },
   header: {
     flexDirection: 'row',

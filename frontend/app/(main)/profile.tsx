@@ -20,6 +20,9 @@ import { api } from '../../src/services/api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
+import { notify } from '../../src/utils/alert';
+import ConfirmDeleteAccountModal from '../../src/components/ConfirmDeleteAccountModal';
 
 const INTERESTS = [
   'Computer Science',
@@ -92,6 +95,7 @@ export default function ProfileScreen() {
   const { user, logout, refreshUser, sessionToken } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [activeSection, setActiveSection] = useState<'photos' | 'basic' | 'preferences' | 'interests'>('photos');
   
   // Photos
@@ -173,7 +177,7 @@ export default function ProfileScreen() {
     try {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permission Required', 'Please allow access to your photo library to upload photos.');
+        notify('Permission Required', 'Please allow access to your photo library to upload photos.');
         return;
       }
 
@@ -193,21 +197,22 @@ export default function ProfileScreen() {
       }
     } catch (error) {
       console.error('Error picking image:', error);
-      Alert.alert('Error', 'Failed to pick image');
+      notify('Error', 'Failed to pick image');
     }
   };
 
   const removePhoto = (index: number) => {
+    const doRemove = () => {
+      const newPhotos = photos.filter((_, i) => i !== index);
+      setPhotos(newPhotos);
+    };
+    if (Platform.OS === 'web') {
+      if (window.confirm('Are you sure you want to remove this photo?')) doRemove();
+      return;
+    }
     Alert.alert('Remove Photo', 'Are you sure you want to remove this photo?', [
       { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Remove',
-        style: 'destructive',
-        onPress: () => {
-          const newPhotos = photos.filter((_, i) => i !== index);
-          setPhotos(newPhotos);
-        },
-      },
+      { text: 'Remove', style: 'destructive', onPress: doRemove },
     ]);
   };
 
@@ -217,7 +222,7 @@ export default function ProfileScreen() {
     } else if (selectedInterests.length < 5) {
       setSelectedInterests([...selectedInterests, interest]);
     } else {
-      Alert.alert('Limit Reached', 'You can select up to 5 interests');
+      notify('Limit Reached', 'You can select up to 5 interests');
     }
   };
 
@@ -263,18 +268,10 @@ export default function ProfileScreen() {
       );
       await refreshUser();
       setIsEditing(false);
-      if (Platform.OS === 'web') {
-        alert('Profile updated successfully');
-      } else {
-        Alert.alert('Success', 'Profile updated successfully');
-      }
+      notify('Success', 'Profile updated successfully');
     } catch (error) {
       console.error('Error saving profile:', error);
-      if (Platform.OS === 'web') {
-        alert('Failed to save profile');
-      } else {
-        Alert.alert('Error', 'Failed to save profile');
-      }
+      notify('Error', 'Failed to save profile');
     } finally {
       setIsSaving(false);
     }
@@ -322,91 +319,35 @@ export default function ProfileScreen() {
    * Permanently delete the user's account and every piece of data linked to
    * it. Required by Apple App Store guideline 5.1.1(v) (in-app deletion)
    * and a Google Play Data Safety commitment too. Irreversible.
+   *
+   * Confirmation is collected by ConfirmDeleteAccountModal — Alert.prompt is
+   * iOS-only (a no-op on Android) and window.prompt looks like stray browser
+   * chrome, so both were replaced with one in-app modal for every platform.
    */
-  const handleDeleteAccount = async () => {
-    const confirmMessage =
-      "PERMANENTLY DELETE YOUR ACCOUNT?\n\n" +
-      "This is irreversible. You will lose:\n" +
-      "• Your profile, photos and bio\n" +
-      "• Every match and chat\n" +
-      "• All mood-tracker history\n" +
-      "• Your premium subscription (active subs are auto-cancelled — no refund)\n\n" +
-      "Type-to-confirm in the next prompt to proceed.";
-
-    const proceed = async () => {
-      try {
-        const apiBase =
-          process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
-        const res = await fetch(`${apiBase}/api/auth/me`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${sessionToken}` },
-          credentials: 'include',
-        });
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.detail || `HTTP ${res.status}`);
-        }
-        if (Platform.OS === 'web' && typeof window !== 'undefined') {
-          window.alert('Your account has been deleted. Goodbye 👋');
-          window.location.href = '/';
-          return;
-        }
-        // Native: clear local state then bounce to landing
-        try { await logout(); } catch {}
-        router.replace('/');
-      } catch (err: any) {
-        const msg = err?.message || 'Failed to delete account.';
-        if (Platform.OS === 'web' && typeof window !== 'undefined') {
-          window.alert(`Error: ${msg}`);
-        } else {
-          Alert.alert('Error', msg);
-        }
+  const performAccountDeletion = async () => {
+    try {
+      const apiBase =
+        process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+      const res = await fetch(`${apiBase}/api/auth/me`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${sessionToken}` },
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || `HTTP ${res.status}`);
       }
-    };
-
-    if (Platform.OS === 'web' && typeof window !== 'undefined') {
-      if (!window.confirm(confirmMessage)) return;
-      const typed = window.prompt('Type DELETE (in capitals) to confirm.');
-      if (typed !== 'DELETE') {
-        window.alert('Cancelled — your account is safe.');
+      setShowDeleteModal(false);
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        window.alert('Your account has been deleted. Goodbye 👋');
+        window.location.href = '/';
         return;
       }
-      await proceed();
-      return;
+      try { await logout(); } catch {}
+      router.replace('/');
+    } catch (err: any) {
+      notify('Error', err?.message || 'Failed to delete account.');
     }
-
-    Alert.alert(
-      'Delete account',
-      confirmMessage,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete forever',
-          style: 'destructive',
-          onPress: async () => {
-            Alert.prompt(
-              'Final confirmation',
-              'Type DELETE (in capitals) to confirm permanent deletion.',
-              [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                  text: 'Delete forever',
-                  style: 'destructive',
-                  onPress: async (value?: string) => {
-                    if (value !== 'DELETE') {
-                      Alert.alert('Cancelled', 'Your account is safe.');
-                      return;
-                    }
-                    await proceed();
-                  },
-                },
-              ],
-              'plain-text',
-            );
-          },
-        },
-      ],
-    );
   };
 
   const getInitials = (name: string) => {
@@ -702,24 +643,34 @@ export default function ProfileScreen() {
       <View style={styles.field}>
         <Text style={styles.fieldLabel}>Ethnicity</Text>
         {isEditing ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ethnicityScroll}>
-            {ETHNICITIES.map((eth) => (
-              <TouchableOpacity
-                key={eth}
-                style={[styles.ethnicityChip, ethnicity === eth && styles.ethnicityChipSelected]}
-                onPress={() => setEthnicity(eth)}
-              >
-                <Text
-                  style={[
-                    styles.ethnicityText,
-                    ethnicity === eth && styles.ethnicityTextSelected,
-                  ]}
+          <View style={styles.ethnicityScrollWrap}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ethnicityScroll}>
+              {ETHNICITIES.map((eth) => (
+                <TouchableOpacity
+                  key={eth}
+                  style={[styles.ethnicityChip, ethnicity === eth && styles.ethnicityChipSelected]}
+                  onPress={() => setEthnicity(eth)}
                 >
-                  {eth}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+                  <Text
+                    style={[
+                      styles.ethnicityText,
+                      ethnicity === eth && styles.ethnicityTextSelected,
+                    ]}
+                  >
+                    {eth}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            {/* Fade hint — signals there are more chips to scroll to on the right */}
+            <LinearGradient
+              colors={['transparent', 'rgba(15, 23, 42, 0.9)']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.ethnicityFade}
+              pointerEvents="none"
+            />
+          </View>
         ) : (
           <Text style={styles.fieldValue}>{user?.ethnicity || 'Not specified'}</Text>
         )}
@@ -837,7 +788,7 @@ export default function ProfileScreen() {
         style={styles.keyboardView}
       >
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-          <View style={styles.content}>
+          <View style={[styles.content, isEditing && styles.contentEditing]}>
             {/* Profile Header */}
             <View style={styles.profileHeader}>
               <View style={styles.avatar}>
@@ -934,24 +885,6 @@ export default function ProfileScreen() {
             {activeSection === 'preferences' && renderPreferencesSection()}
             {activeSection === 'interests' && renderInterestsSection()}
 
-            {/* Save Button */}
-            {isEditing && (
-              <TouchableOpacity
-                style={styles.saveButton}
-                onPress={handleSave}
-                disabled={isSaving}
-              >
-                {isSaving ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <>
-                    <Ionicons name="checkmark-circle" size={24} color="#fff" />
-                    <Text style={styles.saveButtonText}>Save Changes</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
-
             {/* Logout Button */}
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
               <Ionicons name="log-out-outline" size={24} color="#EF4444" />
@@ -961,7 +894,7 @@ export default function ProfileScreen() {
             {/* Delete Account — Apple App Store guideline 5.1.1(v) compliance */}
             <TouchableOpacity
               style={styles.deleteAccountButton}
-              onPress={handleDeleteAccount}
+              onPress={() => setShowDeleteModal(true)}
               data-testid="delete-account-button"
             >
               <Ionicons name="trash-outline" size={20} color="#7F1D1D" />
@@ -973,24 +906,107 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </ScrollView>
+
+        <ConfirmDeleteAccountModal
+          visible={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={performAccountDeletion}
+        />
       </KeyboardAvoidingView>
+
+      {/* Sticky save bar — editing spans a long scroll (photos, basic info,
+          preferences, interests) and the previous inline Save button at the
+          bottom of that scroll meant re-finding it after every edit. */}
+      {isEditing && (
+        <View style={styles.stickySaveBar}>
+          <TouchableOpacity
+            style={styles.stickyCancelButton}
+            onPress={() => setIsEditing(false)}
+            disabled={isSaving}
+          >
+            <Text style={styles.stickyCancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.stickySaveButton}
+            onPress={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <>
+                <Ionicons name="checkmark-circle" size={20} color="#fff" />
+                <Text style={styles.stickySaveButtonText}>Save Changes</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
 
+const TAB_BAR_HEIGHT = Platform.OS === 'ios' ? 88 : 70;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#0F172A',
   },
   keyboardView: {
     flex: 1,
+  },
+  stickySaveBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: TAB_BAR_HEIGHT,
+    flexDirection: 'row',
+    gap: 12,
+    padding: 16,
+    backgroundColor: 'rgba(15, 23, 42, 0.97)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(148, 163, 184, 0.15)',
+  },
+  stickyCancelButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: 'rgba(239, 68, 68, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stickyCancelButtonText: {
+    color: '#EF4444',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  stickySaveButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#6366F1',
+    borderRadius: 12,
+    gap: 8,
+  },
+  stickySaveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   scrollView: {
     flex: 1,
   },
   content: {
     padding: 20,
+    // Clears the floating (position: 'absolute') tab bar so the last card
+    // isn't hidden underneath it.
+    paddingBottom: 100,
+  },
+  contentEditing: {
+    // Also clear the sticky save bar, which sits above the tab bar while editing.
+    paddingBottom: 180,
   },
   profileHeader: {
     alignItems: 'center',
@@ -1309,8 +1325,18 @@ const styles = StyleSheet.create({
   optionTextSelected: {
     color: '#818CF8',
   },
+  ethnicityScrollWrap: {
+    position: 'relative',
+  },
   ethnicityScroll: {
     marginTop: 4,
+  },
+  ethnicityFade: {
+    position: 'absolute',
+    top: 4,
+    right: 0,
+    bottom: 0,
+    width: 28,
   },
   ethnicityChip: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -1450,21 +1476,6 @@ const styles = StyleSheet.create({
   interestTagText: {
     color: '#818CF8',
     fontSize: 14,
-  },
-  saveButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6366F1',
-    paddingVertical: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 8,
   },
   logoutButton: {
     flexDirection: 'row',

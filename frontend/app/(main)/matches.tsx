@@ -27,6 +27,7 @@ import ReportProfileModal from '../../src/components/ReportProfileModal';
 import MatchFiltersModal from '../../src/components/MatchFiltersModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { requestCurrentLocation } from '../../src/utils/location';
+import { notify } from '../../src/utils/alert';
 
 const { width, height } = Dimensions.get('window');
 
@@ -97,8 +98,25 @@ export default function MatchesScreen() {
   // distance-chip vs "enable location" CTA in MatchFiltersModal.
   const [hasLocation, setHasLocation] = useState(false);
   const [locationBusy, setLocationBusy] = useState(false);
+  // One-time tip explaining the per-section heart buttons — undiscoverable
+  // otherwise since they carry no label. Shown until dismissed or used once.
+  const [showLikeHint, setShowLikeHint] = useState(false);
 
   const scrollRef = useRef<FlatList>(null);
+
+  const dismissLikeHint = () => {
+    setShowLikeHint(false);
+    AsyncStorage.setItem('dequad_seen_like_hint', 'true').catch(() => {});
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const seen = await AsyncStorage.getItem('dequad_seen_like_hint');
+        if (!seen) setShowLikeHint(true);
+      } catch {}
+    })();
+  }, []);
 
   // Load persisted filter prefs once on mount
   useEffect(() => {
@@ -199,7 +217,7 @@ export default function MatchesScreen() {
     try {
       const res = await requestCurrentLocation();
       if (!res.ok || !res.coords) {
-        alert(res.error || 'Could not get your location.');
+        notify('Location unavailable', res.error || 'Could not get your location.');
         return;
       }
       await api.post(
@@ -209,7 +227,7 @@ export default function MatchesScreen() {
       );
       setHasLocation(true);
     } catch (e: any) {
-      alert(e?.message || 'Failed to save your location.');
+      notify('Location unavailable', e?.message || 'Failed to save your location.');
     } finally {
       setLocationBusy(false);
     }
@@ -248,11 +266,12 @@ export default function MatchesScreen() {
   };
 
   const openCommentModal = (profile: UserProfile, section: string) => {
+    if (showLikeHint) dismissLikeHint();
     if (!swipeInfo.is_premium && swipeInfo.remaining_likes_this_week !== null && swipeInfo.remaining_likes_this_week <= 0) {
       setShowUpgradePrompt(true);
       return;
     }
-    
+
     setCommentModal({
       profile,
       section,
@@ -355,7 +374,7 @@ export default function MatchesScreen() {
     return gradients[index];
   };
 
-  const LikeButton = ({ onPress, section, disabled, profile }: { onPress: () => void; section: string; disabled?: boolean; profile: UserProfile }) => (
+  const LikeButton = ({ section, disabled, profile }: { section: string; disabled?: boolean; profile: UserProfile }) => (
     <Pressable 
       onPress={() => openCommentModal(profile, section)}
       disabled={disabled}
@@ -441,7 +460,6 @@ export default function MatchesScreen() {
               )}
             </View>
             <LikeButton 
-              onPress={() => {}} 
               section="photo"
               disabled={!isCurrentProfile}
               profile={profile}
@@ -462,8 +480,7 @@ export default function MatchesScreen() {
                   )}
                 </View>
               </View>
-              <LikeButton 
-                onPress={() => {}} 
+              <LikeButton
                 section="course"
                 disabled={!isCurrentProfile}
                 profile={profile}
@@ -481,8 +498,7 @@ export default function MatchesScreen() {
                   <Text style={styles.bioText}>"{profile.bio}"</Text>
                 </View>
               </View>
-              <LikeButton 
-                onPress={() => {}} 
+              <LikeButton
                 section="bio"
                 disabled={!isCurrentProfile}
                 profile={profile}
@@ -506,8 +522,7 @@ export default function MatchesScreen() {
                   </View>
                 </View>
               </View>
-              <LikeButton 
-                onPress={() => {}} 
+              <LikeButton
                 section="interests"
                 disabled={!isCurrentProfile}
                 profile={profile}
@@ -537,8 +552,7 @@ export default function MatchesScreen() {
               {profile.photos.slice(1, 3).map((photo, i) => (
                 <View key={`${profile.user_id}-photo-${i}-${photo.slice(-12)}`} style={styles.additionalPhotoContainer}>
                   <Image source={{ uri: photo }} style={styles.additionalPhoto} />
-                  <LikeButton 
-                    onPress={() => {}} 
+                  <LikeButton
                     section={`photo${i+2}`}
                     disabled={!isCurrentProfile}
                     profile={profile}
@@ -850,7 +864,7 @@ export default function MatchesScreen() {
           style={styles.filterPill}
           data-testid="open-filters-button"
         >
-          <Ionicons name="options-outline" size={16} color="#1F2937" />
+          <Ionicons name="options-outline" size={16} color="#E2E8F0" />
           <Text style={styles.filterPillText}>
             {Object.values(filters).filter(Boolean).length > 0
               ? `Filters · ${Object.values(filters).filter(Boolean).length}`
@@ -861,6 +875,19 @@ export default function MatchesScreen() {
           )}
         </TouchableOpacity>
       </View>
+
+      {/* One-time tip for the per-section heart buttons */}
+      {showLikeHint && (
+        <View style={styles.likeHintBanner}>
+          <Ionicons name="heart" size={14} color="#EC4899" />
+          <Text style={styles.likeHintText}>
+            Tap the heart on a photo, bio, or interest to like that specific thing
+          </Text>
+          <TouchableOpacity onPress={dismissLikeHint} hitSlop={8}>
+            <Ionicons name="close" size={16} color="#94A3B8" />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Profiles List */}
       {currentIndex >= profiles.length ? (
@@ -1340,15 +1367,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F2F5FA',
+    backgroundColor: 'rgba(30, 41, 59, 0.8)',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 999,
     marginLeft: 8,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: 'rgba(148, 163, 184, 0.2)',
   },
-  filterPillText: { fontSize: 13, color: '#1F2937', fontWeight: '700' },
+  filterPillText: { fontSize: 13, color: '#E2E8F0', fontWeight: '700' },
   modalOverlay: {
     position: 'absolute',
     top: 0,
@@ -1477,6 +1504,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 10,
+  },
+  likeHintBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    backgroundColor: 'rgba(236, 72, 153, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(236, 72, 153, 0.25)',
+    gap: 8,
+  },
+  likeHintText: {
+    flex: 1,
+    color: '#F9A8D4',
+    fontSize: 12,
+    lineHeight: 16,
   },
   likesYouButton: {
     flex: 1,

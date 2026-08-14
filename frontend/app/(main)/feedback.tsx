@@ -6,16 +6,19 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import SafeguardingAlert from '../../src/components/SafeguardingAlert';
+import { MoodCardSkeleton } from '../../src/components/SkeletonLoader';
+import { getMoodInfo } from '../../src/utils/moods';
+import { notify } from '../../src/utils/alert';
 
 interface FeedbackEntry {
   id: string;
@@ -33,6 +36,7 @@ export default function FeedbackScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackHistory, setFeedbackHistory] = useState<FeedbackEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
 
@@ -48,12 +52,18 @@ export default function FeedbackScreen() {
       console.error('Error loading feedback:', error);
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
+  };
+
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    loadFeedbackHistory();
   };
 
   const handleSubmit = async () => {
     if (!feedback.trim()) {
-      Alert.alert('Required', 'Please enter your feedback');
+      notify('Required', 'Please enter your feedback');
       return;
     }
 
@@ -74,34 +84,23 @@ export default function FeedbackScreen() {
         setSafeguardingAlert(result.safeguarding_alert);
         setShowSafeguardingModal(true);
       } else {
-        Alert.alert('Thank You!', 'Your feedback has been submitted successfully.');
+        notify('Thank You!', 'Your feedback has been submitted successfully.');
       }
-      
+
       setFeedback('');
       setLectureTopic('');
       setMood(5);
       loadFeedbackHistory();
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      Alert.alert('Error', 'Failed to submit feedback. Please try again.');
+      notify('Error', 'Failed to submit feedback. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const getMoodEmoji = (value: number) => {
-    if (value <= 3) return '😔';
-    if (value <= 5) return '😐';
-    if (value <= 7) return '🙂';
-    return '😊';
-  };
-
-  const getMoodColor = (value: number) => {
-    if (value <= 3) return '#EF4444';
-    if (value <= 5) return '#F59E0B';
-    if (value <= 7) return '#10B981';
-    return '#6366F1';
-  };
+  const getMoodEmoji = (value: number) => getMoodInfo(value).emoji;
+  const getMoodColor = (value: number) => getMoodInfo(value).color;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -120,7 +119,7 @@ export default function FeedbackScreen() {
         visible={showSafeguardingModal}
         onClose={() => {
           setShowSafeguardingModal(false);
-          Alert.alert('Feedback Submitted', 'Your feedback has been saved. Remember, support is always available.');
+          notify('Feedback Submitted', 'Your feedback has been saved. Remember, support is always available.');
         }}
         alertData={safeguardingAlert}
       />
@@ -129,7 +128,18 @@ export default function FeedbackScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+              tintColor="#6366F1"
+              colors={['#6366F1']}
+            />
+          }
+        >
           <View style={styles.content}>
             {/* Header */}
             <View style={styles.headerCard}>
@@ -167,7 +177,7 @@ export default function FeedbackScreen() {
               <View style={styles.moodIndicator}>
                 <Text style={styles.moodEmoji}>{getMoodEmoji(mood)}</Text>
                 <Text style={[styles.moodLabel, { color: getMoodColor(mood) }]}>
-                  {mood <= 3 ? 'Struggling' : mood <= 5 ? 'Okay' : mood <= 7 ? 'Good' : 'Great'}
+                  {getMoodInfo(mood).label}
                 </Text>
               </View>
 
@@ -181,15 +191,21 @@ export default function FeedbackScreen() {
               />
 
               <Text style={styles.inputLabel}>Your Feedback *</Text>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Share your thoughts about the lecture, how you felt, any challenges or suggestions..."
-                placeholderTextColor="#6B7280"
-                multiline
-                numberOfLines={4}
-                value={feedback}
-                onChangeText={setFeedback}
-              />
+              <View style={styles.textAreaContainer}>
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  placeholder="Share your thoughts about the lecture, how you felt, any challenges or suggestions..."
+                  placeholderTextColor="#6B7280"
+                  multiline
+                  numberOfLines={4}
+                  maxLength={1000}
+                  value={feedback}
+                  onChangeText={setFeedback}
+                />
+                {feedback.length > 0 && (
+                  <Text style={styles.charCount}>{feedback.length}/1000</Text>
+                )}
+              </View>
 
               <TouchableOpacity
                 style={[
@@ -223,7 +239,11 @@ export default function FeedbackScreen() {
             <View style={styles.historySection}>
               <Text style={styles.historyTitle}>Your Feedback History</Text>
               {isLoading ? (
-                <ActivityIndicator color="#6366F1" style={{ marginTop: 20 }} />
+                <View>
+                  {[1, 2, 3].map((i) => (
+                    <MoodCardSkeleton key={i} />
+                  ))}
+                </View>
               ) : feedbackHistory.length === 0 ? (
                 <View style={styles.emptyState}>
                   <Ionicons name="document-text-outline" size={48} color="#4B5563" />
@@ -266,7 +286,7 @@ export default function FeedbackScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#0F172A',
   },
   keyboardView: {
     flex: 1,
@@ -276,6 +296,9 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+    // Extra bottom padding so the last history item clears the floating
+    // (position: 'absolute') tab bar instead of being hidden under it.
+    paddingBottom: 100,
   },
   headerCard: {
     backgroundColor: 'rgba(99, 102, 241, 0.1)',
@@ -363,6 +386,16 @@ const styles = StyleSheet.create({
   textArea: {
     minHeight: 120,
     textAlignVertical: 'top',
+  },
+  textAreaContainer: {
+    position: 'relative',
+  },
+  charCount: {
+    position: 'absolute',
+    bottom: 24,
+    right: 12,
+    fontSize: 12,
+    color: '#64748B',
   },
   submitButton: {
     flexDirection: 'row',

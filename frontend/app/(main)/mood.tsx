@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Alert,
   ActivityIndicator,
   Animated,
   Pressable,
@@ -19,19 +18,8 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import SafeguardingAlert from '../../src/components/SafeguardingAlert';
 import { MoodCardSkeleton } from '../../src/components/SkeletonLoader';
-
-const MOODS = [
-  { value: 1, emoji: '😢', label: 'Awful', color: '#EF4444', gradient: ['#EF4444', '#F87171'] },
-  { value: 2, emoji: '😞', label: 'Bad', color: '#F97316', gradient: ['#F97316', '#FB923C'] },
-  { value: 3, emoji: '😔', label: 'Down', color: '#F59E0B', gradient: ['#F59E0B', '#FBBF24'] },
-  { value: 4, emoji: '😕', label: 'Meh', color: '#EAB308', gradient: ['#EAB308', '#FACC15'] },
-  { value: 5, emoji: '😐', label: 'Okay', color: '#84CC16', gradient: ['#84CC16', '#A3E635'] },
-  { value: 6, emoji: '🙂', label: 'Fine', color: '#22C55E', gradient: ['#22C55E', '#4ADE80'] },
-  { value: 7, emoji: '😊', label: 'Good', color: '#10B981', gradient: ['#10B981', '#34D399'] },
-  { value: 8, emoji: '😄', label: 'Great', color: '#14B8A6', gradient: ['#14B8A6', '#2DD4BF'] },
-  { value: 9, emoji: '😁', label: 'Amazing', color: '#06B6D4', gradient: ['#06B6D4', '#22D3EE'] },
-  { value: 10, emoji: '🤩', label: 'Perfect', color: '#6366F1', gradient: ['#6366F1', '#818CF8'] },
-];
+import { MOODS, getMoodInfo } from '../../src/utils/moods';
+import { notify } from '../../src/utils/alert';
 
 interface MoodEntry {
   id: string;
@@ -121,6 +109,7 @@ export default function MoodScreen() {
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showAllHistory, setShowAllHistory] = useState(false);
 
   // Animations
   const buttonScale = useRef(new Animated.Value(1)).current;
@@ -156,7 +145,7 @@ export default function MoodScreen() {
 
   const handleSubmit = async () => {
     if (!selectedMood) {
-      Alert.alert('Select Mood', 'Please select your current mood');
+      notify('Select Mood', 'Please select your current mood');
       return;
     }
 
@@ -191,14 +180,10 @@ export default function MoodScreen() {
       loadMoodHistory();
     } catch (error) {
       console.error('Error submitting mood:', error);
-      Alert.alert('Error', 'Failed to record mood. Please try again.');
+      notify('Error', 'Failed to record mood. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const getMoodInfo = (value: number) => {
-    return MOODS.find((m) => m.value === value) || MOODS[4];
   };
 
   const formatDate = (dateString: string) => {
@@ -244,7 +229,7 @@ export default function MoodScreen() {
         visible={showSafeguardingModal}
         onClose={() => {
           setShowSafeguardingModal(false);
-          Alert.alert('Mood Recorded', 'Your mood has been saved. Remember, support is always available.');
+          notify('Mood Recorded', 'Your mood has been saved. Remember, support is always available.');
         }}
         alertData={safeguardingAlert}
       />
@@ -328,6 +313,7 @@ export default function MoodScreen() {
                 placeholderTextColor="#64748B"
                 multiline
                 numberOfLines={3}
+                maxLength={500}
                 value={notes}
                 onChangeText={setNotes}
               />
@@ -378,8 +364,10 @@ export default function MoodScreen() {
             <View style={styles.historyHeader}>
               <Text style={styles.historyTitle}>Recent Entries</Text>
               {moodHistory.length > 5 && (
-                <TouchableOpacity>
-                  <Text style={styles.viewAllText}>View All</Text>
+                <TouchableOpacity onPress={() => setShowAllHistory((v) => !v)}>
+                  <Text style={styles.viewAllText}>
+                    {showAllHistory ? 'Show Less' : 'View All'}
+                  </Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -401,7 +389,7 @@ export default function MoodScreen() {
                 </Text>
               </View>
             ) : (
-              moodHistory.slice(0, 5).map((entry, index) => {
+              moodHistory.slice(0, showAllHistory ? undefined : 5).map((entry, index) => {
                 const moodInfo = getMoodInfo(entry.mood);
                 return (
                   <Animated.View 
@@ -457,7 +445,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    // Extra bottom padding so the last history item clears the floating
+    // (position: 'absolute') tab bar instead of being hidden under it.
+    paddingBottom: 120,
   },
   header: {
     marginBottom: 20,
