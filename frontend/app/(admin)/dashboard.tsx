@@ -892,7 +892,7 @@ export default function AdminDashboard() {
             </Text>
             <AdminInviteManager
               sessionToken={sessionToken}
-              apiBaseUrl={process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || ''}
+              apiBaseUrl={process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || ''}
             />
           </View>
         )}
