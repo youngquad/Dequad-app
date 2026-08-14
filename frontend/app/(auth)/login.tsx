@@ -102,7 +102,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
       >
         <ScrollView
@@ -268,7 +268,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#0F2942', fontSize: 36, fontWeight: '700',
-    fontFamily: 'Playfair Display, Georgia, serif',
     lineHeight: 42, marginBottom: 14, letterSpacing: -0.5,
   },
   lede: { color: '#4F6076', fontSize: 16, lineHeight: 24, marginBottom: 28 },
@@ -277,17 +276,6 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: '#DDE8F2',
     shadowColor: '#0F2942', shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 },
     elevation: 2,
-  },
-  googleBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
-    backgroundColor: '#0F2942', paddingVertical: 14, borderRadius: 999, minHeight: 52,
-  },
-  googleBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
-  divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 18 },
-  dividerLine: { flex: 1, height: 1, backgroundColor: '#DDE8F2' },
-  dividerText: {
-    color: '#4F6076', fontSize: 11, marginHorizontal: 12,
-    fontWeight: '600', letterSpacing: 1.6, textTransform: 'uppercase',
   },
   inputWrap: {
     flexDirection: 'row', alignItems: 'center',
