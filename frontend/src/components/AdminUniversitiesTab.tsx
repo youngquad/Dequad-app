@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { api } from '../services/api';
 import { adminStyles as styles } from '../utils/adminStyles';
 import { getRiskColor } from '../utils/adminHelpers';
+import { AdminGrowthAnalytics } from './AdminGrowthAnalytics';
 
 type Props = { sessionToken: string | null };
 
@@ -110,6 +111,7 @@ export default function AdminUniversitiesTab({ sessionToken }: Props) {
         isLoadingStudents={isLoadingUniversity}
         onBack={handleBack}
         onRefresh={() => selectedUniversity && runUniversityAnalysis(selectedUniversity)}
+        sessionToken={sessionToken}
       />
     );
   }
@@ -166,6 +168,7 @@ function AnalyticsPanel({
   isLoadingStudents,
   onBack,
   onRefresh,
+  sessionToken,
 }: {
   analysis: UniversityAnalysis | null;
   students: any[];
@@ -173,6 +176,7 @@ function AnalyticsPanel({
   isLoadingStudents: boolean;
   onBack: () => void;
   onRefresh: () => void;
+  sessionToken: string | null;
 }) {
   const ai = analysis?.ai_analysis;
   const stats = analysis?.stats;
@@ -343,6 +347,14 @@ function AnalyticsPanel({
           </View>
         ))
       )}
+
+      {/* Platform-wide growth analytics */}
+      <View style={localStyles.growthAnalyticsDivider}>
+        <View style={localStyles.dividerLine} />
+        <Text style={localStyles.dividerLabel}>Platform Analytics</Text>
+        <View style={localStyles.dividerLine} />
+      </View>
+      <AdminGrowthAnalytics sessionToken={sessionToken} />
     </View>
   );
 }
@@ -575,5 +587,24 @@ const localStyles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 20,
     fontSize: 14,
+  },
+  growthAnalyticsDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 28,
+    marginBottom: 4,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#374151',
+  },
+  dividerLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#6B7280',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
   },
 });
