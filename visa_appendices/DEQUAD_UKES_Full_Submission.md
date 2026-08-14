@@ -76,7 +76,7 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 | **Anchor pilot imminent** | 12-week pilot agreed in principle with the **University of Bedfordshire** Director of Student Services — the institution whose students the founder represented for two years. Formal agreement expected before the Sep 2026 academic year start (M4); the platform is already built and ready for institutional onboarding. |
 | **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind, letting £6,000 of founder cash cover 6 months of positive-balance operation. |
 | **Conservative forecast** | Y1 revenue £13,588 → Y2 £119,880 → Y3 £509,400. Gross margin ~92% throughout; operating break-even targeted Q2 Y4 after Series A. Only ONE university pilot is assumed to convert in Y1; Y2 assumes 3 paying institutions, Y3 assumes 10. |
-| **UK jobs** | 2 (Y1) → 6 (Y2) → 12 (Y3), all UK-based, with EMI options and board-tracked diversity targets. |
+| **UK jobs** | 2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4), all UK-based, with EMI options and board-tracked diversity targets. |
 
 We evidence all three Home Office endorsement criteria — **innovation, viability, scalability** — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.
 
@@ -131,9 +131,9 @@ The dual-sided model matters: students adopt because the core product is free an
 
 - **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **91.8%** by Y3.
 - **Intra-institution network effects.** Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).
-- **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. The model projects 14 average paying institutions in Y3 against 285 UK institutions — under 5% penetration.
+- **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. The model projects 10 average paying institutions in Y3 against 285 UK institutions — under 4% penetration.
 - **International optionality.** The closed-network model maps directly onto `.edu` (US), `.edu.au` (Australia) and EU academic domains — a £180m English-language HE TAM addressable post-Y3 without re-architecting the product.
-- **Team scale plan in place.** Job descriptions for the first six hires are already written (Appendix G); headcount grows 2 → 6 → 12 across the forecast, all UK-based.
+- **Team scale plan in place.** Job descriptions for the first six hires are already written (Appendix G); headcount grows 2 → 6 → 9 → 12 across the forecast, all UK-based.
 
 ---
 
@@ -307,13 +307,13 @@ A PhD-credentialled CMO, a senior engineer and a MIGSO-PCUBED consultant all wor
 | Senior Backend Engineer | Q1 Y2 | £48,000 | £56,000 |
 | Safeguarding & Trust Lead | Q2 Y2 | £18,000 (part-year) | £42,000 |
 | Marketing & Partnerships | Q3 Y2 | £10,000 (part-year) | £38,000 |
-| Data / ML Engineer | Q2 Y3 | — | £40,000 (part-year) |
-| Mobile Engineer | Q3 Y3 | — | £25,000 (part-year) |
-| Founders' Associate | Q3 Y3 | — | £18,000 (part-year) |
-| Engineer #2 (backend) | Q4 Y3 | — | £12,000 (part-year) |
-| Customer Success Manager #2 | Q4 Y3 | — | £13,000 (part-year) |
+| Data / ML Engineer | Q3 Y3 (deferred from Q2) | — | £20,000 (6 mo) |
+| Mobile Engineer | Q4 Y3 (deferred from Q3) | — | £9,000 (3 mo) |
+| Founders' Associate | **Q1 Y4** (deferred from Q3 Y3) | — | — |
+| Engineer #2 (backend) | **Q1 Y4** (deferred from Q4 Y3) | — | — |
+| Customer Success Manager #2 | **Q1 Y4** (deferred from Q4 Y3) | — | — |
 
-Headcount: **2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4)** — all UK-based roles. Three Y3 hires are sequenced to Q1 Y4 pending Series A close and revenue milestones being met.
+Headcount: **2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4)** — all UK-based roles. Three hires originally planned for Y3 are deferred to Q1 Y4 pending Series A close and revenue milestones; the two active Y3 hires (Data/ML and Mobile) start Q3 and Q4 respectively.
 
 ### 7.4 Recruitment strategy
 
@@ -346,7 +346,7 @@ Headcount: **2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4)** — all UK-based role
 | Google Search ads | "UK student loneliness", "find friends university" | £300 |
 | Student ambassador programme | £150/university × 6 partner universities × 2 reps | £900 |
 
-Marketing grows to **£28,000 (Y2)** and **£92,000 (Y3)** — full breakdown in Section 16.
+Marketing grows to **£28,000 (Y2)** and **£80,000 (Y3)** — full breakdown in Section 16.
 
 ### 8.3 B2B sales motion — anchor pilot under way
 
@@ -436,7 +436,7 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 
 ## 11. Revenue and Cost of Sales Forecast
 
-The forecast reflects customer-acquisition numbers directly: 0.5 average paying institutions in Y1 (the Bedfordshire pilot converting mid-year), 4 in Y2, 14 in Y3; and 100 → 1,600 → 6,000 average paying premium students.
+The forecast reflects customer-acquisition numbers directly: 0.5 average paying institutions in Y1 (the Bedfordshire pilot converting mid-year), 3 in Y2, 10 in Y3; and 60 → 1,000 → 5,000 average paying premium students.
 
 ### 11.1 Revenue forecast (annual, GBP)
 
@@ -456,7 +456,7 @@ The forecast reflects customer-acquisition numbers directly: 0.5 average paying 
 | Subtotal | **£0** | **£0** | **£10,000** |
 | **Total revenue** | **£13,588** | **£119,880** | **£509,400** |
 
-_Y1 note: premium users are current Bedfordshire beta cohort; 60 average assumes ~120 paying by December 2026 out of 80 existing beta accounts plus organic word-of-mouth. Y2 note: 3 paying institutions assumes 1 Bedfordshire conversion + 2 new pilots converted; 5–6 institutions signed by year-end is the underlying pipeline assumption. Y3 note: 10 average paying institutions assumes 18–20 signed by year-end — roughly 7% of the 285 UK institutions. No NHS contract is assumed before the University of Bedfordshire pilot generates outcome data publishable to ICBs._
+_Y1 note: premium revenue starts at Stripe go-live (M7, Dec 2026) when the Bedfordshire pilot completes. The 60 average across Y1 assumes 0 paying subscribers M1–M6 and approximately 80–90 paying from M7 onward (the 80-person beta cohort offered a conversion incentive, targeting ~75% conversion). Organic word-of-mouth may add further subscribers but has not been assumed. Y2 note: 3 paying institutions assumes 1 Bedfordshire conversion + 2 new pilots converted; 5–6 institutions signed by year-end is the underlying pipeline assumption. Y3 note: 10 average paying institutions assumes 18–20 signed by year-end — roughly 7% of the 285 UK institutions. No NHS contract is assumed before the University of Bedfordshire pilot generates outcome data publishable to ICBs._
 
 ### 11.2 Cost of sales
 
@@ -479,7 +479,7 @@ _Y1 note: premium users are current Bedfordshire beta cohort; 60 average assumes
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | 0 | 138,928 | 766,128 |
+| Opening cash | 0 | 138,928 | 768,228 |
 | Founder equity injection | 6,000 | 0 | 0 |
 | Pre-seed equity (target Dec 2026, M7) | 150,000 | 0 | 0 |
 | Seed equity (target Q2 Y2) | 0 | 750,000 | 0 |
@@ -558,7 +558,7 @@ Y1–Y3 are deliberately investment years: losses are funded by equity (pre-seed
 | Profit & loss reserve | (16,432) | (140,132) | (179,592) |
 | **Shareholders' funds** | **136,568** | **762,868** | **723,408** |
 
-(The £22,760 difference between net assets and shareholders' funds in Y3 is a deferred revenue timing item — full reconciliation in Appendix F financial workbook.)
+(The differences between net assets and shareholders' funds in each year — £2,360 in Y1, £8,660 in Y2, £22,760 in Y3 — represent deferred revenue: university SaaS contracts billed in advance of the period to which they relate. The deferred revenue liability grows as the institutional customer base scales. Full reconciliation in Appendix F financial workbook.)
 
 ---
 
@@ -2285,14 +2285,14 @@ The founders have accepted (and disclosed to UKES) the following lower-priority 
 | **Prior validation** | **Santander Universities Pre-Incubator** — completed 2025 |
 | **Founder anchor** | Yusuf Quadri served as **University of Bedfordshire SU President 2021–2023** |
 | **MVP** | Live in production at https://dequad.co.uk |
-| **Beta users** | ~50 across 3 UK universities |
+| **Beta users** | 80 verified accounts at University of Bedfordshire (42 daily-active, 6-week retention) |
 | **Anchor pilot discussion currently in progress** | **University of Bedfordshire** — direct relationship via former SU presidency |
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders)** |
 | **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring) |
 | **Funding ask Y1** | £150,000 pre-seed bridge — **Dec 2026 (M7)**, after the 3-month Bedfordshire pilot completes |
-| **3-yr revenue** | £16k → £176k → £659k |
-| **3-yr UK jobs** | 2 → 6 → 12 |
-| **Op profit positive** | Q4 Year 3 |
+| **3-yr revenue** | £13.6k → £119.9k → £509.4k |
+| **3-yr UK jobs** | 2 → 6 → 9 (→ 12 at Q1 Y4) |
+| **Break-even target** | Q2 Year 4 (after Series A) |
 | **Endorsement criteria met** | ✅ Innovation · ✅ Viability · ✅ Scalability |
 
 ---
@@ -2511,15 +2511,15 @@ The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow 
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | £15,988 | £175,808 | £659,280 |
-| Cost of Sales | (£1,440) | (£15,600) | (£54,000) |
-| Gross Profit | £14,548 | £160,208 | £605,280 |
-| Gross margin % | 91.0% | 91.1% | 91.8% |
-| Total overheads | (£28,620) | (£231,480) | (£579,260) |
-| **EBITDA** | **(£14,072)** | **(£71,272)** | **£26,020** |
-| **Operating profit** | **(£14,372)** | **(£72,772)** | **£21,520** |
+| Revenue | £13,588 | £119,880 | £509,400 |
+| Cost of Sales | (£1,100) | (£10,600) | (£41,100) |
+| Gross Profit | £12,488 | £109,280 | £468,300 |
+| Gross margin % | 91.9% | 91.2% | 91.9% |
+| Total overheads | (£28,620) | (£231,480) | (£503,260) |
+| **EBITDA** | **(£16,132)** | **(£122,200)** | **(£34,960)** |
+| **Operating profit / (loss)** | **(£16,432)** | **(£123,700)** | **(£39,460)** |
 
-**Operating profit positive in Q4 Year 3.** Cumulative loss before profitability ≈ £87k — small for a venture-funded company because the NatWest Accelerator + lean founder pay materially reduce Y1 + Y2 burn.
+Y1–Y3 are investment years funded by equity. The Y3 operating loss of £39k narrows sharply versus Y2 (£124k), demonstrating clear operating leverage as revenue scales. **Break-even is targeted Q2 Y4** after the Series A. Cumulative loss to break-even ≈ £180k — modest for a B2B SaaS business, reflecting the cash efficiency of the NatWest Accelerator support and lean founder compensation.
 
 ---
 
@@ -2530,14 +2530,14 @@ The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
 | Founders | 2 | 2 | 2 |
-| Customer Success | 0 | 1 | 2 |
-| Engineering | 0 | 1 | 3 |
+| Customer Success | 0 | 1 | 1 |
+| Engineering | 0 | 1 | 2 |
 | Safeguarding & Trust | 0 | 1 | 1 |
 | Marketing & Partnerships | 0 | 1 | 1 |
 | Data / ML | 0 | 0 | 1 |
 | Mobile | 0 | 0 | 1 |
-| Founders' Associate | 0 | 0 | 1 |
-| **Total UK jobs** | **2** | **6** | **12** |
+| Founders' Associate | 0 | 0 | 0 *(Q1 Y4)* |
+| **Total UK jobs** | **2** | **6** | **9** |
 
 ### Beyond direct jobs
 
@@ -2614,7 +2614,7 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 
 1. **Real product, real users** — the MVP is live, has beta users at three universities, and is governed by a DPIA-cleared safeguarding policy that ships before public launch.
 2. **Capital efficiency** — the business can survive Year 1 on **£6,000 of founder cash** because of the NatWest Accelerator in-kind support and a 6-month no-salary founder commitment. The pre-seed bridge is conservatively timed for **Dec 2026 (M7)** — immediately after the 3-month Bedfordshire pilot completes (Nov 2026) and conversion conversations open.
-3. **Credible UK growth** — 2 to 12 UK jobs in 3 years, 1 to 20 paying universities, operating profit positive Q4 Y3.
+3. **Credible UK growth** — 2 to 9 UK jobs by end Y3 (12 at Q1 Y4), 0.5 to 10 average paying universities by Y3, operating break-even targeted Q2 Y4 after Series A.
 
 ### What endorsement enables
 
