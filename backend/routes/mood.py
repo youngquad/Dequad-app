@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 import asyncio
+from datetime import datetime, timezone
 
 from database import db
-from models import User, MoodEntry, MoodCreate
+from models import User, MoodEntry, MoodCreate, SafeguardingAlert
 from helpers.auth import get_current_user
 from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert, analyze_text_for_new_patterns
+from helpers.email import send_safeguarding_email_to_admins
 
 router = APIRouter()
 
@@ -22,6 +24,32 @@ async def create_mood(data: MoodCreate, current_user: User = Depends(get_current
 
     if safeguarding_result["flagged"]:
         await create_safeguarding_alert(current_user, "mood", data.notes or "", safeguarding_result)
+
+    # Low mood alert — includes user details so admin can follow up directly
+    if data.mood < 5 and not safeguarding_result["flagged"]:
+        notes_snippet = f"\n\nNotes: {data.notes}" if data.notes else ""
+        alert = SafeguardingAlert(
+            user_id=current_user.user_id,
+            user_name=current_user.name,
+            user_email=current_user.email,
+            source="low_mood",
+            content=f"Mood rating: {data.mood}/10{notes_snippet}",
+            risk_level="low",
+            matched_keywords=[f"Mood score {data.mood}/10"],
+        )
+        await db.safeguarding_alerts.insert_one(alert.dict())
+        alert_data = {
+            "alert_id": alert.alert_id,
+            "user_id": current_user.user_id,
+            "user_name": current_user.name,
+            "user_email": current_user.email,
+            "source": "low_mood",
+            "content": alert.content,
+            "risk_level": "low",
+            "matched_keywords": alert.matched_keywords,
+            "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        }
+        asyncio.create_task(send_safeguarding_email_to_admins(alert_data))
 
     if data.notes and (data.mood <= 3 or len(data.notes) > 50):
         asyncio.create_task(analyze_text_for_new_patterns(data.notes, "mood"))
