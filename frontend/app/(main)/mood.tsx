@@ -623,9 +623,9 @@ const createStyles = (t: Theme) => StyleSheet.create({
   historyItem: {
     flexDirection: 'row',
     backgroundColor: t.card,
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 10,
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: t.border,
   },
