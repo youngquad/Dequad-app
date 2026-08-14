@@ -57,6 +57,8 @@ function previewMessage(text?: string | null): string {
 export default function ChatListScreen() {
   const router = useRouter();
   const { sessionToken, user } = useAuth();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const [matches, setMatches] = useState<MatchedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
