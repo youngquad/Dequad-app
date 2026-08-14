@@ -664,7 +664,7 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 | C | Personal commitment & undertaking | `C_personal_commitment_undertaking.md` |
 | D | Wellbeing baseline methodology | `D_wellbeing_baseline_methodology.md` |
 | E | Data Protection Impact Assessment (DPIA) | `E_dpia.md` |
-| F | Financial model (annotated) | `DEQUAD_Financial_Model.xlsx` |
+| F | Financial model (annotated) | See Appendix F below |
 | G | Job descriptions for first 6 hires | `G_job_descriptions.md` |
 | H | University Letters of Interest (template) | `H_university_letter_of_interest_template.md` |
 | I | Online Safety Act 2023 compliance statement | `I_online_safety_act_compliance.md` |
@@ -674,6 +674,145 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 | M | Decision-Maker Brief (UKES short track) | `DEQUAD_UKES_Decision_Brief.md` |
 | N | Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior SWE), Chinyere Jennifer (Advisor) | `N_wider_team_cvs.md` |
 | O | Yusuf Quadri — Safeguarding & Clinical-Awareness Certifications | `O_safeguarding_certifications.md` |
+
+---
+
+# Appendix F — Five-Year Financial Model
+
+*Currency: GBP (£). Y1–Y3 figures are aligned to Business Plan v4.0 §§11–12 (August 2026). Y4–Y5 are indicative projections. All equity lines marked TARGET are contingent on investor due diligence and milestone delivery; none are committed funds beyond the £6,000 founder capital injection.*
+
+---
+
+## F.1 Revenue Forecast
+
+| Line item | Y1 | Y2 | Y3 | Y4 | Y5 |
+|---|---:|---:|---:|---:|---:|
+| Universities (paid — avg in year) | 0.5 | 3 | 10 | 50 | 100 |
+| Avg students per university | 10,000 | 10,000 | 10,000 | 10,000 | 12,000 |
+| Institutional ARR | £10,000 | £60,000 | £200,000 | £1,000,000 | £2,400,000 |
+| NHS ICBs commissioned | 0 | 0 | 1 | 2 | 5 |
+| NHS ARR | £0 | £0 | £10,000 | £250,000 | £800,000 |
+| Premium subscribers | 60 | 1,000 | 5,000 | 25,000 | 60,000 |
+| Premium ARR (£4.99/mo) | £3,588 | £59,880 | £299,400 | £450,000 | £1,200,000 |
+| Research-data licences | £0 | £0 | £0 | £30,000 | £75,000 |
+| White-label / API | £0 | £0 | £0 | £20,000 | £165,000 |
+| **TOTAL REVENUE** | **£13,588** | **£119,880** | **£509,400** | **£1,750,000** | **£4,640,000** |
+
+*Y1 = Bedfordshire pilot converting mid-year (0.5 avg paid year) + 60 beta premium converts. Premium at ~3% of verified base — below Calm (5.7%) and Headspace (4.2%) benchmarks.*
+
+---
+
+## F.2 Cost of Revenue (COGS)
+
+| Driver | Y1 | Y2 | Y3 |
+|---|---:|---:|---:|
+| Cloud hosting (MongoDB Atlas + Render) | £360 | £3,400 | £13,000 |
+| LLM / safeguarding inference (OpenAI gpt-4o-mini) | £270 | £2,800 | £11,000 |
+| Stripe processing (~1% of B2C revenue) | £120 | £1,800 | £9,000 |
+| SMS & email notifications | £150 | £1,200 | £4,500 |
+| Customer-success tooling | £200 | £1,400 | £3,600 |
+| **Total COGS** | **£1,100** | **£10,600** | **£41,100** |
+| **Gross profit** | **£12,488** | **£109,280** | **£468,300** |
+| **Gross margin** | 91.9% | 91.2% | 91.9% |
+
+---
+
+## F.3 Operating Expenses
+
+| Line | Y1 | Y2 | Y3 |
+|---|---:|---:|---:|
+| Payroll (salaries + employer NI + pension + benefits) | £20,340 | £180,680 | £376,660 |
+| Marketing (paid + content + events) | £3,600 | £28,000 | £80,000 |
+| Software subscriptions | £1,800 | £6,000 | £14,400 |
+| Office / co-working (post-NatWest programme) | £0 | £6,000 | £12,000 |
+| Legal & accountancy (out-of-programme) | £1,200 | £5,400 | £11,000 |
+| Insurance (D&O, PI, Cyber, PL) | £480 | £1,800 | £3,200 |
+| Business support / misc | £1,200 | £3,600 | £9,000 |
+| Fixed assets & R&D capex | £900 | £3,000 | £9,000 |
+| **Total OPEX** | **£29,520** | **£234,480** | **£515,260** |
+| **Operating result** | **(£16,432)** | **(£125,200)** | **(£47,060)** |
+
+---
+
+## F.4 Annual Cash Flow Forecast
+
+| Line | Y1 | Y2 | Y3 |
+|---|---:|---:|---:|
+| Opening cash | £0 | £138,928 | £768,228 |
+| Founder equity injection | £6,000 | £0 | £0 |
+| Pre-seed equity (target Dec 2026, M7) | £150,000 | £0 | £0 |
+| Seed equity (target Q2 Y2) | £0 | £750,000 | £0 |
+| R&D tax credit received | £0 | £4,500 | £9,500 |
+| Cash from sales | £13,588 | £119,880 | £509,400 |
+| **Total receipts** | **£169,588** | **£874,380** | **£518,900** |
+| Cost of sales | (£1,100) | (£10,600) | (£41,100) |
+| Payroll (incl. NI, pension, benefits) | (£20,340) | (£180,680) | (£376,660) |
+| Marketing | (£3,600) | (£28,000) | (£80,000) |
+| Software subscriptions | (£1,800) | (£6,000) | (£14,400) |
+| Office (post-programme) | £0 | (£6,000) | (£12,000) |
+| Legal & accountancy (out-of-programme) | (£1,200) | (£5,400) | (£11,000) |
+| Insurance | (£480) | (£1,800) | (£3,200) |
+| Business support / misc | (£1,200) | (£3,600) | (£9,000) |
+| Fixed assets & R&D capex | (£900) | (£3,000) | (£9,000) |
+| **Total expenditure** | **(£30,620)** | **(£245,080)** | **(£556,360)** |
+| **Net cash movement** | **£138,968** | **£629,300** | **(£37,460)** |
+| **Closing cash balance** | **£138,928** | **£768,228** | **£730,768** |
+
+*Pre-seed and seed are targets contingent on pilot outcomes and investor due diligence; they are not committed funds. The Y3 net outflow of £37k reflects planned investment in scaling to 10 institutions; closing cash of £731k provides 16+ months' runway at the Y3 burn rate and bridges to the targeted Series A in Q1 Y4.*
+
+---
+
+## F.5 Funding Milestones
+
+| Round | Timing | Amount (target) | Terms | Status |
+|---|---|---:|---|---|
+| Founder equity injection | M1 (Jun 2026) | £6,000 | Personal capital | **Delivered** |
+| Pre-seed | M7 (Dec 2026) | £150,000 | ~17% at £900k post-money | **Target — not yet secured** |
+| Seed | Q2 Y2 | £750,000 | ~15% at £5m post-money | **Target — not yet approached** |
+| Series A | Q1 Y4 | £3,000,000–£5,000,000 | TBD | **Indicative** |
+
+---
+
+## F.6 Headcount Plan
+
+| Role | Y1 | Y2 | Y3 |
+|---|---:|---:|---:|
+| Founders (CEO + CTO) | 2 | 2 | 2 |
+| Engineering | 0 | 1 | 2 |
+| Customer success | 0 | 1 | 1 |
+| Sales | 0 | 1 | 1 |
+| Safeguarding / DSL | 0 | 1 | 1 |
+| Marketing | 0 | 0 | 1 |
+| Operations / Finance | 0 | 0 | 1 |
+| **Total FTE** | **2** | **6** | **9** |
+
+*No founder salary drawn M1–M6; both founders fund personal living costs from existing employment (CEO: Change Grow Live; CTO: freelance engineering). Founders draw £1,500/mo each from M7 (pre-seed funds).*
+
+---
+
+## F.7 Key Unit Economics
+
+| Metric | Y1 | Y2 | Y3 |
+|---|---:|---:|---:|
+| Avg revenue per paid university | £20,000 | £20,000 | £20,000 |
+| Avg CAC per university | £6,000 | £4,000 | £3,000 |
+| Payback period (years) | 0.30 | 0.20 | 0.15 |
+| LTV (5-yr) per university | £100,000 | £100,000 | £100,000 |
+| LTV : CAC | 16.7× | 25× | 33× |
+
+---
+
+## F.8 Key Assumptions
+
+1. **Institutional pricing:** £2 per enrolled student per year (£20,000 for a 10,000-student university). Below in-house counsellor cost (£40+/student); validated against JISC 2024 procurement data.
+2. **Premium pricing:** £4.99/month (£59.88/year). Y1 = 60 beta converts; Y2+ ~3% of registered base. Below Calm (5.7%) and Headspace (4.2%) consumer benchmarks.
+3. **University procurement cycle:** 4–6 months from first contact (JISC HE buying data). Bedfordshire pilot mid-year conversion = 0.5 avg paid-year in Y1.
+4. **Founder capital sufficiency:** The business survives M1–M6 on £6,000 founder capital with positive month-end balances throughout. Every subsequent funding event is gated on a delivered milestone.
+5. **Founder living costs:** Both founders are employed independently (CEO at Change Grow Live; CTO as a freelance engineer) and do not require a salary from DEQUAD until M7.
+6. **Y3 cash position:** Net outflow of £37,460 in Y3 reflects planned investment in scaling to 10 institutions. Closing balance of £730,768 provides 16+ months' runway at Y3 burn rate, bridging to the Series A.
+7. **Break-even:** Targeted Q2 Y4 after Series A deployed and institutional ARR reaches scale.
+8. **NHS pipeline:** First ICB pilot Y3 (£10,000 fee); full commissioning scale Y4+ contingent on NHS Innovation Accelerator acceptance (~30% acceptance rate).
+9. **R&D tax credit:** HMRC SME RDEC scheme at ~16% on qualifying spend; modelled conservatively at 10% effective rate.
 
 ---
 
