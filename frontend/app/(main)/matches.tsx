@@ -821,6 +821,17 @@ export default function MatchesScreen() {
             <Ionicons name="lock-closed" size={12} color="#F59E0B" style={{ marginLeft: 4 }} />
           )}
         </TouchableOpacity>
+
+        {/* Likes You — the only entry point into /(main)/likes-you, since the
+            full banner was dropped elsewhere in this refactor. */}
+        <TouchableOpacity
+          style={styles.likesYouIconButton}
+          onPress={() => router.push('/(main)/likes-you')}
+          activeOpacity={0.8}
+          data-testid="likes-you-icon-button"
+        >
+          <Ionicons name="heart" size={18} color="#EC4899" />
+        </TouchableOpacity>
       </View>
 
       {/* One-time tip for the per-section heart buttons */}
@@ -1289,6 +1300,17 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderColor: t.border,
   },
   filterPillText: { fontSize: 13, color: t.text, fontWeight: '700' },
+  likesYouIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginLeft: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(236, 72, 153, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(236, 72, 153, 0.3)',
+  },
   modalOverlay: {
     position: 'absolute',
     top: 0,
