@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
 import { useRouter } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
@@ -66,6 +67,8 @@ interface CommentModalData {
 }
 
 export default function MatchesScreen() {
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const router = useRouter();
   const { sessionToken } = useAuth();
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
@@ -79,7 +82,6 @@ export default function MatchesScreen() {
   const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
   const [comment, setComment] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [likesCount, setLikesCount] = useState(0);
   const [reportTarget, setReportTarget] = useState<UserProfile | null>(null);
   // Premium-gated filter state (persisted in AsyncStorage across sessions)
   const [filters, setFilters] = useState<{
@@ -138,17 +140,7 @@ export default function MatchesScreen() {
   useEffect(() => {
     loadProfiles();
     loadSwipeStatus();
-    loadLikesCount();
   }, []);
-
-  const loadLikesCount = async () => {
-    try {
-      const data = await api.get('/matches/likes-received', sessionToken);
-      setLikesCount(data.length);
-    } catch (error) {
-      console.error('Error loading likes count:', error);
-    }
-  };
 
   const loadProfiles = async (reset: boolean = false) => {
     try {
@@ -413,15 +405,6 @@ export default function MatchesScreen() {
               style={styles.photoGradient}
             />
             
-            {/* Skip Button - Top Left */}
-            <TouchableOpacity 
-              style={styles.topSkipButton}
-              onPress={() => handleSkip(profile)}
-              disabled={!isCurrentProfile}
-            >
-              <Ionicons name="close" size={28} color="#fff" />
-            </TouchableOpacity>
-
             {/* Report Button - Top Right */}
             <TouchableOpacity
               style={styles.topReportButton}
@@ -470,7 +453,7 @@ export default function MatchesScreen() {
           {(profile.course || profile.study_style) && (
             <View style={styles.infoSection}>
               <View style={styles.infoContent}>
-                <Ionicons name="book" size={20} color="#6366F1" />
+                <Ionicons name="book" size={20} color={t.accent} />
                 <View style={styles.infoTextContainer}>
                   {profile.course && (
                     <Text style={styles.infoTitle}>{profile.course}</Text>
@@ -492,7 +475,7 @@ export default function MatchesScreen() {
           {profile.bio && (
             <View style={styles.infoSection}>
               <View style={styles.infoContent}>
-                <Ionicons name="chatbubble-ellipses" size={20} color="#10B981" />
+                <Ionicons name="chatbubble-ellipses" size={20} color={t.success} />
                 <View style={styles.infoTextContainer}>
                   <Text style={styles.infoTitle}>About me</Text>
                   <Text style={styles.bioText}>"{profile.bio}"</Text>
@@ -530,22 +513,6 @@ export default function MatchesScreen() {
             </View>
           )}
 
-          {/* Match Score */}
-          {profile.match_score !== undefined && (
-            <View style={styles.matchScoreSection}>
-              <LinearGradient
-                colors={['rgba(245, 158, 11, 0.15)', 'rgba(251, 191, 36, 0.1)']}
-                style={styles.matchScoreCard}
-              >
-                <Ionicons name="star" size={24} color="#F59E0B" />
-                <Text style={styles.matchScoreText}>
-                  {Math.round(profile.match_score * 100)}% Match
-                </Text>
-                <Text style={styles.matchScoreSubtext}>Based on shared interests & preferences</Text>
-              </LinearGradient>
-            </View>
-          )}
-
           {/* Additional Photos */}
           {profile.photos && profile.photos.length > 1 && (
             <View style={styles.additionalPhotos}>
@@ -562,13 +529,13 @@ export default function MatchesScreen() {
             </View>
           )}
 
-          {/* Skip Button */}
-          <TouchableOpacity 
+          {/* Next / Skip Signpost */}
+          <TouchableOpacity
             style={styles.skipButton}
             onPress={() => handleSkip(profile)}
             disabled={!isCurrentProfile}
           >
-            <Ionicons name="close" size={24} color="#64748B" />
+            <Ionicons name="close-circle" size={28} color={t.textFaint} />
             <Text style={styles.skipButtonText}>Skip</Text>
           </TouchableOpacity>
 
@@ -665,7 +632,7 @@ export default function MatchesScreen() {
                   <TextInput
                     style={styles.commentInput}
                     placeholder="Say something nice..."
-                    placeholderTextColor="#64748B"
+                    placeholderTextColor={t.textFaint}
                     value={comment}
                     onChangeText={setComment}
                     multiline
@@ -787,28 +754,8 @@ export default function MatchesScreen() {
         </View>
       )}
 
-      {/* Top Banner with Likes You & Swipe Counter */}
+      {/* Top Banner with Swipe Counter */}
       <View style={styles.topBanner}>
-        {/* Likes You Button */}
-        <TouchableOpacity 
-          style={styles.likesYouButton}
-          onPress={() => router.push('/(main)/likes-you')}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={['rgba(236, 72, 153, 0.2)', 'rgba(244, 114, 182, 0.1)']}
-            style={styles.likesYouGradient}
-          >
-            <Ionicons name="heart" size={18} color="#EC4899" />
-            <Text style={styles.likesYouText}>Likes You</Text>
-            {likesCount > 0 && (
-              <View style={styles.likesCountBadge}>
-                <Text style={styles.likesCountText}>{likesCount}</Text>
-              </View>
-            )}
-          </LinearGradient>
-        </TouchableOpacity>
-
         {/* Weekly Likes Counter — switches to a refresh-countdown when limit is hit */}
         {!swipeInfo.is_premium && (() => {
           const remaining = swipeInfo.remaining_likes_this_week ?? 0;
@@ -864,7 +811,7 @@ export default function MatchesScreen() {
           style={styles.filterPill}
           data-testid="open-filters-button"
         >
-          <Ionicons name="options-outline" size={16} color="#E2E8F0" />
+          <Ionicons name="options-outline" size={16} color={t.text} />
           <Text style={styles.filterPillText}>
             {Object.values(filters).filter(Boolean).length > 0
               ? `Filters · ${Object.values(filters).filter(Boolean).length}`
@@ -893,7 +840,7 @@ export default function MatchesScreen() {
       {currentIndex >= profiles.length ? (
         <View style={styles.emptyState}>
           <View style={styles.emptyIcon}>
-            <Ionicons name="search" size={48} color="#64748B" />
+            <Ionicons name="search" size={48} color={t.textFaint} />
           </View>
           <Text style={styles.emptyTitle}>No More Profiles</Text>
           <Text style={styles.emptySubtitle}>
@@ -901,7 +848,7 @@ export default function MatchesScreen() {
           </Text>
           <Pressable onPress={() => loadProfiles(true)} data-testid="refresh-deck-button">
             <LinearGradient
-              colors={['#6366F1', '#8B5CF6']}
+              colors={t.ctaGradient}
               style={styles.refreshButton}
             >
               <Ionicons name="refresh" size={18} color="#fff" />
@@ -931,10 +878,10 @@ export default function MatchesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: t.bg,
   },
   loadingContainer: {
     flex: 1,
@@ -943,7 +890,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   loadingText: {
-    color: '#94A3B8',
+    color: t.textMuted,
     fontSize: 16,
     marginTop: 20,
     fontWeight: '500',
@@ -1065,7 +1012,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#1E293B',
+    backgroundColor: t.card,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -1083,13 +1030,13 @@ const styles = StyleSheet.create({
   infoSection: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1E293B',
+    backgroundColor: t.card,
     marginHorizontal: 16,
     marginTop: 16,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.1)',
+    borderColor: t.border,
   },
   infoContent: {
     flex: 1,
@@ -1103,16 +1050,16 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F8FAFC',
+    color: t.text,
     marginBottom: 4,
   },
   infoSubtitle: {
     fontSize: 14,
-    color: '#94A3B8',
+    color: t.textMuted,
   },
   bioText: {
     fontSize: 15,
-    color: '#CBD5E1',
+    color: t.textMuted,
     fontStyle: 'italic',
     lineHeight: 22,
     marginTop: 4,
@@ -1124,7 +1071,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   interestTag: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -1133,28 +1080,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#818CF8',
     fontWeight: '500',
-  },
-  matchScoreSection: {
-    marginHorizontal: 16,
-    marginTop: 16,
-  },
-  matchScoreCard: {
-    alignItems: 'center',
-    padding: 20,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
-  },
-  matchScoreText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#F59E0B',
-    marginTop: 8,
-  },
-  matchScoreSubtext: {
-    fontSize: 13,
-    color: '#94A3B8',
-    marginTop: 4,
   },
   additionalPhotos: {
     flexDirection: 'row',
@@ -1186,20 +1111,8 @@ const styles = StyleSheet.create({
   },
   skipButtonText: {
     fontSize: 16,
-    color: '#64748B',
+    color: t.textFaint,
     fontWeight: '600',
-  },
-  topSkipButton: {
-    position: 'absolute',
-    top: 16,
-    left: 16,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
   },
   topReportButton: {
     position: 'absolute',
@@ -1226,7 +1139,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   commentModalContent: {
-    backgroundColor: '#1E293B',
+    backgroundColor: t.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
@@ -1235,7 +1148,7 @@ const styles = StyleSheet.create({
   commentModalHandle: {
     width: 40,
     height: 4,
-    backgroundColor: '#4B5563',
+    backgroundColor: t.textFaint,
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 20,
@@ -1266,7 +1179,7 @@ const styles = StyleSheet.create({
   commentModalName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: t.text,
   },
   commentModalSection: {
     fontSize: 14,
@@ -1275,25 +1188,25 @@ const styles = StyleSheet.create({
   },
   commentPrompt: {
     fontSize: 15,
-    color: '#94A3B8',
+    color: t.textMuted,
     marginBottom: 12,
   },
   commentInputContainer: {
-    backgroundColor: '#0F172A',
+    backgroundColor: t.bg,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.2)',
+    borderColor: t.border,
     padding: 16,
     marginBottom: 20,
   },
   commentInput: {
-    color: '#F8FAFC',
+    color: t.text,
     fontSize: 16,
     minHeight: 80,
     textAlignVertical: 'top',
   },
   commentCounter: {
-    color: '#64748B',
+    color: t.textFaint,
     fontSize: 12,
     textAlign: 'right',
     marginTop: 8,
@@ -1306,7 +1219,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   sendWithoutCommentText: {
-    color: '#94A3B8',
+    color: t.textMuted,
     fontSize: 15,
     fontWeight: '500',
   },
@@ -1341,12 +1254,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: t.text,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 15,
-    color: '#94A3B8',
+    color: t.textMuted,
     marginBottom: 24,
     textAlign: 'center',
   },
@@ -1367,15 +1280,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: t.card,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 999,
     marginLeft: 8,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.2)',
+    borderColor: t.border,
   },
-  filterPillText: { fontSize: 13, color: '#E2E8F0', fontWeight: '700' },
+  filterPillText: { fontSize: 13, color: t.text, fontWeight: '700' },
   modalOverlay: {
     position: 'absolute',
     top: 0,
@@ -1388,7 +1301,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   upgradeModal: {
-    backgroundColor: '#1E293B',
+    backgroundColor: t.card,
     borderRadius: 28,
     padding: 32,
     alignItems: 'center',
@@ -1416,12 +1329,12 @@ const styles = StyleSheet.create({
   upgradeTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: t.text,
     marginBottom: 8,
   },
   upgradeSubtitle: {
     fontSize: 15,
-    color: '#94A3B8',
+    color: t.textMuted,
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 22,
@@ -1444,11 +1357,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   laterButtonText: {
-    color: '#64748B',
+    color: t.textFaint,
     fontSize: 14,
   },
   matchModal: {
-    backgroundColor: '#1E293B',
+    backgroundColor: t.card,
     borderRadius: 28,
     padding: 32,
     alignItems: 'center',
@@ -1468,7 +1381,7 @@ const styles = StyleSheet.create({
   },
   matchSubtitle: {
     fontSize: 16,
-    color: '#94A3B8',
+    color: t.textMuted,
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -1490,11 +1403,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.3)',
+    borderColor: t.border,
     alignItems: 'center',
   },
   matchSecondaryButtonText: {
-    color: '#94A3B8',
+    color: t.textMuted,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -1524,48 +1437,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
   },
-  likesYouButton: {
-    flex: 1,
-  },
-  likesYouGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(236, 72, 153, 0.3)',
-    gap: 8,
-  },
-  likesYouText: {
-    color: '#EC4899',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  likesCountBadge: {
-    backgroundColor: '#EC4899',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 10,
-    minWidth: 22,
-    alignItems: 'center',
-  },
-  likesCountText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '700',
-  },
   swipeBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: t.card,
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.1)',
+    borderColor: t.border,
   },
   swipeBannerLimit: {
     backgroundColor: 'rgba(245, 158, 11, 0.1)',
@@ -1590,13 +1471,13 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'rgba(148, 163, 184, 0.3)',
+    backgroundColor: t.border,
   },
   swipeDotActive: {
     backgroundColor: '#EC4899',
   },
   swipeCounterText: {
-    color: '#94A3B8',
+    color: t.textMuted,
     fontSize: 14,
     fontWeight: '500',
   },

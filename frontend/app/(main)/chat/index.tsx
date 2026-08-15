@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../../src/contexts/ThemeContext';
 import { api } from '../../../src/services/api';
 import { decrypt } from '../../../src/utils/encryption';
 import { MoodCardSkeleton } from '../../../src/components/SkeletonLoader';
@@ -56,6 +57,8 @@ function previewMessage(text?: string | null): string {
 export default function ChatListScreen() {
   const router = useRouter();
   const { sessionToken, user } = useAuth();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const [matches, setMatches] = useState<MatchedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -115,9 +118,9 @@ export default function ChatListScreen() {
           <Text style={styles.matchSubtitle} numberOfLines={1}>{subtitle}</Text>
         </View>
         <View style={styles.lockIcon}>
-          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+          <Ionicons name="shield-checkmark" size={16} color={t.success} />
         </View>
-        <Ionicons name="chevron-forward" size={24} color="#6B7280" />
+        <Ionicons name="chevron-forward" size={24} color={t.textFaint} />
       </TouchableOpacity>
     );
   };
@@ -138,7 +141,7 @@ export default function ChatListScreen() {
     <SafeAreaView style={styles.container} edges={['bottom']}>
       {matches.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="chatbubbles-outline" size={64} color="#4B5563" />
+          <Ionicons name="chatbubbles-outline" size={64} color={t.textFaint} />
           <Text style={styles.emptyTitle}>No Matches Yet</Text>
           <Text style={styles.emptySubtitle}>
             Match with other students to start chatting
@@ -154,7 +157,7 @@ export default function ChatListScreen() {
       ) : (
         <>
           <View style={styles.header}>
-            <Ionicons name="shield-checkmark" size={20} color="#10B981" />
+            <Ionicons name="shield-checkmark" size={20} color={t.success} />
             <Text style={styles.headerText}>
               Conversations are protected and monitored for safety
             </Text>
@@ -171,10 +174,10 @@ export default function ChatListScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: t.bg,
   },
   header: {
     flexDirection: 'row',
@@ -182,12 +185,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    backgroundColor: t.isDark ? 'rgba(79, 184, 159, 0.1)' : 'rgba(15, 122, 94, 0.08)',
     borderBottomWidth: 1,
-    borderBottomColor: '#1F2937',
+    borderBottomColor: t.border,
   },
   headerText: {
-    color: '#10B981',
+    color: t.success,
     fontSize: 14,
     marginLeft: 8,
   },
@@ -197,16 +200,18 @@ const styles = StyleSheet.create({
   matchItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1F2937',
-    borderRadius: 12,
+    backgroundColor: t.card,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: t.border,
   },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -226,36 +231,36 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   matchTime: {
-    color: '#64748B',
+    color: t.textFaint,
     fontSize: 11,
     marginLeft: 'auto',
   },
   matchName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: t.text,
     flex: 1,
   },
   matchEmail: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
   },
   matchSubtitle: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: t.textMuted,
     marginTop: 2,
   },
   lockIcon: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    backgroundColor: t.isDark ? 'rgba(79, 184, 159, 0.15)' : 'rgba(15, 122, 94, 0.1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 8,
   },
   lockText: {
-    color: '#10B981',
+    color: t.success,
     fontSize: 10,
     fontWeight: '600',
     marginLeft: 4,
@@ -269,26 +274,26 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: t.text,
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: t.textMuted,
     textAlign: 'center',
     marginBottom: 24,
   },
   goToMatchesButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#6366F1',
+    backgroundColor: t.primary,
     paddingHorizontal: 24,
     paddingVertical: 14,
-    borderRadius: 24,
+    borderRadius: 999,
   },
   goToMatchesText: {
-    color: '#fff',
+    color: t.primaryText,
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,

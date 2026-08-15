@@ -91,7 +91,7 @@ export default function AdminDashboard() {
   const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'verifications' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'feedback' | 'verifications' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
   const [supportUnread, setSupportUnread] = useState<number>(0);
   const [safeUnread, setSafeUnread] = useState<{ unread: number; high_risk: number }>({ unread: 0, high_risk: 0 });
   const [verifyUnread, setVerifyUnread] = useState<number>(0);
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
   // Date filters
   const [dateRange, setDateRange] = useState('30'); // days
 
-  const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+  const backendUrl = process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || '';
 
   useEffect(() => {
     // Only load data when sessionToken is available and token loading is complete
@@ -497,7 +497,7 @@ export default function AdminDashboard() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {['overview', 'safeguarding', 'verifications', 'support', 'subscriptions', 'ai-learning', 'team', 'universities', 'analytics', 'export'].map((tab) => (
+        {['overview', 'safeguarding', 'feedback', 'verifications', 'support', 'subscriptions', 'ai-learning', 'team', 'universities', 'analytics', 'export'].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -508,6 +508,7 @@ export default function AdminDashboard() {
                 name={
                   tab === 'overview' ? 'grid-outline' :
                   tab === 'safeguarding' ? 'shield-outline' :
+                  tab === 'feedback' ? 'chatbox-ellipses-outline' :
                   tab === 'verifications' ? 'shield-checkmark-outline' :
                   tab === 'support' ? 'chatbubbles-outline' :
                   tab === 'subscriptions' ? 'card-outline' :
@@ -546,11 +547,22 @@ export default function AdminDashboard() {
                   </Text>
                 </View>
               )}
+              {tab === 'feedback' && (() => {
+                const unread = safeguardingAlerts.filter(
+                  a => (a.source === 'low_lecture_rating' || a.source === 'low_mood') && !a.acknowledged
+                ).length;
+                return unread > 0 ? (
+                  <View style={[styles.tabBadge, styles.tabBadgeWarn]}>
+                    <Text style={styles.tabBadgeText}>{unread > 9 ? '9+' : unread}</Text>
+                  </View>
+                ) : null;
+              })()}
             </View>
             <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
               {tab === 'universities' ? 'Unis' :
                tab === 'ai-learning' ? 'AI' :
                tab === 'safeguarding' ? 'Safe' :
+               tab === 'feedback' ? 'Feedback' :
                tab === 'verifications' ? 'Verify' :
                tab === 'subscriptions' ? 'Subs' :
                tab === 'team' ? 'Team' :
@@ -857,6 +869,143 @@ export default function AdminDashboard() {
           </View>
         )}
 
+        {/* Feedback Alerts Tab */}
+        {activeTab === 'feedback' && (() => {
+          const lectureAlerts = safeguardingAlerts.filter(a => a.source === 'low_lecture_rating');
+          const moodAlerts = safeguardingAlerts.filter(a => a.source === 'low_mood');
+          const totalUnacked = [...lectureAlerts, ...moodAlerts].filter(a => !a.acknowledged).length;
+
+          return (
+            <View style={styles.content}>
+              {/* Summary */}
+              <View style={styles.alertSummary}>
+                <View style={[styles.alertSummaryCard, { borderLeftColor: '#F59E0B' }]}>
+                  <Text style={styles.alertSummaryValue}>{lectureAlerts.length}</Text>
+                  <Text style={styles.alertSummaryLabel}>Low Ratings</Text>
+                </View>
+                <View style={[styles.alertSummaryCard, { borderLeftColor: '#6366F1' }]}>
+                  <Text style={styles.alertSummaryValue}>{moodAlerts.length}</Text>
+                  <Text style={styles.alertSummaryLabel}>Low Moods</Text>
+                </View>
+                <View style={[styles.alertSummaryCard, { borderLeftColor: '#EF4444' }]}>
+                  <Text style={styles.alertSummaryValue}>{totalUnacked}</Text>
+                  <Text style={styles.alertSummaryLabel}>Unreviewed</Text>
+                </View>
+              </View>
+
+              {/* Low Lecture Ratings */}
+              <Text style={styles.sectionTitle}>Low Lecture Ratings</Text>
+              <Text style={styles.sectionSubtitle}>
+                Anonymous — submitted when a student rates a lecture below 5/10
+              </Text>
+              {lectureAlerts.length === 0 ? (
+                <View style={styles.emptyState}>
+                  <Ionicons name="chatbox-ellipses-outline" size={40} color="#4B5563" />
+                  <Text style={styles.emptyStateText}>No low-rating alerts yet</Text>
+                </View>
+              ) : (
+                lectureAlerts.map(alert => (
+                  <View
+                    key={alert.alert_id}
+                    style={[styles.alertCard, { borderLeftColor: '#F59E0B' }]}
+                  >
+                    <View style={styles.alertHeader}>
+                      <View style={styles.alertUser}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                          <Ionicons name="eye-off-outline" size={14} color="#9CA3AF" />
+                          <Text style={[styles.alertUserName, { color: '#9CA3AF' }]}>Anonymous Student</Text>
+                        </View>
+                      </View>
+                      <View style={[styles.alertBadge, { backgroundColor: '#F59E0B20' }]}>
+                        <Text style={[styles.alertBadgeText, { color: '#F59E0B' }]}>LOW RATING</Text>
+                      </View>
+                    </View>
+                    <View style={styles.alertMeta}>
+                      <Text style={styles.alertSource}>
+                        {alert.matched_keywords[0] || 'Lecture rating'}
+                      </Text>
+                      <Text style={styles.alertDate}>{formatDate(alert.created_at)}</Text>
+                    </View>
+                    <Text style={styles.alertContent}>{alert.content}</Text>
+                    {!alert.acknowledged && (
+                      <View style={styles.alertActions}>
+                        <TouchableOpacity
+                          style={styles.acknowledgeButton}
+                          onPress={() => acknowledgeAlert(alert.alert_id)}
+                        >
+                          <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                          <Text style={styles.acknowledgeText}>Mark Reviewed</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                ))
+              )}
+
+              {/* Low Mood Alerts */}
+              <Text style={[styles.sectionTitle, { marginTop: 24 }]}>Low Mood Alerts</Text>
+              <Text style={styles.sectionSubtitle}>
+                Submitted when a student logs a mood score below 5/10
+              </Text>
+              {moodAlerts.length === 0 ? (
+                <View style={styles.emptyState}>
+                  <Ionicons name="happy-outline" size={40} color="#4B5563" />
+                  <Text style={styles.emptyStateText}>No low-mood alerts yet</Text>
+                </View>
+              ) : (
+                moodAlerts.map(alert => (
+                  <View
+                    key={alert.alert_id}
+                    style={[styles.alertCard, { borderLeftColor: '#6366F1' }]}
+                  >
+                    <View style={styles.alertHeader}>
+                      <View style={styles.alertUser}>
+                        <Text style={styles.alertUserName}>{alert.user_name}</Text>
+                        <Text style={styles.alertUserEmail}>{alert.user_email}</Text>
+                      </View>
+                      <View style={[styles.alertBadge, { backgroundColor: '#6366F120' }]}>
+                        <Text style={[styles.alertBadgeText, { color: '#6366F1' }]}>LOW MOOD</Text>
+                      </View>
+                    </View>
+                    <View style={styles.alertMeta}>
+                      <Text style={styles.alertSource}>
+                        {alert.matched_keywords[0] || 'Mood score'}
+                      </Text>
+                      <Text style={styles.alertDate}>{formatDate(alert.created_at)}</Text>
+                    </View>
+                    <Text style={styles.alertContent}>{alert.content}</Text>
+                    <View style={styles.alertActions}>
+                      {!alert.acknowledged && (
+                        <TouchableOpacity
+                          style={styles.acknowledgeButton}
+                          onPress={() => acknowledgeAlert(alert.alert_id)}
+                        >
+                          <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                          <Text style={styles.acknowledgeText}>Mark Reviewed</Text>
+                        </TouchableOpacity>
+                      )}
+                      <TouchableOpacity
+                        style={styles.analyzeStudentButton}
+                        onPress={() => runStudentAnalysis(alert.user_id, alert.user_name)}
+                        disabled={analyzingStudentId === alert.user_id}
+                      >
+                        {analyzingStudentId === alert.user_id ? (
+                          <ActivityIndicator size="small" color="#6366F1" />
+                        ) : (
+                          <>
+                            <Ionicons name="analytics" size={18} color="#6366F1" />
+                            <Text style={styles.analyzeStudentText}>Analyze Student</Text>
+                          </>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))
+              )}
+            </View>
+          );
+        })()}
+
         {/* Support Inbox Tab */}
         {activeTab === 'support' && (
           <View style={styles.content}>
@@ -892,7 +1041,7 @@ export default function AdminDashboard() {
             </Text>
             <AdminInviteManager
               sessionToken={sessionToken}
-              apiBaseUrl={process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || ''}
+              apiBaseUrl={process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || ''}
             />
           </View>
         )}
@@ -907,7 +1056,7 @@ export default function AdminDashboard() {
 
         {/* Universities Tab */}
         {activeTab === 'universities' && (
-          <AdminUniversitiesTab sessionToken={sessionToken} />
+          <AdminUniversitiesTab sessionToken={sessionToken} backendUrl={backendUrl} />
         )}
 
         {/* Analytics Tab */}

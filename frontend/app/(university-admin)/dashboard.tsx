@@ -78,7 +78,7 @@ export default function UniversityAdminDashboard() {
   const [moodTrends, setMoodTrends] = useState<MoodTrend[]>([]);
   const [error, setError] = useState<string | null>(null);
   
-  const backendUrl = Constants.expoConfig?.extra?.backendUrl || process.env.EXPO_PUBLIC_BACKEND_URL || '';
+  const backendUrl = process.env.EXPO_PUBLIC_BACKEND_URL || Constants.expoConfig?.extra?.backendUrl || '';
   
   useEffect(() => {
     loadSession();

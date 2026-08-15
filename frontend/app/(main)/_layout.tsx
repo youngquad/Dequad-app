@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { BlurView } from 'expo-blur';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
 import { registerPushToken } from '../../src/utils/push';
 
@@ -14,14 +14,15 @@ function TabIcon({
   focused,
   color,
   badgeCount,
-}: { name: string; focused: boolean; color: string; badgeCount?: number }) {
+  dotBorder,
+}: { name: string; focused: boolean; color: string; badgeCount?: number; dotBorder?: string }) {
   return (
-    <View style={styles.tabIconContainer}>
-      {focused && <View style={[styles.activeIndicator, { backgroundColor: color }]} />}
+    <View style={staticStyles.tabIconContainer}>
+      {focused && <View style={[staticStyles.activeIndicator, { backgroundColor: color }]} />}
       <Ionicons name={name as any} size={24} color={color} />
       {badgeCount && badgeCount > 0 ? (
-        <View style={styles.tabUnreadDot}>
-          <Text style={styles.tabUnreadText}>
+        <View style={[staticStyles.tabUnreadDot, { borderColor: dotBorder || 'transparent' }]}>
+          <Text style={staticStyles.tabUnreadText}>
             {badgeCount > 9 ? '9+' : badgeCount}
           </Text>
         </View>
@@ -32,6 +33,7 @@ function TabIcon({
 
 export default function MainLayout() {
   const { sessionToken } = useAuth();
+  const { theme: t } = useTheme();
   const [chatUnread, setChatUnread] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
 
@@ -71,14 +73,29 @@ export default function MainLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: '#6366F1',
-        tabBarInactiveTintColor: '#64748B',
+        tabBarStyle: {
+          backgroundColor: t.tabBarBg,
+          borderTopWidth: 1,
+          borderTopColor: t.border,
+          paddingTop: 8,
+          paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+          height: Platform.OS === 'ios' ? 88 : 76,
+          position: 'absolute',
+          elevation: 0,
+        },
+        tabBarActiveTintColor: t.primary,
+        tabBarInactiveTintColor: t.textFaint,
         tabBarShowLabel: true,
-        tabBarLabelStyle: styles.tabLabel,
-        headerStyle: styles.header,
-        headerTintColor: '#F8FAFC',
-        headerTitleStyle: styles.headerTitle,
+        tabBarLabelStyle: staticStyles.tabLabel,
+        headerStyle: {
+          backgroundColor: t.headerBg,
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 1,
+          borderBottomColor: t.border,
+        },
+        headerTintColor: t.text,
+        headerTitleStyle: { fontWeight: '700', fontSize: 18, color: t.text },
         headerShadowVisible: false,
       }}
     >
@@ -166,17 +183,7 @@ export default function MainLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(148, 163, 184, 0.1)',
-    paddingTop: 8,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-    height: Platform.OS === 'ios' ? 88 : 70,
-    position: 'absolute',
-    elevation: 0,
-  },
+const staticStyles = StyleSheet.create({
   tabLabel: {
     fontSize: 11,
     fontWeight: '600',
@@ -206,24 +213,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#0F172A',
   },
   tabUnreadText: {
     color: '#fff',
     fontSize: 10,
     fontWeight: '700',
     lineHeight: 12,
-  },
-  header: {
-    backgroundColor: '#0F172A',
-    elevation: 0,
-    shadowOpacity: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(148, 163, 184, 0.1)',
-  },
-  headerTitle: {
-    fontWeight: '700',
-    fontSize: 18,
-    color: '#F8FAFC',
   },
 });

@@ -634,29 +634,37 @@ async def export_mood_history_csv(admin: User = Depends(require_admin), start_da
 
 
 @router.get("/admin/export/feedback-history")
-async def export_feedback_history_csv(admin: User = Depends(require_admin), start_date: Optional[str] = None, end_date: Optional[str] = None, user_id: Optional[str] = None):
+async def export_feedback_history_csv(admin: User = Depends(require_admin), start_date: Optional[str] = None, end_date: Optional[str] = None, user_id: Optional[str] = None, university: Optional[str] = None):
     query = {}
     if user_id: query["user_id"] = user_id
     if start_date or end_date:
         query["created_at"] = {}
         if start_date: query["created_at"]["$gte"] = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
         if end_date: query["created_at"]["$lte"] = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+    if university:
+        uni_users = await db.users.find(
+            {"role": "student", "university": {"$regex": f"^{urllib.parse.unquote(university)}$", "$options": "i"}},
+            {"user_id": 1}
+        ).to_list(5000)
+        query["user_id"] = {"$in": [u["user_id"] for u in uni_users]}
 
     feedback_entries = await db.feedback_entries.find(query, {"_id": 0}).sort("created_at", -1).to_list(50000)
     user_ids = list(set(e.get("user_id") for e in feedback_entries))
-    users = await db.users.find({"user_id": {"$in": user_ids}}, {"_id": 0, "user_id": 1, "name": 1, "email": 1}).to_list(10000)
+    users = await db.users.find({"user_id": {"$in": user_ids}}, {"_id": 0, "user_id": 1, "name": 1, "email": 1, "university": 1}).to_list(10000)
     user_map = {u["user_id"]: u for u in users}
 
     output = io.StringIO()
-    fieldnames = ["user_id", "user_name", "user_email", "mood", "feedback", "lecture_topic", "risk_score", "created_at"]
+    fieldnames = ["university", "user_id", "user_name", "user_email", "mood", "feedback", "lecture_topic", "risk_score", "created_at"]
     writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
     writer.writeheader()
     for entry in feedback_entries:
         user_info = user_map.get(entry.get("user_id"), {})
-        writer.writerow({"user_id": entry.get("user_id"), "user_name": user_info.get("name", "Unknown"), "user_email": user_info.get("email", "Unknown"),
+        writer.writerow({"university": user_info.get("university", "Unknown"), "user_id": entry.get("user_id"),
+                         "user_name": user_info.get("name", "Unknown"), "user_email": user_info.get("email", "Unknown"),
                          "mood": entry.get("mood"), "feedback": entry.get("feedback", ""), "lecture_topic": entry.get("lecture_topic", ""),
                          "risk_score": entry.get("risk_score", 0), "created_at": str(entry.get("created_at", ""))})
-    return Response(content=output.getvalue(), media_type="text/csv", headers={"Content-Disposition": "attachment; filename=feedback_history_export.csv"})
+    filename = f"feedback_{urllib.parse.unquote(university)}_export.csv" if university else "feedback_history_export.csv"
+    return Response(content=output.getvalue(), media_type="text/csv", headers={"Content-Disposition": f"attachment; filename={filename}"})
 
 
 @router.get("/admin/export/safeguarding-alerts")
@@ -951,7 +959,13 @@ async def university_ai_analysis(university_name: str, admin: User = Depends(req
         response = await chat.send_message(UserMessage(
             text=f"University: {university_decoded}\nStudents: {len(students)}\nAvg Mood: {university_avg_mood:.1f}/10\nSummaries: {student_summaries[:20]}"
         ))
-        try: ai_analysis = json.loads(response)
+        try:
+            clean = response.strip()
+            if clean.startswith("```"):
+                clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
+            if clean.endswith("```"):
+                clean = clean.rsplit("```", 1)[0]
+            ai_analysis = json.loads(clean.strip())
         except json.JSONDecodeError:
             ai_analysis = {"overall_wellbeing_score": round(university_avg_mood * 10), "wellbeing_trend": "stable",
                            "key_concerns": ["Unable to parse AI response"], "positive_aspects": [], "recommendations": [response[:500]],

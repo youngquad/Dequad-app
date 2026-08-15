@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
-import { api } from '../../src/services/api';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
+import { api, API_URL } from '../../src/services/api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
@@ -24,23 +25,37 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { notify } from '../../src/utils/alert';
 import ConfirmDeleteAccountModal from '../../src/components/ConfirmDeleteAccountModal';
 
-const INTERESTS = [
-  'Computer Science',
-  'Mathematics',
-  'Physics',
-  'Biology',
-  'Chemistry',
-  'Literature',
-  'History',
-  'Psychology',
-  'Economics',
-  'Art',
-  'Music',
-  'Sports',
-  'Gaming',
-  'Photography',
-  'Travel',
-  'Cooking',
+const INTEREST_CATEGORIES: { label: string; icon: string; items: string[] }[] = [
+  {
+    label: 'Academic',
+    icon: 'school-outline',
+    items: ['Computer Science', 'Mathematics', 'Physics', 'Biology', 'Chemistry', 'Literature', 'History', 'Psychology', 'Economics', 'Philosophy', 'Law', 'Medicine', 'Engineering', 'Architecture', 'Education', 'Data Science'],
+  },
+  {
+    label: 'Creative',
+    icon: 'color-palette-outline',
+    items: ['Art', 'Music', 'Photography', 'Film', 'Graphic Design', 'Writing', 'Dance', 'Theatre', 'Fashion', 'Crafts', 'Illustration', 'Podcasting'],
+  },
+  {
+    label: 'Tech',
+    icon: 'code-slash-outline',
+    items: ['Programming', 'AI & Machine Learning', 'Cybersecurity', 'Robotics', 'Web Development', 'Game Dev', 'Blockchain', '3D Printing'],
+  },
+  {
+    label: 'Lifestyle',
+    icon: 'heart-outline',
+    items: ['Travel', 'Cooking', 'Fitness', 'Yoga', 'Mindfulness', 'Gardening', 'Reading', 'Hiking', 'Cycling', 'Running', 'Swimming', 'Nutrition'],
+  },
+  {
+    label: 'Social',
+    icon: 'people-outline',
+    items: ['Volunteering', 'Politics', 'Entrepreneurship', 'Debating', 'Networking', 'Activism', 'Community', 'Sustainability'],
+  },
+  {
+    label: 'Entertainment',
+    icon: 'game-controller-outline',
+    items: ['Gaming', 'Sports', 'Esports', 'Anime', 'Board Games', 'Comedy', 'Concerts', 'Festivals', 'Binge-watching'],
+  },
 ];
 
 const STUDY_STYLES = [
@@ -91,8 +106,11 @@ const ETHNICITIES = [
 ];
 
 export default function ProfileScreen() {
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const router = useRouter();
   const { user, logout, refreshUser, sessionToken } = useAuth();
+  const { mode: themeMode, setMode: setThemeMode, isDark } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -114,6 +132,7 @@ export default function ProfileScreen() {
   
   // Preferences
   const [selectedInterests, setSelectedInterests] = useState<string[]>(user?.interests || []);
+  const [customInterest, setCustomInterest] = useState('');
   const [studyStyle, setStudyStyle] = useState(user?.study_style || '');
   const [ethnicity, setEthnicity] = useState(user?.ethnicity || '');
   const [interestedIn, setInterestedIn] = useState<string[]>(user?.interested_in || []);
@@ -134,7 +153,6 @@ export default function ProfileScreen() {
     // Push notifications only work on physical devices with development builds
     // Expo Go has limitations with push notifications since SDK 53
     if (!Device.isDevice) {
-      console.log('Push notifications require a physical device');
       return;
     }
 
@@ -148,7 +166,6 @@ export default function ProfileScreen() {
       }
       
       if (finalStatus !== 'granted') {
-        console.log('Push notification permission denied');
         return;
       }
       
@@ -156,17 +173,16 @@ export default function ProfileScreen() {
       // In Expo Go, this will fail gracefully
       try {
         const token = (await Notifications.getExpoPushTokenAsync({
-          projectId: 'dequad-app'
+          projectId: '0ad6a13c-845f-4ab4-9177-ba5031d2462d'
         })).data;
         
         // Save push token to backend
         if (token && sessionToken) {
           await api.put('/profile', { push_token: token }, sessionToken);
-          console.log('Push token registered successfully');
         }
       } catch (tokenError) {
         // This is expected in Expo Go - push notifications require a development build
-        console.log('Push notifications require a development build. Using Expo Go has limitations.');
+        console.error('Push notifications require a development build.');
       }
     } catch (error) {
       console.error('Error registering for push notifications:', error);
@@ -219,11 +235,26 @@ export default function ProfileScreen() {
   const toggleInterest = (interest: string) => {
     if (selectedInterests.includes(interest)) {
       setSelectedInterests(selectedInterests.filter((i) => i !== interest));
-    } else if (selectedInterests.length < 5) {
+    } else if (selectedInterests.length < 15) {
       setSelectedInterests([...selectedInterests, interest]);
     } else {
-      notify('Limit Reached', 'You can select up to 5 interests');
+      notify('Limit Reached', 'You can select up to 15 interests');
     }
+  };
+
+  const addCustomInterest = () => {
+    const trimmed = customInterest.trim();
+    if (!trimmed) return;
+    if (selectedInterests.includes(trimmed)) {
+      setCustomInterest('');
+      return;
+    }
+    if (selectedInterests.length >= 15) {
+      Alert.alert('Limit Reached', 'You can select up to 15 interests');
+      return;
+    }
+    setSelectedInterests([...selectedInterests, trimmed]);
+    setCustomInterest('');
   };
 
   const toggleInterestedIn = (option: string) => {
@@ -326,9 +357,7 @@ export default function ProfileScreen() {
    */
   const performAccountDeletion = async () => {
     try {
-      const apiBase =
-        process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
-      const res = await fetch(`${apiBase}/api/auth/me`, {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${sessionToken}` },
         credentials: 'include',
@@ -514,7 +543,7 @@ export default function ProfileScreen() {
             value={age}
             onChangeText={setAge}
             placeholder="Enter your age"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
             keyboardType="numeric"
             maxLength={2}
           />
@@ -531,7 +560,7 @@ export default function ProfileScreen() {
             value={university}
             onChangeText={setUniversity}
             placeholder="Enter your university"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.university || 'Not specified'}</Text>
@@ -546,7 +575,7 @@ export default function ProfileScreen() {
             value={universityLocation}
             onChangeText={setUniversityLocation}
             placeholder="City, Country"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.university_location || 'Not specified'}</Text>
@@ -561,7 +590,7 @@ export default function ProfileScreen() {
             value={campusName}
             onChangeText={setCampusName}
             placeholder="e.g., Main Campus, North Campus"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.campus_name || 'Not specified'}</Text>
@@ -576,7 +605,7 @@ export default function ProfileScreen() {
             value={course}
             onChangeText={setCourse}
             placeholder="e.g., Computer Science"
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
           />
         ) : (
           <Text style={styles.fieldValue}>{user?.course || 'Not specified'}</Text>
@@ -591,7 +620,7 @@ export default function ProfileScreen() {
             value={bio}
             onChangeText={setBio}
             placeholder="Tell us about yourself..."
-            placeholderTextColor="#6B7280"
+            placeholderTextColor={t.textFaint}
             multiline
             numberOfLines={3}
             maxLength={200}
@@ -664,7 +693,7 @@ export default function ProfileScreen() {
             </ScrollView>
             {/* Fade hint — signals there are more chips to scroll to on the right */}
             <LinearGradient
-              colors={['transparent', 'rgba(15, 23, 42, 0.9)']}
+              colors={['transparent', t.bg]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.ethnicityFade}
@@ -740,43 +769,91 @@ export default function ProfileScreen() {
 
   const renderInterestsSection = () => (
     <View style={styles.section}>
-      <Text style={styles.fieldLabel}>
-        Interests {isEditing && `(${selectedInterests.length}/5)`}
-      </Text>
-      {isEditing ? (
-        <View style={styles.interestsGrid}>
-          {INTERESTS.map((interest) => (
-            <TouchableOpacity
-              key={interest}
-              style={[
-                styles.interestChip,
-                selectedInterests.includes(interest) && styles.interestChipSelected,
-              ]}
-              onPress={() => toggleInterest(interest)}
-            >
-              <Text
-                style={[
-                  styles.interestChipText,
-                  selectedInterests.includes(interest) && styles.interestChipTextSelected,
-                ]}
+      <View style={styles.interestsHeader}>
+        <Text style={styles.fieldLabel}>Interests</Text>
+        <View style={styles.interestCountBadge}>
+          <Text style={styles.interestCountText}>
+            {selectedInterests.length}/15 selected
+          </Text>
+        </View>
+      </View>
+
+      {/* Selected interests summary (always visible) */}
+      {selectedInterests.length > 0 && (
+        <View style={styles.selectedSummary}>
+          <View style={styles.interestsDisplay}>
+            {selectedInterests.map((interest) => (
+              <TouchableOpacity
+                key={interest}
+                style={styles.interestTagRemovable}
+                onPress={() => isEditing && toggleInterest(interest)}
+                disabled={!isEditing}
               >
-                {interest}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ) : (
-        <View style={styles.interestsDisplay}>
-          {user?.interests && user.interests.length > 0 ? (
-            user.interests.map((interest) => (
-              <View key={interest} style={styles.interestTag}>
                 <Text style={styles.interestTagText}>{interest}</Text>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.fieldValue}>No interests added</Text>
-          )}
+                {isEditing && (
+                  <Ionicons name="close-circle" size={14} color="#818CF8" style={{ marginLeft: 4 }} />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
+      )}
+
+      {isEditing && (
+        <>
+          {/* Custom interest input */}
+          <View style={styles.customInterestRow}>
+            <TextInput
+              style={styles.customInterestInput}
+              value={customInterest}
+              onChangeText={setCustomInterest}
+              placeholder="Add your own interest…"
+              placeholderTextColor={t.textFaint}
+              onSubmitEditing={addCustomInterest}
+              returnKeyType="done"
+            />
+            <TouchableOpacity
+              style={[styles.customInterestBtn, !customInterest.trim() && { opacity: 0.4 }]}
+              onPress={addCustomInterest}
+              disabled={!customInterest.trim()}
+            >
+              <Ionicons name="add" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Categorised interest grid */}
+          {INTEREST_CATEGORIES.map((cat) => (
+            <View key={cat.label} style={styles.interestCategory}>
+              <View style={styles.interestCategoryHeader}>
+                <Ionicons name={cat.icon as any} size={14} color={t.textMuted} />
+                <Text style={styles.interestCategoryLabel}>{cat.label}</Text>
+              </View>
+              <View style={styles.interestsGrid}>
+                {cat.items.map((interest) => {
+                  const selected = selectedInterests.includes(interest);
+                  return (
+                    <TouchableOpacity
+                      key={interest}
+                      style={[styles.interestChip, selected && styles.interestChipSelected]}
+                      onPress={() => toggleInterest(interest)}
+                    >
+                      {selected && (
+                        <Ionicons name="checkmark" size={12} color="#818CF8" style={{ marginRight: 4 }} />
+                      )}
+                      <Text style={[styles.interestChipText, selected && styles.interestChipTextSelected]}>
+                        {interest}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          ))}
+        </>
+      )}
+
+      {!isEditing && selectedInterests.length === 0 && (
+        <Text style={styles.fieldValue}>No interests added</Text>
       )}
     </View>
   );
@@ -810,7 +887,7 @@ export default function ProfileScreen() {
             <View style={styles.editRow}>
               {!isEditing ? (
                 <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-                  <Ionicons name="pencil" size={18} color="#6366F1" />
+                  <Ionicons name="pencil" size={18} color={t.accent} />
                   <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
               ) : (
@@ -829,7 +906,7 @@ export default function ProfileScreen() {
               >
                 <Ionicons name="analytics" size={24} color="#F59E0B" />
                 <Text style={styles.adminButtonText}>Admin Dashboard</Text>
-                <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+                <Ionicons name="chevron-forward" size={20} color={t.textMuted} />
               </TouchableOpacity>
             )}
 
@@ -849,7 +926,7 @@ export default function ProfileScreen() {
               </View>
               {user?.plan === 'premium' ? (
                 <View style={styles.premiumActiveBadge}>
-                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={16} color={t.success} />
                   <Text style={styles.premiumActiveText}>Active</Text>
                 </View>
               ) : (
@@ -864,7 +941,7 @@ export default function ProfileScreen() {
               data-testid="contact-support-btn"
             >
               <View style={styles.supportIconContainer}>
-                <Ionicons name="headset" size={22} color="#6366F1" />
+                <Ionicons name="headset" size={22} color={t.accent} />
               </View>
               <View style={styles.supportInfo}>
                 <Text style={styles.supportTitle}>Contact Support</Text>
@@ -873,8 +950,30 @@ export default function ProfileScreen() {
                 </Text>
               </View>
               <View style={styles.supportLiveDot} />
-              <Ionicons name="chevron-forward" size={20} color="#6366F1" />
+              <Ionicons name="chevron-forward" size={20} color={t.accent} />
             </TouchableOpacity>
+
+            {/* Appearance (theme) selector */}
+            <View style={themeRowStyles.row} data-testid="appearance-selector">
+              <View style={themeRowStyles.labelWrap}>
+                <Ionicons name={isDark ? 'moon' : 'sunny'} size={20} color="#5B9BD5" />
+                <Text style={themeRowStyles.label}>Appearance</Text>
+              </View>
+              <View style={themeRowStyles.pills}>
+                {(['light', 'dark', 'system'] as const).map((m) => (
+                  <TouchableOpacity
+                    key={m}
+                    onPress={() => setThemeMode(m)}
+                    style={[themeRowStyles.pill, themeMode === m && themeRowStyles.pillActive]}
+                    data-testid={`theme-${m}`}
+                  >
+                    <Text style={[themeRowStyles.pillText, themeMode === m && themeRowStyles.pillTextActive]}>
+                      {m === 'light' ? 'Light' : m === 'dark' ? 'Dark' : 'Auto'}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
 
             {/* Section Tabs */}
             {renderSectionTabs()}
@@ -932,10 +1031,10 @@ export default function ProfileScreen() {
             disabled={isSaving}
           >
             {isSaving ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={t.primaryText} />
             ) : (
               <>
-                <Ionicons name="checkmark-circle" size={20} color="#fff" />
+                <Ionicons name="checkmark-circle" size={20} color={t.primaryText} />
                 <Text style={styles.stickySaveButtonText}>Save Changes</Text>
               </>
             )}
@@ -948,10 +1047,10 @@ export default function ProfileScreen() {
 
 const TAB_BAR_HEIGHT = Platform.OS === 'ios' ? 88 : 70;
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: t.bg,
   },
   keyboardView: {
     flex: 1,
@@ -964,20 +1063,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     padding: 16,
-    backgroundColor: 'rgba(15, 23, 42, 0.97)',
+    backgroundColor: t.tabBarBg,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(148, 163, 184, 0.15)',
+    borderTopColor: t.border,
   },
   stickyCancelButton: {
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: 'rgba(239, 68, 68, 0.12)',
+    backgroundColor: t.danger + '20',
     alignItems: 'center',
     justifyContent: 'center',
   },
   stickyCancelButtonText: {
-    color: '#EF4444',
+    color: t.danger,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -986,12 +1085,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     borderRadius: 12,
     gap: 8,
   },
   stickySaveButtonText: {
-    color: '#fff',
+    color: t.primaryText,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -1016,7 +1115,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -1029,12 +1128,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: t.text,
     marginBottom: 4,
   },
   email: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: t.textMuted,
   },
   adminBadge: {
     flexDirection: 'row',
@@ -1058,13 +1157,13 @@ const styles = StyleSheet.create({
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: 'rgba(91, 155, 213, 0.15)',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
   },
   editButtonText: {
-    color: '#6366F1',
+    color: t.accent,
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
@@ -1126,7 +1225,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   premiumSubtitle: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 2,
   },
@@ -1147,18 +1246,18 @@ const styles = StyleSheet.create({
   supportButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: 'rgba(99, 102, 241, 0.3)',
+    borderColor: 'rgba(91, 155, 213, 0.3)',
   },
   supportIconContainer: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -1172,7 +1271,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   supportSubtitle: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 2,
   },
@@ -1185,7 +1284,7 @@ const styles = StyleSheet.create({
   },
   photoHint: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -1220,7 +1319,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     left: 8,
-    backgroundColor: 'rgba(99, 102, 241, 0.9)',
+    backgroundColor: 'rgba(91, 155, 213, 0.9)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -1241,7 +1340,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   addPhotoText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 8,
     textAlign: 'center',
@@ -1260,12 +1359,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   activeTab: {
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
   },
   sectionTabText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: t.textMuted,
   },
   activeTabText: {
     color: '#fff',
@@ -1281,19 +1380,19 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: t.textMuted,
     marginBottom: 8,
     fontWeight: '600',
   },
   fieldValue: {
     fontSize: 16,
-    color: '#fff',
+    color: t.text,
   },
   input: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 8,
     padding: 12,
-    color: '#fff',
+    color: t.text,
     fontSize: 16,
   },
   textArea: {
@@ -1314,11 +1413,11 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   optionSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-    borderColor: '#6366F1',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    borderColor: t.accent,
   },
   optionText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -1348,11 +1447,11 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   ethnicityChipSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-    borderColor: '#6366F1',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    borderColor: t.accent,
   },
   ethnicityText: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
   },
   ethnicityTextSelected: {
@@ -1373,17 +1472,17 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   studyStyleSelected: {
-    borderColor: '#6366F1',
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderColor: t.accent,
+    backgroundColor: 'rgba(91, 155, 213, 0.1)',
   },
   studyStyleLabel: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 12,
     marginTop: 8,
     textAlign: 'center',
   },
   studyStyleLabelSelected: {
-    color: '#6366F1',
+    color: t.accent,
   },
   notificationRow: {
     flexDirection: 'row',
@@ -1392,19 +1491,19 @@ const styles = StyleSheet.create({
   },
   notificationDesc: {
     fontSize: 12,
-    color: '#6B7280',
+    color: t.textFaint,
     marginTop: 2,
   },
   toggle: {
     width: 50,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#374151',
+    backgroundColor: t.border,
     padding: 2,
     justifyContent: 'center',
   },
   toggleActive: {
-    backgroundColor: '#6366F1',
+    backgroundColor: t.accent,
   },
   toggleKnob: {
     width: 24,
@@ -1425,7 +1524,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#374151',
+    backgroundColor: t.border,
     padding: 2,
     justifyContent: 'center',
   },
@@ -1433,49 +1532,126 @@ const styles = StyleSheet.create({
     backgroundColor: '#5B9BD5',
   },
   toggleLabel: {
-    color: '#9CA3AF',
+    color: t.textMuted,
     fontSize: 14,
+  },
+  interestsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  interestCountBadge: {
+    backgroundColor: 'rgba(129, 140, 248, 0.15)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(129, 140, 248, 0.3)',
+  },
+  interestCountText: {
+    color: '#818CF8',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  selectedSummary: {
+    marginBottom: 14,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.07)',
+  },
+  customInterestRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  customInterestInput: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    color: t.text,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(129, 140, 248, 0.2)',
+  },
+  customInterestBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 10,
+    backgroundColor: t.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  interestCategory: {
+    marginBottom: 14,
+  },
+  interestCategoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
+  interestCategoryLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: t.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   interestsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 8,
   },
   interestChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: 'transparent',
   },
   interestChipSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-    borderColor: '#6366F1',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    borderColor: t.accent,
   },
   interestChipText: {
-    color: '#9CA3AF',
-    fontSize: 14,
+    color: t.textMuted,
+    fontSize: 13,
   },
   interestChipTextSelected: {
     color: '#818CF8',
+    fontWeight: '600',
   },
   interestsDisplay: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 8,
+  },
+  interestTagRemovable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(129, 140, 248, 0.4)',
   },
   interestTag: {
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+    backgroundColor: 'rgba(91, 155, 213, 0.2)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
   },
   interestTagText: {
     color: '#818CF8',
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: '500',
   },
   logoutButton: {
     flexDirection: 'row',
@@ -1509,11 +1685,37 @@ const styles = StyleSheet.create({
   },
   deleteAccountCaption: {
     fontSize: 12,
-    color: '#6B7280',
+    color: t.textFaint,
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 32,
     paddingHorizontal: 8,
     lineHeight: 16,
   },
+});
+
+const themeRowStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(91, 155, 213, 0.08)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(91, 155, 213, 0.25)',
+    padding: 14,
+    marginBottom: 16,
+  },
+  labelWrap: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  label: { color: '#F8FAFC', fontSize: 15, fontWeight: '600' },
+  pills: { flexDirection: 'row', gap: 6 },
+  pill: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 999,
+    backgroundColor: 'rgba(148, 163, 184, 0.12)',
+  },
+  pillActive: { backgroundColor: '#5B9BD5' },
+  pillText: { color: '#94A3B8', fontSize: 12, fontWeight: '700' },
+  pillTextActive: { color: '#fff' },
 });

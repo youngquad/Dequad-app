@@ -57,8 +57,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "6f957baf-c80f-4809-b784-8306c547529b"
-      }
+        "projectId": "0ad6a13c-845f-4ab4-9177-ba5031d2462d"
+      },
+      "backendUrl": "https://review-extractor-2.preview.emergentagent.com"
     },
     "owner": "youngquad"
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
 import SafeguardingAlert from '../../src/components/SafeguardingAlert';
 import { MoodCardSkeleton } from '../../src/components/SkeletonLoader';
@@ -28,7 +29,7 @@ interface MoodEntry {
   created_at: string;
 }
 
-function AnimatedMoodButton({ mood, isSelected, onPress }: { mood: typeof MOODS[0], isSelected: boolean, onPress: () => void }) {
+function AnimatedMoodButton({ mood, isSelected, onPress, styles }: { mood: typeof MOODS[0], isSelected: boolean, onPress: () => void, styles: any }) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const bounceAnim = useRef(new Animated.Value(0)).current;
 
@@ -100,6 +101,8 @@ function AnimatedMoodButton({ mood, isSelected, onPress }: { mood: typeof MOODS[
 
 export default function MoodScreen() {
   const { sessionToken } = useAuth();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -241,8 +244,8 @@ export default function MoodScreen() {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={onRefresh}
-            tintColor="#6366F1"
-            colors={['#6366F1']}
+            tintColor={t.accent}
+            colors={[t.accent]}
           />
         }
       >
@@ -298,6 +301,7 @@ export default function MoodScreen() {
                   mood={mood}
                   isSelected={selectedMood === mood.value}
                   onPress={() => setSelectedMood(mood.value)}
+                  styles={styles}
                 />
               ))}
             </ScrollView>
@@ -310,7 +314,7 @@ export default function MoodScreen() {
               <TextInput
                 style={styles.notesInput}
                 placeholder="What's on your mind today?"
-                placeholderTextColor="#64748B"
+                placeholderTextColor={t.textFaint}
                 multiline
                 numberOfLines={3}
                 maxLength={500}
@@ -342,7 +346,7 @@ export default function MoodScreen() {
           >
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
               <LinearGradient
-                colors={selectedMood ? ['#6366F1', '#8B5CF6'] : ['#374151', '#4B5563']}
+                colors={selectedMood ? t.ctaGradient : [t.border, t.border]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.submitButton}
@@ -381,7 +385,7 @@ export default function MoodScreen() {
             ) : moodHistory.length === 0 ? (
               <View style={styles.emptyState}>
                 <View style={styles.emptyIcon}>
-                  <Ionicons name="analytics-outline" size={40} color="#64748B" />
+                  <Ionicons name="analytics-outline" size={40} color={t.textFaint} />
                 </View>
                 <Text style={styles.emptyText}>No mood entries yet</Text>
                 <Text style={styles.emptySubtext}>
@@ -436,10 +440,10 @@ export default function MoodScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: t.bg,
   },
   scrollView: {
     flex: 1,
@@ -457,12 +461,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#F8FAFC',
+    color: t.text,
     marginBottom: 6,
   },
   subtitle: {
     fontSize: 15,
-    color: '#94A3B8',
+    color: t.textMuted,
   },
   selectedDisplay: {
     flexDirection: 'row',
@@ -490,7 +494,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#94A3B8',
+    color: t.textMuted,
     marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -502,10 +506,10 @@ const styles = StyleSheet.create({
   moodItem: {
     width: 72,
     height: 96,
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: t.card,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: 'transparent',
+    borderColor: t.border,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -517,11 +521,11 @@ const styles = StyleSheet.create({
   moodValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#F1F5F9',
+    color: t.text,
   },
   moodLabel: {
     fontSize: 10,
-    color: '#64748B',
+    color: t.textFaint,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -529,14 +533,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   notesInputContainer: {
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: t.card,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.1)',
+    borderColor: t.border,
   },
   notesInput: {
     padding: 16,
-    color: '#F1F5F9',
+    color: t.text,
     fontSize: 15,
     minHeight: 100,
     textAlignVertical: 'top',
@@ -546,14 +550,14 @@ const styles = StyleSheet.create({
     bottom: 8,
     right: 12,
     fontSize: 12,
-    color: '#64748B',
+    color: t.textFaint,
   },
   submitButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
-    borderRadius: 14,
+    borderRadius: 999,
     gap: 10,
     marginBottom: 32,
   },
@@ -574,24 +578,26 @@ const styles = StyleSheet.create({
   historyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: t.text,
   },
   viewAllText: {
     fontSize: 14,
-    color: '#6366F1',
+    color: t.accent,
     fontWeight: '600',
   },
   emptyState: {
     alignItems: 'center',
     paddingVertical: 40,
-    backgroundColor: 'rgba(30, 41, 59, 0.5)',
+    backgroundColor: t.card,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: t.border,
   },
   emptyIcon: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(100, 116, 139, 0.15)',
+    backgroundColor: t.isDark ? 'rgba(100, 116, 139, 0.15)' : 'rgba(100, 116, 139, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -599,21 +605,21 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#94A3B8',
+    color: t.textMuted,
     marginBottom: 4,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#64748B',
+    color: t.textFaint,
   },
   historyItem: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(30, 41, 59, 0.6)',
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 10,
+    backgroundColor: t.card,
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.08)',
+    borderColor: t.border,
   },
   historyIconBg: {
     width: 48,
@@ -638,10 +644,10 @@ const styles = StyleSheet.create({
   historyMood: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F1F5F9',
+    color: t.text,
   },
   moodBadge: {
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: t.isDark ? 'rgba(91, 155, 213, 0.15)' : 'rgba(15, 41, 66, 0.06)',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
@@ -652,12 +658,12 @@ const styles = StyleSheet.create({
   },
   historyDate: {
     fontSize: 12,
-    color: '#64748B',
+    color: t.textFaint,
     marginBottom: 4,
   },
   historyNotes: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: t.textMuted,
     lineHeight: 18,
     marginTop: 4,
   },
@@ -667,7 +673,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+    backgroundColor: t.isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(244, 247, 251, 0.96)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 100,
@@ -682,6 +688,6 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: t.text,
   },
 });

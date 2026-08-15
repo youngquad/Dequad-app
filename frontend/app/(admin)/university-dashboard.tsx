@@ -16,10 +16,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '../../src/services/api';
 
 const { width } = Dimensions.get('window');
-
-const API_URL = process.env.REACT_APP_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
 export default function UniversityAdminDashboard() {
   const router = useRouter();
