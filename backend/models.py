@@ -31,6 +31,14 @@ class User(BaseModel):
     notifications_enabled: bool = True
     plan: str = "free"
     stripe_customer_id: Optional[str] = None
+    # "apple" for RevenueCat/StoreKit-managed subscriptions; None/"stripe" for
+    # the existing web Checkout flow (legacy users are left unset, not
+    # backfilled). Determines which provider `/subscription/cancel` talks to.
+    subscription_platform: Optional[str] = None
+    revenuecat_app_user_id: Optional[str] = None
+    subscription_status: Optional[str] = None
+    subscription_cancel_at: Optional[str] = None
+    subscription_id: Optional[str] = None
     swipes_today: int = 0
     last_swipe_date: Optional[str] = None
     # GeoJSON Point for GPS-based match distance filtering: {"type": "Point",

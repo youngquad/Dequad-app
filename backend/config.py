@@ -20,6 +20,11 @@ STRIPE_UNIVERSITY_WEBHOOK_SECRET = os.environ.get(
 )
 stripe.api_key = STRIPE_SECRET_KEY
 
+# RevenueCat webhook shared secret — RevenueCat sends this back verbatim as
+# the `Authorization` header on every webhook call (no HMAC signature, unlike
+# Stripe's webhooks).
+REVENUECAT_WEBHOOK_SECRET = os.environ.get('REVENUECAT_WEBHOOK_SECRET', '')
+
 # Stripe Price Configuration
 STRIPE_PRICE_AMOUNT = 499  # in pence
 STRIPE_PRICE_CURRENCY = "gbp"

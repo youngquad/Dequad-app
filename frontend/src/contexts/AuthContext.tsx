@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import { api, API_URL } from '../services/api';
+import { loginPurchases, logoutPurchases } from '../services/iap';
 
 interface User {
   user_id: string;
@@ -151,6 +152,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     init();
   }, [checkExistingSession]);
+
+  // Keep RevenueCat's identity in sync with whichever login path set `user`
+  // (OAuth callback, restored token, email login/register, admin session) —
+  // one effect here instead of instrumenting every call site.
+  useEffect(() => {
+    if (user?.user_id) {
+      loginPurchases(user.user_id);
+    } else {
+      logoutPurchases();
+    }
+  }, [user?.user_id]);
 
   const _persistSession = async (sessionToken: string, userData: User) => {
     setUser(userData);

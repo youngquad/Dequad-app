@@ -15,11 +15,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
+import { getOfferings, purchasePackage, restorePurchases } from '../../src/services/iap';
 
 interface SubscriptionStatus {
   plan: string;
   is_premium: boolean;
   stripe_customer_id: string | null;
+  subscription_platform: string | null;
   swipes_today: number;
   remaining_swipes: number | null;
   daily_limit: number | null;
@@ -90,7 +92,62 @@ export default function SubscriptionScreen() {
     }
   };
 
+  const handleApplePurchase = async () => {
+    setIsProcessing(true);
+    try {
+      const offering = await getOfferings();
+      const pkg = offering?.availablePackages?.[0];
+      if (!pkg) {
+        Alert.alert('Unavailable', 'Premium subscription is not available right now. Please try again later.');
+        return;
+      }
+      const result = await purchasePackage(pkg);
+      if (result.success) {
+        // The RevenueCat webhook that activates premium on the backend
+        // arrives asynchronously — poll briefly rather than assuming the
+        // status endpoint reflects the purchase immediately.
+        for (let i = 0; i < 5; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          await loadSubscriptionStatus();
+        }
+        await refreshUser();
+      }
+    } catch (error) {
+      console.error('Error purchasing subscription:', error);
+      Alert.alert('Purchase Failed', 'Something went wrong completing your purchase. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleRestorePurchases = async () => {
+    setIsProcessing(true);
+    try {
+      await restorePurchases();
+      await loadSubscriptionStatus();
+      await refreshUser();
+      Alert.alert('Restored', 'Your previous purchases have been restored.');
+    } catch (error) {
+      console.error('Error restoring purchases:', error);
+      Alert.alert('Error', 'Failed to restore purchases.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleCancelSubscription = async () => {
+    if (status?.subscription_platform === 'apple') {
+      Alert.alert(
+        'Manage Subscription',
+        'This subscription was purchased through the App Store. To cancel, open iOS Settings > [your name] > Subscriptions > DEQUAD Premium.',
+        [
+          { text: 'Not Now', style: 'cancel' },
+          { text: 'Open Settings', onPress: () => Linking.openURL('app-settings:') },
+        ],
+      );
+      return;
+    }
+
     const confirmCancel = async () => {
       setIsProcessing(true);
       try {
@@ -273,22 +330,33 @@ export default function SubscriptionScreen() {
                 </TouchableOpacity>
               </View>
             ) : Platform.OS === 'ios' ? (
-              // Apple App Store policy compliance: do NOT offer in-app
-              // purchase of a digital subscription except via StoreKit. We
-              // direct iOS users to upgrade on the web instead.
-              <View style={styles.iosUpgradeNote} data-testid="ios-upgrade-note">
-                <Ionicons name="information-circle-outline" size={22} color="#4F6076" />
-                <Text style={styles.iosUpgradeText}>
-                  Manage your Premium subscription on the web at{' '}
-                  <Text
-                    style={styles.iosUpgradeLink}
-                    onPress={() => Linking.openURL('https://dequad.co.uk/subscription')}
-                    data-testid="ios-upgrade-link"
-                  >
-                    dequad.co.uk
-                  </Text>
-                  .
-                </Text>
+              // Apple App Store policy compliance: digital subscriptions on
+              // iOS are purchased via StoreKit (through RevenueCat), never a
+              // third-party checkout page.
+              <View style={styles.iosPurchaseSection}>
+                <TouchableOpacity
+                  style={styles.subscribeButton}
+                  onPress={handleApplePurchase}
+                  disabled={isProcessing}
+                  data-testid="upgrade-button"
+                >
+                  {isProcessing ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <>
+                      <Ionicons name="diamond" size={24} color="#fff" />
+                      <Text style={styles.subscribeButtonText}>Upgrade to Premium</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleRestorePurchases}
+                  disabled={isProcessing}
+                  style={styles.restoreButton}
+                  data-testid="restore-purchases-button"
+                >
+                  <Text style={styles.restoreButtonText}>Restore Purchases</Text>
+                </TouchableOpacity>
               </View>
             ) : (
               <TouchableOpacity 
@@ -346,7 +414,7 @@ export default function SubscriptionScreen() {
               • Cancel anytime from this screen
             </Text>
             <Text style={styles.infoText}>
-              • Secure payment via Stripe
+              {Platform.OS === 'ios' ? '• Secure payment via the App Store' : '• Secure payment via Stripe'}
             </Text>
           </View>
         </View>
@@ -526,23 +594,17 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
-  iosUpgradeNote: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+  iosPurchaseSection: {
+    alignItems: 'center',
     gap: 12,
-    backgroundColor: '#F2F5FA',
-    borderRadius: 12,
-    padding: 16,
   },
-  iosUpgradeText: {
-    flex: 1,
+  restoreButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  restoreButtonText: {
     fontSize: 14,
-    color: '#4F6076',
-    lineHeight: 20,
-  },
-  iosUpgradeLink: {
-    color: '#0F2942',
-    fontWeight: '700',
+    color: t.textMuted,
     textDecorationLine: 'underline',
   },
   freeCard: {

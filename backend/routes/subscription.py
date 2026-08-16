@@ -13,7 +13,7 @@ from config import (
     STRIPE_WEBHOOK_SECRET, STRIPE_UNIVERSITY_WEBHOOK_SECRET,
     STRIPE_PRICE_AMOUNT, STRIPE_PRICE_CURRENCY,
     STRIPE_PRODUCT_NAME, UNIVERSITY_PRICE_AMOUNT, UNIVERSITY_PRICE_CURRENCY,
-    UNIVERSITY_PRODUCT_NAME, FREE_LIKES_PER_WEEK
+    UNIVERSITY_PRODUCT_NAME, FREE_LIKES_PER_WEEK, REVENUECAT_WEBHOOK_SECRET
 )
 from routes.matches import _week_start_iso, _next_week_reset
 
@@ -140,6 +140,11 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
         "plan": plan,
         "is_premium": plan == "premium",
         "stripe_customer_id": user_doc.get("stripe_customer_id"),
+        # "apple" for RevenueCat/StoreKit subscriptions, None for the
+        # existing Stripe web-checkout flow — tells the client which cancel
+        # UX to show (Apple subscriptions can only be cancelled via iOS
+        # Settings, not through this backend).
+        "subscription_platform": user_doc.get("subscription_platform"),
         # Cancel-at-period-end state (set when user cancels — premium still
         # active until `cancel_at`).
         "subscription_status": user_doc.get("subscription_status"),
@@ -170,6 +175,16 @@ async def cancel_subscription(current_user: User = Depends(get_current_user)):
     To resume before the period ends, call ``POST /subscription/resume``.
     """
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    if user_doc.get("subscription_platform") == "apple":
+        # RevenueCat/Apple have no server-side cancel API — only Apple's own
+        # Settings UI can cancel an auto-renewable subscription, and Stripe
+        # has no record of these customers at all.
+        return {
+            "message": "This subscription was purchased through the App Store. To cancel, open iOS Settings > [your name] > Subscriptions > DEQUAD Premium.",
+            "plan": user_doc.get("plan", "free"),
+            "subscription_platform": "apple",
+            "manage_via": "ios_settings",
+        }
     stripe_customer_id = user_doc.get("stripe_customer_id")
     if not stripe_customer_id:
         await db.users.update_one(
@@ -274,6 +289,75 @@ async def stripe_webhook(request: Request):
         customer_id = event_data.get("customer")
         if customer_id:
             await db.users.update_one({"stripe_customer_id": customer_id}, {"$set": {"plan": "free"}})
+    return {"received": True}
+
+
+# ==================== APPLE / REVENUECAT SUBSCRIPTION ====================
+
+# RevenueCat event types that grant/confirm premium access.
+_REVENUECAT_ACTIVE_EVENTS = {"INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "PRODUCT_CHANGE"}
+
+
+@router.post("/subscription/revenuecat-webhook")
+async def revenuecat_webhook(request: Request):
+    """Server-to-server webhook from RevenueCat for Apple-managed (StoreKit)
+    subscriptions. RevenueCat auth is a shared secret echoed back verbatim in
+    the `Authorization` header (no HMAC signature scheme, unlike Stripe).
+
+    The RevenueCat `app_user_id` is set to Dequad's own `user_id` via
+    `Purchases.logIn()` on the client, so events map directly onto
+    `db.users` without a separate identity mapping table.
+    """
+    auth_header = request.headers.get("authorization", "")
+    if not REVENUECAT_WEBHOOK_SECRET or auth_header != REVENUECAT_WEBHOOK_SECRET:
+        raise HTTPException(status_code=401, detail="Invalid webhook authorization")
+
+    body = await request.json()
+    event = body.get("event", {})
+    event_type = event.get("type")
+    app_user_id = event.get("app_user_id")
+    logger.info(f"RevenueCat webhook: {event_type} for {app_user_id}")
+
+    if not app_user_id:
+        return {"received": True}
+
+    if event_type in _REVENUECAT_ACTIVE_EVENTS:
+        await db.users.update_one(
+            {"user_id": app_user_id},
+            {"$set": {
+                "plan": "premium",
+                "subscription_platform": "apple",
+                "subscription_status": "active",
+                "subscription_id": event.get("original_transaction_id"),
+                "subscription_cancel_at": None,
+                "revenuecat_app_user_id": app_user_id,
+            }},
+        )
+    elif event_type == "CANCELLATION":
+        # Auto-renew turned off — premium stays active until the period
+        # actually ends (EXPIRATION event flips it to free).
+        expiration_ms = event.get("expiration_at_ms")
+        cancel_at_iso = (
+            datetime.fromtimestamp(expiration_ms / 1000, tz=timezone.utc).isoformat()
+            if expiration_ms else None
+        )
+        await db.users.update_one(
+            {"user_id": app_user_id},
+            {"$set": {"subscription_status": "cancel_at_period_end", "subscription_cancel_at": cancel_at_iso}},
+        )
+    elif event_type == "EXPIRATION":
+        await db.users.update_one(
+            {"user_id": app_user_id},
+            {"$set": {"plan": "free", "subscription_status": "expired"}},
+        )
+    elif event_type == "BILLING_ISSUE":
+        await db.users.update_one(
+            {"user_id": app_user_id},
+            {"$set": {"subscription_status": "billing_issue"}},
+        )
+    else:
+        logger.info(f"Unhandled RevenueCat event type: {event_type}")
+
     return {"received": True}
 
 
