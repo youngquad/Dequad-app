@@ -28,6 +28,9 @@
     "production": {
       "autoIncrement": true,
       "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_kpQzmRvbPiesphRyhGUwgTaUjPH"
+      },
       "ios": {
         "resourceClass": "m-medium"
       },
@@ -39,9 +42,8 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "YOUR_APPLE_ID_EMAIL",
-        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "YOUR_APPLE_TEAM_ID"
+        "appleId": "yusufquadri83@gmail.com",
+        "appleTeamId": "84H2486MJS"
       },
       "android": {
         "serviceAccountKeyPath": "./play-service-account.json",
