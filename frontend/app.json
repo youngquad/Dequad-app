@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "com.dequad.wellbeing",
-      "versionCode": 15,
+      "versionCode": 16,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
