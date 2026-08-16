@@ -43,7 +43,7 @@ async def get_admin_stats(admin: User = Depends(require_admin)):
     free_students = total_students - premium_students
 
     university_pipeline = [
-        {"$match": {"role": "student", "university": {"$exists": True, "$ne": None, "$ne": ""}}},
+        {"$match": {"role": "student", "university": {"$exists": True, "$nin": [None, ""]}}},
         {"$group": {
             "_id": "$university", "total_students": {"$sum": 1},
             "premium_count": {"$sum": {"$cond": [{"$eq": ["$plan", "premium"]}, 1, 0]}},
@@ -864,7 +864,7 @@ async def bulk_ai_analysis(admin: User = Depends(require_admin), university: Opt
 @router.get("/admin/universities")
 async def get_universities_list(admin: User = Depends(require_admin)):
     pipeline = [
-        {"$match": {"role": "student", "university": {"$exists": True, "$ne": None, "$ne": ""}}},
+        {"$match": {"role": "student", "university": {"$exists": True, "$nin": [None, ""]}}},
         {"$group": {"_id": "$university", "student_count": {"$sum": 1}}},
         {"$sort": {"student_count": -1}}
     ]

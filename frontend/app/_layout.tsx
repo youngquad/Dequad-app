@@ -15,7 +15,7 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
 
     const inAuthGroup = segments[0] === '(auth)';
     const inMainGroup = segments[0] === '(main)';
-    const inAdminGroup = segments[0] === '(admin)';
+    const inAdminGroup = segments[0] === 'admin';
     const inUniversityAdminGroup = segments[0] === '(university-admin)';
     const isAdminLogin = inAdminGroup && segments[1] === 'login';
     const isAdminDashboard = inAdminGroup && segments[1] === 'dashboard';
@@ -36,7 +36,7 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
       if (isLandingPage || inAuthGroup) {
         // Redirect to appropriate screen based on role
         if (userRole === 'admin') {
-          router.replace('/(admin)/dashboard');
+          router.replace('/admin/dashboard');
         } else {
           router.replace('/(main)/mood');
         }
@@ -115,7 +115,7 @@ function RootLayoutNav() {
           options={{ headerShown: false }} 
         />
         <Stack.Screen 
-          name="(admin)" 
+          name="admin" 
           options={{ headerShown: false }} 
         />
       </Stack>

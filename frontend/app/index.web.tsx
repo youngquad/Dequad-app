@@ -496,7 +496,7 @@ const FooterCta = ({ onPrimary }: { onPrimary: () => void }) => {
             <a href="/privacy" data-testid="footer-privacy">Privacy</a>
             <a href="/terms" data-testid="footer-terms">Terms</a>
             <a href="/contact" data-testid="footer-contact">Contact</a>
-            <a href="/(admin)/login" data-testid="footer-admin">Staff login</a>
+            <a href="/admin/login" data-testid="footer-admin">Staff login</a>
           </div>
           <div className="dq-footer__social">
             <a

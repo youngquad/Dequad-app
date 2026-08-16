@@ -902,7 +902,7 @@ export default function ProfileScreen() {
             {user?.role === 'admin' && (
               <TouchableOpacity
                 style={styles.adminButton}
-                onPress={() => router.push('/(admin)/dashboard')}
+                onPress={() => router.push('/admin/dashboard')}
               >
                 <Ionicons name="analytics" size={24} color="#F59E0B" />
                 <Text style={styles.adminButtonText}>Admin Dashboard</Text>

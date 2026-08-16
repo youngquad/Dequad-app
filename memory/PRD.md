@@ -247,3 +247,8 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
   2. app.json extra.backendUrl: preview URL -> https://www.dequad.co.uk (stable prod backend for repo clones + native builds)
 - yarn install run (react-native-purchases added by pull); frontend+backend verified running
 - USER MUST "Save to GitHub" to push these 2 fixes so third-party tools get working repo
+
+## Post-pull fixes re-applied (June 2026)
+- /login route conflict FIXED: real admin screens moved from app/(admin)/ group into app/admin/ (group deleted, 19 refs updated, root _layout guard uses segments[0]===admin). /login now = student sign-in, /admin/login = staff sign-in (both screenshot-verified)
+- admin.py duplicate $ne bug FIXED: 2x {"$ne": None, "$ne": ""} -> {"$nin": [None, ""]} (lines ~46, ~867); /api/admin/universities verified via curl with admin auth
+- Remind user: Save to GitHub to push these + earlier app.json/package.json fixes

@@ -83,7 +83,7 @@ export default function AcceptInvite() {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       window.location.href = '/admin/login';
     } else {
-      router.replace('/(admin)/login' as any);
+      router.replace('/admin/login' as any);
     }
   };
 
