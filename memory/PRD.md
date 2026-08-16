@@ -257,3 +257,4 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - feedback.tsx converted to theme-aware createStyles(t) pattern (like mood.tsx); verified via screenshots in BOTH light and dark modes; added data-testids: feedback-topic-input, feedback-text-input, feedback-submit-button
 - NOTE: student login endpoint is POST /api/auth/email-login (NOT /auth/login)
 - Android build config verified ready: pkg com.dequad.wellbeing, versionCode 16, googleServicesFile wired, expo-notifications plugin, EAS projectId 6f957baf. User given steps to upload FCM V1 service-account key via eas credentials locally + run production build. eas.json submit.android.serviceAccountKeyPath wrongly points at google-services.json (only matters for eas submit)
+- eas.json submit fix: serviceAccountKeyPath -> ./play-service-account.json (gitignored); user instructed to create Play Console service account key locally
