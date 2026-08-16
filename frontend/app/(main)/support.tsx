@@ -147,7 +147,7 @@ export default function SupportScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} data-testid="support-back-btn">
+        <TouchableOpacity onPress={() => router.push('/(main)/profile')} data-testid="support-back-btn">
           <Ionicons name="chevron-back" size={26} color={t.text} />
         </TouchableOpacity>
         <View style={styles.headerCenter}>

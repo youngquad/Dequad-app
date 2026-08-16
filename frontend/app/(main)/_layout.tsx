@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs } from 'expo-router';
+import { Tabs, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
@@ -163,6 +163,16 @@ export default function MainLayout() {
         name="subscription"
         options={{
           href: null, // Hide from tab bar - accessible from Profile
+          headerTitle: 'Premium',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.push('/(main)/profile')}
+              style={{ paddingHorizontal: 16, paddingVertical: 4 }}
+              data-testid="subscription-back-btn"
+            >
+              <Ionicons name="chevron-back" size={26} color={t.text} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Tabs.Screen
@@ -175,6 +185,7 @@ export default function MainLayout() {
         name="support"
         options={{
           href: null, // Hide from tab bar - accessible from Profile
+          headerShown: false, // Screen renders its own header with back button
           // Also visually hide the bottom tab bar so it doesn't overlap the chat composer.
           tabBarStyle: { display: 'none' },
         }}
