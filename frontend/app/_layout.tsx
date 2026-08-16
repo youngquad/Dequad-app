@@ -16,8 +16,10 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
     const inAuthGroup = segments[0] === '(auth)';
     const inMainGroup = segments[0] === '(main)';
     const inAdminGroup = segments[0] === '(admin)';
+    const inUniversityAdminGroup = segments[0] === '(university-admin)';
     const isAdminLogin = inAdminGroup && segments[1] === 'login';
-    const isAdminDashboard = inAdminGroup && segments[1] === 'dashboard';
+    const isAdminDashboard =
+      inAdminGroup && (segments[1] === 'dashboard' || segments[1] === 'university-dashboard');
     const isLandingPage = segments.length === 0 || segments[0] === 'index';
 
     // ALWAYS allow admin login page - for both authenticated and non-authenticated users
@@ -42,6 +44,15 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
       }
       // Admin dashboard protection - only admins can access dashboard
       if (isAdminDashboard && userRole !== 'admin') {
+        router.replace('/(main)/mood');
+      }
+      // The (university-admin) login flow never calls this AuthContext's
+      // setUser/setSessionToken and stores its token under its own storage
+      // key (see app/(auth)/university-admin-login.tsx), so `isAuthenticated`
+      // here stays false for someone who only used that flow — this branch
+      // only catches a different role (student or platform admin, already
+      // authenticated through the normal flow) wandering into this group.
+      if (inUniversityAdminGroup && userRole !== 'university_admin') {
         router.replace('/(main)/mood');
       }
     }

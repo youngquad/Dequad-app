@@ -57,12 +57,17 @@ export default function UniversityAdminLoginPage() {
       
       // Store session token
       if (data.session_token) {
-        await AsyncStorage.setItem('session_token', data.session_token);
+        // Namespaced separately from 'session_token' — a university-admin
+        // token is a fully valid session on the backend (same db.sessions
+        // collection the main app reads), so sharing the main app's storage
+        // key would let this identity silently leak into AuthContext on
+        // the next reload (or clobber a student's session on this device).
+        await AsyncStorage.setItem('university_admin_session_token', data.session_token);
         await AsyncStorage.setItem('university_admin_user', JSON.stringify(data.user));
-        
+
         // Also store in localStorage for web
         if (Platform.OS === 'web' && typeof window !== 'undefined') {
-          window.localStorage.setItem('session_token', data.session_token);
+          window.localStorage.setItem('university_admin_session_token', data.session_token);
           window.localStorage.setItem('university_admin_user', JSON.stringify(data.user));
         }
       }

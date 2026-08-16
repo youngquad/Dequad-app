@@ -97,16 +97,16 @@ export default function UniversityAdminDashboard() {
       
       // Try localStorage first for web
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        token = window.localStorage.getItem('session_token');
+        token = window.localStorage.getItem('university_admin_session_token');
         const userStr = window.localStorage.getItem('university_admin_user');
         if (userStr) {
           userData = JSON.parse(userStr);
         }
       }
-      
+
       // Fallback to AsyncStorage
       if (!token) {
-        token = await AsyncStorage.getItem('session_token');
+        token = await AsyncStorage.getItem('university_admin_session_token');
         const userStr = await AsyncStorage.getItem('university_admin_user');
         if (userStr) {
           userData = JSON.parse(userStr);
@@ -261,11 +261,11 @@ export default function UniversityAdminDashboard() {
   
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem('session_token');
+      await AsyncStorage.removeItem('university_admin_session_token');
       await AsyncStorage.removeItem('university_admin_user');
-      
+
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        window.localStorage.removeItem('session_token');
+        window.localStorage.removeItem('university_admin_session_token');
         window.localStorage.removeItem('university_admin_user');
       }
       
