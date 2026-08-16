@@ -206,6 +206,7 @@ export default function SupportScreen() {
         ) : (
           <FlatList
             ref={listRef}
+            style={styles.list}
             data={messages}
             keyExtractor={(m) => m.id}
             renderItem={renderMessage}
@@ -317,6 +318,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   quickChipText: { color: '#C7D2FE', fontSize: 14, flex: 1 },
 
+  list: { flex: 1 },
   listContent: { padding: 14, paddingBottom: 16 },
 
   msgRow: {
