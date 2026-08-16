@@ -34,7 +34,7 @@ async def get_session_token(request: Request) -> Optional[str]:
         tok = request.query_params.get("token")
         if tok:
             return tok
-    if path.startswith("/api/university-admin/") and path.endswith("/export"):
+    if path.startswith("/api/university-admin/") and (path.endswith("/export") or "/export/" in path):
         tok = request.query_params.get("token")
         if tok:
             return tok

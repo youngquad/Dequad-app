@@ -38,7 +38,11 @@ export default function ChatScreen() {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  // Ref, not state: the polling interval's `loadMessages` closure is fixed
+  // at effect-mount time, so a state value read inside it would always see
+  // its initial snapshot (false) and log on every failed poll instead of
+  // just once. A ref reads/writes the current value regardless of closure age.
+  const hasErrorRef = useRef(false);
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
   const flatListRef = useRef<FlatList>(null);
@@ -108,14 +112,14 @@ export default function ChatScreen() {
       const data = await api.get(`/chat/${matchId}`, sessionToken);
       if (isMounted.current) {
         setMessages(data);
-        setHasError(false);
+        hasErrorRef.current = false;
       }
     } catch (error: any) {
       if (isMounted.current) {
         // Only log error once, don't spam console
-        if (!hasError) {
+        if (!hasErrorRef.current) {
           console.log('Chat polling paused due to network issue');
-          setHasError(true);
+          hasErrorRef.current = true;
         }
       }
     } finally {

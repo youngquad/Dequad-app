@@ -34,6 +34,17 @@ export async function logoutPurchases() {
   }
 }
 
+// Chains identity changes onto a single queue so a quick logout->login (or
+// a double-render) can't fire loginPurchases/logoutPurchases in parallel —
+// unqueued, the network calls could resolve out of order and leave
+// RevenueCat's identity pointed at the wrong user.
+let identityQueue: Promise<void> = Promise.resolve();
+
+export function syncPurchasesIdentity(userId: string | null) {
+  identityQueue = identityQueue.then(() => (userId ? loginPurchases(userId) : logoutPurchases()));
+  return identityQueue;
+}
+
 export async function getOfferings(): Promise<PurchasesOffering | null> {
   if (!isSupported()) return null;
   const offerings = await Purchases.getOfferings();

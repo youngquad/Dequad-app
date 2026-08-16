@@ -59,7 +59,6 @@ export default function AdminLoginScreen() {
         window.localStorage.setItem('admin_session_token', token);
       }
       await AsyncStorage.setItem('session_token', token);
-      await AsyncStorage.setItem('admin_session_token', token);
       await api.setToken(token);
       if (setAdminSession) setAdminSession(token, authResponse.user);
       await new Promise((resolve) => setTimeout(resolve, 250));

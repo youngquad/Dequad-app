@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import { api, API_URL } from '../services/api';
-import { loginPurchases, logoutPurchases } from '../services/iap';
+import { syncPurchasesIdentity } from '../services/iap';
 
 interface User {
   user_id: string;
@@ -157,11 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // (OAuth callback, restored token, email login/register, admin session) —
   // one effect here instead of instrumenting every call site.
   useEffect(() => {
-    if (user?.user_id) {
-      loginPurchases(user.user_id);
-    } else {
-      logoutPurchases();
-    }
+    syncPurchasesIdentity(user?.user_id ?? null);
   }, [user?.user_id]);
 
   const _persistSession = async (sessionToken: string, userData: User) => {
@@ -279,6 +275,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Clear all stored tokens
     try {
       await AsyncStorage.removeItem('session_token');
+      await AsyncStorage.removeItem('admin_session_token');
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         localStorage.removeItem('session_token');
         localStorage.removeItem('admin_session_token');

@@ -18,8 +18,7 @@ function useProtectedRoute(isAuthenticated: boolean, isLoading: boolean, userRol
     const inAdminGroup = segments[0] === '(admin)';
     const inUniversityAdminGroup = segments[0] === '(university-admin)';
     const isAdminLogin = inAdminGroup && segments[1] === 'login';
-    const isAdminDashboard =
-      inAdminGroup && (segments[1] === 'dashboard' || segments[1] === 'university-dashboard');
+    const isAdminDashboard = inAdminGroup && segments[1] === 'dashboard';
     const isLandingPage = segments.length === 0 || segments[0] === 'index';
 
     // ALWAYS allow admin login page - for both authenticated and non-authenticated users
