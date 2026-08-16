@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "runtimeVersion": "1.2.0",
     "updates": {
-      "url": "https://u.expo.dev/0ad6a13c-845f-4ab4-9177-ba5031d2462d",
+      "url": "https://u.expo.dev/6f957baf-c80f-4809-b784-8306c547529b",
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dequad.wellbeing",
-      "buildNumber": "4"
+      "buildNumber": "5"
     },
     "android": {
       "package": "com.dequad.wellbeing",
@@ -57,7 +57,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "0ad6a13c-845f-4ab4-9177-ba5031d2462d"
+        "projectId": "6f957baf-c80f-4809-b784-8306c547529b"
       },
       "backendUrl": "https://review-extractor-2.preview.emergentagent.com"
     },
