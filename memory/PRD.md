@@ -252,3 +252,8 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - /login route conflict FIXED: real admin screens moved from app/(admin)/ group into app/admin/ (group deleted, 19 refs updated, root _layout guard uses segments[0]===admin). /login now = student sign-in, /admin/login = staff sign-in (both screenshot-verified)
 - admin.py duplicate $ne bug FIXED: 2x {"$ne": None, "$ne": ""} -> {"$nin": [None, ""]} (lines ~46, ~867); /api/admin/universities verified via curl with admin auth
 - Remind user: Save to GitHub to push these + earlier app.json/package.json fixes
+
+## Feedback theme + push build prep (June 2026)
+- feedback.tsx converted to theme-aware createStyles(t) pattern (like mood.tsx); verified via screenshots in BOTH light and dark modes; added data-testids: feedback-topic-input, feedback-text-input, feedback-submit-button
+- NOTE: student login endpoint is POST /api/auth/email-login (NOT /auth/login)
+- Android build config verified ready: pkg com.dequad.wellbeing, versionCode 16, googleServicesFile wired, expo-notifications plugin, EAS projectId 6f957baf. User given steps to upload FCM V1 service-account key via eas credentials locally + run production build. eas.json submit.android.serviceAccountKeyPath wrongly points at google-services.json (only matters for eas submit)
