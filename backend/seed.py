@@ -16,6 +16,7 @@ _rng = secrets.SystemRandom()
 
 
 async def seed_admin_and_test_users():
+    seed_demo = os.environ.get("SEED_DEMO_DATA", "false").lower() == "true"
     """Seed admin user and test profiles on startup.
 
     SEC-001 hardening (2026-07): admin/staff/university-admin passwords MUST
@@ -184,7 +185,7 @@ async def seed_admin_and_test_users():
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
     ]
 
-    for profile in test_profiles:
+    for profile in (test_profiles if seed_demo else []):
         # All seeded profiles bypass email verification — they're synthetic.
         profile["email_verified"] = True
         # PROD hardening (2026-08): seeded demo profiles are hidden from real
@@ -309,7 +310,7 @@ async def seed_admin_and_test_users():
     if cleanup.deleted_count:
         logger.info(f"Removed {cleanup.deleted_count} legacy/blocked staff demo account(s)")
 
-    for staff in staff_accounts:
+    for staff in (staff_accounts if seed_demo else []):
         staff_email_lower = staff["email"].lower()
         existing_staff = await db.users.find_one({"email": staff_email_lower})
         password_from_env = os.environ.get(staff["password_env"])
@@ -404,7 +405,7 @@ async def seed_admin_and_test_users():
 
     # Seed demo mood entries
     mood_count = await db.mood_entries.count_documents({})
-    if mood_count < 20:
+    if seed_demo and mood_count < 20:
         mood_notes = [
             "Feeling great after a productive study session!",
             "A bit stressed about upcoming exams but managing.",
@@ -434,7 +435,7 @@ async def seed_admin_and_test_users():
 
     # Seed demo matches and chat messages
     demo_chat_exists = await db.chat_messages.find_one({"sender_id": "test-user-001"})
-    if not demo_chat_exists:
+    if seed_demo and not demo_chat_exists:
         demo_pairs = [
             ("test-user-001", "test-user-002"),
             ("test-user-001", "test-user-006"),

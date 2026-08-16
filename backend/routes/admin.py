@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from typing import Optional
 from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel
 import csv
 import io
 import uuid
@@ -1313,3 +1314,65 @@ async def get_ai_learning_stats(admin: User = Depends(require_admin)):
 async def trigger_behavioral_analysis(admin: User = Depends(require_admin)):
     await detect_behavioral_anomalies()
     return {"success": True, "message": "Behavioral analysis completed"}
+
+
+# Accounts that survive a purge: founder student account, real student, platform admin, uni admin.
+PURGE_KEEP_EMAILS = {
+    "yusufquadri83@gmail.com",
+    "b01801023@studentmail.uws.ac.uk",
+    "quadri.yusuf@dequad.com",
+    "admin@manchesteruni.edu",
+}
+
+
+class PurgeUsersRequest(BaseModel):
+    confirm: str
+
+
+@router.post("/admin/purge-users")
+async def purge_users(data: PurgeUsersRequest, admin: User = Depends(require_admin)):
+    """Irreversibly delete every user except PURGE_KEEP_EMAILS, cascading all their data."""
+    if data.confirm != "PURGE ALL USERS":
+        raise HTTPException(status_code=400, detail='Confirmation must be exactly "PURGE ALL USERS"')
+
+    all_users = await db.users.find({}, {"_id": 0, "user_id": 1, "email": 1}).to_list(100000)
+    doomed = [u for u in all_users if (u.get("email") or "").lower().strip() not in PURGE_KEEP_EMAILS]
+    ids = [u["user_id"] for u in doomed if u.get("user_id")]
+    emails = [(u.get("email") or "").lower() for u in doomed]
+    kept = sorted((u.get("email") or "").lower() for u in all_users if u not in doomed)
+
+    if not ids:
+        return {"success": True, "deleted_users": 0, "kept_users": kept, "message": "No users to purge"}
+
+    match_ids = await db.matches.distinct("id", {"$or": [
+        {"user_id": {"$in": ids}}, {"matched_user_id": {"$in": ids}},
+    ]})
+
+    deleted = {
+        "users": (await db.users.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "user_sessions": (await db.user_sessions.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "sessions": (await db.sessions.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "matches": (await db.matches.delete_many({"$or": [
+            {"user_id": {"$in": ids}}, {"matched_user_id": {"$in": ids}},
+        ]})).deleted_count,
+        "chat_messages": (await db.chat_messages.delete_many({"$or": [
+            {"sender_id": {"$in": ids}}, {"match_id": {"$in": match_ids}},
+        ]})).deleted_count,
+        "chat_reads": (await db.chat_reads.delete_many({"$or": [
+            {"user_id": {"$in": ids}}, {"match_id": {"$in": match_ids}},
+        ]})).deleted_count,
+        "mood_entries": (await db.mood_entries.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "feedback_entries": (await db.feedback_entries.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "risk_scores": (await db.risk_scores.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "safeguarding_alerts": (await db.safeguarding_alerts.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "notifications": (await db.notifications.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "support_messages": (await db.support_messages.delete_many({"user_id": {"$in": ids}})).deleted_count,
+        "reports": (await db.reports.delete_many({"$or": [
+            {"reporter_id": {"$in": ids}}, {"reported_user_id": {"$in": ids}}, {"reported_id": {"$in": ids}},
+        ]})).deleted_count,
+        "email_verifications": (await db.email_verifications.delete_many({"email": {"$in": emails}})).deleted_count,
+        "password_resets": (await db.password_resets.delete_many({"email": {"$in": emails}})).deleted_count,
+    }
+
+    logger.warning(f"USER PURGE by {admin.email}: {deleted['users']} users deleted, kept {kept}")
+    return {"success": True, "deleted_users": deleted["users"], "kept_users": kept, "deleted": deleted}
