@@ -238,3 +238,12 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - Added `"android.edgeToEdgeEnabled": true` — Android 15 edge-to-edge.
 - Added `"android.resizeableActivity": true` — foldables / multi-window.
 - Bumped `version 1.2.0 → 1.2.1`, `versionCode 4 → 5`, `buildNumber 4 → 5`.
+
+## GitHub Re-sync #2 (June 2026)
+- Workspace hard-reset to GitHub main 0037ca0f (auth/storage fixes, RevenueCat iOS subscriptions, route-guard fixes, Android versionCode 16)
+- User declined re-applying preview-found fixes (/login route conflict, duplicate $ne in admin.py analytics filters) — those bugs still exist in code
+- Fixed post-pull to keep repo usable by third parties:
+  1. package.json: removed broken "packageManager": "npm@10.8.2" field (broke yarn/all installs)
+  2. app.json extra.backendUrl: preview URL -> https://www.dequad.co.uk (stable prod backend for repo clones + native builds)
+- yarn install run (react-native-purchases added by pull); frontend+backend verified running
+- USER MUST "Save to GitHub" to push these 2 fixes so third-party tools get working repo
