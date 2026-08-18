@@ -22,7 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
 import MatchFiltersModal from '../../src/components/MatchFiltersModal';
@@ -71,7 +71,6 @@ export default function MatchesScreen() {
   const { theme: t } = useTheme();
   const styles = useMemo(() => createStyles(t), [t]);
   const router = useRouter();
-  const { openFilters } = useLocalSearchParams<{ openFilters?: string }>();
   const { sessionToken } = useAuth();
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -103,20 +102,15 @@ export default function MatchesScreen() {
   const [filtersLoaded, setFiltersLoaded] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
-  // Filters now live in Profile > Preferences rather than a button on this
-  // screen — that entry point navigates here with ?openFilters=1, which we
-  // translate into opening the same modal (or the upgrade prompt for
-  // non-premium users) once swipeInfo has loaded.
-  useEffect(() => {
-    if (openFilters !== '1' || !swipeInfoLoaded) return;
+  const openFilterModal = () => {
     if (!swipeInfo.is_premium) {
       setUpgradePromptContext('filters');
       setShowUpgradePrompt(true);
     } else {
       setFilterModalOpen(true);
     }
-    router.setParams({ openFilters: undefined });
-  }, [openFilters, swipeInfoLoaded, swipeInfo.is_premium]);
+  };
+
   // Cached "does the current user have a location on file?" flag. Populated
   // from /subscription/status or from a successful location share. Drives the
   // distance-chip vs "enable location" CTA in MatchFiltersModal.
@@ -434,7 +428,7 @@ export default function MatchesScreen() {
                 showsHorizontalScrollIndicator={false}
                 scrollEnabled={isCurrentProfile}
                 onMomentumScrollEnd={onPhotoScrollEnd}
-                data-testid={`photo-carousel-${profile.user_id}`}
+                testID={`photo-carousel-${profile.user_id}`}
               >
                 {profile.photos!.map((photo, i) => (
                   <Image
@@ -472,7 +466,7 @@ export default function MatchesScreen() {
               style={styles.topReportButton}
               onPress={() => setReportTarget(profile)}
               disabled={!isCurrentProfile}
-              data-testid={`report-profile-btn-${profile.user_id}`}
+              testID={`report-profile-btn-${profile.user_id}`}
             >
               <Ionicons name="flag" size={20} color="#fff" />
             </TouchableOpacity>
@@ -494,7 +488,7 @@ export default function MatchesScreen() {
                 </View>
               )}
               {typeof profile.distance_km === 'number' && (
-                <View style={styles.distanceBadge} data-testid={`profile-distance-${profile.user_id}`}>
+                <View style={styles.distanceBadge} testID={`profile-distance-${profile.user_id}`}>
                   <Ionicons name="location" size={12} color="#fff" />
                   <Text style={styles.distanceText}>
                     {profile.distance_km < 1
@@ -800,7 +794,7 @@ export default function MatchesScreen() {
                 setMatchAlert(null);
                 router.push(`/(main)/chat/${target.matchId}?name=${encodeURIComponent(target.user.name)}`);
               }}
-              data-testid="match-say-hi-btn"
+              testID="match-say-hi-btn"
             >
               <LinearGradient
                 colors={['#EC4899', '#F472B6']}
@@ -812,7 +806,7 @@ export default function MatchesScreen() {
                 </Text>
               </LinearGradient>
             </Pressable>
-            <Pressable onPress={() => setMatchAlert(null)} data-testid="match-keep-browsing-btn">
+            <Pressable onPress={() => setMatchAlert(null)} testID="match-keep-browsing-btn">
               <View style={styles.matchSecondaryButton}>
                 <Text style={styles.matchSecondaryButtonText}>Keep Browsing</Text>
               </View>
@@ -832,7 +826,7 @@ export default function MatchesScreen() {
               style={[styles.swipeBanner, limitHit && styles.swipeBannerLimit]}
               onPress={() => router.push('/(main)/subscription')}
               activeOpacity={0.8}
-              data-testid={limitHit ? "likes-reset-banner" : "likes-remaining-banner"}
+              testID={limitHit ? "likes-reset-banner" : "likes-remaining-banner"}
             >
               {limitHit ? (
                 <View style={styles.swipeCounter}>
@@ -866,8 +860,16 @@ export default function MatchesScreen() {
           );
         })()}
 
-        {/* Filters moved to Profile > Preferences — that screen navigates
-            here with ?openFilters=1 (handled in the effect above). */}
+        {/* Filters — opens the same premium-gated modal as before, now
+            reachable directly from Connect instead of Profile > Preferences. */}
+        <TouchableOpacity
+          style={styles.filterIconButton}
+          onPress={openFilterModal}
+          activeOpacity={0.8}
+          testID="open-discovery-filters-button"
+        >
+          <Ionicons name="options-outline" size={18} color="#5B9BD5" />
+        </TouchableOpacity>
 
         {/* Likes You — the only entry point into /(main)/likes-you, since the
             full banner was dropped elsewhere in this refactor. */}
@@ -875,7 +877,7 @@ export default function MatchesScreen() {
           style={styles.likesYouIconButton}
           onPress={() => router.push('/(main)/likes-you')}
           activeOpacity={0.8}
-          data-testid="likes-you-icon-button"
+          testID="likes-you-icon-button"
         >
           <Ionicons name="heart" size={18} color="#EC4899" />
         </TouchableOpacity>
@@ -904,7 +906,7 @@ export default function MatchesScreen() {
           <Text style={styles.emptySubtitle}>
             Check back later for new study partners
           </Text>
-          <Pressable onPress={() => loadProfiles(true)} data-testid="refresh-deck-button">
+          <Pressable onPress={() => loadProfiles(true)} testID="refresh-deck-button">
             <LinearGradient
               colors={t.ctaGradient}
               style={styles.refreshButton}
@@ -1362,6 +1364,16 @@ const createStyles = (t: Theme) => StyleSheet.create({
     backgroundColor: 'rgba(236, 72, 153, 0.12)',
     borderWidth: 1,
     borderColor: 'rgba(236, 72, 153, 0.3)',
+  },
+  filterIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(91, 155, 213, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(91, 155, 213, 0.3)',
   },
   modalOverlay: {
     position: 'absolute',

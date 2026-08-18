@@ -70,10 +70,10 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.backdrop}>
-        <View style={styles.sheet} data-testid="match-filters-modal">
+        <View style={styles.sheet} testID="match-filters-modal">
           <View style={styles.header}>
             <Text style={styles.title}>Filter matches</Text>
-            <Pressable onPress={onClose} data-testid="close-filters">
+            <Pressable onPress={onClose} testID="close-filters">
               <Ionicons name="close" size={24} color="#0F2942" />
             </Pressable>
           </View>
@@ -86,7 +86,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
                   key={g || 'any'}
                   onPress={() => setDraft({ ...draft, gender: g || undefined })}
                   style={[styles.chip, draft.gender === (g || undefined) && styles.chipActive]}
-                  data-testid={`filter-gender-${g || 'any'}`}
+                  testID={`filter-gender-${g || 'any'}`}
                 >
                   <Text style={[styles.chipText, draft.gender === (g || undefined) && styles.chipTextActive]}>
                     {g ? g.charAt(0).toUpperCase() + g.slice(1) : 'Any'}
@@ -104,7 +104,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
                 placeholderTextColor="#94A3B0"
                 keyboardType="numeric"
                 style={[styles.input, { flex: 1 }]}
-                data-testid="filter-min-age"
+                testID="filter-min-age"
               />
               <Text style={styles.dash}>—</Text>
               <TextInput
@@ -114,7 +114,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
                 placeholderTextColor="#94A3B0"
                 keyboardType="numeric"
                 style={[styles.input, { flex: 1 }]}
-                data-testid="filter-max-age"
+                testID="filter-max-age"
               />
             </View>
 
@@ -125,7 +125,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
               placeholder="e.g. University of Bedfordshire"
               placeholderTextColor="#94A3B0"
               style={styles.input}
-              data-testid="filter-university"
+              testID="filter-university"
             />
 
             <Text style={styles.label}>Education level</Text>
@@ -138,7 +138,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
                     styles.chip,
                     draft.education_level === (lvl || undefined) && styles.chipActive,
                   ]}
-                  data-testid={`filter-edu-${(lvl || 'any').toLowerCase().replace(/\s/g, '-')}`}
+                  testID={`filter-edu-${(lvl || 'any').toLowerCase().replace(/\s/g, '-')}`}
                 >
                   <Text
                     style={[
@@ -159,7 +159,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
               placeholder="e.g. London, Manchester, Luton"
               placeholderTextColor="#94A3B0"
               style={styles.input}
-              data-testid="filter-city"
+              testID="filter-city"
             />
 
             <Text style={styles.label}>Max distance</Text>
@@ -172,7 +172,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
                       key={opt.label}
                       onPress={() => setDraft({ ...draft, max_distance_km: opt.value })}
                       style={[styles.chip, active && styles.chipActive]}
-                      data-testid={`filter-distance-${opt.value ?? 'any'}`}
+                      testID={`filter-distance-${opt.value ?? 'any'}`}
                     >
                       <Text style={[styles.chipText, active && styles.chipTextActive]}>
                         {opt.label}
@@ -185,7 +185,7 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
               <Pressable
                 onPress={onRequestLocation}
                 style={styles.locationCta}
-                data-testid="enable-location-cta"
+                testID="enable-location-cta"
               >
                 <Ionicons name="location-outline" size={18} color="#0F2942" />
                 <Text style={styles.locationCtaText}>
@@ -196,10 +196,10 @@ export default function MatchFiltersModal({ visible, initial, onClose, onApply, 
           </ScrollView>
 
           <View style={styles.footer}>
-            <Pressable onPress={clearAll} style={styles.clearBtn} data-testid="clear-filters">
+            <Pressable onPress={clearAll} style={styles.clearBtn} testID="clear-filters">
               <Text style={styles.clearBtnText}>Clear all</Text>
             </Pressable>
-            <Pressable onPress={apply} style={styles.applyBtn} data-testid="apply-filters">
+            <Pressable onPress={apply} style={styles.applyBtn} testID="apply-filters">
               <Text style={styles.applyBtnText}>Apply filters</Text>
             </Pressable>
           </View>
