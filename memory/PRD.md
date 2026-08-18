@@ -263,3 +263,4 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - User purge (June 2026): POST /api/admin/purge-users (admin-only, requires confirm "PURGE ALL USERS"); keeps yusufquadri83@gmail.com, B01801023@studentmail.uws.ac.uk, quadri.yusuf@dequad.com, admin@manchesteruni.edu; cascades 15 collections. Tested on preview (19 users purged, then demo data re-seeded + ui.tester re-registered OK)
 - Seeding gated: demo/test users + demo mood/matches/chats now only seed when SEED_DEMO_DATA=true (preview backend/.env has it; production does NOT, so purged demo users stay gone)
 - PRODUCTION PENDING: user must redeploy then trigger purge on www.dequad.co.uk
+- GitHub pull #3 (June 2026): fast-forward 562d77a0 -> cf5b9d2c (no local work lost). New: discovery filters moved to Profile, reciprocal likes exempt from weekly limit, versionCode 25 / iOS build 7, admin helper scripts. No dep changes; services verified 200
