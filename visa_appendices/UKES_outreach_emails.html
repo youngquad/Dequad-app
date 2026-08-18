@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
+  <meta name="generator" content="pandoc 3.10.2" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>UKES_outreach_emails</title>
+  <title>UKES Outreach Emails</title>
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
       color: #1a1a1a;
       background-color: #fdfdfd;
     }
@@ -28,17 +28,19 @@
     @media (max-width: 600px) {
       body {
         font-size: 0.9em;
-        padding: 1em;
+        padding: 12px;
       }
       h1 {
         font-size: 1.8em;
       }
     }
     @media print {
+      html {
+        background-color: white;
+      }
       body {
         background-color: transparent;
         color: black;
-        font-size: 12pt;
       }
       p, h2, h3 {
         orphans: 3;
@@ -58,6 +60,10 @@
       color: #1a1a1a;
     }
     img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
       max-width: 100%;
     }
     h1, h2, h3, h4, h5, h6 {
@@ -84,9 +90,11 @@
       color: #606060;
     }
     code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
       font-size: 85%;
       margin: 0;
+      hyphens: manual;
     }
     pre {
       margin: 1em 0;
@@ -102,8 +110,8 @@
      overflow: visible;
     }
     hr {
-      background-color: #1a1a1a;
       border: none;
+      border-top: 1px solid #1a1a1a;
       height: 1px;
       margin: 1em 0;
     }
@@ -146,40 +154,29 @@
     #TOC a:not(:hover) {
       text-decoration: none;
     }
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <style>
-    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
-           line-height: 1.5; font-size: 11pt; }
-    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
-                 page-break-after: avoid; }
-    h1 { font-size: 22pt; margin-top: 0; }
-    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
-    h3 { font-size: 13pt; }
-    table { border-collapse: collapse; width: 100%; margin: 14px 0;
-            font-size: 9.5pt; }
-    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
-             vertical-align: top; }
-    th { background: #F6FAFE; }
-    code { background: #F6FAFE; padding: 1px 4px; border-radius: 4px;
-           font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
-    pre { background: #F6FAFE; padding: 10px; border-radius: 6px; overflow-x: auto;
-          font-size: 9pt; }
-    blockquote { border-left: 3px solid #5B9BD5; padding-left: 12px;
-                 color: #4F6076; margin: 12px 0; }
-    hr { border: none; border-top: 1px solid #DDE8F2; margin: 24px 0; }
   </style>
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">UKES_outreach_emails</h1>
+<h1 class="title">UKES Outreach Emails</h1>
 </header>
 <h1 id="ukes-outreach-emails-pre-application-sequence">UKES Outreach
 Emails — Pre-Application Sequence</h1>
@@ -224,20 +221,21 @@ statutory criteria.</li>
 <ul>
 <li><strong>Live, working product</strong> at https://dequad.co.uk
 (FastAPI backend, React Native / Expo native + web frontends, MongoDB
-persistence). I have built the platform end-to-end as sole technical
-founder.</li>
+persistence), built end-to-end with my co-founder Yusuff Adeagbo
+(CTO).</li>
 <li><strong>Verified-student peer network</strong> (<code>.ac.uk</code>
 email gate), per-user wellbeing baseline detection, safeguarding
 pipeline with escalation to a Designated Safeguarding Lead, and 24/7
 support chat.</li>
 <li><strong>Two-sided business model:</strong> free for students, paid
-by universities (£1.50–£2.80 per student per year) and NHS Integrated
-Care Boards from Year 3.</li>
-<li><strong>5-year UK plan:</strong> 100 partner universities, 42 UK FTE
-jobs created, break-even Q3 Year 3.</li>
+by universities (£2 per student per year).</li>
+<li><strong>Self-funded 3-year plan:</strong> £6,000 of founder capital
+plus revenue — no external investment assumed or required. Conservative
+and deliberately modest: growing from 2 unpaid founders to 3 people by
+Year 3.</li>
 </ul>
-<p>A full endorsement submission document plus 13 supporting appendices
-is ready to share.</p>
+<p>A full endorsement submission document plus supporting appendices is
+ready to share.</p>
 <p>I am happy to send the executive summary and a 1-page deck in advance
 of any call.</p>
 <p>Thank you for considering this enquiry. I look forward to hearing
