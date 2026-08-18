@@ -22,7 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api } from '../../src/services/api';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
 import MatchFiltersModal from '../../src/components/MatchFiltersModal';
@@ -70,12 +70,17 @@ export default function MatchesScreen() {
   const { theme: t } = useTheme();
   const styles = useMemo(() => createStyles(t), [t]);
   const router = useRouter();
+  const { openFilters } = useLocalSearchParams<{ openFilters?: string }>();
   const { sessionToken } = useAuth();
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  // Which photo (0-2) is showing for each profile's card, keyed by user_id —
+  // lets each card in the FlatList browse its own photos independently.
+  const [photoIndices, setPhotoIndices] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [matchAlert, setMatchAlert] = useState<{ user: UserProfile; matchId: string } | null>(null);
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_likes_this_week: 3, is_premium: false, next_like_reset: null });
+  const [swipeInfoLoaded, setSwipeInfoLoaded] = useState(false);
   const [now, setNow] = useState<number>(Date.now());
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [likingSection, setLikingSection] = useState<string | null>(null);
@@ -95,6 +100,20 @@ export default function MatchesScreen() {
   }>({});
   const [filtersLoaded, setFiltersLoaded] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+
+  // Filters now live in Profile > Preferences rather than a button on this
+  // screen — that entry point navigates here with ?openFilters=1, which we
+  // translate into opening the same modal (or the upgrade prompt for
+  // non-premium users) once swipeInfo has loaded.
+  useEffect(() => {
+    if (openFilters !== '1' || !swipeInfoLoaded) return;
+    if (!swipeInfo.is_premium) {
+      setShowUpgradePrompt(true);
+    } else {
+      setFilterModalOpen(true);
+    }
+    router.setParams({ openFilters: undefined });
+  }, [openFilters, swipeInfoLoaded, swipeInfo.is_premium]);
   // Cached "does the current user have a location on file?" flag. Populated
   // from /subscription/status or from a successful location share. Drives the
   // distance-chip vs "enable location" CTA in MatchFiltersModal.
@@ -187,6 +206,8 @@ export default function MatchesScreen() {
       });
     } catch (error) {
       console.error('Error loading swipe status:', error);
+    } finally {
+      setSwipeInfoLoaded(true);
     }
   };
 
@@ -382,10 +403,19 @@ export default function MatchesScreen() {
   const renderProfile = ({ item: profile, index }: { item: UserProfile; index: number }) => {
     const hasPhoto = profile.photos && profile.photos.length > 0;
     const isCurrentProfile = index === currentIndex;
+    const photoCount = profile.photos?.length ?? 0;
+    const activePhotoIndex = Math.min(photoIndices[profile.user_id] || 0, Math.max(photoCount - 1, 0));
+
+    const onPhotoScrollEnd = (e: any) => {
+      const newIndex = Math.round(e.nativeEvent.contentOffset.x / width);
+      if (newIndex !== activePhotoIndex) {
+        setPhotoIndices((prev) => ({ ...prev, [profile.user_id]: newIndex }));
+      }
+    };
 
     return (
       <View style={styles.profileContainer}>
-        <ScrollView 
+        <ScrollView
           style={styles.profileScroll}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.profileScrollContent}
@@ -394,7 +424,22 @@ export default function MatchesScreen() {
           {/* Main Photo Section */}
           <View style={styles.photoSection}>
             {hasPhoto ? (
-              <Image source={{ uri: profile.photos![0] }} style={styles.mainPhoto} />
+              <ScrollView
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                scrollEnabled={isCurrentProfile}
+                onMomentumScrollEnd={onPhotoScrollEnd}
+                data-testid={`photo-carousel-${profile.user_id}`}
+              >
+                {profile.photos!.map((photo, i) => (
+                  <Image
+                    key={`${profile.user_id}-slide-${i}`}
+                    source={{ uri: photo }}
+                    style={styles.mainPhotoSlide}
+                  />
+                ))}
+              </ScrollView>
             ) : (
               <LinearGradient colors={getAvatarGradient(profile.name)} style={styles.mainPhotoPlaceholder}>
                 <Text style={styles.mainPhotoInitials}>{getInitials(profile.name)}</Text>
@@ -403,8 +448,21 @@ export default function MatchesScreen() {
             <LinearGradient
               colors={['transparent', 'rgba(0,0,0,0.7)']}
               style={styles.photoGradient}
+              pointerEvents="none"
             />
-            
+
+            {/* Dots track which photo is showing in the carousel above */}
+            {photoCount > 1 && (
+              <View style={styles.photoDots} pointerEvents="none">
+                {profile.photos!.map((_, i) => (
+                  <View
+                    key={`${profile.user_id}-dot-${i}`}
+                    style={[styles.photoDot, i === activePhotoIndex && styles.photoDotActive]}
+                  />
+                ))}
+              </View>
+            )}
+
             {/* Report Button - Top Right */}
             <TouchableOpacity
               style={styles.topReportButton}
@@ -799,28 +857,8 @@ export default function MatchesScreen() {
           );
         })()}
 
-        {/* Filter button — premium gated */}
-        <TouchableOpacity
-          onPress={() => {
-            if (!swipeInfo?.is_premium) {
-              setShowUpgradePrompt(true);
-              return;
-            }
-            setFilterModalOpen(true);
-          }}
-          style={styles.filterPill}
-          data-testid="open-filters-button"
-        >
-          <Ionicons name="options-outline" size={16} color={t.text} />
-          <Text style={styles.filterPillText}>
-            {Object.values(filters).filter(Boolean).length > 0
-              ? `Filters · ${Object.values(filters).filter(Boolean).length}`
-              : 'Filters'}
-          </Text>
-          {!swipeInfo?.is_premium && (
-            <Ionicons name="lock-closed" size={12} color="#F59E0B" style={{ marginLeft: 4 }} />
-          )}
-        </TouchableOpacity>
+        {/* Filters moved to Profile > Preferences — that screen navigates
+            here with ?openFilters=1 (handled in the effect above). */}
 
         {/* Likes You — the only entry point into /(main)/likes-you, since the
             full banner was dropped elsewhere in this refactor. */}
@@ -872,6 +910,7 @@ export default function MatchesScreen() {
           ref={scrollRef}
           data={profiles}
           renderItem={renderProfile}
+          extraData={photoIndices}
           keyExtractor={(item) => item.user_id}
           horizontal
           pagingEnabled
@@ -921,8 +960,8 @@ const createStyles = (t: Theme) => StyleSheet.create({
     height: height * 0.5,
     position: 'relative',
   },
-  mainPhoto: {
-    width: '100%',
+  mainPhotoSlide: {
+    width,
     height: '100%',
   },
   mainPhotoPlaceholder: {
@@ -950,6 +989,23 @@ const createStyles = (t: Theme) => StyleSheet.create({
     right: 0,
     padding: 20,
     paddingBottom: 24,
+  },
+  photoDots: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    right: 12,
+    flexDirection: 'row',
+    gap: 4,
+  },
+  photoDot: {
+    flex: 1,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255,255,255,0.35)',
+  },
+  photoDotActive: {
+    backgroundColor: '#fff',
   },
   nameContainer: {
     flexDirection: 'row',
@@ -1287,19 +1343,6 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  filterPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: t.card,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 999,
-    marginLeft: 8,
-    borderWidth: 1,
-    borderColor: t.border,
-  },
-  filterPillText: { fontSize: 13, color: t.text, fontWeight: '700' },
   likesYouIconButton: {
     width: 36,
     height: 36,
@@ -1436,7 +1479,8 @@ const createStyles = (t: Theme) => StyleSheet.create({
   topBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
     paddingVertical: 8,
     gap: 10,
   },

@@ -96,7 +96,21 @@ class ApiService {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `HTTP error ${response.status}`);
+        // FastAPI's `detail` is usually a plain string, but some endpoints
+        // (e.g. the weekly-like-limit rejection) send a structured object
+        // like { message, limit, upgrade_required }. Passing that object
+        // straight into `Error()` stringifies it to the useless
+        // "[object Object]" — pull out `.message` instead.
+        const detail = errorData.detail;
+        const message =
+          typeof detail === 'string'
+            ? detail
+            : detail?.message || `HTTP error ${response.status}`;
+        const err = new Error(message) as Error & { detail?: unknown };
+        if (detail && typeof detail === 'object') {
+          err.detail = detail;
+        }
+        throw err;
       }
 
       return await response.json();

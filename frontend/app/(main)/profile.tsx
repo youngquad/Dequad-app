@@ -634,6 +634,21 @@ export default function ProfileScreen() {
 
   const renderPreferencesSection = () => (
     <View style={styles.section}>
+      <TouchableOpacity
+        style={styles.discoveryFiltersRow}
+        onPress={() => router.push('/(main)/matches?openFilters=1')}
+        data-testid="open-discovery-filters"
+      >
+        <View style={styles.discoveryFiltersIcon}>
+          <Ionicons name="options-outline" size={20} color={t.accent} />
+        </View>
+        <View style={styles.discoveryFiltersTextWrap}>
+          <Text style={styles.discoveryFiltersTitle}>Discovery Filters</Text>
+          <Text style={styles.discoveryFiltersSubtitle}>Gender, age, university, distance — Premium</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color={t.textMuted} />
+      </TouchableOpacity>
+
       <View style={styles.field}>
         <Text style={styles.fieldLabel}>Interested In</Text>
         {isEditing ? (
@@ -1652,6 +1667,38 @@ const createStyles = (t: Theme) => StyleSheet.create({
     color: '#818CF8',
     fontSize: 13,
     fontWeight: '500',
+  },
+  discoveryFiltersRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: t.card,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: t.border,
+    padding: 14,
+    marginBottom: 20,
+    gap: 12,
+  },
+  discoveryFiltersIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(91, 155, 213, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  discoveryFiltersTextWrap: {
+    flex: 1,
+  },
+  discoveryFiltersTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: t.text,
+  },
+  discoveryFiltersSubtitle: {
+    fontSize: 12,
+    color: t.textMuted,
+    marginTop: 2,
   },
   logoutButton: {
     flexDirection: 'row',
