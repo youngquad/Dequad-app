@@ -31,9 +31,9 @@ I am writing to formally submit my application for an **Innovator Founder endors
 
 1. **Innovation.** DEQUAD is the only UK platform combining `.ac.uk`-verified peer matching, daily wellbeing telemetry and machine-assisted safeguarding triage in a single product. The safeguarding webhook escalates risk signals to a university's Designated Safeguarding Lead in under 60 seconds — a capability no incumbent (Togetherall, TalkCampus, UniBuddy) offers.
 
-2. **Viability.** The MVP is already live in production with ~50 beta users across three UK universities. The safeguarding pipeline was designed by the lead applicant, a practising safeguarding professional — currently a Recovery Coordinator at Change Grow Live (safeguarding referrals, dynamic risk assessment, multi-agency working) with concurrent NHS mental-health experience at East London NHS Foundation Trust. The first commercial pilot is the **University of Bedfordshire** — a 12-week (3-month) pilot launching in **September 2026 (M4)** and completing in **November 2026 (M6)**, with paid-conversion conversations opening in **December 2026 (M7)**. Year-1 cash flow remains positive every single month on a £6,000 founder-capital base, supported by £31,000 of in-kind benefits from the NatWest Accelerator (London).
+2. **Viability.** The MVP is already live in production with 80 verified beta users at the University of Bedfordshire (42 daily-active). The safeguarding pipeline was designed by the lead applicant, a practising safeguarding professional — currently a Recovery Coordinator at Change Grow Live (safeguarding referrals, dynamic risk assessment, multi-agency working) with concurrent NHS mental-health experience at East London NHS Foundation Trust. I am in early, informal conversation about a possible pilot at the **University of Bedfordshire** — no agreement, LOI or date is signed, and nothing is guaranteed; a 12-week window has been proposed for **September–November 2026 (M4–M6)** as a target only. The 3-year plan is entirely self-funded: £6,000 of founder capital plus revenue, with no institutional revenue assumed in Year 1 and no pre-seed, seed or other external investment assumed anywhere. Cash flow remains positive every single month of Year 1 on that basis alone, supported by £31,000 of in-kind benefits from the NatWest Accelerator (London) in Year 1.
 
-3. **Scalability.** Three-year UK revenue forecast £16k → £176k → £659k, growing to 12 UK FTE by Year 3 and approaching 30+ FTE following the Year-2 seed round. University pricing is a simple **£2 per enrolled student per year** — roughly half the effective per-student cost of the closest incumbent. The business model is software-only (~92% gross margin by Year 3) and addresses a £28m UK SAM expanding to £180m TAM internationally post-Year 3.
+3. **Scalability.** Three-year UK revenue forecast £0.6k → £16k → £48k, deliberately conservative and self-funded, growing from 2 unpaid founders to 3 people (c.2.5 FTE) by Year 3 — no external funding round is assumed to enable this growth. University pricing is a simple **£2 per enrolled student per year** — roughly half the effective per-student cost of the closest incumbent. The business model is software-only (gross margin reaching ~87% by Year 3) and addresses a £28m UK SAM, with international expansion (£180m TAM) treated as a longer-term ambition beyond this 3-year plan, not an assumption within it.
 
 ### Document pack enclosed
 
@@ -41,10 +41,10 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 
 | # | Document | File |
 |---|---|---|
-| 1 | UKES Business Plan (full, 19 sections, v3.0 — June 2026) | `DEQUAD_UKES_Business_Plan.pdf` |
+| 1 | UKES Business Plan (full, 19 sections, v5.0 — self-funded 3-year revision, August 2026) | `DEQUAD_UKES_Business_Plan.pdf` |
 | 2 | Decision-Maker Brief (15-page short-track companion) | `DEQUAD_UKES_Decision_Brief.pdf` |
 | 3 | Pitch Deck (12 slides) | `DEQUAD_Pitch_Deck.pdf` |
-| 4 | Financial Model (12-sheet Excel workbook) | `DEQUAD_Financial_Model.xlsx` |
+| 4 | Financial Model (13-sheet Excel workbook, self-funded 3-year model) | `DEQUAD_Financial_Model.xlsx` |
 | 5 | Risk Register | `DEQUAD_Risk_Register.pdf` |
 | 6 | Founder CVs (Yusuf Quadri, Yusuff Adeagbo) | `B_founder_cv.pdf`, `B_cofounder_cv.pdf` |
 | 7 | Wider team CVs (Dr Gerald Marfo, Adedapo Ajuwon, Chinyere Jennifer) | `N_wider_team_cvs.pdf` |
@@ -63,7 +63,7 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 
 - **Santander Universities Pre-Incubator** — completed 2025.
 - **NatWest Accelerator (London cohort)** — joined 16 March 2026, currently active.
-- **University of Bedfordshire** — anchor pilot discussion in progress; lead founder is the institution's former Student Union President (2021–2023).
+- **University of Bedfordshire** — early, informal pilot conversation only; nothing signed. Lead founder is the institution's former Student Union President (2021–2023).
 
 ### Live product access
 

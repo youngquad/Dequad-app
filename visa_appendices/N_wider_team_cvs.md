@@ -6,11 +6,13 @@
 > deep functional expertise across marketing, engineering and programme
 > delivery.
 >
-> **None of the team is currently drawing a salary.** Each has accepted an
-> EMI share-option grant and is contributing time on a pure-equity basis
-> pending the close of the pre-seed round in September Year 1. This is a
-> material signal of belief in the mission and materially strengthens the
-> leadership profile without adding to cash burn.
+> **None of the team is currently drawing a salary, and none is assumed to
+> in this 3-year self-funded plan.** Each has accepted an EMI share-option
+> grant and is contributing time on a pure-equity basis, with no committed
+> date for that to change and no dependency on any external funding round
+> (none is assumed in this plan — Section 10). This is a material signal
+> of belief in the mission and materially strengthens the leadership
+> profile without adding to cash burn.
 
 ---
 
@@ -19,7 +21,7 @@
 | Field | Value |
 |---|---|
 | **Role at DEQUAD** | Chief Marketing Officer (founding team member) |
-| **Working pattern Y1** | Equity-only — **no Y1 salary**; salaried role to commence after seed close (Q2 Y2) |
+| **Working pattern** | Equity-only — **no salary funded within this 3-year self-funded plan**; a cash role would only begin once revenue or a future funding round supports it |
 | **Cash investment** | £0 — joining as senior team member, not as a share-capital founder |
 | **Equity** | EMI options with 4-year vest, 1-year cliff |
 
@@ -39,7 +41,7 @@ Dr Gerald Marfo holds a **PhD in Digital Marketing** and brings academic-level r
 - UK university partnership marketing (PR, events, UUK channel)
 - Performance marketing strategy across Instagram, TikTok, Google Search, LinkedIn
 - Marketing measurement and dashboarding; CAC discipline
-- Mentoring the first marketing hire (Q3 Y2)
+- Mentoring the Y3 part-time hire (Section 18.3) once revenue supports it
 
 ---
 
@@ -48,7 +50,7 @@ Dr Gerald Marfo holds a **PhD in Digital Marketing** and brings academic-level r
 | Field | Value |
 |---|---|
 | **Role at DEQUAD** | Senior Software Engineer (founding team member) |
-| **Working pattern Y1** | Equity-only — **no Y1 salary**; salaried role to commence Q1 Y2 |
+| **Working pattern** | Equity-only — **no salary funded within this 3-year self-funded plan**; same basis as above |
 | **Cash investment** | £0 — joining as senior team member |
 | **Equity** | EMI options with 4-year vest, 1-year cliff |
 
@@ -61,7 +63,7 @@ Adedapo Ajuwon is a senior software engineer working alongside the CTO on the DE
 - Production reliability and performance of the DEQUAD platform
 - Feature delivery in collaboration with the CTO — peer matching, mood tracker, safeguarding webhook, admin tooling
 - Code review and engineering standards across the team
-- Mentoring the next backend engineer hire (Q1 Y2)
+- Mentoring the Y3 part-time hire (Section 18.3) once revenue supports it
 
 ---
 

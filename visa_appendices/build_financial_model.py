@@ -1,34 +1,42 @@
-"""DEQUAD financial model — bootstrap edition.
+"""DEQUAD financial model — self-funded 3-year edition.
 
 Starting reality:
   - Two co-founders, £3,000 EACH (£6,000 pooled) in the bank, MVP already shipped.
   - On the NatWest Accelerator (London cohort) — joined 16 March 2026. Office
     co-working, legal advice and accountancy support all provided FREE
-    through the programme for 12 months. Only out-of-scope costs (Companies
-    House filings, trademark fees, optional overflow accountancy at year-end)
-    are budgeted as cash.
+    through the programme for the first 12 months (Y1 only).
   - Previously completed the Santander Universities Pre-Incubator programme
     (2025) — another independent validation point.
-  - Founders draw NO salary in Q1-Q2 Y1 (living on personal savings) and
-    take a minimum draw only after the £150k pre-seed lands in Q3.
-  - Anchor pilot: University of Bedfordshire (lead founder served as SU
-    President 2021-2023, direct senior-management relationship).
+  - Prospective anchor pilot: University of Bedfordshire (lead founder served
+    as SU President 2021-2023, direct senior-management relationship) — this
+    is an EARLY, INFORMAL CONVERSATION ONLY. No agreement, LOI or date is
+    signed, and nothing is guaranteed.
+
+Key change from earlier drafts of this model: NO pre-seed, seed, Series A,
+grant or R&D tax credit is assumed anywhere. The £6,000 founder capital plus
+revenue generated in the period is the ONLY funding in this plan. Founders
+draw no salary until Year 3, and only then to the extent revenue supports it
+— not gated on any funding round, because none is assumed.
 
 This produces a model that is credible for an Innovator visa endorsement:
-- Cash never goes negative.
-- Pre-seed bridge is small (£150k) and only needed once paid pilots exist.
-- Year 1 cash burn is ~£11k pre-bridge, achievable on personal savings.
+  - Cash never goes negative in any month of Year 1 or any year of the
+    3-year forecast — on founder capital and revenue alone.
+  - No institutional revenue is assumed in Y1 (nothing is signed).
+  - Growth (the plan's one hire, modest founder pay) is triggered by
+    revenue actually landing, not by an external funding event.
 
-Run with:  python /app/visa_appendices/build_financial_model.py
-Output:    /app/visa_appendices/DEQUAD_Financial_Model.xlsx
+Run with:  python build_financial_model.py   (run from visa_appendices/)
+Output:    DEQUAD_Financial_Model.xlsx (written next to this script)
 """
 from __future__ import annotations
+
+from pathlib import Path
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-OUT = "/app/visa_appendices/DEQUAD_Financial_Model.xlsx"
+OUT = str(Path(__file__).resolve().parent / "DEQUAD_Financial_Model.xlsx")
 
 NAVY, BLUE, SOFT, WHITE, GREY, AMBER = "0F2942", "5B9BD5", "EDF4FB", "FFFFFF", "F1F5F9", "FEF3C7"
 thin = Side(border_style="thin", color="DDE8F2")
@@ -56,7 +64,9 @@ def write_header(ws, title, cols, col_widths=None):
     ws["A1"] = title
     ws["A1"].font = title_font
     ws["A2"] = ("All figures in GBP, net of VAT. Forecast — not a guarantee. "
-                "NatWest Accelerator covers office, legal and accountancy for the first 12 months.")
+                "No institutional revenue is assumed in Y1; no pre-seed, seed or other "
+                "external funding is assumed anywhere in this model. NatWest Accelerator "
+                "covers office, legal and accountancy in-kind for Year 1 only.")
     ws["A2"].font = italic_small
     ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=1 + len(cols))
 
@@ -105,29 +115,38 @@ def sheet_readme(wb):
     ws = wb.active
     ws.title = "README"
     ws.column_dimensions["A"].width = 110
-    ws["A1"] = "DEQUAD — Financial Model (Bootstrap Edition)"
+    ws["A1"] = "DEQUAD — Financial Model (Self-Funded 3-Year Edition)"
     ws["A1"].font = Font(bold=True, size=16, color=NAVY)
     intro = [
         "",
         "Prepared for: UKES (endorsing body) — UK Innovator Founder Visa",
         "Entity:       DEQUAD Ltd (company in formation, England & Wales)",
-        "Founders:     Two co-founders — Founder A (Yusuf Quadri) and Founder B (TBC)",
-        "Starting cash: £6,000 (£3,000 from each founder, pooled in the company bank)",
+        "Founders:     Two co-founders — Yusuf Quadri (CEO) and Yusuff Adeagbo (CTO)",
+        "Starting cash: £6,000 (£3,000 from each founder, pooled in the company bank) —",
+        "               the ONLY funding assumed anywhere in this model.",
         "MVP status:    Production-ready and deployed at https://dequad.co.uk",
         "Accelerator:   NatWest Accelerator (London) — joined 16 March 2026.",
-        "               Office, legal and accountancy support provided in-kind for 12 months.",
+        "               Office, legal and accountancy support provided in-kind for Year 1 only.",
         "Prior accel:   Santander Universities Pre-Incubator — completed 2025.",
-        "Anchor pilot:  University of Bedfordshire (lead founder = former SU President 2021-2023).",
-        "Currency:     GBP, net of VAT",
-        "Horizon:      3 years annual + Year-1 monthly cash flow",
+        "Pilot status:  Early, informal conversation with University of Bedfordshire (lead",
+        "               founder = former SU President 2021-2023). NO agreement, LOI or date",
+        "               is signed. Modelled as a Y2 upside only — never assumed in Y1.",
+        "Currency:      GBP, net of VAT",
+        "Horizon:       3 years annual + Year-1 monthly cash flow",
         "",
-        "KEY MODEL ASSUMPTIONS (different from a typical seed-funded model)",
-        "  - Founders take NO salary in Q1-Q2 Y1 (living on personal savings)",
-        "  - Founders draw £1,500/month each from Q3 Y1 (once pre-seed lands)",
+        "KEY MODEL ASSUMPTIONS (deliberately conservative and self-funded)",
+        "  - NO pre-seed, seed, Series A, grant or R&D tax credit is assumed anywhere.",
+        "  - Y1 institutional revenue is £0 — nothing is signed. Premium (B2C) revenue",
+        "    is modelled independently of any pilot, from the existing 80-person",
+        "    Bedfordshire beta cohort plus modest organic growth.",
+        "  - Founders take NO salary in Y1 or Y2 (living on personal savings/freelance",
+        "    income). Modest £500/month each begins in Y3, funded entirely by revenue.",
+        "  - The plan's only funded hire (Safeguarding & Trust Lead, part-time) starts",
+        "    in Y3, contingent on 2+ paying universities, funded entirely by revenue.",
         "  - Office, legal and accountancy carry a nominal £0 cash cost in Y1 because",
-        "    those services are provided FREE by the NatWest Accelerator. £1,200 of",
-        "    out-of-programme Companies House / IP / overflow accountancy fees are budgeted.",
-        "  - Marketing in Q1-Q2 Y1 is £0 cash — founder organic outreach only.",
+        "    those services are provided FREE by the NatWest Accelerator (Y1 only).",
+        "  - Marketing is founder-led and low-cost throughout — no paid-acquisition",
+        "    budget in Y1; spend grows only in line with actual revenue in Y2-Y3.",
         "  - Y1 starts with the existing MVP, so no upfront engineering capex.",
         "",
         "WORKBOOK STRUCTURE",
@@ -139,12 +158,12 @@ def sheet_readme(wb):
         "  6. Cost of Sales W2   — Direct cost detail",
         "  7. Payroll W3         — Salaries, NI and pension",
         "  8. Marketing W4       — Marketing spend by channel",
-        "  9. R&D W5             — R&D investment",
+        "  9. R&D W5             — R&D activity (unpaid founder time; no tax credit assumed)",
         " 10. Fixed Assets       — CAPEX schedule",
-        " 11. Accelerator Value  — Quantified in-kind value of NatWest support",
-        " 12. Startup Loan       — Empty (no debt taken)",
+        " 11. Accelerator Value  — Quantified in-kind value of NatWest support (Y1 only)",
+        " 12. Startup Loan       — Empty (no debt taken; no external funding assumed at all)",
         "",
-        "All assumptions map to /app/visa_appendices/DEQUAD_UKES_Business_Plan.md.",
+        "All assumptions map to DEQUAD_UKES_Business_Plan.md (v5.0, self-funded revision).",
         "Yellow cells indicate user-editable inputs.",
     ]
     for i, line in enumerate(intro, start=2):
@@ -155,32 +174,32 @@ def sheet_readme(wb):
 
 
 # ============================================================
-# Profit & Loss — bootstrap numbers
+# Profit & Loss — self-funded, conservative numbers
 # ============================================================
 PL = {
     # Revenue
-    "rev_uni":     (10_000, 80_000, 280_000),   # £2/enrolled student/yr × 10k avg students × 0.5 / 4 / 14 institutions
-    "rev_premium": (5_988, 95_808, 359_280),    # 100 / 1,600 / 6,000 avg subs
-    "rev_icb":     (0, 0, 20_000),
+    "rev_uni":     (0, 10_000, 30_000),      # 0 / 0.5 / 1.5 avg paying institutions — nothing signed in Y1
+    "rev_premium": (600, 6_000, 18_000),     # 20 / 100 / 300 avg paying subscribers
+    "rev_icb":     (0, 0, 0),                # no NHS ICB revenue assumed in this 3-year plan
 
     # COGS
-    "cogs_cloud":  (480, 5_400, 18_000),
-    "cogs_llm":    (360, 4_200, 14_400),
-    "cogs_stripe": (180, 3_000, 12_000),
-    "cogs_msg":    (180, 1_800, 6_000),
-    "cogs_tools":  (240, 1_200, 3_600),
+    "cogs_cloud":  (600, 1_200, 2_400),
+    "cogs_llm":    (400, 900, 1_800),
+    "cogs_stripe": (50, 90, 180),
+    "cogs_msg":    (150, 410, 800),
+    "cogs_tools":  (200, 500, 920),
 
     # Overheads
-    "salaries":    (18_000, 156_000, 372_000),    # see Payroll W3
-    "ni":          (1_200, 14_000, 38_500),
-    "pension":     (540, 4_680, 11_160),
-    "benefits":    (600, 6_000, 16_000),
-    "software":    (1_800, 6_000, 14_400),
-    "office":      (0, 6_000, 12_000),
-    "legal_acc":   (1_200, 5_400, 11_000),
-    "marketing":   (3_600, 28_000, 92_000),
-    "insurance":   (480, 1_800, 3_200),
-    "misc":        (1_200, 3_600, 9_000),
+    "salaries":    (0, 0, 20_000),           # 2 founders @ £500/mo + 1 part-time hire, Y3 only
+    "ni":          (0, 0, 900),
+    "pension":     (0, 0, 350),
+    "benefits":    (0, 0, 250),
+    "software":    (600, 1_200, 1_800),
+    "office":      (0, 300, 600),
+    "legal_acc":   (300, 600, 1_200),
+    "marketing":   (900, 2_500, 5_000),
+    "insurance":   (480, 700, 900),
+    "misc":        (400, 700, 1_000),
 }
 
 REV_Y = [PL["rev_uni"][i] + PL["rev_premium"][i] + PL["rev_icb"][i] for i in range(3)]
@@ -190,8 +209,10 @@ OH_Y = [sum(PL[k][i] for k in ("salaries", "ni", "pension", "benefits", "softwar
                                "office", "legal_acc", "marketing", "insurance", "misc"))
         for i in range(3)]
 EBITDA_Y = [GP_Y[i] - OH_Y[i] for i in range(3)]
-DEPR_Y = [-300, -1_500, -4_500]
+DEPR_Y = [-150, -400, -700]
 PBT_Y = [EBITDA_Y[i] + DEPR_Y[i] for i in range(3)]
+TAX_Y = [0, -500, -1_200]
+PAT_Y = [PBT_Y[i] + TAX_Y[i] for i in range(3)]
 
 
 def sheet_pl(wb):
@@ -201,15 +222,15 @@ def sheet_pl(wb):
 
     blocks = [
         ("Revenue", [
-            ("Service 1 — University SaaS subscription", PL["rev_uni"]),
+            ("Service 1 — University SaaS subscription (contingent, not signed)", PL["rev_uni"]),
             ("Service 2 — DEQUAD Premium (B2C)", PL["rev_premium"]),
-            ("Service 3 — NHS ICB pilot", PL["rev_icb"]),
+            ("Service 3 — NHS ICB (not assumed in this 3-year plan)", PL["rev_icb"]),
         ], REV_Y, "Total Revenue"),
 
         ("Cost of Sales (W2)", [
             ("Cloud hosting (Render, Cloudflare)", PL["cogs_cloud"]),
             ("LLM / safeguarding inference", PL["cogs_llm"]),
-            ("Stripe processing (~2.9% + 30p)", PL["cogs_stripe"]),
+            ("Stripe processing", PL["cogs_stripe"]),
             ("SMS & email (Twilio, SendGrid)", PL["cogs_msg"]),
             ("Customer-success tooling", PL["cogs_tools"]),
         ], COGS_Y, "Total Cost of Sales"),
@@ -223,14 +244,14 @@ def sheet_pl(wb):
         write_row(ws, r, total_lbl, list(total_v) + [sum(total_v)], total=True); r += 1
         r += 1
 
-    write_row(ws, r, "Gross Profit", GP_Y + [sum(GP_Y)], total=True); r += 1
+    write_row(ws, r, "Gross Profit / (Loss)", GP_Y + [sum(GP_Y)], total=True); r += 1
     write_row(ws, r, "Gross margin %",
               [f"{round(GP_Y[i] / REV_Y[i] * 100, 1)}%" if REV_Y[i] else "n/a" for i in range(3)] + [""],
               money=False); r += 2
 
     sub_row(ws, r, "Overhead Expenditure", 4); r += 1
     for label, key in [
-        ("Salaries (W3)", "salaries"),
+        ("Salaries (W3) — £0 until Y3", "salaries"),
         ("Employer NI", "ni"),
         ("Employer pension (3%)", "pension"),
         ("Other employment costs (kit, training)", "benefits"),
@@ -250,19 +271,15 @@ def sheet_pl(wb):
               money=False); r += 1
     write_row(ws, r, "Depreciation & amortisation", DEPR_Y + [sum(DEPR_Y)]); r += 1
     write_row(ws, r, "Operating profit / (loss)", PBT_Y + [sum(PBT_Y)], total=True); r += 1
-    write_row(ws, r, "Corporation Tax", [0, 0, 0, 0]); r += 1
-    write_row(ws, r, "Profit / (loss) after tax", PBT_Y + [sum(PBT_Y)], total=True)
+    write_row(ws, r, "Corporation Tax (paid in arrears — see Cash Flow)", TAX_Y + [sum(TAX_Y)]); r += 1
+    write_row(ws, r, "Profit / (loss) after tax", PAT_Y + [sum(PAT_Y)], total=True)
 
 
 # ============================================================
-# Cash Flow 3yr
+# Cash Flow 3yr — self-funded only
 # ============================================================
 RECEIPTS = {
-    "founder_eq":  (6_000, 0, 0),
-    "preseed":     (150_000, 0, 0),
-    "seed":        (0, 750_000, 0),
-    "rd_credit":   (0, 4_500, 9_500),
-    "sales":       REV_Y,
+    "sales": REV_Y,
 }
 EXPENSES = {
     "cogs":      [-c for c in COGS_Y],
@@ -273,36 +290,32 @@ EXPENSES = {
     "legal_acc": [-l for l in PL["legal_acc"]],
     "insurance": [-i for i in PL["insurance"]],
     "misc":      [-m for m in PL["misc"]],
-    "capex":     (-900, -3_000, -9_000),
+    "capex":     (-600, -600, -1_200),
+    "tax_paid":  (0, 0, -500),   # Y2's accrued tax liability, paid in arrears during Y3
 }
 TOTAL_R = [sum(v[i] for v in RECEIPTS.values()) for i in range(3)]
 TOTAL_E = [sum(v[i] for v in EXPENSES.values()) for i in range(3)]
 SURPLUS = [TOTAL_R[i] + TOTAL_E[i] for i in range(3)]
 
-# Closing balance is cumulative
-CASH_OPEN = [0]
-for s in SURPLUS:
+# £6,000 founder capital is the Year-1 OPENING balance (already invested Day 1),
+# not an in-year receipt — matching the Business Plan's presentation (Section 12.1).
+CASH_OPEN = [6_000]
+for s in SURPLUS[:-1]:
     CASH_OPEN.append(CASH_OPEN[-1] + s)
-CASH_CLOSE = CASH_OPEN[1:]
-CASH_OPEN = CASH_OPEN[:3]
+CASH_CLOSE = [CASH_OPEN[i] + SURPLUS[i] for i in range(3)]
 
 
 def sheet_cf(wb):
     ws = wb.create_sheet("Cash Flow 3yr")
-    write_header(ws, "Annual Cash Flow Forecast", ["Year 1", "Year 2", "Year 3"], [46, 16, 16, 16])
+    write_header(ws, "Annual Cash Flow Forecast (Self-Funded)", ["Year 1", "Year 2", "Year 3"], [46, 16, 16, 16])
 
     r = 5
-    write_row(ws, r, "Opening cash balance", list(CASH_OPEN)); r += 2
+    write_row(ws, r, "Opening cash balance", list(CASH_OPEN)); r += 1
+    write_row(ws, r, "  (Year 1 opening = £6,000 founder equity, already invested Day 1)", ["", "", ""],
+              money=False); r += 2
 
     sub_row(ws, r, "RECEIPTS", 3); r += 1
-    for label, key in [
-        ("Founder equity injection (Day 1)", "founder_eq"),
-        ("Pre-seed equity (Q3 Y1 — £150k @ £1.2m cap)", "preseed"),
-        ("Seed equity (Y2 — £750k @ £6m post)", "seed"),
-        ("R&D tax credit received", "rd_credit"),
-        ("Cash from sales (collected)", "sales"),
-    ]:
-        write_row(ws, r, label, list(RECEIPTS[key])); r += 1
+    write_row(ws, r, "Cash from sales (collected)", list(RECEIPTS["sales"])); r += 1
     write_row(ws, r, "Total Receipts", TOTAL_R, total=True); r += 2
 
     sub_row(ws, r, "EXPENDITURE", 3); r += 1
@@ -315,13 +328,20 @@ def sheet_cf(wb):
         ("Legal & accountancy (out-of-programme)", "legal_acc"),
         ("Insurance", "insurance"),
         ("Business support / misc", "misc"),
-        ("Fixed assets & R&D capex", "capex"),
+        ("Fixed assets capex", "capex"),
+        ("Corporation tax (prior-year liability, paid in arrears)", "tax_paid"),
     ]:
         write_row(ws, r, label, list(EXPENSES[key])); r += 1
     write_row(ws, r, "Total Expenditure", TOTAL_E, total=True); r += 2
 
     write_row(ws, r, "Cash surplus / (deficit)", SURPLUS, total=True); r += 1
-    write_row(ws, r, "Closing cash balance", list(CASH_CLOSE), total=True)
+    write_row(ws, r, "Closing cash balance", list(CASH_CLOSE), total=True); r += 2
+
+    ws.cell(row=r, column=1,
+            value="No pre-seed, seed, Series A, grant or R&D tax credit is assumed anywhere in this table. "
+                  "Closing cash stays positive every year, funded entirely by the £6,000 founder capital plus "
+                  "revenue — the plan does not depend on any pilot converting or any investor closing.").font = italic_small
+    ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=4)
 
 
 # ============================================================
@@ -332,60 +352,58 @@ def sheet_cf_monthly(wb):
     months = ["M1\nJun", "M2\nJul", "M3\nAug", "M4\nSep", "M5\nOct", "M6\nNov",
               "M7\nDec", "M8\nJan", "M9\nFeb", "M10\nMar", "M11\nApr", "M12\nMay"]
     cols = months + ["Y1 total"]
-    write_header(ws, "Year 1 Monthly Cash Flow Forecast (Bootstrap)", cols, [42] + [11] * 13)
+    write_header(ws, "Year 1 Monthly Cash Flow Forecast (Self-Funded)", cols, [42] + [11] * 13)
 
-    # Phased monthly inflows
-    inflow_eq   = [6_000] + [0]*11
-    inflow_pre  = [0,0,0,0,0,0, 150_000, 0,0,0,0,0]   # M7 (Dec) pre-seed lands
-    inflow_sale = [0, 0, 200, 350, 500, 700, 800, 1_100, 1_350, 1_700, 2_100, 3_188]
-    total_in    = [inflow_eq[i] + inflow_pre[i] + inflow_sale[i] for i in range(12)]
-    assert sum(inflow_eq) == 6_000
-    assert sum(inflow_pre) == 150_000
+    # No institutional revenue and no external funding at any point in Y1.
+    # Premium (B2C) revenue begins M7 when Stripe billing goes live for the
+    # existing 80-person Bedfordshire beta cohort — independent of whether
+    # any pilot conversation converts.
+    inflow_sale = [0, 0, 0, 0, 0, 0, 50, 70, 90, 110, 130, 150]
+    assert sum(inflow_sale) == PL["rev_premium"][0] == 600
+    total_in = inflow_sale
 
-    # Outflows — bootstrap-tight
-    out_cogs    = [-30, -50, -70, -90, -110, -130, -140, -150, -160, -180, -200, -130]   # ~-1,440
-    # Salaries kick in M7 only (Q3 onwards): £1,500/mo each = £3,000/mo total for 6 months
-    # Y1 total salaries: 6 * 3000 = £18,000 (matches PL)
-    out_salary  = [0]*6 + [-3_000]*6
-    # Employer NI/pension/benefits scale with salaries:
-    out_nipp    = [0]*6 + [-390]*6   # ~£200 NI + £90 pension + ~£100 benefits per month
-    out_mkt     = [0, 0, -100, -150, -200, -300, -500, -550, -550, -450, -400, -400]    # = -3,600
-    out_sw      = [-100]*12   # = -1,200 (Cloudflare, GitHub, Notion, Linear)
-    out_sw[0] -= 600           # initial Notion+Linear seed seats
-    out_sw_total = sum(out_sw)
-    out_office  = [0]*12
-    out_legal   = [-500, 0, 0, -100, 0, 0, -300, 0, 0, -100, -100, -100]  # -1,200
-    out_ins     = [0, 0, -40, -40, -40, -40, -40, -40, -40, -40, -40, -120]  # -520
-    out_misc    = [-80, -80, -100, -100, -100, -100, -100, -100, -100, -110, -110, -120]  # -1,200
-    out_capex   = [-150, -100, -50, -50, -50, -50, -100, -100, -50, -50, -50, -100]  # -900
-    total_out   = [sum(x) for x in zip(out_cogs, out_salary, out_nipp, out_mkt, out_sw,
-                                       out_office, out_legal, out_ins, out_misc, out_capex)]
+    # Outflows — self-funded, no payroll in Y1 (founders unpaid throughout)
+    out_cogs = [60, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 290]
+    out_sw = [50] * 12
+    out_legal = [300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]   # incorporation, IP filings
+    out_ins = [0, 0, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48]
+    out_mkt = [0, 0, 50, 80, 80, 80, 90, 90, 90, 90, 90, 160]
+    out_misc = [125, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25]
+    out_capex = [500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100]   # laptops M1; minor addition M12
 
-    # Cash balance walk
-    bal = [0] * 13  # bal[0] = opening
+    assert sum(out_cogs) == COGS_Y[0] == 1_400
+    assert sum(out_sw) == PL["software"][0] == 600
+    assert sum(out_legal) == PL["legal_acc"][0] == 300
+    assert sum(out_ins) == PL["insurance"][0] == 480
+    assert sum(out_mkt) == PL["marketing"][0] == 900
+    assert sum(out_misc) == PL["misc"][0] == 400
+    assert sum(out_capex) == 600
+
+    total_out = [-(a + b + c + d + e + f + g) for a, b, c, d, e, f, g in
+                 zip(out_cogs, out_sw, out_legal, out_ins, out_mkt, out_misc, out_capex)]
+    assert sum(total_out) == -4_680
+
+    # Cash balance walk — opens at £6,000 (founder capital, Day 1)
+    bal = [6_000] + [0] * 12
     for i in range(12):
-        bal[i+1] = bal[i] + total_in[i] + total_out[i]
+        bal[i + 1] = bal[i] + total_in[i] + total_out[i]
     opening = bal[:-1]
     closing = bal[1:]
+    assert round(closing[-1]) == 1_920
 
     rows = [
         ("Opening cash balance", opening, False),
         ("RECEIPTS", None, "sub"),
-        ("  Founder equity", inflow_eq, False),
-        ("  Pre-seed equity (Q3)", inflow_pre, False),
-        ("  Cash from sales", inflow_sale, False),
+        ("  Cash from premium (B2C) sales — Stripe live from M7", inflow_sale, False),
         ("Total Receipts", total_in, True),
         ("EXPENDITURE", None, "sub"),
-        ("  Cost of sales", out_cogs, False),
-        ("  Founder salaries (from M7 only)", out_salary, False),
-        ("  Employer NI + pension + benefits", out_nipp, False),
-        ("  Marketing", out_mkt, False),
-        ("  Software subscriptions", out_sw, False),
-        ("  Office (NatWest Accelerator — £0)", out_office, False),
-        ("  Legal & accountancy (out-of-programme)", out_legal, False),
-        ("  Insurance", out_ins, False),
-        ("  Business support / misc", out_misc, False),
-        ("  Fixed assets & R&D capex", out_capex, False),
+        ("  Cost of sales", [-x for x in out_cogs], False),
+        ("  Software subscriptions", [-x for x in out_sw], False),
+        ("  Legal & accountancy (incorporation, IP filings)", [-x for x in out_legal], False),
+        ("  Insurance", [-x for x in out_ins], False),
+        ("  Marketing (founder-led, low-cost)", [-x for x in out_mkt], False),
+        ("  Business support / misc", [-x for x in out_misc], False),
+        ("  Fixed assets capex", [-x for x in out_capex], False),
         ("Total Expenditure", total_out, True),
         ("Closing cash balance", closing, True),
     ]
@@ -395,17 +413,17 @@ def sheet_cf_monthly(wb):
             sub_row(ws, r, label, 13); r += 1; continue
         values = list(monthly) + [sum(monthly)]
         write_row(ws, r, label, values, total=(style is True))
-        # Flag rows where closing balance dips below £0 for safety check
         if label.startswith("Closing"):
             for i, v in enumerate(monthly, start=2):
                 if isinstance(v, (int, float)) and v < 0:
                     ws.cell(row=r, column=i).fill = amber_fill
         r += 1
-    ws.cell(row=r+1, column=1,
-            value="Cash is positive every month: the £3,000 founder equity covers operating costs "
-                  "until the pre-seed bridge lands in M7 (December). Q1 marketing spend is intentionally "
-                  "£0 — early traction is from founder-led university outreach and the existing beta cohort.").font = italic_small
-    ws.merge_cells(start_row=r+1, start_column=1, end_row=r+1, end_column=14)
+    ws.cell(row=r + 1, column=1,
+            value="No founder salary is drawn in Year 1, and no institutional revenue or external funding is "
+                  "assumed. Cash declines steadily from the £6,000 opening balance as the business absorbs "
+                  "incorporation and running costs, then stabilises once modest premium-subscription revenue "
+                  "begins in M7 — closing the year at roughly £1,920, positive throughout.").font = italic_small
+    ws.merge_cells(start_row=r + 1, start_column=1, end_row=r + 1, end_column=14)
 
 
 # ============================================================
@@ -417,29 +435,23 @@ def sheet_bs(wb):
 
     # CAPEX (cumulative) — small because MVP already built
     capex = [-x for x in EXPENSES["capex"]]
-    cum_capex = [capex[0], capex[0]+capex[1], capex[0]+capex[1]+capex[2]]
-    cum_dep   = [-DEPR_Y[0], -(DEPR_Y[0]+DEPR_Y[1]), -(DEPR_Y[0]+DEPR_Y[1]+DEPR_Y[2])]
-    nbv       = [cum_capex[i] - cum_dep[i] for i in range(3)]
+    cum_capex = [capex[0], capex[0] + capex[1], capex[0] + capex[1] + capex[2]]
+    cum_dep = [-DEPR_Y[0], -(DEPR_Y[0] + DEPR_Y[1]), -(DEPR_Y[0] + DEPR_Y[1] + DEPR_Y[2])]
+    nbv = [cum_capex[i] - cum_dep[i] for i in range(3)]
 
-    # Cash from CF model
     cash = CASH_CLOSE
-    debtors = [800, 6_200, 22_000]
-    payables = [1_400, 4_200, 9_800]
+    debtors = [0, 500, 1_500]
+    payables = [0, 1_000, 2_700]
 
-    # Equity raised
-    share_premium = [
-        RECEIPTS["preseed"][0],
-        RECEIPTS["preseed"][0] + RECEIPTS["seed"][1],
-        RECEIPTS["preseed"][0] + RECEIPTS["seed"][1],
-    ]
-    share_cap = [3_000, 3_000, 3_000]
-    retained = [PBT_Y[0], PBT_Y[0]+PBT_Y[1], PBT_Y[0]+PBT_Y[1]+PBT_Y[2]]
+    # No external investment round — no share premium in any year.
+    share_premium = [0, 0, 0]
+    share_cap = [6_000, 6_000, 6_000]
+    retained = [PAT_Y[0], PAT_Y[0] + PAT_Y[1], PAT_Y[0] + PAT_Y[1] + PAT_Y[2]]
     sh_funds = [share_cap[i] + share_premium[i] + retained[i] for i in range(3)]
 
     total_assets = [nbv[i] + cash[i] + debtors[i] for i in range(3)]
     total_liab = list(payables)
     net_assets = [total_assets[i] - total_liab[i] for i in range(3)]
-    # Balance check
     check = [net_assets[i] - sh_funds[i] for i in range(3)]
 
     rows = [
@@ -451,12 +463,12 @@ def sheet_bs(wb):
         ("Cash at bank", cash, False),
         ("Trade receivables (debtors)", debtors, False),
         ("Stock / inventory", [0, 0, 0], False),
-        ("Total current assets", [cash[i]+debtors[i] for i in range(3)], True),
+        ("Total current assets", [cash[i] + debtors[i] for i in range(3)], True),
         ("", None, False),
         ("TOTAL ASSETS", total_assets, True),
         ("", None, False),
         ("CURRENT LIABILITIES", None, "sub"),
-        ("Trade payables / accrued payroll", payables, False),
+        ("Trade payables / accrued costs", payables, False),
         ("Director's loan account", [0, 0, 0], False),
         ("Total liabilities", total_liab, True),
         ("", None, False),
@@ -464,11 +476,11 @@ def sheet_bs(wb):
         ("", None, False),
         ("CAPITAL & RESERVES", None, "sub"),
         ("Called-up share capital", share_cap, False),
-        ("Share premium (pre-seed + seed)", share_premium, False),
+        ("Share premium (none — no external investment round)", share_premium, False),
         ("Profit & loss reserve", retained, False),
         ("Shareholders' funds", sh_funds, True),
         ("", None, False),
-        ("Balance check", check, False),
+        ("Balance check (should be £0)", check, False),
     ]
     r = 5
     for label, vals, style in rows:
@@ -486,26 +498,24 @@ def sheet_bs(wb):
 def sheet_w1(wb):
     ws = wb.create_sheet("Revenue W1")
     write_header(ws, "Revenue Detail (W1)", ["Year 1", "Year 2", "Year 3", "TOTAL"],
-                 [44, 14, 14, 14, 14])
+                 [50, 14, 14, 14, 14])
     rows = [
         ("Total Revenue", REV_Y, "total"),
         ("", None, False),
         ("Service 1 — University SaaS subscription", None, "sub"),
-        ("Paying institutions (avg active during year)", [0.5, 4, 14], False),
-        ("Paying institutions (end of year)", [1, 6, 20], False),
+        ("Paying institutions (avg during year) — contingent, not signed", [0, 0.5, 1.5], False),
         ("Price per enrolled student (£/yr)", [2, 2, 2], False),
         ("Average enrolled students per institution", [10_000, 10_000, 10_000], False),
         ("Average contract value (£/yr)", [20_000, 20_000, 20_000], False),
         ("Subtotal revenue", PL["rev_uni"], "total"),
         ("", None, False),
         ("Service 2 — DEQUAD Premium (B2C)", None, "sub"),
-        ("Paying student subs (avg, year)", [100, 1_600, 6_000], False),
+        ("Paying student subs (avg, year) — independent of any pilot", [20, 100, 300], False),
         ("Price per student (£/month)", [4.99, 4.99, 4.99], False),
         ("Subtotal revenue", PL["rev_premium"], "total"),
         ("", None, False),
-        ("Service 3 — NHS ICB pilot", None, "sub"),
-        ("Number of contracts", [0, 0, 1], False),
-        ("Average contract value (£/yr)", [0, 0, 20_000], False),
+        ("Service 3 — NHS ICB", None, "sub"),
+        ("Number of contracts (not assumed in this 3-year plan)", [0, 0, 0], False),
         ("Subtotal revenue", PL["rev_icb"], "total"),
     ]
     r = 5
@@ -531,7 +541,7 @@ def sheet_w2(wb):
         ("Total Cost of Sales", COGS_Y, "total"),
         ("Cloud hosting (Render, Cloudflare CDN)", PL["cogs_cloud"], False),
         ("LLM / safeguarding inference (OpenAI/Anthropic)", PL["cogs_llm"], False),
-        ("Stripe processing (~2.9% + 30p)", PL["cogs_stripe"], False),
+        ("Stripe processing", PL["cogs_stripe"], False),
         ("SMS & email (Twilio, SendGrid)", PL["cogs_msg"], False),
         ("Customer-success tooling (Intercom, Hotjar)", PL["cogs_tools"], False),
     ]
@@ -546,58 +556,38 @@ def sheet_w2(wb):
 # ============================================================
 def sheet_w3(wb):
     ws = wb.create_sheet("Payroll W3")
-    write_header(ws, "Payroll Detail (W3)",
-                 ["Y1 Gross", "Y1 Months paid", "Y2 Gross", "Y3 Gross"],
-                 [44, 12, 14, 12, 12])
+    write_header(ws, "Payroll Detail (W3)", ["Y1 Gross", "Y2 Gross", "Y3 Gross"], [50, 14, 14, 14])
 
     roles = [
-        # (label, y1_gross, y1_months, y2_gross, y3_gross)
-        ("Founder A — CEO (Yusuf Quadri), £1,500/mo from M7", 9_000, 6, 24_000, 36_000),
-        ("Founder B — CTO, £1,500/mo from M7", 9_000, 6, 24_000, 36_000),
-        ("Customer Success Manager", 0, 0, 32_000, 36_000),
-        ("Senior Backend Engineer (start Q1 Y2)", 0, 0, 48_000, 56_000),
-        ("Safeguarding & Trust Lead (start Q2 Y2)", 0, 0, 18_000, 42_000),
-        ("Marketing & Partnerships (start Q3 Y2)", 0, 0, 10_000, 38_000),
-        ("Data / ML Engineer (start Q2 Y3)", 0, 0, 0, 40_000),
-        ("Mobile Engineer (start Q3 Y3)", 0, 0, 0, 25_000),
-        ("Founders' Associate (start Q3 Y3)", 0, 0, 0, 18_000),
-        ("Engineer #2 (start Q4 Y3)", 0, 0, 0, 12_000),
-        ("CSM #2 (start Q4 Y3)", 0, 0, 0, 13_000),
+        ("Founder A — CEO (Yusuf Quadri), £500/mo from Y3 only", 0, 0, 6_000),
+        ("Founder B — CTO (Yusuff Adeagbo), £500/mo from Y3 only", 0, 0, 6_000),
+        ("Safeguarding & Trust Lead (part-time, ~10 hrs/wk, Y3 only — contingent on 2+ paying universities)", 0, 0, 8_000),
     ]
     r = 5
     totals = [0, 0, 0]
-    for label, y1, y1m, y2, y3 in roles:
-        write_row(ws, r, label, [y1, y1m, y2, y3], money=True)
-        # Override Y1 months column to plain integer
-        ws.cell(row=r, column=3).number_format = "0"
+    for label, y1, y2, y3 in roles:
+        write_row(ws, r, label, [y1, y2, y3], money=True)
         totals[0] += y1; totals[1] += y2; totals[2] += y3
         r += 1
-    write_row(ws, r, "Total gross salaries", [totals[0], "", totals[1], totals[2]], total=True); r += 2
+    write_row(ws, r, "Total gross salaries", totals, total=True); r += 2
 
-    # NI + pension + benefits
-    ni = (round(max(0, totals[0] - 1500) * 0.138 / 6),  # rough — only 6 months in Y1
-          round(max(0, totals[1] - 9100) * 0.138),
-          round(max(0, totals[2] - 9100) * 0.138))
-    ni_total = (PL["ni"][0], PL["ni"][1], PL["ni"][2])
+    ni = (PL["ni"][0], PL["ni"][1], PL["ni"][2])
     pen = (PL["pension"][0], PL["pension"][1], PL["pension"][2])
     ben = (PL["benefits"][0], PL["benefits"][1], PL["benefits"][2])
 
-    write_row(ws, r, "Employer NI (13.8% above secondary threshold)",
-              [ni_total[0], "", ni_total[1], ni_total[2]], total=True); r += 1
-    write_row(ws, r, "Employer pension (3% above £6,240)",
-              [pen[0], "", pen[1], pen[2]], total=True); r += 1
-    write_row(ws, r, "Other employment costs (kit, training, EMI admin)",
-              [ben[0], "", ben[1], ben[2]], total=True); r += 1
+    write_row(ws, r, "Employer NI (13.8% above secondary threshold)", list(ni), total=True); r += 1
+    write_row(ws, r, "Employer pension (3% above £6,240)", list(pen), total=True); r += 1
+    write_row(ws, r, "Other employment costs (kit, training)", list(ben), total=True); r += 1
     write_row(ws, r, "TOTAL EMPLOYMENT COST",
-              [totals[0]+ni_total[0]+pen[0]+ben[0], "",
-               totals[1]+ni_total[1]+pen[1]+ben[1],
-               totals[2]+ni_total[2]+pen[2]+ben[2]], total=True); r += 2
+              [totals[i] + ni[i] + pen[i] + ben[i] for i in range(3)], total=True); r += 2
 
     ws.cell(row=r, column=1,
-            value="Founders take £0 in Q1-Q2 Y1 and £1,500/month each from M7 (Sep Y1) when the £150k pre-seed lands. "
-                  "Both founders accept materially below-market compensation through Y2 to preserve runway. "
-                  "EMI share-option scheme covers all Y2+ hires.").font = italic_small
-    ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=5)
+            value="No team member — founders included — draws any salary in Y1 or Y2. Both founders fund "
+                  "personal living costs from existing employment/freelance income throughout. Modest founder "
+                  "pay and the plan's only funded hire begin in Y3, funded entirely by revenue — not by any "
+                  "external funding round, none of which is assumed in this plan. Further hires beyond Year 3 "
+                  "would only be made if revenue growth or a future funding round justifies them.").font = italic_small
+    ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=4)
 
 
 # ============================================================
@@ -611,18 +601,16 @@ def sheet_w4(wb):
         ("Total Marketing Expenses", PL["marketing"], "total"),
         ("", None, False),
         ("Channel-level spend", None, "sub"),
-        ("University partnership & PR (NatWest network helps)", [1_200, 6_000, 18_000], False),
-        ("Content / SEO / whitepaper", [600, 3_500, 12_000], False),
-        ("LinkedIn / paid B2B", [0, 4_000, 14_000], False),
-        ("Instagram / TikTok (mostly organic Y1)", [600, 7_500, 22_000], False),
-        ("Google Search ads", [300, 3_000, 10_000], False),
-        ("Student-rep / ambassador programme", [900, 4_000, 16_000], False),
+        ("University partnership & PR (NatWest network)", [300, 700, 1_300], False),
+        ("Content / SEO (founder-written)", [150, 400, 700], False),
+        ("LinkedIn / paid B2B", [0, 300, 700], False),
+        ("Instagram / TikTok (organic)", [150, 500, 1_000], False),
+        ("Google Search ads (none in Y1)", [0, 200, 500], False),
+        ("Student-rep / ambassador programme", [300, 400, 800], False),
         ("", None, False),
         ("KPIs", None, "sub"),
-        ("Marketing as % of revenue", ["30%", "16%", "13%"], False),
-        ("Number of campaigns / year", [6, 18, 32], False),
-        ("Average CAC — institutional buyer (£)", [3_600, 1_800, 1_200], False),
-        ("Average CAC — premium student (£)", [4.50, 3.20, 2.10], False),
+        ("Marketing as % of revenue", ["n/a", "15.6%", "10.4%"], False),
+        ("Avg CAC per university (founder-led, low-cost)", ["n/a", "~£2,500", "~£3,300"], False),
     ]
     r = 5
     for label, vals, style in rows:
@@ -630,9 +618,9 @@ def sheet_w4(wb):
             if style == "sub":
                 sub_row(ws, r, label, 4)
             r += 1; continue
-        total_val = sum(vals) if all(isinstance(v, (int, float)) for v in vals) else ""
-        write_row(ws, r, label, list(vals) + [total_val], total=(style == "total"),
-                  money=isinstance(vals[0], (int, float)))
+        is_money = all(isinstance(v, (int, float)) for v in vals)
+        total_val = sum(vals) if is_money else ""
+        write_row(ws, r, label, list(vals) + [total_val], total=(style == "total"), money=is_money)
         r += 1
 
 
@@ -641,31 +629,32 @@ def sheet_w4(wb):
 # ============================================================
 def sheet_w5(wb):
     ws = wb.create_sheet("R&D W5")
-    write_header(ws, "Research & Development (W5)", ["Year 1", "Year 2", "Year 3", "TOTAL"],
-                 [44, 14, 14, 14, 14])
+    write_header(ws, "Research & Development (W5)", ["Year 1", "Year 2", "Year 3"], [50, 14, 14, 14])
     rows = [
-        ("Total R&D Cost (P&L view)", [22_500, 60_000, 110_000], "total"),
+        ("R&D delivery model", None, "sub"),
+        ("Founder time (unpaid, no cash cost)", ["Y1-Y2: 100%", "Y1-Y2: 100%", "Some paid capacity from Y3"], False),
+        ("Cash R&D spend (already included in COGS/OPEX above)",
+         [PL["cogs_llm"][0], PL["cogs_llm"][1], PL["cogs_llm"][2]], True),
         ("", None, False),
-        ("Founder R&D time (60% allocation Y1)", [10_800, 28_800, 43_200], False),
-        ("ML / NLP engineer time (allocated)", [0, 19_200, 45_000], False),
-        ("R&D tooling & datasets (HuggingFace, Modal)", [1_200, 6_000, 12_000], False),
-        ("3rd-party model evaluation & safety testing", [600, 2_000, 6_000], False),
-        ("Hosting allocated to experiments", [180, 1_400, 3_800], False),
-        ("Compliance / DPIA work attributable to R&D", [720, 2_600, 0], False),
-        ("", None, False),
-        ("Estimated SME R&D tax credit (16%)", None, "sub"),
-        ("Receivable in following accounting period", [3_600, 9_600, 17_600], False),
+        ("SME R&D Tax Credit", None, "sub"),
+        ("Assumed as a cash inflow in this model", [0, 0, 0], True),
     ]
     r = 5
     for label, vals, style in rows:
         if vals is None:
             if style == "sub":
-                sub_row(ws, r, label, 4)
+                sub_row(ws, r, label, 3)
             r += 1; continue
-        total_val = sum(vals) if all(isinstance(v, (int, float)) for v in vals) else ""
-        write_row(ws, r, label, list(vals) + [total_val], total=(style == "total"),
-                  money=isinstance(vals[0], (int, float)))
+        write_row(ws, r, label, vals, total=(style is True), money=all(isinstance(v, (int, float)) for v in vals))
         r += 1
+    r += 1
+    ws.cell(row=r, column=1,
+            value="R&D is delivered as unpaid founder time throughout Y1-Y2, plus modest paid capacity from Y3 "
+                  "once revenue supports it. No SME R&D Tax Credit inflow is assumed anywhere in this model — "
+                  "qualifying PAYE spend is minimal while founders are unpaid. The founders will explore claiming "
+                  "R&D tax relief with NatWest's in-kind accountancy support once qualifying costs exist from Y3, "
+                  "as a possible upside not relied upon here.").font = italic_small
+    ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=4)
 
 
 # ============================================================
@@ -677,10 +666,11 @@ def sheet_fa(wb):
                  ["Depreciation rate", "Y1 additions", "Y2 additions", "Y3 additions",
                   "Y1 depreciation", "Y2 depreciation", "Y3 depreciation", "Y3 NBV"],
                  [44, 14] + [12] * 7)
+    # Split reconciles exactly to DEPR_Y = [-150, -400, -700] used in the P&L.
     rows = [
-        ("Tangible — Laptops & equipment", "33%", 600, 1_800, 5_000, -200, -800, -2_400, 4_000),
-        ("Intangible — Capitalised R&D (W5)", "20%", 300, 1_200, 4_000, -100, -700, -2_100, 2_900),
-        ("Total CAPEX", "", 900, 3_000, 9_000, -300, -1_500, -4_500, 6_900),
+        ("Tangible — Laptops & equipment", "33%", 500, 500, 900, -130, -340, -580, 850),
+        ("Intangible — Capitalised R&D (W5)", "20%", 100, 100, 300, -20, -60, -120, 300),
+        ("Total CAPEX", "", 600, 600, 1_200, -150, -400, -700, 1_150),
     ]
     r = 5
     for row in rows:
@@ -699,18 +689,19 @@ def sheet_fa(wb):
                 c.fill = total_fill; c.font = bold
         r += 1
 
-    ws.cell(row=r+1, column=1,
-            value="MVP is already built so the upfront capex is minimal. Y1 hardware = 2 laptops + 1 spare; "
-                  "Intangible adds are the cost of capitalised R&D meeting IAS 38 criteria.").font = italic_small
-    ws.merge_cells(start_row=r+1, start_column=1, end_row=r+1, end_column=9)
+    ws.cell(row=r + 1, column=1,
+            value="MVP is already built so upfront capex is minimal. Y1 hardware = 2 founder laptops; Y3 adds "
+                  "a laptop for the first part-time hire. Intangible adds are the cost of capitalised R&D "
+                  "meeting IAS 38 criteria.").font = italic_small
+    ws.merge_cells(start_row=r + 1, start_column=1, end_row=r + 1, end_column=9)
 
 
 # ============================================================
-# Accelerator Value — quantify in-kind support
+# Accelerator Value — quantify in-kind support (Y1 only)
 # ============================================================
 def sheet_accelerator(wb):
     ws = wb.create_sheet("Accelerator Value")
-    write_header(ws, "NatWest Accelerator — Quantified In-Kind Value",
+    write_header(ws, "NatWest Accelerator — Quantified In-Kind Value (Year 1 Only)",
                  ["Annual value (£)", "Cash cost to DEQUAD"], [50, 18, 18])
     rows = [
         ("Office co-working space (3 desks, central London)", 12_000, 0),
@@ -719,9 +710,9 @@ def sheet_accelerator(wb):
         ("Banking & business introductions", 2_000, 0),
         ("Investor pitch coaching & mentoring", 5_000, 0),
         ("Programme demo day & PR placement", 4_000, 0),
-        ("Out-of-programme costs (Companies House, IP filings)", 0, 1_200),
+        ("Out-of-programme costs (Companies House, IP filings)", 0, 300),
         ("", None, None),
-        ("TOTAL in-kind value (Y1)", 31_100, 1_200),
+        ("TOTAL in-kind value (Y1)", 31_100, 300),
     ]
     r = 5
     for row in rows:
@@ -737,11 +728,12 @@ def sheet_accelerator(wb):
         if label.startswith("TOTAL"):
             for cc in (c, c2, c3): cc.fill = total_fill; cc.font = bold
         r += 1
-    ws.cell(row=r+1, column=1,
-            value="The NatWest Accelerator membership materially de-risks Year 1: £31k of services received in-kind "
-                  "against just £1.2k of cash cost. This is a strong validation signal for UKES — DEQUAD has "
-                  "already passed NatWest's selection process and is being mentored by their startup network.").font = italic_small
-    ws.merge_cells(start_row=r+1, start_column=1, end_row=r+1, end_column=4)
+    ws.cell(row=r + 1, column=1,
+            value="The NatWest Accelerator membership materially de-risks Year 1: £31k of services received "
+                  "in-kind against a few hundred pounds of cash cost, covered within the £6,000 founder capital. "
+                  "This support runs for Year 1 only — from Year 2 the plan budgets modest real cash costs for "
+                  "office, legal and accountancy (see Cash Flow 3yr).").font = italic_small
+    ws.merge_cells(start_row=r + 1, start_column=1, end_row=r + 1, end_column=4)
 
 
 # ============================================================
@@ -750,13 +742,14 @@ def sheet_accelerator(wb):
 def sheet_loan(wb):
     ws = wb.create_sheet("Startup Loan")
     write_header(ws, "Startup Loan Schedule",
-                 ["Principal", "Interest rate", "Term (months)", "Monthly payment"], [44] + [14]*4)
-    ws.cell(row=5, column=1, value="No external debt taken at incorporation.").font = bold
+                 ["Principal", "Interest rate", "Term (months)", "Monthly payment"], [50] + [14] * 4)
+    ws.cell(row=5, column=1, value="No external debt or equity taken at any point in this 3-year plan.").font = bold
     ws.cell(row=6, column=1,
-            value="The founders are bootstrapping with £3,000 of equity and the in-kind NatWest "
-                  "Accelerator support. The first cash injection is the £150,000 pre-seed bridge "
-                  "(equity, not debt) targeted for September Year 1 once the first paying university "
-                  "pilot has converted.").alignment = left_a
+            value="The founders are self-funding the entire 3-year plan with £6,000 of equity plus revenue, "
+                  "and the in-kind NatWest Accelerator support in Year 1. No pre-seed, seed or other external "
+                  "investment is assumed, committed, or required for this plan to succeed. If institutional "
+                  "traction significantly exceeds this conservative forecast, the founders may explore external "
+                  "investment beyond Year 3 — that scenario is outside the scope of this model.").alignment = left_a
     ws.merge_cells(start_row=6, start_column=1, end_row=6, end_column=5)
 
 
@@ -781,7 +774,7 @@ def main():
     wb.save(OUT)
     print(f"Wrote {OUT}")
     print(f"  Y1 revenue: £{REV_Y[0]:,}  Y2: £{REV_Y[1]:,}  Y3: £{REV_Y[2]:,}")
-    print(f"  Y1 closing cash: £{CASH_CLOSE[0]:,}")
+    print(f"  Y1 opening cash: £{CASH_OPEN[0]:,}  Y1 closing cash: £{CASH_CLOSE[0]:,}")
     print(f"  Y3 closing cash: £{CASH_CLOSE[2]:,}")
 
 

@@ -61,7 +61,7 @@ Yusuff is committing full-time to DEQUAD as a co-founder because:
 
 1. **Lived experience of the problem.** Like the lead founder, Yusuff is part of the African diaspora UK student community and has seen first-hand the gap between the community-building UK universities want to provide and what students actually experience day-to-day.
 2. **Cross-functional fit.** DEQUAD needs a CTO who can write production code, design a usable interface, brief a marketing campaign and lead a project to a hard deadline. That breadth is unusual in early-stage UK tech and is exactly what Yusuff brings.
-3. **Long-term commitment.** Yusuff is contributing £3,000 of personal capital alongside the lead founder, accepting six months of no salary, and signing customary founder vesting at the pre-seed close. He is committed to working full-time in the UK on DEQUAD for the duration of the visa endorsement period and beyond.
+3. **Long-term commitment.** Yusuff is contributing £3,000 of personal capital alongside the lead founder, accepting no salary through Y1–Y2, and signing customary founder vesting if and when any future funding round is raised — none is assumed or required in this 3-year self-funded plan. He is committed to working full-time in the UK on DEQUAD for the duration of the visa endorsement period and beyond.
 
 ---
 
@@ -71,8 +71,8 @@ The undersigned confirms that he:
 
 - is committing full-time to DEQUAD as Chief Technology Officer;
 - is contributing **£3,000** of personal capital as founder share capital, to be evidenced by the share allotment return (Form SH01) to be filed with Companies House at incorporation;
-- agrees to a customary 4-year founder-vesting schedule with a 1-year cliff, to be put in place at the pre-seed round;
-- accepts a £0 salary for the first six months of trading (Q1–Q2 Year 1) and a £1,500/month salary thereafter until the seed round.
+- agrees to a customary 4-year founder-vesting schedule with a 1-year cliff, to be put in place if and when any future external funding round is raised (none is assumed or required in this 3-year self-funded plan);
+- accepts a £0 salary throughout Year 1 and Year 2, and a modest £500/month salary from Year 3 — funded entirely by revenue, not by any funding round.
 
 Signed: ___________________________   Date: ___________________
 

@@ -14,7 +14,7 @@ from pathlib import Path
 
 import markdown
 
-APPDIR = Path("/app/visa_appendices")
+APPDIR = Path(__file__).resolve().parent
 CHROME = shutil.which("google-chrome") or shutil.which("chromium") or "/root/bin/chromium"
 
 CSS = """

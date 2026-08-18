@@ -15,7 +15,7 @@
 **Accelerator:** **NatWest Accelerator London** — joined **16 March 2026**; office co-working, legal advice and accountancy support provided in-kind for the first 12 months
 **Prior validation:** **Santander Universities Pre-Incubator programme** — completed 2025
 **Founder contact:** quadri.yusuf@dequad.com · 07928132617 · https://www.linkedin.com/in/quadri-yusuf/
-**Document version:** 4.0
+**Document version:** 5.0 (self-funded 3-year revision — no pre-seed/seed assumed; pilot status corrected to reflect no signed agreement)
 **Date:** August 2026
 **Endorsing body:** UKES
 
@@ -73,10 +73,10 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 | **Working product — fully featured** | Production deployment at dequad.co.uk. Closed beta: **80 verified student accounts at the University of Bedfordshire** (42 daily-active over 6 weeks). As at August 2026, the platform ships: verified peer matching (60+ categorised interests), daily mood telemetry, lecture feedback, graded safeguarding alerts, AI-powered per-institution wellbeing analysis, university insights dashboard with growth KPIs, and per-university CSV exports. Engineering build cost in Y1: **zero** — the MVP and all Y1 features are already built. |
 | **Founding team** | **Yusuf Quadri** (CEO — safeguarding professional, MBA with Data Analytics, 2× SU President) + **Yusuff Adeagbo** (CTO — MSc IT with Project Management), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor, MIGSO-PCUBED) — all wider team on equity-only terms. |
 | **Two independent validations** | **Santander Universities Pre-Incubator** (completed 2025) and **NatWest Accelerator London** (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes. |
-| **Anchor pilot imminent** | 12-week pilot agreed in principle with the **University of Bedfordshire** Director of Student Services — the institution whose students the founder represented for two years. Formal agreement expected before the Sep 2026 academic year start (M4); the platform is already built and ready for institutional onboarding. |
-| **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind, letting £6,000 of founder cash cover 6 months of positive-balance operation. |
-| **Conservative forecast** | Y1 revenue £13,588 → Y2 £119,880 → Y3 £509,400. Gross margin ~92% throughout; operating break-even targeted Q2 Y4 after Series A. Only ONE university pilot is assumed to convert in Y1; Y2 assumes 3 paying institutions, Y3 assumes 10. |
-| **UK jobs** | 2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4), all UK-based, with EMI options and board-tracked diversity targets. |
+| **Pilot conversations under way — nothing signed** | Early-stage conversations with the **University of Bedfordshire** Director of Student Services — the institution whose students the founder represented for two years. No pilot agreement, LOI or date is confirmed; the platform is already built and ready to onboard as soon as (and if) an agreement is reached. |
+| **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind through Y1, reducing DEQUAD's cash overheads. |
+| **Self-funded, conservative forecast** | Y1 revenue ~£600 → Y2 ~£16,000 → Y3 ~£48,000, funded entirely by the founders' **£6,000 opening capital** plus revenue generated in the period. **No pre-seed, seed or other external investment is assumed anywhere in this plan.** The base case assumes **zero institutional revenue in Y1** (no pilot is yet signed); one paying university is modelled as a Y2 upside contingent on conversion, rising to c.1.5–2 by Y3. |
+| **UK jobs — modest and self-funded** | 2 founders (Y1–Y2, unpaid by the company) → 3 people (2.5 FTE) by Y3, funded entirely from institutional and premium revenue, not external investment. |
 
 We evidence all three Home Office endorsement criteria — **innovation, viability, scalability** — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.
 
@@ -102,7 +102,7 @@ DEQUAD ships as a cross-platform application (iOS, Android and web at dequad.co.
 |---|---|---|
 | **UK university** | Site licence to the Insights Dashboard, branded safeguarding webhook into their existing safeguarding team, dedicated success manager. | **£2 per enrolled student per year** — a 10,000-student university pays £20,000/yr. Simple, transparent, headcount-based. |
 | **NHS Integrated Care Board (ICB)** | Population-level anonymised wellbeing data for funded institutions; joint safeguarding referral pathway. | Annual contract from **£20,000/yr** per ICB. |
-| **Student (consumer)** | Free core product. Optional **DEQUAD Premium**: advanced match filters, unlimited chats, profile boost. | **£4.99/month** via Stripe (integrated and test-verified; first live revenue expected on pilot conversion Q1 Y2). |
+| **Student (consumer)** | Free core product. Optional **DEQUAD Premium**: advanced match filters, unlimited chats, profile boost. | **£4.99/month** via Stripe (integrated and test-verified; first live revenue expected from M7 (Dec 2026) from the existing beta cohort, independent of whether any university pilot converts). |
 
 The dual-sided model matters: students adopt because the core product is free and genuinely useful; universities pay because DEQUAD gives their safeguarding teams the early-warning layer regulators now require.
 
@@ -122,18 +122,18 @@ The dual-sided model matters: students adopt because the core product is free an
 
 - **The product is built and live.** The largest single risk in most early-stage plans — can they ship? — is already retired. dequad.co.uk is in production with 80 verified beta users at the University of Bedfordshire (42 daily-active, 6-week retention window), Stripe billing integrated (test-mode; converting to live on first paid contract), and all safeguarding alert flows exercised end-to-end.
 - **The founder does this job professionally.** Safeguarding-first is not a marketing phrase: the CEO manages safeguarding caseloads at Change Grow Live and has NHS mental-health ward experience. This is decisive credibility in university procurement conversations, which are led by safeguarding and student-services professionals.
-- **A trusted route into the anchor customer.** Two years as Bedfordshire SU President gives DEQUAD direct, warm relationships with the Director of Student Services, safeguarding leads and senior leadership. The 12-week pilot is scheduled for **Sep–Nov 2026 (M4–M6)**, with conversion discussions from **Dec 2026 (M7)**.
+- **A trusted route into a prospective anchor customer.** Two years as Bedfordshire SU President gives DEQUAD direct, warm relationships with the Director of Student Services, safeguarding leads and senior leadership. A 12-week pilot has been **proposed** for **Sep–Nov 2026 (M4–M6)** — this is a target timeline only; no agreement is signed, and the pilot may be delayed, altered or may not proceed.
 - **Two independent third-party validations.** Santander Universities Pre-Incubator (completed 2025) and NatWest Accelerator London (admitted 16 March 2026) — both competitive selection processes assessing team and product quality.
 - **Proven willingness to pay.** Togetherall and TalkCampus charge UK universities £15k–£60k/yr and hold 100+ UK customers between them, for products missing DEQUAD's verification and triage capabilities.
-- **A cash plan that survives scrutiny.** £6,000 founder capital plus £31,100 of NatWest in-kind support delivers positive month-end cash in every month of Y1 (Section 12), with zero founder salary until the pre-seed lands in M7.
+- **A cash plan that survives scrutiny — and needs no pilot to succeed.** £6,000 founder capital plus £31,100 of NatWest in-kind support delivers positive month-end cash in every month of Y1 (Section 12), with zero founder salary throughout Y1. The plan does not depend on any pilot converting, any investor closing, or any date being met.
 
 ### 3.3 Scalability
 
-- **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **91.8%** by Y3.
+- **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **87.3%** by Y3.
 - **Intra-institution network effects.** Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).
-- **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. The model projects 10 average paying institutions in Y3 against 285 UK institutions — under 4% penetration.
+- **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. This 3-year plan conservatively models c.1.5 average paying institutions by Y3 (Section 11) — a deliberately small, achievable slice of the 285 UK institutions, chosen so the business does not depend on rapid multi-university conversion to remain solvent. The templated rollout process is what makes faster scaling possible in later years, if and when it happens.
 - **International optionality.** The closed-network model maps directly onto `.edu` (US), `.edu.au` (Australia) and EU academic domains — a £180m English-language HE TAM addressable post-Y3 without re-architecting the product.
-- **Team scale plan in place.** Job descriptions for the first six hires are already written (Appendix G); headcount grows 2 → 6 → 9 → 12 across the forecast, all UK-based.
+- **Team scale plan in place, sequenced to revenue.** A job description for the first funded hire (Safeguarding & Trust Lead, part-time) is already written (Appendix G); headcount grows 2 (unpaid founders) → 2 → 3 (2.5 FTE) across the self-funded 3-year forecast, all UK-based. Faster hiring would only follow proven multi-university traction and/or a future funding round, neither of which is assumed in this plan.
 
 ---
 
@@ -141,7 +141,7 @@ The dual-sided model matters: students adopt because the core product is free an
 
 R&D is the core of the innovation proposition: DEQUAD's defensibility rests on the verification engine and the safeguarding-inference pipeline, both of which are original engineering rather than assembled off-the-shelf parts.
 
-Y1 R&D is delivered by the two founders (≈60% of combined founder time, ≈£10,800 attributable labour) plus tooling and safety-testing spend, for a total Y1 R&D investment of **£22,500**, rising to **£60,000 (Y2)** and **£110,000 (Y3)**. The SME R&D Tax Credit scheme is expected to recoup ~16% of qualifying spend annually.
+Y1 R&D is delivered entirely as unpaid founder time (no cash cost, and no salary is drawn) plus modest tooling and safety-testing spend included in Section 11.2/12.1. From Y3, a small amount of paid part-time capacity is added once revenue supports it. No SME R&D Tax Credit inflow is assumed in the cash flow forecast (Section 12) — the pre-revenue/bootstrap structure means qualifying PAYE spend is minimal in Y1–Y2; the founders will explore claiming R&D tax relief with NatWest's in-kind accountancy support once qualifying costs exist, as a possible upside not relied upon here.
 
 ### 4.1 Identity-and-intent verification engine
 
@@ -231,6 +231,8 @@ The five findings below were consistent across **both** the 312-response quantit
 | **SAM** | Russell Group + post-92 universities with >10k students + associated ICBs | **£28m/yr** |
 | **SOM (5-yr)** | 12% SAM capture (matching Togetherall's Y5 share) | **£3.4m ARR by Y5** |
 
+_The 5-year SOM above is a long-term market-opportunity reference point, not a forecast. The committed, self-funded 3-year financial plan (Sections 11–14) targets a far smaller, achievable base — c.£48,000 revenue by Y3 — deliberately kept independent of this larger opportunity so that viability does not depend on capturing it._
+
 ### Regulatory tailwinds
 
 Three regulatory forces are converting student wellbeing from discretionary spend into compliance spend:
@@ -278,12 +280,12 @@ Five competitors, assessed comprehensively:
 
 ### 7.1 Founding team — Year 1
 
-**Compensation reality at submission:** no team member — founders included — currently draws a salary from DEQUAD. Founders fund personal living costs from employment income and savings; the wider team contributes on pure-equity terms pending the pre-seed close in **December 2026 (M7)**, immediately after the Bedfordshire pilot completes. This is a deliberate, evidenced founder commitment.
+**Compensation reality at submission:** no team member — founders included — currently draws a salary from DEQUAD. Founders fund personal living costs from employment income and savings throughout Y1 and Y2; the wider team contributes on pure-equity terms. There is no committed date for this to change, and it is **not contingent on any external funding round** — under this plan, founder pay only begins in Y3, and only once institutional and premium revenue supports it (Section 18).
 
-| Role | Name | Profile | Y1 compensation |
+| Role | Name | Profile | Compensation under this plan |
 |---|---|---|---|
-| **CEO — Product & Safeguarding** | **Yusuf Quadri** | Practising **Recovery Coordinator, Change Grow Live** (safeguarding referrals, risk assessment, multi-agency working); Clinical Support Worker & Assistant Duty Senior Nurse Administrator, **East London NHS Foundation Trust**; 2× **University of Bedfordshire SU President** (2021–23, £900k budget, 10,000+ students); **MBA with Data Analytics**; seven UK safeguarding/clinical certifications (Appendix O); B2B business-development experience (UGC Planet, Mavin Care). | **£0 M1–M6**; £1,500/mo from M7 (£9,000 total Y1) |
-| **CTO — Engineering & IT** | **Yusuff Adeagbo** | **MSc IT with Project Management** (University of the West of Scotland); HND Computer Science; full-stack, UI/UX, infrastructure (Appendix B-2). | Same — £0 M1–M6; £1,500/mo from M7 |
+| **CEO — Product & Safeguarding** | **Yusuf Quadri** | Practising **Recovery Coordinator, Change Grow Live** (safeguarding referrals, risk assessment, multi-agency working); Clinical Support Worker & Assistant Duty Senior Nurse Administrator, **East London NHS Foundation Trust**; 2× **University of Bedfordshire SU President** (2021–23, £900k budget, 10,000+ students); **MBA with Data Analytics**; seven UK safeguarding/clinical certifications (Appendix O); B2B business-development experience (UGC Planet, Mavin Care). | **£0 in Y1–Y2**; modest £500/mo from Y3, funded entirely by revenue (£6,000 Y3 total) |
+| **CTO — Engineering & IT** | **Yusuff Adeagbo** | **MSc IT with Project Management** (University of the West of Scotland); HND Computer Science; full-stack, UI/UX, infrastructure (Appendix B-2). | Same — **£0 in Y1–Y2**; £500/mo from Y3 |
 
 Both founders are UK-resident, full-time on DEQUAD, with signed commitment undertakings (Appendix C).
 
@@ -291,35 +293,29 @@ Both founders are UK-resident, full-time on DEQUAD, with signed commitment under
 
 ### 7.2 Wider founding team — equity-only at incorporation
 
-| Role | Name | Background | Y1 compensation |
+| Role | Name | Background | Compensation under this plan |
 |---|---|---|---|
-| **Chief Marketing Officer** | **Dr Gerald Marfo** | PhD in Digital Marketing; digital go-to-market for impact-led startups. | £0 — EMI options; salaried from Q2 Y2 (post-seed) |
-| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior full-stack engineer working on the platform alongside the CTO. | £0 — EMI options; salaried from Q1 Y2 |
+| **Chief Marketing Officer** | **Dr Gerald Marfo** | PhD in Digital Marketing; digital go-to-market for impact-led startups. | £0 — EMI options; a cash salary is not funded within this 3-year self-funded plan and would only begin once revenue or a future funding round supports it |
+| **Senior Software Engineer** | **Adedapo Ajuwon** | Senior full-stack engineer working on the platform alongside the CTO. | £0 — EMI options; same basis as above |
 | **Senior Advisor — Programme & Delivery** | **Chinyere Jennifer** | Senior Project Management Consultant, **MIGSO-PCUBED**; LLM background. | £0 — advisor EMI vest; MIGSO-PCUBED remains primary employer |
 
 A PhD-credentialled CMO, a senior engineer and a MIGSO-PCUBED consultant all working equity-only signals deep conviction in the mission. CVs at Appendix N.
 
 ### 7.3 Hiring plan
 
-| Role | Hire date | Y2 gross | Y3 gross |
-|---|---|---:|---:|
-| Customer Success Manager #1 | Q1 Y2 | £32,000 | £36,000 |
-| Senior Backend Engineer | Q1 Y2 | £48,000 | £56,000 |
-| Safeguarding & Trust Lead | Q2 Y2 | £18,000 (part-year) | £42,000 |
-| Marketing & Partnerships | Q3 Y2 | £10,000 (part-year) | £38,000 |
-| Data / ML Engineer | Q3 Y3 (deferred from Q2) | — | £20,000 (6 mo) |
-| Mobile Engineer | Q4 Y3 (deferred from Q3) | — | £9,000 (3 mo) |
-| Founders' Associate | **Q1 Y4** (deferred from Q3 Y3) | — | — |
-| Engineer #2 (backend) | **Q1 Y4** (deferred from Q4 Y3) | — | — |
-| Customer Success Manager #2 | **Q1 Y4** (deferred from Q4 Y3) | — | — |
+This plan makes **one** funded hire within the 3-year forecast, timed strictly to revenue rather than to any funding round:
 
-Headcount: **2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4)** — all UK-based roles. Three hires originally planned for Y3 are deferred to Q1 Y4 pending Series A close and revenue milestones; the two active Y3 hires (Data/ML and Mobile) start Q3 and Q4 respectively.
+| Role | Hire date | Basis | Y3 gross |
+|---|---|---|---:|
+| Safeguarding & Trust Lead (part-time, ~10 hrs/wk) | Y3 — contingent on 2+ paying universities | Funded entirely by institutional revenue, not investment | £8,000 |
+
+Headcount: **2 (Y1, founders unpaid) → 2 (Y2, founders unpaid) → 3 people / 2.5 FTE (Y3, founders on modest pay + 1 part-time hire)** — all UK-based, entirely self-funded from revenue. Further hires (engineering, customer success, marketing) are **not assumed** in this plan; they would only be made beyond Year 3 if revenue growth or a future funding round justifies them.
 
 ### 7.4 Recruitment strategy
 
 - **Channels:** Otta, LinkedIn, OnlyDev (engineering), university careers portals (placements), and warm introductions through the NatWest Accelerator alumni network.
 - **Diversity:** ≥40% female and ≥30% ethnic-minority hires across the first 10 employees, tracked as a board-level KPI.
-- **Discipline:** no cash hires until the pre-seed has closed and institutional revenue is contracted — first hires deferred to Q1 Y2.
+- **Discipline:** no cash hires until institutional revenue is signed and recurring — the first hire (Y3) is funded entirely by revenue already earned, not by any external investment.
 - **Retention:** HMRC-approved EMI share-option scheme for all Y2+ hires (4-year vest, 1-year cliff).
 
 ---
@@ -336,33 +332,34 @@ Headcount: **2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4)** — all UK-based role
 | Universities | "See loneliness early. Act before it becomes a crisis." |
 | NHS ICBs | "Population-level student wellbeing data — anonymised and audit-ready." |
 
-### 8.2 Year-1 channel mix (£3,600 total)
+### 8.2 Year-1 channel mix (£900 total)
+
+Kept deliberately lean — this is founder-led, low-cost outreach funded from the £6,000 opening capital, not a paid-acquisition budget:
 
 | Channel | Tactic | Y1 spend |
 |---|---|---:|
-| University partnership & PR | Direct outreach to 30 Directors of Student Services; UUK webinar; NatWest Accelerator introductions | £1,200 |
-| Content / SEO | Whitepaper "Loneliness in UK HE 2026" with academic co-author; Wonkhe op-eds | £600 |
-| Instagram & TikTok | Organic founder content + 5 produced posts | £600 |
-| Google Search ads | "UK student loneliness", "find friends university" | £300 |
-| Student ambassador programme | £150/university × 6 partner universities × 2 reps | £900 |
+| University partnership & PR | Direct outreach to Directors of Student Services; NatWest Accelerator introductions | £300 |
+| Content / SEO | Founder-written blog content; Wonkhe op-ed pitches | £150 |
+| Instagram & TikTok | Organic founder content | £150 |
+| Google Search ads | None in Y1 — deferred until revenue justifies paid acquisition | £0 |
+| Student ambassador programme | Small incentive budget at the Bedfordshire beta cohort | £300 |
 
-Marketing grows to **£28,000 (Y2)** and **£80,000 (Y3)** — full breakdown in Section 16.
+Marketing grows modestly to **£2,500 (Y2)** and **£5,000 (Y3)**, scaled to actual revenue rather than assumed funding — full breakdown in Section 16.
 
-### 8.3 B2B sales motion — anchor pilot under way
+### 8.3 B2B sales motion — pilot conversations under way, nothing signed
 
-**Anchor pilot: University of Bedfordshire.** The CEO served two consecutive terms as the university's SU President; the pilot discussion is in progress with student services and safeguarding leads he worked alongside for two years.
+**Prospective anchor pilot: University of Bedfordshire.** The CEO served two consecutive terms as the university's SU President; he is in early, informal conversation with student services and safeguarding leads he worked alongside for two years. **No agreement, LOI or date has been signed or confirmed.**
 
 | Stage | Timing | Detail |
 |---|---|---|
 | Company incorporated | **Jun 2026 (M1)** — ✅ Complete | DEQUAD Ltd registered at Companies House. |
 | Platform feature buildout | **Jun–Aug 2026 (M1–M3)** — ✅ Complete | University AI analytics, graded safeguarding alerts, categorised interest matching, per-university data exports all shipped and live. |
-| Pilot agreement signed | **Sep 2026 (M4)** — academic year start | Formal agreement expected before or at academic year start; no-fee 12-week pilot, one student cohort. |
-| Pilot delivery | **Sep–Nov 2026 (M4–M6)** | Founder-led implementation; weekly office hours; mid-pilot steering-group review. University AI analysis dashboard live for safeguarding staff. |
-| Review & conversion discussions | **Dec 2026 (M7) onwards** | Outcomes readout; commercial conversation opens. No revenue assumed from Bedfordshire until formal SaaS contract signed. |
-| Target paid signature | **Q1 2027 (M8–M9)** | Target paid SaaS agreement covering AY 2027/28 — no guarantee; modelled conservatively as 50% probability. |
-| Pre-seed bridge target | **M7 (Dec 2026)** | Target close of £150,000 pre-seed bridge from UK angels via NatWest Accelerator network, timed to pilot-outcome data. No pre-seed is secured or committed at the date of this plan. |
+| Pilot agreement — **target, not signed** | Proposed for **Sep 2026 (M4)** — academic year start | Nothing is agreed or scheduled. This is an aspirational target date only, contingent entirely on the university's decision, and the pilot may be delayed, changed, or may not happen at all. |
+| Pilot delivery (if agreed) | **Sep–Nov 2026 (M4–M6)** | Founder-led implementation, if the pilot proceeds; weekly office hours; mid-pilot steering-group review. |
+| Review & conversion discussions (if a pilot occurs) | **Dec 2026 (M7) onwards** | Outcomes readout; commercial conversation opens. No revenue is assumed from Bedfordshire until a formal SaaS contract is signed. |
+| Target paid signature (upside case) | **Q1 2027 (M8–M9)** | Target paid SaaS agreement covering AY 2027/28 — no guarantee; not assumed in the Y1 base case (Section 11), modelled only as a Y2 upside. |
 
-The Y1 forecast assumes **only the Bedfordshire pilot converts** (all other institutions modelled at 0% conversion). Two further pilots are being scoped at peer institutions as pure Q1-2027 upside.
+The Y1 base-case forecast assumes **zero institutional revenue** — no pilot signed, no conversion. One paying institution is modelled only as a Y2 upside if the Bedfordshire conversation converts; this is a target, not a commitment. No other institutions are in active conversation at the date of this plan.
 
 ---
 
@@ -370,12 +367,12 @@ The Y1 forecast assumes **only the Bedfordshire pilot converts** (all other inst
 
 | **Strengths** | **Weaknesses** |
 |---|---|
-| Production MVP live with real beta students — build risk retired. | Cash-light start (£6,000 founder capital). |
-| CEO is a practising safeguarding professional (CGL + NHS) — unmatched credibility with university safeguarding buyers. | Two-person core team — key-person risk until Q1 Y2 hires. |
-| Bedfordshire anchor pilot in progress via the founder's SU-President relationships. | No formal clinical advisory board yet (planned Q2 Y2). |
+| Production MVP live with real beta students — build risk retired. | Cash-light start (£6,000 founder capital, no external investment). |
+| CEO is a practising safeguarding professional (CGL + NHS) — unmatched credibility with university safeguarding buyers. | Two-person core team — key-person risk until the first funded hire in Y3. |
+| Early, informal conversations with Bedfordshire via the founder's SU-President relationships. | **No signed pilot, LOI or paying customer at the date of this plan — institutional revenue is a target, not a commitment.** |
 | Two independent UK-bank validations: Santander Pre-Incubator (2025) + NatWest Accelerator (Mar 2026). | Limited consumer brand awareness at launch. |
-| £31,100/yr NatWest in-kind support incl. London office. | Cyber Essentials accreditation pending. |
-| `.ac.uk` verification + safeguarding webhook are genuine technical moats. | |
+| £31,100/yr NatWest in-kind support incl. London office (Y1 only). | Cyber Essentials accreditation pending. |
+| `.ac.uk` verification + safeguarding webhook are genuine technical moats. | No formal clinical advisory board yet. |
 | B2B willingness-to-pay proven by Togetherall/TalkCampus (100+ UK customers combined). | |
 | OSA-2023 compliance shipped, not promised. | |
 | **Opportunities** | **Threats** |
@@ -416,27 +413,25 @@ The co-founders contribute **£6,000 of personal capital (£3,000 each)** at inc
 
 This support is why £6,000 of founder cash is sufficient: DEQUAD pays no rent, lawyers or accountants in cash during Y1.
 
-### 10.4 Funding ladder
+### 10.4 Funding — self-funded, no external investment assumed
 
-| Round | Timing | Source | Amount | Use of funds |
-|---|---|---|---:|---|
-| **Founder equity** ✅ | Day 1 Jun 2026 | Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000) | **£6,000** | Incorporation, domains, IP filings, hosting. Already invested. |
-| **R&D tax credit** | End Y1 (target) | HMRC SME scheme | ~£3,600 | Recycled into engineering. |
-| **Pre-seed (target)** | M7 Dec 2026 | UK angels via NatWest Accelerator network. *Not yet secured.* | **£150,000** target at ~£900k post (~17%) | First 4 hires, 18-month runway, mobile app store builds, R&D. |
-| **Seed (target)** | Q2 Y2 | UK VCs (Forward Partners, LocalGlobe, Ada Ventures). *Not yet approached.* | **£750,000** target at ~£5m post (~15%) | Scale to 10 universities, ML engineer, NHS-ICB channel. |
-| **Series A (target)** | Q1 Y4 | Growth-stage VCs | **£3–5m** | EU/AU launch, federated-learning infrastructure, 30+ FTE. |
+| Source | Timing | Detail | Amount |
+|---|---|---|---:|
+| **Founder equity** ✅ | Day 1, Jun 2026 | Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000) — already invested, evidenced by Form SH01 | **£6,000** |
 
-_All rounds after founder equity are targets contingent on preceding milestones. No investor discussions have been initiated at the date of this plan; the NatWest Accelerator programme will provide warm introduction to angels at the M7 demo day, which is the intended access point for the pre-seed._
+**This £6,000 is the only funding assumed anywhere in this business plan.** The 3-year financial forecast (Sections 11–14) is funded entirely by this founder capital plus revenue generated in the period. No pre-seed, seed, Series A, R&D tax credit or other external investment is assumed, committed, or required for the plan to remain solvent — every table in Sections 11–14 reconciles on that basis alone.
+
+If institutional traction significantly exceeds this conservative forecast (for example, 5+ paying universities), the founders may explore external investment beyond Year 3 to accelerate growth. That scenario is not part of the numbers presented here and carries no commitment, timeline, or dependency for this plan to succeed.
 
 ### 10.5 Founder Investment Statement (visa requirement)
 
-The lead applicant has personally invested **£3,000** of his own funds as founder share capital, matched by the co-founder's **£3,000**, for total founder share capital of **£6,000**, evidenced by the share allotment return (Form SH01) filed with Companies House at incorporation. No third-party investment exists at the date of this application; external investment will be sought in **December 2026 (M7)**, immediately after the University of Bedfordshire pilot completes (Sep–Nov 2026) and conversion discussions open.
+The lead applicant has personally invested **£3,000** of his own funds as founder share capital, matched by the co-founder's **£3,000**, for total founder share capital of **£6,000**, evidenced by the share allotment return (Form SH01) filed with Companies House at incorporation. **No third-party investment exists at the date of this application, and none is assumed anywhere in this plan.** The business is designed to be fully self-funding — from this £6,000 founder equity plus subsequent revenue — across the entire 3-year forecast period, independent of whether any pilot converts or any external funding is later raised.
 
 ---
 
 ## 11. Revenue and Cost of Sales Forecast
 
-The forecast reflects customer-acquisition numbers directly: 0.5 average paying institutions in Y1 (the Bedfordshire pilot converting mid-year), 3 in Y2, 10 in Y3; and 60 → 1,000 → 5,000 average paying premium students.
+This is a deliberately conservative, self-funded forecast: it assumes **zero institutional revenue in Y1** (no pilot is signed at the date of this plan), rising only if the Bedfordshire conversation converts to a Y2 upside. Institutional conversion is a target, not a commitment. Customer-acquisition numbers: 0 average paying institutions in Y1, 0.5 in Y2 (one pilot converting mid-year, contingent), c.1.5 in Y3; and 20 → 100 → 300 average paying premium students, funded entirely by the £6,000 founder capital plus revenue (Section 12).
 
 ### 11.1 Revenue forecast (annual, GBP)
 
@@ -446,30 +441,32 @@ The forecast reflects customer-acquisition numbers directly: 0.5 average paying 
 | Price per enrolled student (£/yr) | 2.00 | 2.00 | 2.00 |
 | Average enrolled students per partner institution | 10,000 | 10,000 | 10,000 |
 | Average contract value (£) | 20,000 | 20,000 | 20,000 |
-| Average paying institutions in year | 0.5 | 3 | 10 |
-| Subtotal | **£10,000** | **£60,000** | **£200,000** |
+| Average paying institutions in year | 0 | 0.5 (contingent, not signed) | 1.5 (contingent) |
+| Subtotal | **£0** | **£10,000** | **£30,000** |
 | **DEQUAD Premium (B2C)** | | | |
-| Average paying students | 60 | 1,000 | 5,000 |
+| Average paying students | 20 | 100 | 300 |
 | Price (£/mo) | 4.99 | 4.99 | 4.99 |
-| Subtotal | **£3,588** | **£59,880** | **£299,400** |
+| Subtotal | **£600** | **£6,000** | **£18,000** |
 | **NHS ICB pilot** | | | |
-| Subtotal | **£0** | **£0** | **£10,000** |
-| **Total revenue** | **£13,588** | **£119,880** | **£509,400** |
+| Subtotal | **£0** | **£0** | **£0** |
+| **Total revenue** | **£600** | **£16,000** | **£48,000** |
 
-_Y1 note: premium revenue starts at Stripe go-live (M7, Dec 2026) when the Bedfordshire pilot completes. The 60 average across Y1 assumes 0 paying subscribers M1–M6 and approximately 80–90 paying from M7 onward (the 80-person beta cohort offered a conversion incentive, targeting ~75% conversion). Organic word-of-mouth may add further subscribers but has not been assumed. Y2 note: 3 paying institutions assumes 1 Bedfordshire conversion + 2 new pilots converted; 5–6 institutions signed by year-end is the underlying pipeline assumption. Y3 note: 10 average paying institutions assumes 18–20 signed by year-end — roughly 7% of the 285 UK institutions. No NHS contract is assumed before the University of Bedfordshire pilot generates outcome data publishable to ICBs._
+_Y1 note: no institutional revenue is assumed — nothing is signed. Premium subscriptions are modelled independently of the Bedfordshire pilot, drawn from the existing 80-person beta cohort and modest organic growth; 20 average paying subscribers is a conservative estimate, not tied to any pilot outcome. Y2 note: 0.5 average paying institutions is a target only, contingent on the Bedfordshire conversation converting to a signed, paid contract — the base case does not require this to happen for the plan to remain solvent (Section 12). Y3 note: 1.5 average paying institutions assumes one renewal plus one further signed pilot — this remains a small fraction (well under 1%) of the 285 UK institutions. No NHS ICB revenue is assumed within this 3-year plan._
 
 ### 11.2 Cost of sales
 
 | Driver | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Cloud hosting | £360 | £3,400 | £13,000 |
-| LLM / safeguarding inference (OpenAI API) | £270 | £2,800 | £11,000 |
-| Stripe processing (~1% of B2C revenue) | £120 | £1,800 | £9,000 |
-| SMS & email | £150 | £1,200 | £4,500 |
-| Customer-success tooling | £200 | £1,400 | £3,600 |
-| **Total cost of sales** | **£1,100** | **£10,600** | **£41,100** |
-| **Gross profit** | **£12,488** | **£109,280** | **£468,300** |
-| **Gross margin %** | 91.9% | 91.2% | 91.9% |
+| Cloud hosting | £600 | £1,200 | £2,400 |
+| LLM / safeguarding inference (OpenAI API) | £400 | £900 | £1,800 |
+| Stripe processing (~5% of B2C revenue at low volume) | £50 | £90 | £180 |
+| SMS & email | £150 | £400 | £800 |
+| Customer-success tooling | £200 | £500 | £900 |
+| **Total cost of sales** | **£1,400** | **£3,100** | **£6,100** |
+| **Gross profit** | **(£800)** | **£12,900** | **£41,900** |
+| **Gross margin %** | n/a — revenue too small to be meaningful | 80.6% | 87.3% |
+
+_Y1 gross profit is negative because minimum viable infrastructure cost (hosting, safeguarding-inference API) exceeds the small Y1 revenue base — normal for a pre-revenue-stage bootstrap and fully absorbed within the £6,000 founder capital (Section 12)._
 
 ---
 
@@ -477,40 +474,38 @@ _Y1 note: premium revenue starts at Stripe go-live (M7, Dec 2026) when the Bedfo
 
 ### 12.1 Annual cash flow (GBP)
 
+No external investment, grant or tax credit is assumed anywhere in this table — the business is funded entirely by the founders' £6,000 opening capital plus revenue generated in each period.
+
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | 0 | 138,928 | 768,228 |
-| Founder equity injection | 6,000 | 0 | 0 |
-| Pre-seed equity (target Dec 2026, M7) | 150,000 | 0 | 0 |
-| Seed equity (target Q2 Y2) | 0 | 750,000 | 0 |
-| R&D tax credit received | 0 | 4,500 | 9,500 |
-| Cash from sales | 13,588 | 119,880 | 509,400 |
-| **Total receipts** | **169,588** | **874,380** | **518,900** |
-| Cost of sales | (1,100) | (10,600) | (41,100) |
-| Payroll (incl. NI, pension, benefits) | (20,340) | (180,680) | (376,660) |
-| Marketing | (3,600) | (28,000) | (80,000) |
-| Software subscriptions | (1,800) | (6,000) | (14,400) |
-| Office (post-programme) | 0 | (6,000) | (12,000) |
-| Legal & accountancy (out-of-programme) | (1,200) | (5,400) | (11,000) |
-| Insurance | (480) | (1,800) | (3,200) |
-| Business support / misc | (1,200) | (3,600) | (9,000) |
-| Fixed assets & R&D capex | (900) | (3,000) | (9,000) |
-| **Total expenditure** | **(30,620)** | **(245,080)** | **(556,360)** |
-| **Net cash movement** | **138,968** | **629,300** | **(37,460)** |
-| **Closing cash balance** | **138,928** | **768,228** | **730,768** |
+| Opening cash | 6,000 | 1,920 | 8,220 |
+| Cash from sales | 600 | 16,000 | 48,000 |
+| **Total receipts** | **600** | **16,000** | **48,000** |
+| Cost of sales | (1,400) | (3,100) | (6,100) |
+| Payroll (incl. NI, pension, benefits) | 0 | 0 | (21,500) |
+| Marketing | (900) | (2,500) | (5,000) |
+| Software subscriptions | (600) | (1,200) | (1,800) |
+| Office (post-NatWest programme; low-cost co-working / remote) | 0 | (300) | (600) |
+| Legal & accountancy (out-of-programme) | (300) | (600) | (1,200) |
+| Insurance | (480) | (700) | (900) |
+| Business support / misc | (400) | (700) | (1,000) |
+| Fixed assets capex | (600) | (600) | (1,200) |
+| Corporation tax (paid in arrears, prior-year liability) | 0 | 0 | (500) |
+| **Total expenditure** | **(4,680)** | **(9,700)** | **(39,800)** |
+| **Net cash movement** | **(4,080)** | **6,300** | **8,200** |
+| **Closing cash balance** | **1,920** | **8,220** | **16,420** |
 
-_Pre-seed and seed are targets contingent on pilot outcomes and investor due diligence; they are not committed funds. The Y3 net outflow of £37k reflects planned investment in scaling to 10 institutions; closing cash of £731k provides 16 months' runway at the Y3 burn rate and bridges comfortably to the targeted Series A in Q1 Y4._
+_This is a self-funded plan: it does not require any pilot to convert, any investor to close, or any grant to be awarded to remain solvent. Closing cash stays positive throughout, growing from the £6,000 opening balance to c.£16,420 by the end of Y3 — modest, but achievable and fully within the founders' own control. If institutional revenue is delayed or does not materialise at all, Y1–Y2 costs are scoped to still fit comfortably within the £6,000 founder capital plus modest premium revenue alone (see 12.2)._
 
 ### 12.2 Year 1 monthly cash flow — the critical view
 
-The monthly Y1 schedule (financial workbook, sheet "Cash Flow Y1 (mo)") shows **positive closing cash in every single month**:
+The Y1 plan is built to survive on **£6,000 of founder capital alone**, with no institutional revenue and no external funding assumed at any point:
 
-- **M1–M3 (Jun–Aug 2026):** operating burn of ≈£350–£700/month, funded entirely by the £6,000 founder injection. No founder salary drawn. Both founders fund personal living costs from their existing employment income (CEO from Change Grow Live; CTO from freelance engineering). Platform features built and shipped during this period.
-- **M4–M6 (Sep–Nov 2026):** 12-week Bedfordshire pilot underway; burn rises to ≈£1,000–£1,500/month as founder time shifts to pilot management. Pilot is no-fee; no cash receipts from Bedfordshire in this period.
-- **M7 (Dec 2026):** **target £150,000 pre-seed close**, subject to pilot outcomes and investor due diligence. If this close is delayed by 1–2 months, the £6,000 founder capital still provides positive month-end balance through to M9 at current burn levels — no existential risk in a brief delay.
-- **M7–M12 (Dec 2026–May 2027):** founders draw £1,500/month each from pre-seed funds; total monthly burn rises to ≈£4,500 including salary — well within the pre-seed runway of 33+ months at that rate.
+- **M1–M3 (Jun–Aug 2026):** operating burn of ≈£250–£400/month (hosting, tooling, incorporation costs), funded entirely by the £6,000 founder injection. No founder salary drawn. Both founders fund personal living costs from their existing employment income (CEO from Change Grow Live; CTO from freelance engineering). Platform features built and shipped during this period.
+- **M4–M6 (Sep–Nov 2026):** if the proposed 12-week Bedfordshire pilot goes ahead, it is planned as **no-fee**, so it generates no institutional cash receipts in this window; if it does not go ahead, costs are unaffected since none were budgeted against it. Burn stays in the same ≈£300–£450/month range.
+- **M7–M12 (Dec 2026–May 2027):** modest premium-subscription revenue begins from the existing 80-person beta cohort as Stripe billing goes live; no founder salary is drawn in Y1 regardless of whether any pilot converts.
 
-For endorsement purposes: the business survives its pre-revenue phase on £6,000 of founder capital with positive month-end balances throughout M1–M12, and every subsequent funding event is sequenced to a delivered milestone rather than an assumption.
+Because **no funding round, tax credit or pilot conversion is required** for the plan to work, there is no "funding cliff" and no single point of failure: the business survives the entirety of Y1 on founder capital and organic premium revenue alone, closing the year with roughly **£1,920** in the bank.
 
 ---
 
@@ -518,27 +513,27 @@ For endorsement purposes: the business survives its pre-revenue phase on £6,000
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | 13,588 | 119,880 | 509,400 |
-| Cost of sales | (1,100) | (10,600) | (41,100) |
-| **Gross profit** | **12,488** | **109,280** | **468,300** |
-| Salaries | (18,000) | (156,000) | (319,000) |
-| Employer NI | (1,200) | (14,000) | (31,200) |
-| Employer pension (3%) | (540) | (4,680) | (9,570) |
-| Other employment costs | (600) | (6,000) | (13,890) |
-| Software subscriptions | (1,800) | (6,000) | (14,400) |
-| Office | 0 | (6,000) | (12,000) |
-| Legal & accountancy | (1,200) | (5,400) | (11,000) |
-| Marketing | (3,600) | (28,000) | (80,000) |
-| Insurance | (480) | (1,800) | (3,200) |
-| Business support / misc | (1,200) | (3,600) | (9,000) |
-| **Total overheads** | **(28,620)** | **(231,480)** | **(503,260)** |
-| **EBITDA** | **(16,132)** | **(122,200)** | **(34,960)** |
-| Depreciation & amortisation | (300) | (1,500) | (4,500) |
-| **Operating profit / (loss)** | **(16,432)** | **(123,700)** | **(39,460)** |
-| Corporation tax | 0 | 0 | 0 |
-| **Profit / (loss) after tax** | **(16,432)** | **(123,700)** | **(39,460)** |
+| Revenue | 600 | 16,000 | 48,000 |
+| Cost of sales | (1,400) | (3,100) | (6,100) |
+| **Gross profit / (loss)** | **(800)** | **12,900** | **41,900** |
+| Salaries | 0 | 0 | (20,000) |
+| Employer NI | 0 | 0 | (900) |
+| Employer pension (3%) | 0 | 0 | (350) |
+| Other employment costs | 0 | 0 | (250) |
+| Software subscriptions | (600) | (1,200) | (1,800) |
+| Office | 0 | (300) | (600) |
+| Legal & accountancy | (300) | (600) | (1,200) |
+| Marketing | (900) | (2,500) | (5,000) |
+| Insurance | (480) | (700) | (900) |
+| Business support / misc | (400) | (700) | (1,000) |
+| **Total overheads** | **(2,680)** | **(6,000)** | **(32,000)** |
+| **EBITDA** | **(3,480)** | **6,900** | **9,900** |
+| Depreciation & amortisation | (150) | (400) | (700) |
+| **Operating profit / (loss)** | **(3,630)** | **6,500** | **9,200** |
+| Corporation tax | 0 | (500) | (1,200) |
+| **Profit / (loss) after tax** | **(3,630)** | **6,000** | **8,000** |
 
-Y1–Y3 are deliberately investment years: losses are funded by equity (pre-seed M7 Y1; seed Q2 Y2) and are typical of a B2B SaaS business in its first institutional sales cycle. The Y3 operating loss of £39k narrows sharply versus Y2 (£124k), demonstrating clear operating leverage as revenue scales. **Operating break-even is targeted Q2 Y4**, immediately after the Series A that funds the team to full strength. Y3 closing cash of £731k provides 16 months of forward runway at the Y3 monthly burn rate without any further fundraising.
+This is a self-funded plan: it assumes **no equity investment of any kind** — Y1's small loss is absorbed entirely by the £6,000 founder capital, not by any pre-seed or seed round. Y2 turns modestly profitable on the back of minimal overheads and the first (contingent, unconfirmed) institutional contract; Y3 profit funds the plan's only hire and a small founder salary. This is a deliberately small, achievable trajectory rather than a break-even target dependent on external funding — the business does not need investment to survive or to grow modestly across these three years.
 
 ---
 
@@ -546,19 +541,19 @@ Y1–Y3 are deliberately investment years: losses are funded by equity (pre-seed
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Fixed assets (net) | 600 | 2,100 | 6,900 |
-| Cash at bank | 138,928 | 768,228 | 730,768 |
-| Trade receivables | 700 | 5,000 | 17,000 |
+| Fixed assets (net) | 450 | 650 | 1,150 |
+| Cash at bank | 1,920 | 8,220 | 16,420 |
+| Trade receivables | 0 | 500 | 1,500 |
 | Stock / inventory | 0 | 0 | 0 |
-| **Total assets** | **140,228** | **775,328** | **754,668** |
-| Trade payables | (1,300) | (3,800) | (8,500) |
-| **Net assets** | **138,928** | **771,528** | **746,168** |
-| Share capital | 3,000 | 3,000 | 3,000 |
-| Share premium | 150,000 | 900,000 | 900,000 |
-| Profit & loss reserve | (16,432) | (140,132) | (179,592) |
-| **Shareholders' funds** | **136,568** | **762,868** | **723,408** |
+| **Total assets** | **2,370** | **9,370** | **19,070** |
+| Trade payables | 0 | (1,000) | (2,700) |
+| **Net assets** | **2,370** | **8,370** | **16,370** |
+| Share capital | 6,000 | 6,000 | 6,000 |
+| Share premium | 0 | 0 | 0 |
+| Profit & loss reserve | (3,630) | 2,370 | 10,370 |
+| **Shareholders' funds** | **2,370** | **8,370** | **16,370** |
 
-(The differences between net assets and shareholders' funds in each year — £2,360 in Y1, £8,660 in Y2, £22,760 in Y3 — represent deferred revenue: university SaaS contracts billed in advance of the period to which they relate. The deferred revenue liability grows as the institutional customer base scales. Full reconciliation in Appendix F financial workbook.)
+No share premium exists in any year — there has been no external investment round, consistent with Section 10. Shareholders' funds grow from the £6,000 founder investment (less the small Y1 trading loss) to c.£16,370 by Y3, entirely through trading, not fundraising.
 
 ---
 
@@ -572,16 +567,16 @@ DEQUAD is a pure software business and **holds no inventory**. Stock is **£0** 
 
 | Channel | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| University partnership & PR (NatWest network) | £1,200 | £6,000 | £16,000 |
-| Content / SEO / whitepaper | £600 | £3,500 | £10,000 |
-| LinkedIn / paid B2B | £0 | £4,000 | £12,000 |
-| Instagram / TikTok | £600 | £7,500 | £20,000 |
-| Google Search ads | £300 | £3,000 | £8,000 |
-| Student ambassador programme | £900 | £4,000 | £14,000 |
-| **Total** | **£3,600** | **£28,000** | **£80,000** |
-| Marketing as % of revenue | 26% | 23% | 16% |
+| University partnership & PR (NatWest network) | £300 | £700 | £1,300 |
+| Content / SEO / whitepaper | £150 | £400 | £700 |
+| LinkedIn / paid B2B | £0 | £300 | £700 |
+| Instagram / TikTok | £150 | £500 | £1,000 |
+| Google Search ads | £0 | £200 | £500 |
+| Student ambassador programme | £300 | £400 | £800 |
+| **Total** | **£900** | **£2,500** | **£5,000** |
+| Marketing as % of revenue | n/a — Y1 revenue too small to be meaningful | 15.6% | 10.4% |
 
-Y1 marketing-to-revenue ratio of 26% is high because the Bedfordshire pilot generates no revenue in Y1 — nearly all Y1 revenue is premium subscriptions from beta users. From Y2 onward the ratio falls as institutional ARR grows. Institutional CAC is estimated at £3,600 in Y1 (1 institution, fully manual), falling to ~£2,000 by Y3 as NatWest introductions and inbound referrals reduce outbound effort.
+Marketing is deliberately kept to founder-led, low-cost channels throughout — there is no paid-acquisition budget in Y1, and spend only grows in line with actual revenue in Y2–Y3, not with any assumed funding round.
 
 ---
 
@@ -589,68 +584,54 @@ Y1 marketing-to-revenue ratio of 26% is high because the Bedfordshire pilot gene
 
 | Asset class | Depreciation rate | Y1 additions | Y2 additions | Y3 additions | Y3 NBV |
 |---|---:|---:|---:|---:|---:|
-| Tangible — laptops & equipment | 33% | £600 | £1,800 | £5,000 | £4,000 |
-| Intangible — capitalised R&D | 20% | £300 | £1,200 | £4,000 | £2,900 |
-| **Total CAPEX** | | **£900** | **£3,000** | **£9,000** | **£6,900** |
+| Tangible — laptops & equipment | 33% | £500 | £500 | £900 | £850 |
+| Intangible — capitalised R&D | 20% | £100 | £100 | £300 | £300 |
+| **Total CAPEX** | | **£600** | **£600** | **£1,200** | **£1,150** |
 
-The MVP is already built and contributed by the founders, so no upfront capitalisation is required. Y1 hardware is two laptops plus one spare.
+The MVP is already built and contributed by the founders, so no upfront capitalisation is required. Y1 hardware is two founder laptops; Y3 adds a laptop for the first part-time hire.
 
 ---
 
 ## 18. Forecasted Staff Costs
 
-All figures include the associated employer National Insurance and pension obligations, stated separately below.
+All figures include the associated employer National Insurance and pension obligations, stated separately below. **No salary is drawn by anyone until Y3, and only then to the extent institutional and premium revenue supports it — no external funding is assumed at any point.**
 
-### 18.1 Y1 — bootstrap
+### 18.1 Y1 — bootstrap, unpaid founders
 
-| Role | Y1 gross | Months paid |
-|---|---:|---:|
-| Founder A (CEO) — £1,500/mo from M7 | £9,000 | 6 |
-| Founder B (CTO) — £1,500/mo from M7 | £9,000 | 6 |
-| **Total Y1 gross** | **£18,000** | |
+| Role | Y1 gross |
+|---|---:|
+| Founder A (CEO) | £0 |
+| Founder B (CTO) | £0 |
+| **Total Y1 gross** | **£0** |
 
-Employer NI £1,200 + pension £540 + benefits £600 = **£20,340 total Y1 employment cost**.
+Both founders fund personal living costs from their existing employment/freelance income throughout Y1. **Total Y1 employment cost: £0.**
 
-### 18.2 Y2 — first hires
+### 18.2 Y2 — still unpaid, no hires
 
 | Role | Y2 gross |
 |---|---:|
-| Founder A (CEO) | £24,000 |
-| Founder B (CTO) | £24,000 |
-| Customer Success Manager (Q1) | £32,000 |
-| Senior Backend Engineer (Q1) | £48,000 |
-| Safeguarding & Trust Lead (Q2) | £18,000 |
-| Marketing & Partnerships (Q3) | £10,000 |
-| **Total Y2 gross** | **£156,000** |
+| Founder A (CEO) | £0 |
+| Founder B (CTO) | £0 |
+| **Total Y2 gross** | **£0** |
 
-Employer NI £14,000 + pension £4,680 + benefits £6,000 = **£180,680 total Y2 employment cost**.
+No hires are made in Y2 under this plan; the modest (contingent) institutional revenue and growing premium revenue are retained as cash buffer rather than spent on payroll. **Total Y2 employment cost: £0.**
 
-### 18.3 Y3 — scaled team (9 FTE)
-
-_Three hires originally planned for Y3 are deferred to Q1 Y4 to keep expenditure in line with the more conservative revenue trajectory. They are not cancelled — they are sequenced behind revenue milestones._
+### 18.3 Y3 — first modest pay, first hire
 
 | Role | Y3 gross |
 |---|---:|
-| Founder A (CEO) | £36,000 |
-| Founder B (CTO) | £36,000 |
-| Customer Success Manager #1 | £36,000 |
-| Senior Backend Engineer | £56,000 |
-| Safeguarding & Trust Lead | £42,000 |
-| Marketing & Partnerships | £38,000 |
-| Data / ML Engineer (Q3 start — deferred from Q2) | £20,000 |
-| Mobile Engineer (Q4 start — deferred from Q3) | £9,000 |
-| **Deferred to Q1 Y4:** Founders' Associate | — |
-| **Deferred to Q1 Y4:** Engineer #2 | — |
-| **Deferred to Q1 Y4:** Customer Success Manager #2 | — |
-| **Total Y3 gross** | **£273,000** |
+| Founder A (CEO) — £500/mo | £6,000 |
+| Founder B (CTO) — £500/mo | £6,000 |
+| Safeguarding & Trust Lead (part-time, ~10 hrs/wk) | £8,000 |
+| **Total Y3 gross** | **£20,000** |
 
-Employer NI £31,200 + pension £9,570 + benefits £13,890 = **£327,660 total Y3 employment cost**.
+Employer NI ~£900 + pension ~£350 + other employment costs ~£250 = **£21,500 total Y3 employment cost**, funded entirely by Y3 revenue (Section 11).
 
-Headcount: **2 (Y1) → 6 (Y2) → 9 (Y3) → 12 (Q1 Y4)** — all UK-based roles.
+Headcount: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / 2.5 FTE (Y3)** — all UK-based, entirely self-funded. Scaling beyond this (additional engineering, customer success, marketing hires) is a longer-term ambition, not part of this 3-year plan, and would only follow proven multi-university revenue or a future funding round.
 
 ### 18.4 Equity
 
-All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Founders adopt customary investor-friendly reverse vesting at the pre-seed close.
+The wider founding team (Section 7.2) hold EMI options on equity-only terms. No new EMI grants are modelled for the single Y3 hire's compensation above, which is cash-only; option grants for future hires would be considered if and when a funding round is raised — not assumed in this plan.
 
 ---
 
@@ -677,28 +658,26 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 ---
 
-# Appendix F — Five-Year Financial Model
+# Appendix F — Three-Year Financial Model (Self-Funded)
 
-*Currency: GBP (£). Y1–Y3 figures are aligned to Business Plan v4.0 §§11–12 (August 2026). Y4–Y5 are indicative projections. All equity lines marked TARGET are contingent on investor due diligence and milestone delivery; none are committed funds beyond the £6,000 founder capital injection.*
+*Currency: GBP (£). Figures are aligned to Business Plan v5.0 §§11–14 (this document). This is a deliberately conservative, self-funded model: the £6,000 founder capital injection is the only funding assumed anywhere. No pre-seed, seed, Series A, grant or R&D tax credit is assumed, committed, or required for the plan to remain solvent. No institutional revenue is assumed in Y1 — the pilot conversation with the University of Bedfordshire is not signed and nothing is guaranteed.*
 
 ---
 
 ## F.1 Revenue Forecast
 
-| Line item | Y1 | Y2 | Y3 | Y4 | Y5 |
-|---|---:|---:|---:|---:|---:|
-| Universities (paid — avg in year) | 0.5 | 3 | 10 | 50 | 100 |
-| Avg students per university | 10,000 | 10,000 | 10,000 | 10,000 | 12,000 |
-| Institutional ARR | £10,000 | £60,000 | £200,000 | £1,000,000 | £2,400,000 |
-| NHS ICBs commissioned | 0 | 0 | 1 | 2 | 5 |
-| NHS ARR | £0 | £0 | £10,000 | £250,000 | £800,000 |
-| Premium subscribers | 60 | 1,000 | 5,000 | 25,000 | 60,000 |
-| Premium ARR (£4.99/mo) | £3,588 | £59,880 | £299,400 | £450,000 | £1,200,000 |
-| Research-data licences | £0 | £0 | £0 | £30,000 | £75,000 |
-| White-label / API | £0 | £0 | £0 | £20,000 | £165,000 |
-| **TOTAL REVENUE** | **£13,588** | **£119,880** | **£509,400** | **£1,750,000** | **£4,640,000** |
+| Line item | Y1 | Y2 | Y3 |
+|---|---:|---:|---:|
+| Universities (paid — avg in year) | 0 (nothing signed) | 0.5 (target, contingent) | 1.5 (target, contingent) |
+| Avg students per university | 10,000 | 10,000 | 10,000 |
+| Institutional ARR | £0 | £10,000 | £30,000 |
+| NHS ICBs commissioned | 0 | 0 | 0 |
+| NHS ARR | £0 | £0 | £0 |
+| Premium subscribers (avg) | 20 | 100 | 300 |
+| Premium ARR (£4.99/mo) | £600 | £6,000 | £18,000 |
+| **TOTAL REVENUE** | **£600** | **£16,000** | **£48,000** |
 
-*Y1 = Bedfordshire pilot converting mid-year (0.5 avg paid year) + 60 beta premium converts. Premium at ~3% of verified base — below Calm (5.7%) and Headspace (4.2%) benchmarks.*
+*Y1 assumes zero institutional revenue — no pilot is signed at the date of this plan. Premium revenue is modelled independently of any pilot, from the existing 80-person Bedfordshire beta cohort plus modest organic growth. Y2/Y3 institutional figures are targets only, contingent on the Bedfordshire conversation converting; the plan remains solvent (Section 12) even if it does not.*
 
 ---
 
@@ -706,14 +685,14 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 | Driver | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Cloud hosting (MongoDB Atlas + Render) | £360 | £3,400 | £13,000 |
-| LLM / safeguarding inference (OpenAI gpt-4o-mini) | £270 | £2,800 | £11,000 |
-| Stripe processing (~1% of B2C revenue) | £120 | £1,800 | £9,000 |
-| SMS & email notifications | £150 | £1,200 | £4,500 |
-| Customer-success tooling | £200 | £1,400 | £3,600 |
-| **Total COGS** | **£1,100** | **£10,600** | **£41,100** |
-| **Gross profit** | **£12,488** | **£109,280** | **£468,300** |
-| **Gross margin** | 91.9% | 91.2% | 91.9% |
+| Cloud hosting (MongoDB Atlas + Render) | £600 | £1,200 | £2,400 |
+| LLM / safeguarding inference (OpenAI gpt-4o-mini) | £400 | £900 | £1,800 |
+| Stripe processing | £50 | £90 | £180 |
+| SMS & email notifications | £150 | £400 | £800 |
+| Customer-success tooling | £200 | £500 | £900 |
+| **Total COGS** | **£1,400** | **£3,100** | **£6,100** |
+| **Gross profit / (loss)** | **(£800)** | **£12,900** | **£41,900** |
+| **Gross margin** | n/a (revenue too small) | 80.6% | 87.3% |
 
 ---
 
@@ -721,16 +700,16 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Payroll (salaries + employer NI + pension + benefits) | £20,340 | £180,680 | £376,660 |
-| Marketing (paid + content + events) | £3,600 | £28,000 | £80,000 |
-| Software subscriptions | £1,800 | £6,000 | £14,400 |
-| Office / co-working (post-NatWest programme) | £0 | £6,000 | £12,000 |
-| Legal & accountancy (out-of-programme) | £1,200 | £5,400 | £11,000 |
-| Insurance (D&O, PI, Cyber, PL) | £480 | £1,800 | £3,200 |
-| Business support / misc | £1,200 | £3,600 | £9,000 |
-| Fixed assets & R&D capex | £900 | £3,000 | £9,000 |
-| **Total OPEX** | **£29,520** | **£234,480** | **£515,260** |
-| **Operating result** | **(£16,432)** | **(£125,200)** | **(£47,060)** |
+| Payroll (salaries + employer NI + pension + benefits) | £0 | £0 | £21,500 |
+| Marketing (founder-led, low-cost channels) | £900 | £2,500 | £5,000 |
+| Software subscriptions | £600 | £1,200 | £1,800 |
+| Office / co-working (post-NatWest programme; low-cost/remote) | £0 | £300 | £600 |
+| Legal & accountancy (out-of-programme) | £300 | £600 | £1,200 |
+| Insurance (D&O, PI, Cyber, PL) | £480 | £700 | £900 |
+| Business support / misc | £400 | £700 | £1,000 |
+| Fixed assets capex | £600 | £600 | £1,200 |
+| **Total OPEX** | **£3,280** | **£6,600** | **£33,200** |
+| **Operating result** | **(£3,630)** *(incl. depreciation, see §13)* | **£6,500** | **£9,200** |
 
 ---
 
@@ -738,38 +717,34 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | £0 | £138,928 | £768,228 |
-| Founder equity injection | £6,000 | £0 | £0 |
-| Pre-seed equity (target Dec 2026, M7) | £150,000 | £0 | £0 |
-| Seed equity (target Q2 Y2) | £0 | £750,000 | £0 |
-| R&D tax credit received | £0 | £4,500 | £9,500 |
-| Cash from sales | £13,588 | £119,880 | £509,400 |
-| **Total receipts** | **£169,588** | **£874,380** | **£518,900** |
-| Cost of sales | (£1,100) | (£10,600) | (£41,100) |
-| Payroll (incl. NI, pension, benefits) | (£20,340) | (£180,680) | (£376,660) |
-| Marketing | (£3,600) | (£28,000) | (£80,000) |
-| Software subscriptions | (£1,800) | (£6,000) | (£14,400) |
-| Office (post-programme) | £0 | (£6,000) | (£12,000) |
-| Legal & accountancy (out-of-programme) | (£1,200) | (£5,400) | (£11,000) |
-| Insurance | (£480) | (£1,800) | (£3,200) |
-| Business support / misc | (£1,200) | (£3,600) | (£9,000) |
-| Fixed assets & R&D capex | (£900) | (£3,000) | (£9,000) |
-| **Total expenditure** | **(£30,620)** | **(£245,080)** | **(£556,360)** |
-| **Net cash movement** | **£138,968** | **£629,300** | **(£37,460)** |
-| **Closing cash balance** | **£138,928** | **£768,228** | **£730,768** |
+| Opening cash | £6,000 | £1,920 | £8,220 |
+| Cash from sales | £600 | £16,000 | £48,000 |
+| **Total receipts** | **£600** | **£16,000** | **£48,000** |
+| Cost of sales | (£1,400) | (£3,100) | (£6,100) |
+| Payroll (incl. NI, pension, benefits) | £0 | £0 | (£21,500) |
+| Marketing | (£900) | (£2,500) | (£5,000) |
+| Software subscriptions | (£600) | (£1,200) | (£1,800) |
+| Office | £0 | (£300) | (£600) |
+| Legal & accountancy | (£300) | (£600) | (£1,200) |
+| Insurance | (£480) | (£700) | (£900) |
+| Business support / misc | (£400) | (£700) | (£1,000) |
+| Fixed assets capex | (£600) | (£600) | (£1,200) |
+| Corporation tax (prior-year liability, paid in arrears) | £0 | £0 | (£500) |
+| **Total expenditure** | **(£4,680)** | **(£9,700)** | **(£39,800)** |
+| **Net cash movement** | **(£4,080)** | **£6,300** | **£8,200** |
+| **Closing cash balance** | **£1,920** | **£8,220** | **£16,420** |
 
-*Pre-seed and seed are targets contingent on pilot outcomes and investor due diligence; they are not committed funds. The Y3 net outflow of £37k reflects planned investment in scaling to 10 institutions; closing cash of £731k provides 16+ months' runway at the Y3 burn rate and bridges to the targeted Series A in Q1 Y4.*
+*No pre-seed, seed or R&D tax credit is assumed. Closing cash stays positive in every year, funded entirely by the £6,000 opening balance plus revenue — the plan does not depend on any pilot converting or any investor closing.*
 
 ---
 
-## F.5 Funding Milestones
+## F.5 Funding — self-funded only
 
-| Round | Timing | Amount (target) | Terms | Status |
-|---|---|---:|---|---|
-| Founder equity injection | M1 (Jun 2026) | £6,000 | Personal capital | **Delivered** |
-| Pre-seed | M7 (Dec 2026) | £150,000 | ~17% at £900k post-money | **Target — not yet secured** |
-| Seed | Q2 Y2 | £750,000 | ~15% at £5m post-money | **Target — not yet approached** |
-| Series A | Q1 Y4 | £3,000,000–£5,000,000 | TBD | **Indicative** |
+| Source | Timing | Amount | Status |
+|---|---|---:|---|
+| Founder equity injection | M1 (Jun 2026) | £6,000 | **Delivered — the only funding in this plan** |
+
+No pre-seed, seed, Series A or other external investment is assumed, committed, or required anywhere in this 3-year model. If institutional traction significantly exceeds this conservative forecast, the founders may explore external investment beyond Year 3 — that scenario is outside the scope of these figures.
 
 ---
 
@@ -777,16 +752,11 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 | Role | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Founders (CEO + CTO) | 2 | 2 | 2 |
-| Engineering | 0 | 1 | 2 |
-| Customer success | 0 | 1 | 1 |
-| Sales | 0 | 1 | 1 |
-| Safeguarding / DSL | 0 | 1 | 1 |
-| Marketing | 0 | 0 | 1 |
-| Operations / Finance | 0 | 0 | 1 |
-| **Total FTE** | **2** | **6** | **9** |
+| Founders (CEO + CTO) | 2 (unpaid) | 2 (unpaid) | 2 (modest pay) |
+| Safeguarding & Trust Lead (part-time) | 0 | 0 | 1 |
+| **Total headcount / FTE** | **2 / 0 FTE (unpaid)** | **2 / 0 FTE (unpaid)** | **3 / c.2.5 FTE** |
 
-*No founder salary drawn M1–M6; both founders fund personal living costs from existing employment (CEO: Change Grow Live; CTO: freelance engineering). Founders draw £1,500/mo each from M7 (pre-seed funds).*
+*No founder salary is drawn in Y1 or Y2; both founders fund personal living costs from existing employment (CEO: Change Grow Live; CTO: freelance engineering). Modest founder pay (£500/mo each) and the plan's only funded hire begin in Y3, funded entirely by revenue.*
 
 ---
 
@@ -794,26 +764,23 @@ All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year cliff). Fou
 
 | Metric | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Avg revenue per paid university | £20,000 | £20,000 | £20,000 |
-| Avg CAC per university | £6,000 | £4,000 | £3,000 |
-| Payback period (years) | 0.30 | 0.20 | 0.15 |
-| LTV (5-yr) per university | £100,000 | £100,000 | £100,000 |
-| LTV : CAC | 16.7× | 25× | 33× |
+| Avg revenue per paid university | n/a | £20,000 | £20,000 |
+| Avg CAC per university | n/a (no paid channel) | c.£2,500 (founder-led, low-cost) | c.£3,300 |
+| Avg premium subscriber revenue | £59.88/yr | £59.88/yr | £59.88/yr |
+
+*Institutional unit economics are illustrative only in Y1–Y2 given the small, contingent sample size (0–0.5 universities). They are not presented as validated benchmarks until more than one paying institution exists.*
 
 ---
 
 ## F.8 Key Assumptions
 
-1. **Institutional pricing:** £2 per enrolled student per year (£20,000 for a 10,000-student university). Below in-house counsellor cost (£40+/student); validated against JISC 2024 procurement data.
-2. **Premium pricing:** £4.99/month (£59.88/year). Y1 = 60 beta converts; Y2+ ~3% of registered base. Below Calm (5.7%) and Headspace (4.2%) consumer benchmarks.
-3. **University procurement cycle:** 4–6 months from first contact (JISC HE buying data). Bedfordshire pilot mid-year conversion = 0.5 avg paid-year in Y1.
-4. **Founder capital sufficiency:** The business survives M1–M6 on £6,000 founder capital with positive month-end balances throughout. Every subsequent funding event is gated on a delivered milestone.
-5. **Founder living costs:** Both founders are employed independently (CEO at Change Grow Live; CTO as a freelance engineer) and do not require a salary from DEQUAD until M7.
-6. **Y3 cash position:** Net outflow of £37,460 in Y3 reflects planned investment in scaling to 10 institutions. Closing balance of £730,768 provides 16+ months' runway at Y3 burn rate, bridging to the Series A.
-7. **Break-even:** Targeted Q2 Y4 after Series A deployed and institutional ARR reaches scale.
-8. **NHS pipeline:** First ICB pilot Y3 (£10,000 fee); full commissioning scale Y4+ contingent on NHS Innovation Accelerator acceptance (~30% acceptance rate).
-9. **R&D tax credit:** HMRC SME RDEC scheme at ~16% on qualifying spend; modelled conservatively at 10% effective rate.
+1. **Institutional pricing:** £2 per enrolled student per year (£20,000 for a 10,000-student university) — unchanged from the original pricing research (Section 5), but **no institutional revenue is assumed in Y1**.
+2. **Premium pricing:** £4.99/month (£59.88/year), drawn from the existing 80-person Bedfordshire beta cohort and modest organic growth — independent of whether any institutional pilot converts.
+3. **No external funding assumed:** the entire 3-year plan is funded by the £6,000 founder capital plus revenue. No pre-seed, seed, grant or R&D tax credit is assumed or required.
+4. **Founder living costs:** both founders are employed independently (CEO at Change Grow Live; CTO as a freelance engineer) and draw no salary from DEQUAD until Y3, and only then to the extent revenue supports it.
+5. **Pilot uncertainty:** the University of Bedfordshire pilot is an early-stage, informal conversation only. No agreement, LOI or date is signed. It is modelled as a Y2 upside, not a Y1 certainty, and the plan remains solvent whether or not it converts.
+6. **No break-even target is set for this 3-year window** — the plan targets modest, growing profitability and a growing cash reserve (Section 13), not a specific break-even date tied to external funding.
 
 ---
 
-*End of business plan. All figures are forecasts, not guarantees of future performance. This business plan was written by Yusuf Quadri (Founder & CEO) with Yusuff Adeagbo (Co-Founder & CTO) and is submitted to UKES as part of the UK Innovator Founder visa endorsement process — August 2026 (v4.0).*
+*End of business plan. All figures are forecasts, not guarantees of future performance. This business plan was written by Yusuf Quadri (Founder & CEO) with Yusuff Adeagbo (Co-Founder & CTO) and is submitted to UKES as part of the UK Innovator Founder visa endorsement process — August 2026 (v5.0, self-funded 3-year revision).*

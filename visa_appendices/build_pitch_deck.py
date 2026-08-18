@@ -12,7 +12,7 @@ from pathlib import Path
 
 import markdown
 
-APPDIR = Path("/app/visa_appendices")
+APPDIR = Path(__file__).resolve().parent
 CHROME = shutil.which("google-chrome") or shutil.which("chromium") or "/root/bin/chromium"
 
 CSS = """
@@ -122,7 +122,7 @@ body {
 
 /* Page number watermark */
 .slide:not(.cover)::after {
-  content: "DEQUAD · UKES Pre-Seed Deck · February 2026";
+  content: "DEQUAD · UKES Innovator Founder Submission · August 2026";
   position: absolute;
   bottom: 8mm;
   right: 28mm;
@@ -136,7 +136,7 @@ TEMPLATE = """<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>DEQUAD — Pre-Seed Pitch Deck</title>
+<title>DEQUAD — Pitch Deck (Self-Funded 3-Year Plan)</title>
 <style>{css}</style>
 </head>
 <body>

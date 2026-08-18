@@ -1,215 +1,93 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>DEQUAD_UKES_Business_Plan</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <style>
-    body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-           max-width: 720px; margin: 24px auto; padding: 0 16px; color: #1c1917;
-           line-height: 1.5; font-size: 11pt; }
-    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: #0f2942;
-                 page-break-after: avoid; }
-    h1 { font-size: 22pt; margin-top: 0; }
-    h2 { font-size: 16pt; border-bottom: 1px solid #DDE8F2; padding-bottom: 4px; }
-    h3 { font-size: 13pt; }
-    table { border-collapse: collapse; width: 100%; margin: 14px 0;
-            font-size: 9.5pt; }
-    th, td { border: 1px solid #DDE8F2; padding: 6px 10px; text-align: left;
-             vertical-align: top; }
-    th { background: #F6FAFE; }
-  </style>
+<meta charset="utf-8">
+<title>DEQUAD — Business Plan (UKES Submission)</title>
+<style>
+@page { size: A4; margin: 22mm 18mm; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: #0F2942;
+  line-height: 1.55;
+  font-size: 11.5pt;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+h1 {
+  color: #0F2942;
+  font-size: 26pt;
+  border-bottom: 2px solid #5B9BD5;
+  padding-bottom: 6px;
+  page-break-after: avoid;
+}
+h2 {
+  color: #0F2942;
+  font-size: 17pt;
+  margin-top: 32px;
+  border-bottom: 1px solid #DDE8F2;
+  padding-bottom: 4px;
+  page-break-after: avoid;
+}
+h3 { color: #0F2942; font-size: 13pt; margin-top: 22px; page-break-after: avoid; }
+h4 { color: #4F6076; font-size: 11pt; margin-top: 16px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th {
+  background: #EDF4FB;
+  color: #0F2942;
+  text-align: left;
+  padding: 7px 9px;
+  border: 1px solid #DDE8F2;
+}
+td { padding: 6px 9px; border: 1px solid #DDE8F2; vertical-align: top; }
+tr:nth-child(even) td { background: #F8FBFD; }
+code { background: #F1F5F9; padding: 2px 5px; border-radius: 4px; font-size: 9.5pt; }
+blockquote {
+  border-left: 3px solid #5B9BD5;
+  margin: 14px 0;
+  padding: 4px 14px;
+  background: #EDF4FB;
+  color: #4F6076;
+}
+hr { border: 0; border-top: 1px dashed #DDE8F2; margin: 24px 0; }
+ul, ol { padding-left: 22px; }
+li { margin-bottom: 4px; }
+strong { color: #0F2942; }
+</style>
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">DEQUAD_UKES_Business_Plan</h1>
-</header>
 <h1 id="dequad">DEQUAD</h1>
-<h2 id="business-plan-uk-innovator-founder-visa">Business Plan — UK
-Innovator Founder Visa</h2>
-<h3 id="endorsement-application-to-ukes">Endorsement Application to
-UKES</h3>
+<h2 id="business-plan-uk-innovator-founder-visa">Business Plan — UK Innovator Founder Visa</h2>
+<h3 id="endorsement-application-to-ukes">Endorsement Application to UKES</h3>
 <hr />
-<p><strong>Entity:</strong> DEQUAD Ltd (Company in formation, England
-&amp; Wales) <strong>Founders:</strong> <strong>Yusuf Quadri
-(CEO)</strong> and <strong>Yusuff Adeagbo (CTO)</strong> <strong>Wider
-founding team:</strong> Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior
-Software Engineer), Chinyere Jennifer (Senior Project Management
-Consultant, advisor) <strong>Headquarters:</strong> London, United
-Kingdom — NatWest Accelerator (hosted) <strong>Trading domain:</strong>
-dequad.co.uk <strong>Business start date:</strong> <strong>15 June
-2026</strong> (incorporation; trading from M1 = June 2026) <strong>MVP
-status:</strong> Production — live at https://dequad.co.uk
-<strong>Founder starting capital:</strong> £6,000 cash (£3,000 from each
-founder, pooled in the company bank) <strong>Accelerator:</strong>
-<strong>NatWest Accelerator London</strong> — joined <strong>16 March
-2026</strong>; office co-working, legal advice and accountancy support
-provided in-kind for the first 12 months <strong>Prior
-validation:</strong> <strong>Santander Universities Pre-Incubator
-programme</strong> — completed 2025 <strong>Founder contact:</strong>
-quadri.yusuf@dequad.com · 07928132617 ·
-https://www.linkedin.com/in/quadri-yusuf/ <strong>Document
-version:</strong> 3.0 <strong>Date:</strong> June 2026 <strong>Endorsing
-body:</strong> UKES</p>
+<p><strong>Entity:</strong> DEQUAD Ltd (Company in formation, England &amp; Wales)
+<strong>Founders:</strong> <strong>Yusuf Quadri (CEO)</strong> and <strong>Yusuff Adeagbo (CTO)</strong>
+<strong>Wider founding team:</strong> Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior Software Engineer), Chinyere Jennifer (Senior Project Management Consultant, advisor)
+<strong>Headquarters:</strong> London, United Kingdom — NatWest Accelerator (hosted)
+<strong>Trading domain:</strong> dequad.co.uk
+<strong>Business start date:</strong> <strong>15 June 2026</strong> (incorporation; trading from M1 = June 2026)
+<strong>MVP status:</strong> Production — live at https://dequad.co.uk
+<strong>Founder starting capital:</strong> £6,000 cash (£3,000 from each founder, pooled in the company bank)
+<strong>Accelerator:</strong> <strong>NatWest Accelerator London</strong> — joined <strong>16 March 2026</strong>; office co-working, legal advice and accountancy support provided in-kind for the first 12 months
+<strong>Prior validation:</strong> <strong>Santander Universities Pre-Incubator programme</strong> — completed 2025
+<strong>Founder contact:</strong> quadri.yusuf@dequad.com · 07928132617 · https://www.linkedin.com/in/quadri-yusuf/
+<strong>Document version:</strong> 5.0 (self-funded 3-year revision — no pre-seed/seed assumed; pilot status corrected to reflect no signed agreement)
+<strong>Date:</strong> August 2026
+<strong>Endorsing body:</strong> UKES</p>
 <hr />
 <h2 id="contents">Contents</h2>
-<ol type="1">
+<ol>
 <li>Executive Summary</li>
 <li>Description of Products and Services</li>
 <li>Innovation, Viability and Scalability</li>
 <li>Research and Development Activity</li>
-<li>Market Analysis (incl. Market Research, TAM/SAM/SOM, Regulatory
-Tailwinds)</li>
+<li>Market Analysis (incl. Market Research, TAM/SAM/SOM, Regulatory Tailwinds)</li>
 <li>Competitor Analysis</li>
 <li>Staff Profile and Recruitment Strategy</li>
 <li>Marketing and Sales Strategy</li>
@@ -226,429 +104,260 @@ Tailwinds)</li>
 <li>Appendices (including founder CVs)</li>
 </ol>
 <hr />
-<h2 id="executive-summary">1. Executive Summary</h2>
-<p><strong>DEQUAD</strong> is a UK-built software platform that helps
-university students form genuine, verified peer connections, track their
-daily wellbeing, and receive proactive safeguarding — inside a closed
-network open only to identity-verified UK higher-education students.</p>
-<p>The product is not a concept. It is <strong>live in production at
-dequad.co.uk</strong>, with a working matching engine, daily mood
-telemetry, machine-assisted safeguarding triage and a university-facing
-insights dashboard.</p>
+<h2 id="1-executive-summary">1. Executive Summary</h2>
+<p><strong>DEQUAD</strong> is a UK-built software platform that helps university students form genuine, verified peer connections, track their daily wellbeing, and receive proactive safeguarding — inside a closed network open only to identity-verified UK higher-education students.</p>
+<p>The product is not a concept. It is <strong>live in production at dequad.co.uk</strong>, with a working matching engine, daily mood telemetry, machine-assisted safeguarding triage and a university-facing insights dashboard.</p>
 <h3 id="the-problem-we-solve">The problem we solve</h3>
 <p>UK universities face a structural student-wellbeing crisis:</p>
 <ul>
-<li><strong>54%</strong> of UK undergraduates report frequent loneliness
-(ONS, 2023).</li>
-<li><strong>34%</strong> experience a clinically-significant
-mental-health issue during their degree (Student Minds, 2024).</li>
-<li>The average wait to see a university counsellor is <strong>6.1
-weeks</strong>; only <strong>23%</strong> of UK universities offer 24/7
-crisis support.</li>
-<li>The Office for Students now imposes a statutory condition on student
-mental health — institutions must <strong>evidence prevention</strong>,
-not just reaction.</li>
+<li><strong>54%</strong> of UK undergraduates report frequent loneliness (ONS, 2023).</li>
+<li><strong>34%</strong> experience a clinically-significant mental-health issue during their degree (Student Minds, 2024).</li>
+<li>The average wait to see a university counsellor is <strong>6.1 weeks</strong>; only <strong>23%</strong> of UK universities offer 24/7 crisis support.</li>
+<li>The Office for Students now imposes a statutory condition on student mental health — institutions must <strong>evidence prevention</strong>, not just reaction.</li>
 </ul>
-<p>Existing tools each solve a fragment: anonymous forums (Togetherall),
-peer-chat apps (TalkCampus), pre-enrolment chat (UniBuddy), or generic
-social apps with zero safeguarding (Bumble BFF, Discord). None connects
-<strong>verified student identity → real peer connection → wellbeing
-telemetry → institutional safeguarding action</strong> in one loop.
-DEQUAD does.</p>
-<h3 id="the-founder-market-fit-that-most-applications-cannot-claim">The
-founder-market fit that most applications cannot claim</h3>
-<p>The lead founder, <strong>Yusuf Quadri</strong>, is a
-<strong>practising frontline safeguarding professional</strong> —
-currently a Recovery Coordinator at Change Grow Live managing
-safeguarding referrals, dynamic risk assessments and multi-agency
-casework for vulnerable adults, with parallel NHS mental-health
-experience at East London NHS Foundation Trust. He also served
-<strong>two consecutive terms as University of Bedfordshire Students’
-Union President (2021–2023)</strong>, representing 10,000+ students and
-managing a £900,000 budget. DEQUAD’s safeguarding pipeline was not
-designed from a textbook; it was designed by someone who files real
-safeguarding referrals every week.</p>
-<h3 id="why-this-business-is-endorsable-now">Why this business is
-endorsable now</h3>
+<p>Existing tools each solve a fragment: anonymous forums (Togetherall), peer-chat apps (TalkCampus), pre-enrolment chat (UniBuddy), or generic social apps with zero safeguarding (Bumble BFF, Discord). None connects <strong>verified student identity → real peer connection → wellbeing telemetry → institutional safeguarding action</strong> in one loop. DEQUAD does.</p>
+<h3 id="the-founder-market-fit-that-most-applications-cannot-claim">The founder-market fit that most applications cannot claim</h3>
+<p>The lead founder, <strong>Yusuf Quadri</strong>, is a <strong>practising frontline safeguarding professional</strong> — currently a Recovery Coordinator at Change Grow Live managing safeguarding referrals, dynamic risk assessments and multi-agency casework for vulnerable adults, with parallel NHS mental-health experience at East London NHS Foundation Trust. He also served <strong>two consecutive terms as University of Bedfordshire Students' Union President (2021–2023)</strong>, representing 10,000+ students and managing a £900,000 budget. DEQUAD's safeguarding pipeline was not designed from a textbook; it was designed by someone who files real safeguarding referrals every week.</p>
+<h3 id="why-this-business-is-endorsable-now">Why this business is endorsable now</h3>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Evidence</th>
 <th>Detail</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td><strong>Working product</strong></td>
-<td>Production deployment at dequad.co.uk with ~50 beta users across 3
-universities. Engineering build cost in Y1: <strong>zero</strong> — the
-MVP is already built.</td>
+<tr>
+<td><strong>Working product — fully featured</strong></td>
+<td>Production deployment at dequad.co.uk. Closed beta: <strong>80 verified student accounts at the University of Bedfordshire</strong> (42 daily-active over 6 weeks). As at August 2026, the platform ships: verified peer matching (60+ categorised interests), daily mood telemetry, lecture feedback, graded safeguarding alerts, AI-powered per-institution wellbeing analysis, university insights dashboard with growth KPIs, and per-university CSV exports. Engineering build cost in Y1: <strong>zero</strong> — the MVP and all Y1 features are already built.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Founding team</strong></td>
-<td><strong>Yusuf Quadri</strong> (CEO — safeguarding professional, MBA
-with Data Analytics, 2× SU President) + <strong>Yusuff Adeagbo</strong>
-(CTO — MSc IT with Project Management), supported by <strong>Dr Gerald
-Marfo</strong> (CMO, PhD Digital Marketing), <strong>Adedapo
-Ajuwon</strong> (Senior Software Engineer) and <strong>Chinyere
-Jennifer</strong> (Senior Advisor, MIGSO-PCUBED) — all wider team on
-equity-only terms.</td>
+<td><strong>Yusuf Quadri</strong> (CEO — safeguarding professional, MBA with Data Analytics, 2× SU President) + <strong>Yusuff Adeagbo</strong> (CTO — MSc IT with Project Management), supported by <strong>Dr Gerald Marfo</strong> (CMO, PhD Digital Marketing), <strong>Adedapo Ajuwon</strong> (Senior Software Engineer) and <strong>Chinyere Jennifer</strong> (Senior Advisor, MIGSO-PCUBED) — all wider team on equity-only terms.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Two independent validations</strong></td>
-<td><strong>Santander Universities Pre-Incubator</strong> (completed
-2025) and <strong>NatWest Accelerator London</strong> (joined 16 March
-2026). Two UK high-street banks independently selected this team through
-competitive processes.</td>
+<td><strong>Santander Universities Pre-Incubator</strong> (completed 2025) and <strong>NatWest Accelerator London</strong> (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes.</td>
 </tr>
-<tr class="even">
-<td><strong>Anchor pilot in progress</strong></td>
-<td>Pilot discussion under way with the <strong>University of
-Bedfordshire</strong> — the institution whose students the founder
-represented for two years. 12-week pilot scheduled Sep–Nov 2026.</td>
+<tr>
+<td><strong>Pilot conversations under way — nothing signed</strong></td>
+<td>Early-stage conversations with the <strong>University of Bedfordshire</strong> Director of Student Services — the institution whose students the founder represented for two years. No pilot agreement, LOI or date is confirmed; the platform is already built and ready to onboard as soon as (and if) an agreement is reached.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>In-kind runway</strong></td>
-<td>NatWest Accelerator provides London office, legal and accountancy
-support worth <strong>£31,100/yr</strong> in-kind, letting £6,000 of
-founder cash cover 6 months of positive-balance operation.</td>
+<td>NatWest Accelerator provides London office, legal and accountancy support worth <strong>£31,100/yr</strong> in-kind through Y1, reducing DEQUAD's cash overheads.</td>
 </tr>
-<tr class="even">
-<td><strong>Conservative forecast</strong></td>
-<td>Y1 revenue £15,988 → Y2 £175,808 → Y3 £659,280. Gross margin ~92% by
-Y3; operating profit positive in Q4 Y3. Only ONE university pilot is
-assumed to convert in Y1.</td>
+<tr>
+<td><strong>Self-funded, conservative forecast</strong></td>
+<td>Y1 revenue ~£600 → Y2 ~£16,000 → Y3 ~£48,000, funded entirely by the founders' <strong>£6,000 opening capital</strong> plus revenue generated in the period. <strong>No pre-seed, seed or other external investment is assumed anywhere in this plan.</strong> The base case assumes <strong>zero institutional revenue in Y1</strong> (no pilot is yet signed); one paying university is modelled as a Y2 upside contingent on conversion, rising to c.1.5–2 by Y3.</td>
 </tr>
-<tr class="odd">
-<td><strong>UK jobs</strong></td>
-<td>2 (Y1) → 6 (Y2) → 12 (Y3), all UK-based, with EMI options and
-board-tracked diversity targets.</td>
+<tr>
+<td><strong>UK jobs — modest and self-funded</strong></td>
+<td>2 founders (Y1–Y2, unpaid by the company) → 3 people (2.5 FTE) by Y3, funded entirely from institutional and premium revenue, not external investment.</td>
 </tr>
 </tbody>
 </table>
-<p>We evidence all three Home Office endorsement criteria —
-<strong>innovation, viability, scalability</strong> — with a shipped
-product, a frontline-qualified founding team, third-party programme
-validation, and a deliberately conservative financial model.</p>
+<p>We evidence all three Home Office endorsement criteria — <strong>innovation, viability, scalability</strong> — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.</p>
 <hr />
-<h2 id="description-of-products-and-services">2. Description of Products
-and Services</h2>
-<h3 id="the-dequad-platform">2.1 The DEQUAD platform</h3>
-<p>DEQUAD ships as a cross-platform application (iOS, Android and web at
-dequad.co.uk) on a FastAPI / MongoDB backend. Four modules are live in
-production today:</p>
+<h2 id="2-description-of-products-and-services">2. Description of Products and Services</h2>
+<h3 id="21-the-dequad-platform">2.1 The DEQUAD platform</h3>
+<p>DEQUAD ships as a cross-platform application (iOS, Android and web at dequad.co.uk) on a FastAPI / MongoDB backend. Four modules are live in production today:</p>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Module</th>
 <th>What it does</th>
 <th>Why it is different</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Verified peer matching</strong></td>
-<td>Matches students with compatible peers for friendship, study groups
-and peer support — exclusively within <code>.ac.uk</code>
-student-email-verified accounts, with distance-based and interest-based
-filters.</td>
-<td>Closed-network identity plus intent-based matching. Not offered by
-Bumble BFF, Hinge or Facebook Groups.</td>
+<td>Matches students with compatible peers for friendship, study groups and peer support — exclusively within <code>.ac.uk</code> student-email-verified accounts, with distance-based and interest-based filters. Students select from <strong>60+ categorised interests across 6 life-domains</strong> (Academic, Creative, Tech, Lifestyle, Social, Entertainment) — up to 15 interests per profile — enabling richer compatibility scoring than any generic app.</td>
+<td>Closed-network identity plus intent-based matching. Not offered by Bumble BFF, Hinge or Facebook Groups.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Daily wellbeing tracker</strong></td>
-<td>30-second daily check-in (mood, sleep, stress, connection) feeding a
-personal trend dashboard.</td>
-<td>Anonymised, opt-in, DPIA-cleared. Combined with connection data to
-flag emerging isolation before crisis.</td>
+<td>30-second daily check-in (mood, sleep, stress, connection) feeding a personal trend dashboard.</td>
+<td>Anonymised, opt-in, DPIA-cleared. Combined with connection data to flag emerging isolation before crisis.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Machine-assisted safeguarding</strong></td>
-<td>LLM-based classifier over mood and chat signals flags suicide-risk,
-harassment, hate-speech and disordered-eating indicators to university
-safeguarding leads via webhook, with human review.</td>
-<td>The first UK student platform pairing <code>.ac.uk</code> identity
-verification with proactive safeguarding triage — designed by a
-practising safeguarding professional.</td>
+<td>LLM-based classifier over mood and chat signals flags suicide-risk, harassment, hate-speech and disordered-eating indicators to university safeguarding leads via webhook, with human review. Low-mood streaks (mood ≤ 3 for 3+ consecutive days) and low lecture-engagement patterns trigger separate, graded safeguarding alert channels.</td>
+<td>The first UK student platform pairing <code>.ac.uk</code> identity verification with proactive safeguarding triage — designed by a practising safeguarding professional.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>University Insights Dashboard</strong></td>
-<td>Anonymised, aggregated cohort wellbeing analytics for university
-staff: mood trends, engagement, hotspot alerts.</td>
-<td>Population-scale early warning without breaching individual
-privacy.</td>
+<td>Anonymised, aggregated cohort wellbeing analytics for university staff: mood trends, engagement rates, platform growth KPIs (DAU/WAU/MAU, retention cohorts), and <strong>AI-powered per-institution wellbeing analysis</strong> that surfaces key concerns, positive indicators and prioritised intervention recommendations.</td>
+<td>Population-scale early warning without breaching individual privacy. The AI analysis layer (GPT-4o-mini via structured JSON output) interprets multi-signal patterns and delivers human-readable recommendations — not raw numbers — to non-technical safeguarding staff.</td>
+</tr>
+<tr>
+<td><strong>Institutional data exports</strong></td>
+<td>CSV export of feedback history, student data, mood entries and safeguarding alerts — with per-university filtering so each institution receives only its own cohort's data.</td>
+<td>Closes the audit-trail requirement for OfS Condition B3 compliance; no comparable export tool exists in Togetherall or TalkCampus.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="what-each-customer-buys">2.2 What each customer buys</h3>
+<h3 id="22-what-each-customer-buys">2.2 What each customer buys</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Customer</th>
 <th>What they receive</th>
 <th>Price</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>UK university</strong></td>
-<td>Site licence to the Insights Dashboard, branded safeguarding webhook
-into their existing safeguarding team, dedicated success manager.</td>
-<td><strong>£2 per enrolled student per year</strong> — a 10,000-student
-university pays £20,000/yr. Simple, transparent, headcount-based.</td>
+<td>Site licence to the Insights Dashboard, branded safeguarding webhook into their existing safeguarding team, dedicated success manager.</td>
+<td><strong>£2 per enrolled student per year</strong> — a 10,000-student university pays £20,000/yr. Simple, transparent, headcount-based.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>NHS Integrated Care Board (ICB)</strong></td>
-<td>Population-level anonymised wellbeing data for funded institutions;
-joint safeguarding referral pathway.</td>
+<td>Population-level anonymised wellbeing data for funded institutions; joint safeguarding referral pathway.</td>
 <td>Annual contract from <strong>£20,000/yr</strong> per ICB.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Student (consumer)</strong></td>
-<td>Free core product. Optional <strong>DEQUAD Premium</strong>:
-advanced match filters, unlimited chats, profile boost.</td>
-<td><strong>£4.99/month</strong> via Stripe (live and processing
-payments today).</td>
+<td>Free core product. Optional <strong>DEQUAD Premium</strong>: advanced match filters, unlimited chats, profile boost.</td>
+<td><strong>£4.99/month</strong> via Stripe (integrated and test-verified; first live revenue expected from M7 (Dec 2026) from the existing beta cohort, independent of whether any university pilot converts).</td>
 </tr>
 </tbody>
 </table>
-<p>The dual-sided model matters: students adopt because the core product
-is free and genuinely useful; universities pay because DEQUAD gives
-their safeguarding teams the early-warning layer regulators now
-require.</p>
+<p>The dual-sided model matters: students adopt because the core product is free and genuinely useful; universities pay because DEQUAD gives their safeguarding teams the early-warning layer regulators now require.</p>
 <hr />
-<h2 id="innovation-viability-and-scalability">3. Innovation, Viability
-and Scalability</h2>
-<h3 id="innovation">3.1 Innovation</h3>
-<ol type="1">
-<li><strong>Closed-network identity verification.</strong> DEQUAD is the
-only UK student platform enforcing <code>.ac.uk</code> student-domain
-verification with an explicit student-status attestation, a curated
-UK-student-domain allow-list, and a human admin review queue for
-ambiguous accounts (architecture at Appendix J). Generic social apps
-cannot retrofit this without abandoning their open-network model.</li>
-<li><strong>The verification → connection → telemetry → safeguarding
-loop.</strong> Each element exists somewhere in the market; the
-<strong>integrated loop</strong> exists nowhere else. Wellbeing signals
-are only actionable when tied to a verified identity inside an
-institution that can respond — which is exactly the configuration DEQUAD
-ships.</li>
-<li><strong>Practitioner-designed safeguarding.</strong> The triage
-thresholds, referral pathways and escalation policy were authored by a
-founder who performs statutory-adjacent safeguarding work weekly at
-Change Grow Live, modelled on UUK Stepchange and Suicide-Safer
-Universities guidance. Competing products bolt moderation on; DEQUAD is
-built outward from the safeguarding case-file.</li>
-<li><strong>Compliance as a feature.</strong> Online Safety Act 2023
-risk assessment, in-app reporting, UK GDPR DPIA and lawful-basis
-register shipped <strong>before</strong> first institutional sale —
-turning the sector’s biggest procurement objection into our opening
-slide.</li>
+<h2 id="3-innovation-viability-and-scalability">3. Innovation, Viability and Scalability</h2>
+<h3 id="31-innovation">3.1 Innovation</h3>
+<ol>
+<li><strong>Closed-network identity verification.</strong> DEQUAD is the only UK student platform enforcing <code>.ac.uk</code> student-domain verification with an explicit student-status attestation, a curated UK-student-domain allow-list, and a human admin review queue for ambiguous accounts (architecture at Appendix J). Generic social apps cannot retrofit this without abandoning their open-network model.</li>
+<li><strong>The verification → connection → telemetry → safeguarding loop.</strong> Each element exists somewhere in the market; the <strong>integrated loop</strong> exists nowhere else. Wellbeing signals are only actionable when tied to a verified identity inside an institution that can respond — which is exactly the configuration DEQUAD ships.</li>
+<li><strong>Practitioner-designed safeguarding.</strong> The triage thresholds, referral pathways and escalation policy were authored by a founder who performs statutory-adjacent safeguarding work weekly at Change Grow Live, modelled on UUK Stepchange and Suicide-Safer Universities guidance. Competing products bolt moderation on; DEQUAD is built outward from the safeguarding case-file. The graded-alert system distinguishes mood-based signals (routed with user context for counselling follow-up) from lecture-engagement signals (routed anonymously for academic support) — a nuance no competitor has attempted.</li>
+<li><strong>AI-powered per-institution wellbeing intelligence.</strong> The University Insights Dashboard now incorporates a GPT-4o-mini inference layer that reads multi-signal cohort data and generates a structured wellbeing analysis: a 0–100 wellbeing score (colour-coded with trend arrows), a ranked list of key concerns, a list of positive indicators, and prioritised, actionable recommendations — all rendered in human-readable English for safeguarding staff who are not data analysts. This converts a raw-numbers dashboard into a decision-support tool — a capability no university wellbeing platform currently provides.</li>
+<li><strong>Compliance as a feature.</strong> Online Safety Act 2023 risk assessment, in-app reporting, UK GDPR DPIA and lawful-basis register shipped <strong>before</strong> first institutional sale — turning the sector's biggest procurement objection into our opening slide. Per-institution CSV data exports with GDPR-safe university-scoped filtering are included by default, satisfying the OfS Condition B3 evidence obligation out of the box.</li>
 </ol>
-<h3 id="viability">3.2 Viability</h3>
+<h3 id="32-viability">3.2 Viability</h3>
 <ul>
-<li><strong>The product is built and live.</strong> The largest single
-risk in most early-stage plans — can they ship? — is already retired.
-dequad.co.uk is in production with real beta users and live Stripe
-billing.</li>
-<li><strong>The founder does this job professionally.</strong>
-Safeguarding-first is not a marketing phrase: the CEO manages
-safeguarding caseloads at Change Grow Live and has NHS mental-health
-ward experience. This is decisive credibility in university procurement
-conversations, which are led by safeguarding and student-services
-professionals.</li>
-<li><strong>A trusted route into the anchor customer.</strong> Two years
-as Bedfordshire SU President gives DEQUAD direct, warm relationships
-with the Director of Student Services, safeguarding leads and senior
-leadership. The 12-week pilot is scheduled for <strong>Sep–Nov 2026
-(M4–M6)</strong>, with conversion discussions from <strong>Dec 2026
-(M7)</strong>.</li>
-<li><strong>Two independent third-party validations.</strong> Santander
-Universities Pre-Incubator (completed 2025) and NatWest Accelerator
-London (admitted 16 March 2026) — both competitive selection processes
-assessing team and product quality.</li>
-<li><strong>Proven willingness to pay.</strong> Togetherall and
-TalkCampus charge UK universities £15k–£60k/yr and hold 100+ UK
-customers between them, for products missing DEQUAD’s verification and
-triage capabilities.</li>
-<li><strong>A cash plan that survives scrutiny.</strong> £6,000 founder
-capital plus £31,100 of NatWest in-kind support delivers positive
-month-end cash in every month of Y1 (Section 12), with zero founder
-salary until the pre-seed lands in M7.</li>
+<li><strong>The product is built and live.</strong> The largest single risk in most early-stage plans — can they ship? — is already retired. dequad.co.uk is in production with 80 verified beta users at the University of Bedfordshire (42 daily-active, 6-week retention window), Stripe billing integrated (test-mode; converting to live on first paid contract), and all safeguarding alert flows exercised end-to-end.</li>
+<li><strong>The founder does this job professionally.</strong> Safeguarding-first is not a marketing phrase: the CEO manages safeguarding caseloads at Change Grow Live and has NHS mental-health ward experience. This is decisive credibility in university procurement conversations, which are led by safeguarding and student-services professionals.</li>
+<li><strong>A trusted route into a prospective anchor customer.</strong> Two years as Bedfordshire SU President gives DEQUAD direct, warm relationships with the Director of Student Services, safeguarding leads and senior leadership. A 12-week pilot has been <strong>proposed</strong> for <strong>Sep–Nov 2026 (M4–M6)</strong> — this is a target timeline only; no agreement is signed, and the pilot may be delayed, altered or may not proceed.</li>
+<li><strong>Two independent third-party validations.</strong> Santander Universities Pre-Incubator (completed 2025) and NatWest Accelerator London (admitted 16 March 2026) — both competitive selection processes assessing team and product quality.</li>
+<li><strong>Proven willingness to pay.</strong> Togetherall and TalkCampus charge UK universities £15k–£60k/yr and hold 100+ UK customers between them, for products missing DEQUAD's verification and triage capabilities.</li>
+<li><strong>A cash plan that survives scrutiny — and needs no pilot to succeed.</strong> £6,000 founder capital plus £31,100 of NatWest in-kind support delivers positive month-end cash in every month of Y1 (Section 12), with zero founder salary throughout Y1. The plan does not depend on any pilot converting, any investor closing, or any date being met.</li>
 </ul>
-<h3 id="scalability">3.3 Scalability</h3>
+<h3 id="33-scalability">3.3 Scalability</h3>
 <ul>
-<li><strong>Software-only marginal cost.</strong> An incremental student
-costs ~£0.05/month in hosting; gross margin reaches
-<strong>91.8%</strong> by Y3.</li>
-<li><strong>Intra-institution network effects.</strong> Every additional
-verified student raises the platform’s value for every other student at
-the same university — driving the organic growth that keeps CAC falling
-(Section 16).</li>
-<li><strong>Repeatable institutional rollout.</strong> Each new
-university onboards through a templated 6-week implementation. The model
-projects 14 average paying institutions in Y3 against 285 UK
-institutions — under 5% penetration.</li>
-<li><strong>International optionality.</strong> The closed-network model
-maps directly onto <code>.edu</code> (US), <code>.edu.au</code>
-(Australia) and EU academic domains — a £180m English-language HE TAM
-addressable post-Y3 without re-architecting the product.</li>
-<li><strong>Team scale plan in place.</strong> Job descriptions for the
-first six hires are already written (Appendix G); headcount grows 2 → 6
-→ 12 across the forecast, all UK-based.</li>
+<li><strong>Software-only marginal cost.</strong> An incremental student costs ~£0.05/month in hosting; gross margin reaches <strong>87.3%</strong> by Y3.</li>
+<li><strong>Intra-institution network effects.</strong> Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).</li>
+<li><strong>Repeatable institutional rollout.</strong> Each new university onboards through a templated 6-week implementation. This 3-year plan conservatively models c.1.5 average paying institutions by Y3 (Section 11) — a deliberately small, achievable slice of the 285 UK institutions, chosen so the business does not depend on rapid multi-university conversion to remain solvent. The templated rollout process is what makes faster scaling possible in later years, if and when it happens.</li>
+<li><strong>International optionality.</strong> The closed-network model maps directly onto <code>.edu</code> (US), <code>.edu.au</code> (Australia) and EU academic domains — a £180m English-language HE TAM addressable post-Y3 without re-architecting the product.</li>
+<li><strong>Team scale plan in place, sequenced to revenue.</strong> A job description for the first funded hire (Safeguarding &amp; Trust Lead, part-time) is already written (Appendix G); headcount grows 2 (unpaid founders) → 2 → 3 (2.5 FTE) across the self-funded 3-year forecast, all UK-based. Faster hiring would only follow proven multi-university traction and/or a future funding round, neither of which is assumed in this plan.</li>
 </ul>
 <hr />
-<h2 id="research-and-development-activity">4. Research and Development
-Activity</h2>
-<p>R&amp;D is the core of the innovation proposition: DEQUAD’s
-defensibility rests on the verification engine and the
-safeguarding-inference pipeline, both of which are original engineering
-rather than assembled off-the-shelf parts.</p>
-<p>Y1 R&amp;D is delivered by the two founders (≈60% of combined founder
-time, ≈£10,800 attributable labour) plus tooling and safety-testing
-spend, for a total Y1 R&amp;D investment of <strong>£22,500</strong>,
-rising to <strong>£60,000 (Y2)</strong> and <strong>£110,000
-(Y3)</strong>. The SME R&amp;D Tax Credit scheme is expected to recoup
-~16% of qualifying spend annually.</p>
-<h3 id="identity-and-intent-verification-engine">4.1 Identity-and-intent
-verification engine</h3>
+<h2 id="4-research-and-development-activity">4. Research and Development Activity</h2>
+<p>R&amp;D is the core of the innovation proposition: DEQUAD's defensibility rests on the verification engine and the safeguarding-inference pipeline, both of which are original engineering rather than assembled off-the-shelf parts.</p>
+<p>Y1 R&amp;D is delivered entirely as unpaid founder time (no cash cost, and no salary is drawn) plus modest tooling and safety-testing spend included in Section 11.2/12.1. From Y3, a small amount of paid part-time capacity is added once revenue supports it. No SME R&amp;D Tax Credit inflow is assumed in the cash flow forecast (Section 12) — the pre-revenue/bootstrap structure means qualifying PAYE spend is minimal in Y1–Y2; the founders will explore claiming R&amp;D tax relief with NatWest's in-kind accountancy support once qualifying costs exist, as a possible upside not relied upon here.</p>
+<h3 id="41-identity-and-intent-verification-engine">4.1 Identity-and-intent verification engine</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Activity</th>
 <th>Status</th>
 <th>R&amp;D tax-relief eligible</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td><code>.ac.uk</code> student-subdomain classifier (allow-list,
-block-list, attestation flow)</td>
-<td><strong>Shipped</strong> Feb 2026 (<code>uk_student_email</code>
-verification module)</td>
+<tr>
+<td><code>.ac.uk</code> student-subdomain classifier (allow-list, block-list, attestation flow)</td>
+<td><strong>Shipped</strong> Feb 2026 (<code>uk_student_email</code> verification module)</td>
 <td>Yes</td>
 </tr>
-<tr class="even">
-<td>Admin “Pending Verification” queue with audit trail</td>
+<tr>
+<td>Admin "Pending Verification" queue with audit trail</td>
 <td><strong>Shipped</strong> Feb 2026</td>
 <td>Yes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Optical student-ID OCR with on-device redaction</td>
 <td>Planned Q3 Y1</td>
 <td>Yes</td>
 </tr>
 </tbody>
 </table>
-<h3 id="wellbeing-inference-and-safeguarding-triage">4.2 Wellbeing
-inference and safeguarding triage</h3>
+<h3 id="42-wellbeing-inference-and-safeguarding-triage">4.2 Wellbeing inference and safeguarding triage</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Activity</th>
 <th>Status</th>
 <th>R&amp;D tax-relief eligible</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Mood × engagement × text-signal classifier (PHQ-9-lite scoring +
-risk-signal NLU)</td>
+<tr>
+<td>Mood × engagement × text-signal classifier (PHQ-9-lite scoring + risk-signal NLU)</td>
 <td>Prototype Feb 2026; production Q2 Y2</td>
 <td>Yes</td>
 </tr>
-<tr class="even">
-<td>Real-time safeguarding webhook with adapter library for university
-SIS/CRM systems</td>
+<tr>
+<td>Graded-alert pipeline: low-mood streak detector (≤3, 3+ consecutive days) → admin safeguarding alert</td>
+<td><strong>Shipped</strong> Aug 2026</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Low lecture-engagement signal → anonymous academic-support alert</td>
+<td><strong>Shipped</strong> Aug 2026</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>AI-powered per-institution wellbeing analysis (GPT-4o-mini structured JSON — wellbeing score, concerns, recommendations)</td>
+<td><strong>Shipped</strong> Aug 2026</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Real-time safeguarding webhook with adapter library for university SIS/CRM systems</td>
 <td>Production Q3 Y1</td>
 <td>Yes</td>
 </tr>
-<tr class="odd">
-<td>Federated learning so per-institution models improve without raw
-data leaving the platform</td>
+<tr>
+<td>Federated learning so per-institution models improve without raw data leaving the platform</td>
 <td>Planned Q4 Y2</td>
 <td>Yes</td>
 </tr>
 </tbody>
 </table>
-<p>The triage models are trained and threshold-tuned against the
-safeguarding decision frameworks the CEO applies professionally (CGL
-risk-assessment practice; UUK Suicide-Safer Universities), with every
-automated flag routed through human review — a deliberate safety-case
-design documented in Appendix D.</p>
-<h3 id="privacy-and-compliance-infrastructure">4.3 Privacy and
-compliance infrastructure</h3>
+<p>The triage models are trained and threshold-tuned against the safeguarding decision frameworks the CEO applies professionally (CGL risk-assessment practice; UUK Suicide-Safer Universities), with every automated flag routed through human review — a deliberate safety-case design documented in Appendix D.</p>
+<h3 id="43-privacy-and-compliance-infrastructure">4.3 Privacy and compliance infrastructure</h3>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Activity</th>
 <th>Status</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>DPIA-cleared mood-data pipeline; ICO Code of Practice alignment</td>
 <td>Drafted Feb 2026 (Appendix E)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Online Safety Act 2023 risk assessment and in-app reporting</td>
 <td><strong>Shipped</strong> Feb 2026 (Appendix I)</td>
 </tr>
-<tr class="odd">
-<td>Cryptographic data minimisation (hash-based de-identification of
-mood records for institutional reporting)</td>
+<tr>
+<td>Cryptographic data minimisation (hash-based de-identification of mood records for institutional reporting)</td>
 <td>Planned Q2 Y2</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="market-analysis">5. Market Analysis</h2>
-<h3 id="market-research-evidence-base">5.1 Market Research — evidence
-base</h3>
-<p>The claims in this section are grounded in <strong>primary field
-research conducted directly by the founding team between May 2024 and
-January 2026</strong>, triangulated with peer-reviewed secondary
-sources. Nothing here is theoretical: every buyer, user and pricing
-signal below has been tested with a real counterparty on the record.</p>
-<p><strong>Primary research undertaken (May 2024 – Jan
-2026):</strong></p>
+<h2 id="5-market-analysis">5. Market Analysis</h2>
+<h3 id="51-market-research-evidence-base">5.1 Market Research — evidence base</h3>
+<p>The claims in this section are grounded in <strong>primary field research conducted directly by the founding team between May 2024 and January 2026</strong>, triangulated with peer-reviewed secondary sources. Nothing here is theoretical: every buyer, user and pricing signal below has been tested with a real counterparty on the record.</p>
+<p><strong>Primary research undertaken (May 2024 – Jan 2026):</strong></p>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Method</th>
 <th>Participants</th>
 <th>What we tested</th>
@@ -656,164 +365,100 @@ signal below has been tested with a real counterparty on the record.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Structured student interviews</strong></td>
-<td><strong>48 UK undergraduates</strong> across 6 universities
-(Bedfordshire, Manchester, Leeds, Warwick, Bristol, Birmingham)</td>
-<td>Onboarding friction, verification trust, wellbeing
-willingness-to-share, £4.99/mo premium price test</td>
+<td><strong>48 UK undergraduates</strong> across 6 universities (Bedfordshire, Manchester, Leeds, Warwick, Bristol, Birmingham)</td>
+<td>Onboarding friction, verification trust, wellbeing willingness-to-share, £4.99/mo premium price test</td>
 <td>45-min Zoom + on-campus (Union buildings)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Anonymous quantitative survey</strong></td>
-<td><strong>312 completed responses</strong> (target n=300); recruited
-via SU mailing lists and Instagram at 2 anchor universities</td>
-<td>Loneliness prevalence, existing app usage (Bumble BFF, Hinge,
-Discord), safeguarding-app trust deltas, price elasticity at £2.99 /
-£4.99 / £7.99</td>
-<td>Google Forms, incentivised via £5 Amazon vouchers (10 randomly
-drawn)</td>
+<td><strong>312 completed responses</strong> (target n=300); recruited via SU mailing lists and Instagram at 2 anchor universities</td>
+<td>Loneliness prevalence, existing app usage (Bumble BFF, Hinge, Discord), safeguarding-app trust deltas, price elasticity at £2.99 / £4.99 / £7.99</td>
+<td>Google Forms, incentivised via £5 Amazon vouchers (10 randomly drawn)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Semi-structured buyer interviews</strong></td>
-<td><strong>11 university staff</strong> — 4 Directors of Student
-Services, 3 Wellbeing/Safeguarding Managers, 2 Heads of Digital, 2
-Deputy Vice-Chancellors (Student Experience)</td>
-<td>Procurement path, budget owner, integration needs (SSO, LMS
-webhook), price-per-student anchor, compliance triggers (OfS, OSA 2023,
-UUK Charter)</td>
+<td><strong>11 university staff</strong> — 4 Directors of Student Services, 3 Wellbeing/Safeguarding Managers, 2 Heads of Digital, 2 Deputy Vice-Chancellors (Student Experience)</td>
+<td>Procurement path, budget owner, integration needs (SSO, LMS webhook), price-per-student anchor, compliance triggers (OfS, OSA 2023, UUK Charter)</td>
 <td>60-min recorded video calls; transcripts on file</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Discord / Reddit ethnographic scan</strong></td>
-<td>14 UK-university Discord servers, r/UniUK (287k members),
-r/UKUni</td>
-<td>Where students actually meet peers today; unmet needs mentioned in
-unmoderated threads</td>
+<td>14 UK-university Discord servers, r/UniUK (287k members), r/UKUni</td>
+<td>Where students actually meet peers today; unmet needs mentioned in unmoderated threads</td>
 <td>Passive observation over 8 weeks</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Comparable-product pricing scrape</strong></td>
-<td>Togetherall, TalkCampus, UniBuddy, Kooth, Silvercloud, Big White
-Wall archives</td>
+<td>Togetherall, TalkCampus, UniBuddy, Kooth, Silvercloud, Big White Wall archives</td>
 <td>Real UK ASPs, per-student rates, contract length norms</td>
 <td>FOI requests + public press releases + Crunchbase</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Closed beta at the University of Bedfordshire</strong></td>
-<td><strong>80 verified students</strong> onboarded, 42 daily-active
-over 6 weeks</td>
-<td>Retention, mood-check completion, match-to-chat conversion,
-escalation false-positive rate</td>
+<td><strong>80 verified students</strong> onboarded, 42 daily-active over 6 weeks</td>
+<td>Retention, mood-check completion, match-to-chat conversion, escalation false-positive rate</td>
 <td>Live product, not prototype</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Secondary sources triangulated with the above:</strong></p>
 <ul>
-<li><strong>HESA 2023/24</strong> — UK student headcount and
-course-level segmentation</li>
-<li><strong>ONS 2023 Student Wellbeing Survey</strong> — loneliness
-prevalence baseline (54% frequent, 26% chronic)</li>
-<li><strong>Student Minds “Insight Briefing 2024”</strong> — 34% of
-undergraduates report a clinically significant mental-health issue
-during their degree</li>
-<li><strong>Universities UK (UUK) 2024 report</strong> — average
-per-student services budget (£123/yr), average wait for counselling (6.1
-weeks), Mental Health Charter signatory list (100+)</li>
-<li><strong>Office for Students</strong> — 2023 statutory condition on
-student mental health; regulatory advice notes</li>
-<li><strong>Online Safety Act 2023 / Ofcom implementation
-timelines</strong> — user-to-user services duties, illegal-content risk
-assessment obligations</li>
-<li><strong>HEPI (Higher Education Policy Institute)</strong> — 2024
-report <em>“How can universities and students respond to student mental
-ill health?”</em> — corroborates our safeguarding-first hypothesis</li>
-<li><strong>Crunchbase + Companies House filings</strong> — competitor
-revenue trajectories (Togetherall, TalkCampus)</li>
+<li><strong>HESA 2023/24</strong> — UK student headcount and course-level segmentation</li>
+<li><strong>ONS 2023 Student Wellbeing Survey</strong> — loneliness prevalence baseline (54% frequent, 26% chronic)</li>
+<li><strong>Student Minds "Insight Briefing 2024"</strong> — 34% of undergraduates report a clinically significant mental-health issue during their degree</li>
+<li><strong>Universities UK (UUK) 2024 report</strong> — average per-student services budget (£123/yr), average wait for counselling (6.1 weeks), Mental Health Charter signatory list (100+)</li>
+<li><strong>Office for Students</strong> — 2023 statutory condition on student mental health; regulatory advice notes</li>
+<li><strong>Online Safety Act 2023 / Ofcom implementation timelines</strong> — user-to-user services duties, illegal-content risk assessment obligations</li>
+<li><strong>HEPI (Higher Education Policy Institute)</strong> — 2024 report <em>"How can universities and students respond to student mental ill health?"</em> — corroborates our safeguarding-first hypothesis</li>
+<li><strong>Crunchbase + Companies House filings</strong> — competitor revenue trajectories (Togetherall, TalkCampus)</li>
 </ul>
-<h3 id="key-findings-from-primary-research">5.2 Key findings from
-primary research</h3>
-<p>The five findings below were consistent across <strong>both</strong>
-the 312-response quantitative survey and the 48 in-depth interviews, and
-are what the DEQUAD product is built around:</p>
-<ol type="1">
-<li><strong>Loneliness is near-universal, but shame is the barrier — not
-desire.</strong> 71% of surveyed students agreed with “I want to make
-more real friends at university” while only <strong>19%</strong> used an
-existing app (Bumble BFF, Hinge, Discord) to try. Verified
-<code>.ac.uk</code>-only was the <strong>#1 unlock</strong>: 68% of
-respondents said they would try a friendship app <em>if they knew
-everyone else was a verified student at a real UK university.</em> This
-is exactly the trust gap DEQUAD closes and no incumbent addresses.</li>
-<li><strong>£4.99/month is the price ceiling for students.</strong> In
-the Van Westendorp price-sensitivity block: median “cheap” price =
-£2.99, median “expensive” = £7.99, <strong>optimal price point =
-£4.99</strong> for premium features (advanced filters, unlimited likes,
-distance filter). This confirmed our student-side price without further
-guesswork.</li>
-<li><strong>Universities buy on safeguarding evidence, not engagement
-metrics.</strong> In 10 of 11 buyer interviews, the <em>first
-question</em> was: <strong>“Show me the safeguarding escalation
-flow.”</strong> Not matching volume, not DAU. This validates our
-decision to treat safeguarding as the primary product rather than a
-feature, and it drives our per-student pricing framing (“£2 per student
-is 1.6% of your services budget and reduces your OSA-2023
-liability”).</li>
-<li><strong><code>.ac.uk</code> verification is a
-procurement-decision-maker.</strong> 9 of 11 university buyers cited
-<em>identity-verified peer networks</em> as their primary unmet need.
-Existing incumbents (Togetherall, TalkCampus) are anonymous by design,
-which explicitly prevents named-individual escalation — the exact
-capability that Directors of Student Services need to defend their
-budget.</li>
-<li><strong>6-week university procurement cycle is achievable for pilots
-under £50k.</strong> Buyers confirmed pilots at ≤£40,000/yr avoid full
-tender processes and can be signed off directly by the Director of
-Student Services (delegated authority), enabling our 6-week
-land-and-expand motion documented in Section 8.</li>
+<h3 id="52-key-findings-from-primary-research">5.2 Key findings from primary research</h3>
+<p>The five findings below were consistent across <strong>both</strong> the 312-response quantitative survey and the 48 in-depth interviews, and are what the DEQUAD product is built around:</p>
+<ol>
+<li><strong>Loneliness is near-universal, but shame is the barrier — not desire.</strong> 71% of surveyed students agreed with "I want to make more real friends at university" while only <strong>19%</strong> used an existing app (Bumble BFF, Hinge, Discord) to try. Verified <code>.ac.uk</code>-only was the <strong>#1 unlock</strong>: 68% of respondents said they would try a friendship app <em>if they knew everyone else was a verified student at a real UK university.</em> This is exactly the trust gap DEQUAD closes and no incumbent addresses.</li>
+<li><strong>£4.99/month is the price ceiling for students.</strong> In the Van Westendorp price-sensitivity block: median "cheap" price = £2.99, median "expensive" = £7.99, <strong>optimal price point = £4.99</strong> for premium features (advanced filters, unlimited likes, distance filter). This confirmed our student-side price without further guesswork.</li>
+<li><strong>Universities buy on safeguarding evidence, not engagement metrics.</strong> In 10 of 11 buyer interviews, the <em>first question</em> was: <strong>"Show me the safeguarding escalation flow."</strong> Not matching volume, not DAU. This validates our decision to treat safeguarding as the primary product rather than a feature, and it drives our per-student pricing framing ("£2 per student is 1.6% of your services budget and reduces your OSA-2023 liability").</li>
+<li><strong><code>.ac.uk</code> verification is a procurement-decision-maker.</strong> 9 of 11 university buyers cited <em>identity-verified peer networks</em> as their primary unmet need. Existing incumbents (Togetherall, TalkCampus) are anonymous by design, which explicitly prevents named-individual escalation — the exact capability that Directors of Student Services need to defend their budget.</li>
+<li><strong>6-week university procurement cycle is achievable for pilots under £50k.</strong> Buyers confirmed pilots at ≤£40,000/yr avoid full tender processes and can be signed off directly by the Director of Student Services (delegated authority), enabling our 6-week land-and-expand motion documented in Section 8.</li>
 </ol>
-<h3 id="market-size-and-structure">5.3 Market size and structure</h3>
+<h3 id="53-market-size-and-structure">5.3 Market size and structure</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Metric</th>
 <th>Source</th>
 <th>Figure</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>UK higher-education students (FT + PT)</td>
 <td>HESA 2023/24</td>
 <td><strong>2.86 million</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>UK higher-education institutions</td>
 <td>HESA 2024</td>
 <td><strong>285</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>UK undergrads reporting frequent loneliness</td>
 <td>ONS 2023</td>
 <td><strong>54%</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>UK undergrads with clinically-significant MH issue</td>
 <td>Student Minds 2024</td>
 <td><strong>34%</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Average university student-services budget per FTE</td>
 <td>UUK 2024</td>
 <td><strong>£123/yr</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Average wait for university counselling</td>
 <td>UUK 2024</td>
 <td><strong>6.1 weeks</strong></td>
@@ -822,73 +467,46 @@ land-and-expand motion documented in Section 8.</li>
 </table>
 <h3 id="tam-sam-som">TAM / SAM / SOM</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Tier</th>
 <th>Definition</th>
 <th>Size</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>TAM</strong></td>
 <td>All UK universities + ICBs + UK student premium subscriptions</td>
 <td><strong>£86m/yr</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>SAM</strong></td>
-<td>Russell Group + post-92 universities with &gt;10k students +
-associated ICBs</td>
+<td>Russell Group + post-92 universities with &gt;10k students + associated ICBs</td>
 <td><strong>£28m/yr</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>SOM (5-yr)</strong></td>
-<td>12% SAM capture (matching Togetherall’s Y5 share)</td>
+<td>12% SAM capture (matching Togetherall's Y5 share)</td>
 <td><strong>£3.4m ARR by Y5</strong></td>
 </tr>
 </tbody>
 </table>
+<p><em>The 5-year SOM above is a long-term market-opportunity reference point, not a forecast. The committed, self-funded 3-year financial plan (Sections 11–14) targets a far smaller, achievable base — c.£48,000 revenue by Y3 — deliberately kept independent of this larger opportunity so that viability does not depend on capturing it.</em></p>
 <h3 id="regulatory-tailwinds">Regulatory tailwinds</h3>
-<p>Three regulatory forces are converting student wellbeing from
-discretionary spend into compliance spend:</p>
-<ol type="1">
-<li><strong>Office for Students statutory condition on student mental
-health (2023)</strong> — institutions must evidence <em>proactive
-prevention</em>, which requires exactly the early-warning data DEQUAD’s
-dashboard produces.</li>
-<li><strong>Online Safety Act 2023, now in force</strong> —
-student-facing platforms must implement risk assessments and reporting
-flows. DEQUAD ships OSA-compliant by design; informal alternatives
-(Discord servers, Facebook groups) expose universities to unmanaged
-risk.</li>
-<li><strong>UUK Mental Health Charter</strong> — 100+ signatory
-universities have committed to data-driven wellbeing strategies and must
-now demonstrate delivery.</li>
+<p>Three regulatory forces are converting student wellbeing from discretionary spend into compliance spend:</p>
+<ol>
+<li><strong>Office for Students statutory condition on student mental health (2023)</strong> — institutions must evidence <em>proactive prevention</em>, which requires exactly the early-warning data DEQUAD's dashboard produces.</li>
+<li><strong>Online Safety Act 2023, now in force</strong> — student-facing platforms must implement risk assessments and reporting flows. DEQUAD ships OSA-compliant by design; informal alternatives (Discord servers, Facebook groups) expose universities to unmanaged risk.</li>
+<li><strong>UUK Mental Health Charter</strong> — 100+ signatory universities have committed to data-driven wellbeing strategies and must now demonstrate delivery.</li>
 </ol>
-<p>Budget exists: at £123 per student FTE, a 20,000-student university
-spends ~£2.5m/yr on student services. DEQUAD’s £2-per-student price
-(£40,000/yr for that university) is ~1.6% of that budget — and roughly
-<strong>half Togetherall’s effective per-student cost</strong> — while
-directly servicing a statutory obligation.</p>
+<p>Budget exists: at £123 per student FTE, a 20,000-student university spends ~£2.5m/yr on student services. DEQUAD's £2-per-student price (£40,000/yr for that university) is ~1.6% of that budget — and roughly <strong>half Togetherall's effective per-student cost</strong> — while directly servicing a statutory obligation.</p>
 <hr />
-<h2 id="competitor-analysis">6. Competitor Analysis</h2>
+<h2 id="6-competitor-analysis">6. Competitor Analysis</h2>
 <p>Five competitors, assessed comprehensively:</p>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
+<table>
 <thead>
-<tr class="header">
+<tr>
 <th>#</th>
 <th>Competitor</th>
 <th>Model</th>
@@ -898,70 +516,52 @@ directly servicing a statutory obligation.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td><strong>Togetherall</strong></td>
 <td>Anonymous moderated peer-support community + self-help courses</td>
 <td>~60</td>
 <td>~£40k/yr</td>
-<td>Anonymity prevents real-world connection and makes individual
-safeguarding escalation impossible. DEQUAD adds verified peer matching,
-daily telemetry and named-individual safeguarding webhooks.</td>
+<td>Anonymity prevents real-world connection and makes individual safeguarding escalation impossible. DEQUAD adds verified peer matching, daily telemetry and named-individual safeguarding webhooks.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td><strong>TalkCampus</strong></td>
 <td>Peer-support app with trained moderation and CBT modules</td>
 <td>~30</td>
 <td>~£25k/yr</td>
-<td>No institutional insights dashboard, no machine-assisted triage, no
-identity verification. Universities get a service, not a data-driven
-safeguarding capability.</td>
+<td>No institutional insights dashboard, no machine-assisted triage, no identity verification. Universities get a service, not a data-driven safeguarding capability.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td><strong>UniBuddy</strong></td>
 <td>Prospective-student chat for course discovery and recruitment</td>
 <td>200+</td>
 <td>~£18k/yr</td>
-<td>Pre-enrolment only — proves universities buy student-engagement SaaS
-at scale but competes in an orthogonal market.</td>
+<td>Pre-enrolment only — proves universities buy student-engagement SaaS at scale but competes in an orthogonal market.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td><strong>Bumble BFF / Hinge</strong></td>
 <td>Generic friendship/dating apps with student users</td>
 <td>n/a</td>
 <td>Free + £15–£35/mo premium</td>
-<td>No <code>.ac.uk</code> verification, no university partnership, no
-safeguarding, no wellbeing layer. Open networks cannot pivot to
-closed-network institutional trust.</td>
+<td>No <code>.ac.uk</code> verification, no university partnership, no safeguarding, no wellbeing layer. Open networks cannot pivot to closed-network institutional trust.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>5</td>
 <td><strong>Discord / Facebook Groups</strong></td>
 <td>Informal, unmoderated student communities</td>
 <td>n/a</td>
 <td>Free</td>
-<td>Zero moderation, zero safeguarding, zero telemetry — and a growing
-OSA-2023 liability for universities that informally rely on them.</td>
+<td>Zero moderation, zero safeguarding, zero telemetry — and a growing OSA-2023 liability for universities that informally rely on them.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="feature-by-feature-comparison">Feature-by-feature
-comparison</h3>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-</colgroup>
+<h3 id="feature-by-feature-comparison">Feature-by-feature comparison</h3>
+<table>
 <thead>
-<tr class="header">
+<tr>
 <th>Capability</th>
 <th>DEQUAD</th>
 <th>Togetherall</th>
@@ -972,7 +572,7 @@ comparison</h3>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>.ac.uk</code> student verification</td>
 <td>✅</td>
 <td>❌</td>
@@ -981,8 +581,8 @@ comparison</h3>
 <td>❌</td>
 <td>❌</td>
 </tr>
-<tr class="even">
-<td>Intent-based peer matching</td>
+<tr>
+<td>Intent-based peer matching (60+ interests, 6 categories)</td>
 <td>✅</td>
 <td>❌</td>
 <td>Ltd</td>
@@ -990,7 +590,7 @@ comparison</h3>
 <td>Ltd</td>
 <td>❌</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Daily mood telemetry</td>
 <td>✅</td>
 <td>❌</td>
@@ -999,7 +599,7 @@ comparison</h3>
 <td>❌</td>
 <td>❌</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Machine-assisted safeguarding triage</td>
 <td>✅</td>
 <td>Ltd</td>
@@ -1008,7 +608,16 @@ comparison</h3>
 <td>❌</td>
 <td>❌</td>
 </tr>
-<tr class="odd">
+<tr>
+<td>Graded-alert safeguarding (mood vs engagement)</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
 <td>University insights dashboard</td>
 <td>✅</td>
 <td>✅</td>
@@ -1017,7 +626,25 @@ comparison</h3>
 <td>❌</td>
 <td>❌</td>
 </tr>
-<tr class="even">
+<tr>
+<td>AI-powered per-institution wellbeing analysis</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Per-university CSV export with GDPR filtering</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
 <td>Safeguarding webhook to institution</td>
 <td>✅</td>
 <td>❌</td>
@@ -1026,7 +653,7 @@ comparison</h3>
 <td>❌</td>
 <td>❌</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Online Safety Act 2023 ready</td>
 <td>✅</td>
 <td>✅</td>
@@ -1037,588 +664,373 @@ comparison</h3>
 </tr>
 </tbody>
 </table>
-<p><strong>DEQUAD is the only product in the UK market that holds all
-seven capabilities simultaneously.</strong> Our closest substitutes are
-strong in exactly one column each.</p>
+<p><strong>DEQUAD is the only product in the UK market that holds all ten capabilities simultaneously.</strong> Our closest substitutes are strong in exactly one column each.</p>
 <hr />
-<h2 id="staff-profile-and-recruitment-strategy">7. Staff Profile and
-Recruitment Strategy</h2>
-<h3 id="founding-team-year-1">7.1 Founding team — Year 1</h3>
-<p><strong>Compensation reality at submission:</strong> no team member —
-founders included — currently draws a salary from DEQUAD. Founders fund
-personal living costs from employment income and savings; the wider team
-contributes on pure-equity terms pending the pre-seed close in
-<strong>December 2026 (M7)</strong>, immediately after the Bedfordshire
-pilot completes. This is a deliberate, evidenced founder commitment.</p>
+<h2 id="7-staff-profile-and-recruitment-strategy">7. Staff Profile and Recruitment Strategy</h2>
+<h3 id="71-founding-team-year-1">7.1 Founding team — Year 1</h3>
+<p><strong>Compensation reality at submission:</strong> no team member — founders included — currently draws a salary from DEQUAD. Founders fund personal living costs from employment income and savings throughout Y1 and Y2; the wider team contributes on pure-equity terms. There is no committed date for this to change, and it is <strong>not contingent on any external funding round</strong> — under this plan, founder pay only begins in Y3, and only once institutional and premium revenue supports it (Section 18).</p>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>Name</th>
 <th>Profile</th>
-<th>Y1 compensation</th>
+<th>Compensation under this plan</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>CEO — Product &amp; Safeguarding</strong></td>
 <td><strong>Yusuf Quadri</strong></td>
-<td>Practising <strong>Recovery Coordinator, Change Grow Live</strong>
-(safeguarding referrals, risk assessment, multi-agency working);
-Clinical Support Worker &amp; Assistant Duty Senior Nurse Administrator,
-<strong>East London NHS Foundation Trust</strong>; 2× <strong>University
-of Bedfordshire SU President</strong> (2021–23, £900k budget, 10,000+
-students); <strong>MBA with Data Analytics</strong>; seven UK
-safeguarding/clinical certifications (Appendix O); B2B
-business-development experience (UGC Planet, Mavin Care).</td>
-<td><strong>£0 M1–M6</strong>; £1,500/mo from M7 (£9,000 total Y1)</td>
+<td>Practising <strong>Recovery Coordinator, Change Grow Live</strong> (safeguarding referrals, risk assessment, multi-agency working); Clinical Support Worker &amp; Assistant Duty Senior Nurse Administrator, <strong>East London NHS Foundation Trust</strong>; 2× <strong>University of Bedfordshire SU President</strong> (2021–23, £900k budget, 10,000+ students); <strong>MBA with Data Analytics</strong>; seven UK safeguarding/clinical certifications (Appendix O); B2B business-development experience (UGC Planet, Mavin Care).</td>
+<td><strong>£0 in Y1–Y2</strong>; modest £500/mo from Y3, funded entirely by revenue (£6,000 Y3 total)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>CTO — Engineering &amp; IT</strong></td>
 <td><strong>Yusuff Adeagbo</strong></td>
-<td><strong>MSc IT with Project Management</strong> (University of the
-West of Scotland); HND Computer Science; full-stack, UI/UX,
-infrastructure (Appendix B-2).</td>
-<td>Same — £0 M1–M6; £1,500/mo from M7</td>
+<td><strong>MSc IT with Project Management</strong> (University of the West of Scotland); HND Computer Science; full-stack, UI/UX, infrastructure (Appendix B-2).</td>
+<td>Same — <strong>£0 in Y1–Y2</strong>; £500/mo from Y3</td>
 </tr>
 </tbody>
 </table>
-<p>Both founders are UK-resident, full-time on DEQUAD, with signed
-commitment undertakings (Appendix C).</p>
-<p><strong>Why this CEO profile matters to endorsement:</strong> the
-person who designed DEQUAD’s safeguarding triage files real safeguarding
-referrals every week and coordinates care with clinicians, probation,
-housing and social care. When a Director of Student Services asks “who
-wrote your escalation policy?”, DEQUAD’s answer is unique in this
-market. Combined with two years representing 10,000+ students inside the
-anchor-pilot university, this is founder-market fit of a kind that
-cannot be hired or bought.</p>
-<h3 id="wider-founding-team-equity-only-at-incorporation">7.2 Wider
-founding team — equity-only at incorporation</h3>
+<p>Both founders are UK-resident, full-time on DEQUAD, with signed commitment undertakings (Appendix C).</p>
+<p><strong>Why this CEO profile matters to endorsement:</strong> the person who designed DEQUAD's safeguarding triage files real safeguarding referrals every week and coordinates care with clinicians, probation, housing and social care. When a Director of Student Services asks "who wrote your escalation policy?", DEQUAD's answer is unique in this market. Combined with two years representing 10,000+ students inside the anchor-pilot university, this is founder-market fit of a kind that cannot be hired or bought.</p>
+<h3 id="72-wider-founding-team-equity-only-at-incorporation">7.2 Wider founding team — equity-only at incorporation</h3>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>Name</th>
 <th>Background</th>
-<th>Y1 compensation</th>
+<th>Compensation under this plan</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Chief Marketing Officer</strong></td>
 <td><strong>Dr Gerald Marfo</strong></td>
-<td>PhD in Digital Marketing; digital go-to-market for impact-led
-startups.</td>
-<td>£0 — EMI options; salaried from Q2 Y2 (post-seed)</td>
+<td>PhD in Digital Marketing; digital go-to-market for impact-led startups.</td>
+<td>£0 — EMI options; a cash salary is not funded within this 3-year self-funded plan and would only begin once revenue or a future funding round supports it</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Senior Software Engineer</strong></td>
 <td><strong>Adedapo Ajuwon</strong></td>
-<td>Senior full-stack engineer working on the platform alongside the
-CTO.</td>
-<td>£0 — EMI options; salaried from Q1 Y2</td>
+<td>Senior full-stack engineer working on the platform alongside the CTO.</td>
+<td>£0 — EMI options; same basis as above</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Senior Advisor — Programme &amp; Delivery</strong></td>
 <td><strong>Chinyere Jennifer</strong></td>
-<td>Senior Project Management Consultant, <strong>MIGSO-PCUBED</strong>;
-LLM background.</td>
+<td>Senior Project Management Consultant, <strong>MIGSO-PCUBED</strong>; LLM background.</td>
 <td>£0 — advisor EMI vest; MIGSO-PCUBED remains primary employer</td>
 </tr>
 </tbody>
 </table>
-<p>A PhD-credentialled CMO, a senior engineer and a MIGSO-PCUBED
-consultant all working equity-only signals deep conviction in the
-mission. CVs at Appendix N.</p>
-<h3 id="hiring-plan">7.3 Hiring plan</h3>
+<p>A PhD-credentialled CMO, a senior engineer and a MIGSO-PCUBED consultant all working equity-only signals deep conviction in the mission. CVs at Appendix N.</p>
+<h3 id="73-hiring-plan">7.3 Hiring plan</h3>
+<p>This plan makes <strong>one</strong> funded hire within the 3-year forecast, timed strictly to revenue rather than to any funding round:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th>Hire date</th>
-<th style="text-align: right;">Y2 gross</th>
+<th>Basis</th>
 <th style="text-align: right;">Y3 gross</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Customer Success Manager #1</td>
-<td>Q1 Y2</td>
-<td style="text-align: right;">£32,000</td>
-<td style="text-align: right;">£36,000</td>
-</tr>
-<tr class="even">
-<td>Senior Backend Engineer</td>
-<td>Q1 Y2</td>
-<td style="text-align: right;">£48,000</td>
-<td style="text-align: right;">£56,000</td>
-</tr>
-<tr class="odd">
-<td>Safeguarding &amp; Trust Lead</td>
-<td>Q2 Y2</td>
-<td style="text-align: right;">£18,000 (part-year)</td>
-<td style="text-align: right;">£42,000</td>
-</tr>
-<tr class="even">
-<td>Marketing &amp; Partnerships</td>
-<td>Q3 Y2</td>
-<td style="text-align: right;">£10,000 (part-year)</td>
-<td style="text-align: right;">£38,000</td>
-</tr>
-<tr class="odd">
-<td>Data / ML Engineer</td>
-<td>Q2 Y3</td>
-<td style="text-align: right;">—</td>
-<td style="text-align: right;">£40,000 (part-year)</td>
-</tr>
-<tr class="even">
-<td>Mobile Engineer</td>
-<td>Q3 Y3</td>
-<td style="text-align: right;">—</td>
-<td style="text-align: right;">£25,000 (part-year)</td>
-</tr>
-<tr class="odd">
-<td>Founders’ Associate</td>
-<td>Q3 Y3</td>
-<td style="text-align: right;">—</td>
-<td style="text-align: right;">£18,000 (part-year)</td>
-</tr>
-<tr class="even">
-<td>Engineer #2 (backend)</td>
-<td>Q4 Y3</td>
-<td style="text-align: right;">—</td>
-<td style="text-align: right;">£12,000 (part-year)</td>
-</tr>
-<tr class="odd">
-<td>Customer Success Manager #2</td>
-<td>Q4 Y3</td>
-<td style="text-align: right;">—</td>
-<td style="text-align: right;">£13,000 (part-year)</td>
+<tr>
+<td>Safeguarding &amp; Trust Lead (part-time, ~10 hrs/wk)</td>
+<td>Y3 — contingent on 2+ paying universities</td>
+<td>Funded entirely by institutional revenue, not investment</td>
+<td style="text-align: right;">£8,000</td>
 </tr>
 </tbody>
 </table>
-<p>Headcount: <strong>2 (Y1) → 6 (Y2) → 12 (Y3)</strong> — all UK-based
-roles.</p>
-<h3 id="recruitment-strategy">7.4 Recruitment strategy</h3>
+<p>Headcount: <strong>2 (Y1, founders unpaid) → 2 (Y2, founders unpaid) → 3 people / 2.5 FTE (Y3, founders on modest pay + 1 part-time hire)</strong> — all UK-based, entirely self-funded from revenue. Further hires (engineering, customer success, marketing) are <strong>not assumed</strong> in this plan; they would only be made beyond Year 3 if revenue growth or a future funding round justifies them.</p>
+<h3 id="74-recruitment-strategy">7.4 Recruitment strategy</h3>
 <ul>
-<li><strong>Channels:</strong> Otta, LinkedIn, OnlyDev (engineering),
-university careers portals (placements), and warm introductions through
-the NatWest Accelerator alumni network.</li>
-<li><strong>Diversity:</strong> ≥40% female and ≥30% ethnic-minority
-hires across the first 10 employees, tracked as a board-level KPI.</li>
-<li><strong>Discipline:</strong> no cash hires until the pre-seed has
-closed and institutional revenue is contracted — first hires deferred to
-Q1 Y2.</li>
-<li><strong>Retention:</strong> HMRC-approved EMI share-option scheme
-for all Y2+ hires (4-year vest, 1-year cliff).</li>
+<li><strong>Channels:</strong> Otta, LinkedIn, OnlyDev (engineering), university careers portals (placements), and warm introductions through the NatWest Accelerator alumni network.</li>
+<li><strong>Diversity:</strong> ≥40% female and ≥30% ethnic-minority hires across the first 10 employees, tracked as a board-level KPI.</li>
+<li><strong>Discipline:</strong> no cash hires until institutional revenue is signed and recurring — the first hire (Y3) is funded entirely by revenue already earned, not by any external investment.</li>
+<li><strong>Retention:</strong> HMRC-approved EMI share-option scheme for all Y2+ hires (4-year vest, 1-year cliff).</li>
 </ul>
 <hr />
-<h2 id="marketing-and-sales-strategy">8. Marketing and Sales
-Strategy</h2>
-<h3 id="positioning">8.1 Positioning</h3>
+<h2 id="8-marketing-and-sales-strategy">8. Marketing and Sales Strategy</h2>
+<h3 id="81-positioning">8.1 Positioning</h3>
 <blockquote>
-<p><strong>“The UK student app that gives universities early warning
-before students fall through the cracks.”</strong></p>
+<p><strong>"The UK student app that gives universities early warning before students fall through the cracks."</strong></p>
 </blockquote>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Audience</th>
 <th>Message</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Students</td>
-<td>“Verified UK uni students. Real connections. Wellbeing built
-in.”</td>
+<td>"Verified UK uni students. Real connections. Wellbeing built in."</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Universities</td>
-<td>“See loneliness early. Act before it becomes a crisis.”</td>
+<td>"See loneliness early. Act before it becomes a crisis."</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>NHS ICBs</td>
-<td>“Population-level student wellbeing data — anonymised and
-audit-ready.”</td>
+<td>"Population-level student wellbeing data — anonymised and audit-ready."</td>
 </tr>
 </tbody>
 </table>
-<h3 id="year-1-channel-mix-3600-total">8.2 Year-1 channel mix (£3,600
-total)</h3>
+<h3 id="82-year-1-channel-mix-900-total">8.2 Year-1 channel mix (£900 total)</h3>
+<p>Kept deliberately lean — this is founder-led, low-cost outreach funded from the £6,000 opening capital, not a paid-acquisition budget:</p>
 <table>
-<colgroup>
-<col style="width: 30%" />
-<col style="width: 30%" />
-<col style="width: 40%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Channel</th>
 <th>Tactic</th>
 <th style="text-align: right;">Y1 spend</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>University partnership &amp; PR</td>
-<td>Direct outreach to 30 Directors of Student Services; UUK webinar;
-NatWest Accelerator introductions</td>
-<td style="text-align: right;">£1,200</td>
-</tr>
-<tr class="even">
-<td>Content / SEO</td>
-<td>Whitepaper “Loneliness in UK HE 2026” with academic co-author;
-Wonkhe op-eds</td>
-<td style="text-align: right;">£600</td>
-</tr>
-<tr class="odd">
-<td>Instagram &amp; TikTok</td>
-<td>Organic founder content + 5 produced posts</td>
-<td style="text-align: right;">£600</td>
-</tr>
-<tr class="even">
-<td>Google Search ads</td>
-<td>“UK student loneliness”, “find friends university”</td>
+<td>Direct outreach to Directors of Student Services; NatWest Accelerator introductions</td>
 <td style="text-align: right;">£300</td>
 </tr>
-<tr class="odd">
+<tr>
+<td>Content / SEO</td>
+<td>Founder-written blog content; Wonkhe op-ed pitches</td>
+<td style="text-align: right;">£150</td>
+</tr>
+<tr>
+<td>Instagram &amp; TikTok</td>
+<td>Organic founder content</td>
+<td style="text-align: right;">£150</td>
+</tr>
+<tr>
+<td>Google Search ads</td>
+<td>None in Y1 — deferred until revenue justifies paid acquisition</td>
+<td style="text-align: right;">£0</td>
+</tr>
+<tr>
 <td>Student ambassador programme</td>
-<td>£150/university × 6 partner universities × 2 reps</td>
-<td style="text-align: right;">£900</td>
+<td>Small incentive budget at the Bedfordshire beta cohort</td>
+<td style="text-align: right;">£300</td>
 </tr>
 </tbody>
 </table>
-<p>Marketing grows to <strong>£28,000 (Y2)</strong> and <strong>£92,000
-(Y3)</strong> — full breakdown in Section 16.</p>
-<h3 id="b2b-sales-motion-anchor-pilot-under-way">8.3 B2B sales motion —
-anchor pilot under way</h3>
-<p><strong>Anchor pilot: University of Bedfordshire.</strong> The CEO
-served two consecutive terms as the university’s SU President; the pilot
-discussion is in progress with student services and safeguarding leads
-he worked alongside for two years.</p>
+<p>Marketing grows modestly to <strong>£2,500 (Y2)</strong> and <strong>£5,000 (Y3)</strong>, scaled to actual revenue rather than assumed funding — full breakdown in Section 16.</p>
+<h3 id="83-b2b-sales-motion-pilot-conversations-under-way-nothing-signed">8.3 B2B sales motion — pilot conversations under way, nothing signed</h3>
+<p><strong>Prospective anchor pilot: University of Bedfordshire.</strong> The CEO served two consecutive terms as the university's SU President; he is in early, informal conversation with student services and safeguarding leads he worked alongside for two years. <strong>No agreement, LOI or date has been signed or confirmed.</strong></p>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Stage</th>
 <th>Timing</th>
 <th>Detail</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Pilot launch</td>
-<td><strong>Sep 2026 (M4)</strong> — academic year start</td>
-<td>12-week no-fee pilot, one student cohort</td>
+<tr>
+<td>Company incorporated</td>
+<td><strong>Jun 2026 (M1)</strong> — ✅ Complete</td>
+<td>DEQUAD Ltd registered at Companies House.</td>
 </tr>
-<tr class="even">
-<td>Pilot delivery</td>
+<tr>
+<td>Platform feature buildout</td>
+<td><strong>Jun–Aug 2026 (M1–M3)</strong> — ✅ Complete</td>
+<td>University AI analytics, graded safeguarding alerts, categorised interest matching, per-university data exports all shipped and live.</td>
+</tr>
+<tr>
+<td>Pilot agreement — <strong>target, not signed</strong></td>
+<td>Proposed for <strong>Sep 2026 (M4)</strong> — academic year start</td>
+<td>Nothing is agreed or scheduled. This is an aspirational target date only, contingent entirely on the university's decision, and the pilot may be delayed, changed, or may not happen at all.</td>
+</tr>
+<tr>
+<td>Pilot delivery (if agreed)</td>
 <td><strong>Sep–Nov 2026 (M4–M6)</strong></td>
-<td>Founder-led implementation; weekly office hours; mid-pilot
-steering-group review</td>
+<td>Founder-led implementation, if the pilot proceeds; weekly office hours; mid-pilot steering-group review.</td>
 </tr>
-<tr class="odd">
-<td>Review &amp; conversion discussions</td>
+<tr>
+<td>Review &amp; conversion discussions (if a pilot occurs)</td>
 <td><strong>Dec 2026 (M7) onwards</strong></td>
-<td>Outcomes readout; commercial conversation opens</td>
+<td>Outcomes readout; commercial conversation opens. No revenue is assumed from Bedfordshire until a formal SaaS contract is signed.</td>
 </tr>
-<tr class="even">
-<td>Target paid signature</td>
+<tr>
+<td>Target paid signature (upside case)</td>
 <td><strong>Q1 2027 (M8–M9)</strong></td>
-<td>Paid SaaS agreement covering AY 2026/27 H2 + 2027/28</td>
-</tr>
-<tr class="odd">
-<td>Pre-seed bridge close</td>
-<td><strong>M7 (Dec 2026)</strong></td>
-<td>Raised off pilot-outcome signals + NatWest demo day — standard UK
-pre-seed sequencing</td>
+<td>Target paid SaaS agreement covering AY 2027/28 — no guarantee; not assumed in the Y1 base case (Section 11), modelled only as a Y2 upside.</td>
 </tr>
 </tbody>
 </table>
-<p>The Y1 forecast assumes <strong>only the Bedfordshire pilot
-converts</strong> (all other institutions modelled at 0% conversion).
-Two further pilots are being scoped at peer institutions as pure Q1-2027
-upside.</p>
+<p>The Y1 base-case forecast assumes <strong>zero institutional revenue</strong> — no pilot signed, no conversion. One paying institution is modelled only as a Y2 upside if the Bedfordshire conversation converts; this is a target, not a commitment. No other institutions are in active conversation at the date of this plan.</p>
 <hr />
-<h2 id="swot-analysis">9. SWOT Analysis</h2>
+<h2 id="9-swot-analysis">9. SWOT Analysis</h2>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Strengths</strong></th>
 <th><strong>Weaknesses</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Production MVP live with real beta students — build risk
-retired.</td>
-<td>Cash-light start (£6,000 founder capital).</td>
+<tr>
+<td>Production MVP live with real beta students — build risk retired.</td>
+<td>Cash-light start (£6,000 founder capital, no external investment).</td>
 </tr>
-<tr class="even">
-<td>CEO is a practising safeguarding professional (CGL + NHS) —
-unmatched credibility with university safeguarding buyers.</td>
-<td>Two-person core team — key-person risk until Q1 Y2 hires.</td>
+<tr>
+<td>CEO is a practising safeguarding professional (CGL + NHS) — unmatched credibility with university safeguarding buyers.</td>
+<td>Two-person core team — key-person risk until the first funded hire in Y3.</td>
 </tr>
-<tr class="odd">
-<td>Bedfordshire anchor pilot in progress via the founder’s SU-President
-relationships.</td>
-<td>No formal clinical advisory board yet (planned Q2 Y2).</td>
+<tr>
+<td>Early, informal conversations with Bedfordshire via the founder's SU-President relationships.</td>
+<td><strong>No signed pilot, LOI or paying customer at the date of this plan — institutional revenue is a target, not a commitment.</strong></td>
 </tr>
-<tr class="even">
-<td>Two independent UK-bank validations: Santander Pre-Incubator (2025)
-+ NatWest Accelerator (Mar 2026).</td>
+<tr>
+<td>Two independent UK-bank validations: Santander Pre-Incubator (2025) + NatWest Accelerator (Mar 2026).</td>
 <td>Limited consumer brand awareness at launch.</td>
 </tr>
-<tr class="odd">
-<td>£31,100/yr NatWest in-kind support incl. London office.</td>
+<tr>
+<td>£31,100/yr NatWest in-kind support incl. London office (Y1 only).</td>
 <td>Cyber Essentials accreditation pending.</td>
 </tr>
-<tr class="even">
-<td><code>.ac.uk</code> verification + safeguarding webhook are genuine
-technical moats.</td>
+<tr>
+<td><code>.ac.uk</code> verification + safeguarding webhook are genuine technical moats.</td>
+<td>No formal clinical advisory board yet.</td>
+</tr>
+<tr>
+<td>B2B willingness-to-pay proven by Togetherall/TalkCampus (100+ UK customers combined).</td>
 <td></td>
 </tr>
-<tr class="odd">
-<td>B2B willingness-to-pay proven by Togetherall/TalkCampus (100+ UK
-customers combined).</td>
-<td></td>
-</tr>
-<tr class="even">
+<tr>
 <td>OSA-2023 compliance shipped, not promised.</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Opportunities</strong></td>
 <td><strong>Threats</strong></td>
 </tr>
-<tr class="even">
-<td>OfS statutory MH condition forces universities to evidence
-prevention.</td>
-<td>Togetherall/TalkCampus could attempt <code>.ac.uk</code>
-verification within 12 months.</td>
+<tr>
+<td>OfS statutory MH condition forces universities to evidence prevention.</td>
+<td>Togetherall/TalkCampus could attempt <code>.ac.uk</code> verification within 12 months.</td>
 </tr>
-<tr class="odd">
-<td>UUK Mental Health Charter: 100+ universities need evidenced
-strategies.</td>
-<td>A large incumbent (Meta/Microsoft) launching a student-only
-network.</td>
+<tr>
+<td>UUK Mental Health Charter: 100+ universities need evidenced strategies.</td>
+<td>A large incumbent (Meta/Microsoft) launching a student-only network.</td>
 </tr>
-<tr class="even">
-<td>42 NHS ICBs at £20–60k/yr each once university data proves
-value.</td>
+<tr>
+<td>42 NHS ICBs at £20–60k/yr each once university data proves value.</td>
 <td>Reputational damage from a mishandled safeguarding incident.</td>
 </tr>
-<tr class="odd">
-<td>International expansion: .edu / .edu.au / EU domains (£180m TAM
-post-Y3).</td>
+<tr>
+<td>International expansion: .edu / .edu.au / EU domains (£180m TAM post-Y3).</td>
 <td>Cost-of-living pressure on student premium uptake.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>SME R&amp;D tax credits recoup ~16% of qualifying spend.</td>
-<td>Tighter UK immigration rules affecting international founder
-talent.</td>
+<td>Tighter UK immigration rules affecting international founder talent.</td>
 </tr>
 </tbody>
 </table>
-<p>Mitigations for each threat are documented in the Risk Register
-(Appendix L) — including the safeguarding-incident playbook, which the
-CEO drafted from professional practice.</p>
+<p>Mitigations for each threat are documented in the Risk Register (Appendix L) — including the safeguarding-incident playbook, which the CEO drafted from professional practice.</p>
 <hr />
-<h2 id="investment-strategy-and-funding-requirement">10. Investment
-Strategy and Funding Requirement</h2>
-<h3 id="founder-commitment">10.1 Founder commitment</h3>
-<p>The co-founders contribute <strong>£6,000 of personal capital (£3,000
-each)</strong> at incorporation to cover company formation,
-<code>.uk</code>/<code>.co.uk</code> domains, trademark filings (Classes
-9/41/45) and initial cloud-hosting credits. The MVP is contributed as
-founders’ work-product — <strong>zero engineering capex is required at
-incorporation</strong> because the product is already built and
-live.</p>
-<h3 id="independent-third-party-validation">10.2 Independent third-party
-validation</h3>
+<h2 id="10-investment-strategy-and-funding-requirement">10. Investment Strategy and Funding Requirement</h2>
+<h3 id="101-founder-commitment">10.1 Founder commitment</h3>
+<p>The co-founders contribute <strong>£6,000 of personal capital (£3,000 each)</strong> at incorporation to cover company formation, <code>.uk</code>/<code>.co.uk</code> domains, trademark filings (Classes 9/41/45) and initial cloud-hosting credits. The MVP is contributed as founders' work-product — <strong>zero engineering capex is required at incorporation</strong> because the product is already built and live.</p>
+<h3 id="102-independent-third-party-validation">10.2 Independent third-party validation</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Programme</th>
 <th>Status</th>
 <th>Value</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Santander Universities Pre-Incubator</strong></td>
 <td>Completed 2025</td>
-<td>Competitive university-affiliated programme validating team and
-thesis.</td>
+<td>Competitive university-affiliated programme validating team and thesis.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>NatWest Accelerator (London)</strong></td>
 <td>Joined <strong>16 March 2026</strong> — active</td>
-<td>Office, legal, accountancy, banking and investor mentoring in-kind
-for 12 months.</td>
+<td>Office, legal, accountancy, banking and investor mentoring in-kind for 12 months.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="natwest-accelerator-in-kind-contribution-y1">10.3 NatWest
-Accelerator in-kind contribution (Y1)</h3>
+<h3 id="103-natwest-accelerator-in-kind-contribution-y1">10.3 NatWest Accelerator in-kind contribution (Y1)</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>In-kind item</th>
 <th style="text-align: right;">Annual value</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>London office co-working (3 desks)</td>
 <td style="text-align: right;">£12,000</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Legal advice (Mishcon de Reya, DLA Piper panels)</td>
 <td style="text-align: right;">£4,500</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Accountancy support</td>
 <td style="text-align: right;">£3,600</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Banking &amp; business introductions</td>
 <td style="text-align: right;">£2,000</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Investor pitch coaching &amp; mentoring</td>
 <td style="text-align: right;">£5,000</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Demo day &amp; PR placement</td>
 <td style="text-align: right;">£4,000</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total in-kind value (Y1)</strong></td>
 <td style="text-align: right;"><strong>£31,100</strong></td>
 </tr>
 </tbody>
 </table>
-<p>This support is why £6,000 of founder cash is sufficient: DEQUAD pays
-no rent, lawyers or accountants in cash during Y1.</p>
-<h3 id="funding-ladder">10.4 Funding ladder</h3>
+<p>This support is why £6,000 of founder cash is sufficient: DEQUAD pays no rent, lawyers or accountants in cash during Y1.</p>
+<h3 id="104-funding-self-funded-no-external-investment-assumed">10.4 Funding — self-funded, no external investment assumed</h3>
 <table>
-<colgroup>
-<col style="width: 18%" />
-<col style="width: 18%" />
-<col style="width: 18%" />
-<col style="width: 25%" />
-<col style="width: 18%" />
-</colgroup>
 <thead>
-<tr class="header">
-<th>Round</th>
-<th>Timing</th>
+<tr>
 <th>Source</th>
+<th>Timing</th>
+<th>Detail</th>
 <th style="text-align: right;">Amount</th>
-<th>Use of funds</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td><strong>Founder equity</strong></td>
-<td>Day 1 (Q1 Y1)</td>
-<td>Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000)</td>
+<tr>
+<td><strong>Founder equity</strong> ✅</td>
+<td>Day 1, Jun 2026</td>
+<td>Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000) — already invested, evidenced by Form SH01</td>
 <td style="text-align: right;"><strong>£6,000</strong></td>
-<td>Incorporation, domains, IP filings, hosting.</td>
-</tr>
-<tr class="even">
-<td><strong>R&amp;D tax credit</strong></td>
-<td>End Y1</td>
-<td>HMRC SME scheme</td>
-<td style="text-align: right;">~£3,600</td>
-<td>Recycled into engineering.</td>
-</tr>
-<tr class="odd">
-<td><strong>Pre-seed bridge</strong></td>
-<td><strong>M7 (Dec 2026)</strong> — after pilot completion</td>
-<td>UK pre-seed angels via UKES / NatWest network</td>
-<td style="text-align: right;"><strong>£150,000</strong> at £1.2m
-post-money (12.5%)</td>
-<td>First 4 hires, 18-month runway, dual mobile builds, R&amp;D.</td>
-</tr>
-<tr class="even">
-<td><strong>Seed</strong></td>
-<td>Q2 Y2</td>
-<td>UK VCs (Forward Partners, LocalGlobe, Crane)</td>
-<td style="text-align: right;"><strong>£750,000</strong> at £6m post
-(12.5%)</td>
-<td>Scale to 20 universities, ML team, NHS-ICB channel.</td>
-</tr>
-<tr class="odd">
-<td><strong>Series A</strong></td>
-<td>Q1 Y4</td>
-<td>Growth-stage VCs</td>
-<td style="text-align: right;"><strong>£3–5m</strong></td>
-<td>EU + AU launch, federated-learning infrastructure, 30+ FTE.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="founder-investment-statement-visa-requirement">10.5 Founder
-Investment Statement (visa requirement)</h3>
-<p>The lead applicant has personally invested <strong>£3,000</strong> of
-his own funds as founder share capital, matched by the co-founder’s
-<strong>£3,000</strong>, for total founder share capital of
-<strong>£6,000</strong>, evidenced by the share allotment return (Form
-SH01) filed with Companies House at incorporation. No third-party
-investment exists at the date of this application; external investment
-will be sought in <strong>December 2026 (M7)</strong>, immediately after
-the University of Bedfordshire pilot completes (Sep–Nov 2026) and
-conversion discussions open.</p>
+<p><strong>This £6,000 is the only funding assumed anywhere in this business plan.</strong> The 3-year financial forecast (Sections 11–14) is funded entirely by this founder capital plus revenue generated in the period. No pre-seed, seed, Series A, R&amp;D tax credit or other external investment is assumed, committed, or required for the plan to remain solvent — every table in Sections 11–14 reconciles on that basis alone.</p>
+<p>If institutional traction significantly exceeds this conservative forecast (for example, 5+ paying universities), the founders may explore external investment beyond Year 3 to accelerate growth. That scenario is not part of the numbers presented here and carries no commitment, timeline, or dependency for this plan to succeed.</p>
+<h3 id="105-founder-investment-statement-visa-requirement">10.5 Founder Investment Statement (visa requirement)</h3>
+<p>The lead applicant has personally invested <strong>£3,000</strong> of his own funds as founder share capital, matched by the co-founder's <strong>£3,000</strong>, for total founder share capital of <strong>£6,000</strong>, evidenced by the share allotment return (Form SH01) filed with Companies House at incorporation. <strong>No third-party investment exists at the date of this application, and none is assumed anywhere in this plan.</strong> The business is designed to be fully self-funding — from this £6,000 founder equity plus subsequent revenue — across the entire 3-year forecast period, independent of whether any pilot converts or any external funding is later raised.</p>
 <hr />
-<h2 id="revenue-and-cost-of-sales-forecast">11. Revenue and Cost of
-Sales Forecast</h2>
-<p>The forecast reflects customer-acquisition numbers directly: 0.5
-average paying institutions in Y1 (the Bedfordshire pilot converting
-mid-year), 4 in Y2, 14 in Y3; and 100 → 1,600 → 6,000 average paying
-premium students.</p>
-<h3 id="revenue-forecast-annual-gbp">11.1 Revenue forecast (annual,
-GBP)</h3>
+<h2 id="11-revenue-and-cost-of-sales-forecast">11. Revenue and Cost of Sales Forecast</h2>
+<p>This is a deliberately conservative, self-funded forecast: it assumes <strong>zero institutional revenue in Y1</strong> (no pilot is signed at the date of this plan), rising only if the Bedfordshire conversation converts to a Y2 upside. Institutional conversion is a target, not a commitment. Customer-acquisition numbers: 0 average paying institutions in Y1, 0.5 in Y2 (one pilot converting mid-year, contingent), c.1.5 in Y3; and 20 → 100 → 300 average paying premium students, funded entirely by the £6,000 founder capital plus revenue (Section 12).</p>
+<h3 id="111-revenue-forecast-annual-gbp">11.1 Revenue forecast (annual, GBP)</h3>
 <table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Line item</th>
 <th style="text-align: right;">Y1</th>
 <th style="text-align: right;">Y2</th>
@@ -1626,90 +1038,91 @@ GBP)</h3>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>University SaaS</strong></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Price per enrolled student (£/yr)</td>
 <td style="text-align: right;">2.00</td>
 <td style="text-align: right;">2.00</td>
 <td style="text-align: right;">2.00</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Average enrolled students per partner institution</td>
 <td style="text-align: right;">10,000</td>
 <td style="text-align: right;">10,000</td>
 <td style="text-align: right;">10,000</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Average contract value (£)</td>
 <td style="text-align: right;">20,000</td>
 <td style="text-align: right;">20,000</td>
 <td style="text-align: right;">20,000</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Average paying institutions in year</td>
-<td style="text-align: right;">0.5</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.5 (contingent, not signed)</td>
+<td style="text-align: right;">1.5 (contingent)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Subtotal</td>
+<td style="text-align: right;"><strong>£0</strong></td>
 <td style="text-align: right;"><strong>£10,000</strong></td>
-<td style="text-align: right;"><strong>£80,000</strong></td>
-<td style="text-align: right;"><strong>£280,000</strong></td>
+<td style="text-align: right;"><strong>£30,000</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>DEQUAD Premium (B2C)</strong></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Average paying students</td>
+<td style="text-align: right;">20</td>
 <td style="text-align: right;">100</td>
-<td style="text-align: right;">1,600</td>
-<td style="text-align: right;">6,000</td>
+<td style="text-align: right;">300</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Price (£/mo)</td>
 <td style="text-align: right;">4.99</td>
 <td style="text-align: right;">4.99</td>
 <td style="text-align: right;">4.99</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Subtotal</td>
-<td style="text-align: right;"><strong>£5,988</strong></td>
-<td style="text-align: right;"><strong>£95,808</strong></td>
-<td style="text-align: right;"><strong>£359,280</strong></td>
+<td style="text-align: right;"><strong>£600</strong></td>
+<td style="text-align: right;"><strong>£6,000</strong></td>
+<td style="text-align: right;"><strong>£18,000</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>NHS ICB pilot</strong></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Subtotal</td>
 <td style="text-align: right;"><strong>£0</strong></td>
 <td style="text-align: right;"><strong>£0</strong></td>
-<td style="text-align: right;"><strong>£20,000</strong></td>
+<td style="text-align: right;"><strong>£0</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total revenue</strong></td>
-<td style="text-align: right;"><strong>£15,988</strong></td>
-<td style="text-align: right;"><strong>£175,808</strong></td>
-<td style="text-align: right;"><strong>£659,280</strong></td>
+<td style="text-align: right;"><strong>£600</strong></td>
+<td style="text-align: right;"><strong>£16,000</strong></td>
+<td style="text-align: right;"><strong>£48,000</strong></td>
 </tr>
 </tbody>
 </table>
-<h3 id="cost-of-sales">11.2 Cost of sales</h3>
+<p><em>Y1 note: no institutional revenue is assumed — nothing is signed. Premium subscriptions are modelled independently of the Bedfordshire pilot, drawn from the existing 80-person beta cohort and modest organic growth; 20 average paying subscribers is a conservative estimate, not tied to any pilot outcome. Y2 note: 0.5 average paying institutions is a target only, contingent on the Bedfordshire conversation converting to a signed, paid contract — the base case does not require this to happen for the plan to remain solvent (Section 12). Y3 note: 1.5 average paying institutions assumes one renewal plus one further signed pilot — this remains a small fraction (well under 1%) of the 285 UK institutions. No NHS ICB revenue is assumed within this 3-year plan.</em></p>
+<h3 id="112-cost-of-sales">11.2 Cost of sales</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Driver</th>
 <th style="text-align: right;">Y1</th>
 <th style="text-align: right;">Y2</th>
@@ -1717,68 +1130,64 @@ GBP)</h3>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Cloud hosting</td>
-<td style="text-align: right;">£480</td>
-<td style="text-align: right;">£5,400</td>
-<td style="text-align: right;">£18,000</td>
-</tr>
-<tr class="even">
-<td>LLM / safeguarding inference</td>
-<td style="text-align: right;">£360</td>
-<td style="text-align: right;">£4,200</td>
-<td style="text-align: right;">£14,400</td>
-</tr>
-<tr class="odd">
-<td>Stripe processing</td>
-<td style="text-align: right;">£180</td>
-<td style="text-align: right;">£3,000</td>
-<td style="text-align: right;">£12,000</td>
-</tr>
-<tr class="even">
-<td>SMS &amp; email</td>
-<td style="text-align: right;">£180</td>
-<td style="text-align: right;">£1,800</td>
-<td style="text-align: right;">£6,000</td>
-</tr>
-<tr class="odd">
-<td>Customer-success tooling</td>
-<td style="text-align: right;">£240</td>
+<td style="text-align: right;">£600</td>
 <td style="text-align: right;">£1,200</td>
-<td style="text-align: right;">£3,600</td>
+<td style="text-align: right;">£2,400</td>
 </tr>
-<tr class="even">
+<tr>
+<td>LLM / safeguarding inference (OpenAI API)</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£900</td>
+<td style="text-align: right;">£1,800</td>
+</tr>
+<tr>
+<td>Stripe processing (~5% of B2C revenue at low volume)</td>
+<td style="text-align: right;">£50</td>
+<td style="text-align: right;">£90</td>
+<td style="text-align: right;">£180</td>
+</tr>
+<tr>
+<td>SMS &amp; email</td>
+<td style="text-align: right;">£150</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£800</td>
+</tr>
+<tr>
+<td>Customer-success tooling</td>
+<td style="text-align: right;">£200</td>
+<td style="text-align: right;">£500</td>
+<td style="text-align: right;">£900</td>
+</tr>
+<tr>
 <td><strong>Total cost of sales</strong></td>
-<td style="text-align: right;"><strong>£1,440</strong></td>
-<td style="text-align: right;"><strong>£15,600</strong></td>
-<td style="text-align: right;"><strong>£54,000</strong></td>
+<td style="text-align: right;"><strong>£1,400</strong></td>
+<td style="text-align: right;"><strong>£3,100</strong></td>
+<td style="text-align: right;"><strong>£6,100</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Gross profit</strong></td>
-<td style="text-align: right;"><strong>£14,548</strong></td>
-<td style="text-align: right;"><strong>£160,208</strong></td>
-<td style="text-align: right;"><strong>£605,280</strong></td>
+<td style="text-align: right;"><strong>(£800)</strong></td>
+<td style="text-align: right;"><strong>£12,900</strong></td>
+<td style="text-align: right;"><strong>£41,900</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Gross margin %</strong></td>
-<td style="text-align: right;">91.0%</td>
-<td style="text-align: right;">91.1%</td>
-<td style="text-align: right;">91.8%</td>
+<td style="text-align: right;">n/a — revenue too small to be meaningful</td>
+<td style="text-align: right;">80.6%</td>
+<td style="text-align: right;">87.3%</td>
 </tr>
 </tbody>
 </table>
+<p><em>Y1 gross profit is negative because minimum viable infrastructure cost (hosting, safeguarding-inference API) exceeds the small Y1 revenue base — normal for a pre-revenue-stage bootstrap and fully absorbed within the £6,000 founder capital (Section 12).</em></p>
 <hr />
-<h2 id="cash-flow-forecast">12. Cash Flow Forecast</h2>
-<h3 id="annual-cash-flow-gbp">12.1 Annual cash flow (GBP)</h3>
+<h2 id="12-cash-flow-forecast">12. Cash Flow Forecast</h2>
+<h3 id="121-annual-cash-flow-gbp">12.1 Annual cash flow (GBP)</h3>
+<p>No external investment, grant or tax credit is assumed anywhere in this table — the business is funded entirely by the founders' £6,000 opening capital plus revenue generated in each period.</p>
 <table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Line</th>
 <th style="text-align: right;">Y1</th>
 <th style="text-align: right;">Y2</th>
@@ -1786,154 +1195,118 @@ GBP)</h3>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Opening cash</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">141,028</td>
-<td style="text-align: right;">821,256</td>
-</tr>
-<tr class="even">
-<td>Founder equity injection</td>
 <td style="text-align: right;">6,000</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1,920</td>
+<td style="text-align: right;">8,220</td>
 </tr>
-<tr class="odd">
-<td>Pre-seed equity (Dec 2026, M7)</td>
-<td style="text-align: right;">150,000</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td>Seed equity (Q2 Y2)</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">750,000</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td>R&amp;D tax credit received</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">4,500</td>
-<td style="text-align: right;">9,500</td>
-</tr>
-<tr class="even">
+<tr>
 <td>Cash from sales</td>
-<td style="text-align: right;">15,988</td>
-<td style="text-align: right;">175,808</td>
-<td style="text-align: right;">659,280</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">16,000</td>
+<td style="text-align: right;">48,000</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total receipts</strong></td>
-<td style="text-align: right;"><strong>171,988</strong></td>
-<td style="text-align: right;"><strong>930,308</strong></td>
-<td style="text-align: right;"><strong>668,780</strong></td>
+<td style="text-align: right;"><strong>600</strong></td>
+<td style="text-align: right;"><strong>16,000</strong></td>
+<td style="text-align: right;"><strong>48,000</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Cost of sales</td>
-<td style="text-align: right;">(1,440)</td>
-<td style="text-align: right;">(15,600)</td>
-<td style="text-align: right;">(54,000)</td>
+<td style="text-align: right;">(1,400)</td>
+<td style="text-align: right;">(3,100)</td>
+<td style="text-align: right;">(6,100)</td>
 </tr>
-<tr class="odd">
-<td>Payroll (incl. NI, pension, benefits)</td>
-<td style="text-align: right;">(20,340)</td>
-<td style="text-align: right;">(180,680)</td>
-<td style="text-align: right;">(437,660)</td>
-</tr>
-<tr class="even">
-<td>Marketing</td>
-<td style="text-align: right;">(3,600)</td>
-<td style="text-align: right;">(28,000)</td>
-<td style="text-align: right;">(92,000)</td>
-</tr>
-<tr class="odd">
-<td>Software subscriptions</td>
-<td style="text-align: right;">(1,800)</td>
-<td style="text-align: right;">(6,000)</td>
-<td style="text-align: right;">(14,400)</td>
-</tr>
-<tr class="even">
-<td>Office (post-programme)</td>
+<tr>
+<td>Payroll (incl. NI, pension, benefits)</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">(6,000)</td>
-<td style="text-align: right;">(12,000)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(21,500)</td>
 </tr>
-<tr class="odd">
-<td>Legal &amp; accountancy (out-of-programme)</td>
+<tr>
+<td>Marketing</td>
+<td style="text-align: right;">(900)</td>
+<td style="text-align: right;">(2,500)</td>
+<td style="text-align: right;">(5,000)</td>
+</tr>
+<tr>
+<td>Software subscriptions</td>
+<td style="text-align: right;">(600)</td>
 <td style="text-align: right;">(1,200)</td>
-<td style="text-align: right;">(5,400)</td>
-<td style="text-align: right;">(11,000)</td>
+<td style="text-align: right;">(1,800)</td>
 </tr>
-<tr class="even">
+<tr>
+<td>Office (post-NatWest programme; low-cost co-working / remote)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(300)</td>
+<td style="text-align: right;">(600)</td>
+</tr>
+<tr>
+<td>Legal &amp; accountancy (out-of-programme)</td>
+<td style="text-align: right;">(300)</td>
+<td style="text-align: right;">(600)</td>
+<td style="text-align: right;">(1,200)</td>
+</tr>
+<tr>
 <td>Insurance</td>
 <td style="text-align: right;">(480)</td>
-<td style="text-align: right;">(1,800)</td>
-<td style="text-align: right;">(3,200)</td>
-</tr>
-<tr class="odd">
-<td>Business support / misc</td>
-<td style="text-align: right;">(1,200)</td>
-<td style="text-align: right;">(3,600)</td>
-<td style="text-align: right;">(9,000)</td>
-</tr>
-<tr class="even">
-<td>Fixed assets &amp; R&amp;D capex</td>
+<td style="text-align: right;">(700)</td>
 <td style="text-align: right;">(900)</td>
-<td style="text-align: right;">(3,000)</td>
-<td style="text-align: right;">(9,000)</td>
 </tr>
-<tr class="odd">
+<tr>
+<td>Business support / misc</td>
+<td style="text-align: right;">(400)</td>
+<td style="text-align: right;">(700)</td>
+<td style="text-align: right;">(1,000)</td>
+</tr>
+<tr>
+<td>Fixed assets capex</td>
+<td style="text-align: right;">(600)</td>
+<td style="text-align: right;">(600)</td>
+<td style="text-align: right;">(1,200)</td>
+</tr>
+<tr>
+<td>Corporation tax (paid in arrears, prior-year liability)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(500)</td>
+</tr>
+<tr>
 <td><strong>Total expenditure</strong></td>
-<td style="text-align: right;"><strong>(30,960)</strong></td>
-<td style="text-align: right;"><strong>(250,080)</strong></td>
-<td style="text-align: right;"><strong>(642,260)</strong></td>
+<td style="text-align: right;"><strong>(4,680)</strong></td>
+<td style="text-align: right;"><strong>(9,700)</strong></td>
+<td style="text-align: right;"><strong>(39,800)</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Net cash movement</strong></td>
-<td style="text-align: right;"><strong>141,028</strong></td>
-<td style="text-align: right;"><strong>680,228</strong></td>
-<td style="text-align: right;"><strong>26,520</strong></td>
+<td style="text-align: right;"><strong>(4,080)</strong></td>
+<td style="text-align: right;"><strong>6,300</strong></td>
+<td style="text-align: right;"><strong>8,200</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Closing cash balance</strong></td>
-<td style="text-align: right;"><strong>141,028</strong></td>
-<td style="text-align: right;"><strong>821,256</strong></td>
-<td style="text-align: right;"><strong>847,776</strong></td>
+<td style="text-align: right;"><strong>1,920</strong></td>
+<td style="text-align: right;"><strong>8,220</strong></td>
+<td style="text-align: right;"><strong>16,420</strong></td>
 </tr>
 </tbody>
 </table>
-<h3 id="year-1-monthly-cash-flow-the-critical-view">12.2 Year 1 monthly
-cash flow — the critical view</h3>
-<p>The monthly Y1 schedule (financial workbook, sheet “Cash Flow Y1
-(mo)”) shows <strong>positive closing cash in every single
-month</strong>:</p>
+<p><em>This is a self-funded plan: it does not require any pilot to convert, any investor to close, or any grant to be awarded to remain solvent. Closing cash stays positive throughout, growing from the £6,000 opening balance to c.£16,420 by the end of Y3 — modest, but achievable and fully within the founders' own control. If institutional revenue is delayed or does not materialise at all, Y1–Y2 costs are scoped to still fit comfortably within the £6,000 founder capital plus modest premium revenue alone (see 12.2).</em></p>
+<h3 id="122-year-1-monthly-cash-flow-the-critical-view">12.2 Year 1 monthly cash flow — the critical view</h3>
+<p>The Y1 plan is built to survive on <strong>£6,000 of founder capital alone</strong>, with no institutional revenue and no external funding assumed at any point:</p>
 <ul>
-<li><strong>M1–M6 (Jun–Nov 2026):</strong> operating burn of
-≈£350–£1,500/month, funded entirely by the £6,000 founder injection. No
-founder salary. The 12-week Bedfordshire pilot runs Sep–Nov 2026
-(M4–M6).</li>
-<li><strong>M7 (Dec 2026):</strong> the <strong>£150,000 pre-seed bridge
-lands</strong>, timed with pilot-conversion conversations opening.</li>
-<li><strong>M7–M12 (Dec 2026–May 2027):</strong> founders draw
-£1,500/month each; total burn rises to ≈£4,500/month — comfortably
-within pre-seed runway.</li>
+<li><strong>M1–M3 (Jun–Aug 2026):</strong> operating burn of ≈£250–£400/month (hosting, tooling, incorporation costs), funded entirely by the £6,000 founder injection. No founder salary drawn. Both founders fund personal living costs from their existing employment income (CEO from Change Grow Live; CTO from freelance engineering). Platform features built and shipped during this period.</li>
+<li><strong>M4–M6 (Sep–Nov 2026):</strong> if the proposed 12-week Bedfordshire pilot goes ahead, it is planned as <strong>no-fee</strong>, so it generates no institutional cash receipts in this window; if it does not go ahead, costs are unaffected since none were budgeted against it. Burn stays in the same ≈£300–£450/month range.</li>
+<li><strong>M7–M12 (Dec 2026–May 2027):</strong> modest premium-subscription revenue begins from the existing 80-person beta cohort as Stripe billing goes live; no founder salary is drawn in Y1 regardless of whether any pilot converts.</li>
 </ul>
-<p>For endorsement purposes this is the strongest viability evidence in
-the plan: the business survives its pre-revenue phase on £6,000 with
-positive month-end balances throughout, and every subsequent funding
-event is sequenced to a delivered milestone rather than hope.</p>
+<p>Because <strong>no funding round, tax credit or pilot conversion is required</strong> for the plan to work, there is no "funding cliff" and no single point of failure: the business survives the entirety of Y1 on founder capital and organic premium revenue alone, closing the year with roughly <strong>£1,920</strong> in the bank.</p>
 <hr />
-<h2 id="annual-profit-loss-forecast">13. Annual Profit &amp; Loss
-Forecast</h2>
+<h2 id="13-annual-profit-loss-forecast">13. Annual Profit &amp; Loss Forecast</h2>
 <table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th style="text-align: right;">Y1</th>
 <th style="text-align: right;">Y2</th>
@@ -1941,131 +1314,128 @@ Forecast</h2>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Revenue</td>
-<td style="text-align: right;">15,988</td>
-<td style="text-align: right;">175,808</td>
-<td style="text-align: right;">659,280</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">16,000</td>
+<td style="text-align: right;">48,000</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Cost of sales</td>
-<td style="text-align: right;">(1,440)</td>
-<td style="text-align: right;">(15,600)</td>
-<td style="text-align: right;">(54,000)</td>
+<td style="text-align: right;">(1,400)</td>
+<td style="text-align: right;">(3,100)</td>
+<td style="text-align: right;">(6,100)</td>
 </tr>
-<tr class="odd">
-<td><strong>Gross profit</strong></td>
-<td style="text-align: right;"><strong>14,548</strong></td>
-<td style="text-align: right;"><strong>160,208</strong></td>
-<td style="text-align: right;"><strong>605,280</strong></td>
+<tr>
+<td><strong>Gross profit / (loss)</strong></td>
+<td style="text-align: right;"><strong>(800)</strong></td>
+<td style="text-align: right;"><strong>12,900</strong></td>
+<td style="text-align: right;"><strong>41,900</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Salaries</td>
-<td style="text-align: right;">(18,000)</td>
-<td style="text-align: right;">(156,000)</td>
-<td style="text-align: right;">(372,000)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(20,000)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Employer NI</td>
-<td style="text-align: right;">(1,200)</td>
-<td style="text-align: right;">(14,000)</td>
-<td style="text-align: right;">(38,500)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(900)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Employer pension (3%)</td>
-<td style="text-align: right;">(540)</td>
-<td style="text-align: right;">(4,680)</td>
-<td style="text-align: right;">(11,160)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(350)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Other employment costs</td>
-<td style="text-align: right;">(600)</td>
-<td style="text-align: right;">(6,000)</td>
-<td style="text-align: right;">(16,000)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(250)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Software subscriptions</td>
+<td style="text-align: right;">(600)</td>
+<td style="text-align: right;">(1,200)</td>
 <td style="text-align: right;">(1,800)</td>
-<td style="text-align: right;">(6,000)</td>
-<td style="text-align: right;">(14,400)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Office</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">(6,000)</td>
-<td style="text-align: right;">(12,000)</td>
+<td style="text-align: right;">(300)</td>
+<td style="text-align: right;">(600)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Legal &amp; accountancy</td>
+<td style="text-align: right;">(300)</td>
+<td style="text-align: right;">(600)</td>
 <td style="text-align: right;">(1,200)</td>
-<td style="text-align: right;">(5,400)</td>
-<td style="text-align: right;">(11,000)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Marketing</td>
-<td style="text-align: right;">(3,600)</td>
-<td style="text-align: right;">(28,000)</td>
-<td style="text-align: right;">(92,000)</td>
+<td style="text-align: right;">(900)</td>
+<td style="text-align: right;">(2,500)</td>
+<td style="text-align: right;">(5,000)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Insurance</td>
 <td style="text-align: right;">(480)</td>
-<td style="text-align: right;">(1,800)</td>
-<td style="text-align: right;">(3,200)</td>
+<td style="text-align: right;">(700)</td>
+<td style="text-align: right;">(900)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Business support / misc</td>
-<td style="text-align: right;">(1,200)</td>
-<td style="text-align: right;">(3,600)</td>
-<td style="text-align: right;">(9,000)</td>
+<td style="text-align: right;">(400)</td>
+<td style="text-align: right;">(700)</td>
+<td style="text-align: right;">(1,000)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Total overheads</strong></td>
-<td style="text-align: right;"><strong>(28,620)</strong></td>
-<td style="text-align: right;"><strong>(231,480)</strong></td>
-<td style="text-align: right;"><strong>(579,260)</strong></td>
+<td style="text-align: right;"><strong>(2,680)</strong></td>
+<td style="text-align: right;"><strong>(6,000)</strong></td>
+<td style="text-align: right;"><strong>(32,000)</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>EBITDA</strong></td>
-<td style="text-align: right;"><strong>(14,072)</strong></td>
-<td style="text-align: right;"><strong>(71,272)</strong></td>
-<td style="text-align: right;"><strong>26,020</strong></td>
+<td style="text-align: right;"><strong>(3,480)</strong></td>
+<td style="text-align: right;"><strong>6,900</strong></td>
+<td style="text-align: right;"><strong>9,900</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Depreciation &amp; amortisation</td>
-<td style="text-align: right;">(300)</td>
-<td style="text-align: right;">(1,500)</td>
-<td style="text-align: right;">(4,500)</td>
+<td style="text-align: right;">(150)</td>
+<td style="text-align: right;">(400)</td>
+<td style="text-align: right;">(700)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Operating profit / (loss)</strong></td>
-<td style="text-align: right;"><strong>(14,372)</strong></td>
-<td style="text-align: right;"><strong>(72,772)</strong></td>
-<td style="text-align: right;"><strong>21,520</strong></td>
+<td style="text-align: right;"><strong>(3,630)</strong></td>
+<td style="text-align: right;"><strong>6,500</strong></td>
+<td style="text-align: right;"><strong>9,200</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Corporation tax</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">(500)</td>
+<td style="text-align: right;">(1,200)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Profit / (loss) after tax</strong></td>
-<td style="text-align: right;"><strong>(14,372)</strong></td>
-<td style="text-align: right;"><strong>(72,772)</strong></td>
-<td style="text-align: right;"><strong>21,520</strong></td>
+<td style="text-align: right;"><strong>(3,630)</strong></td>
+<td style="text-align: right;"><strong>6,000</strong></td>
+<td style="text-align: right;"><strong>8,000</strong></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Operating profit turns positive in Q4 Y3.</strong> Y1
-overheads are deliberately lean — ~70% below a conventional
-funded-startup cost base — because of the NatWest in-kind support and
-zero-salary founder period.</p>
+<p>This is a self-funded plan: it assumes <strong>no equity investment of any kind</strong> — Y1's small loss is absorbed entirely by the £6,000 founder capital, not by any pre-seed or seed round. Y2 turns modestly profitable on the back of minimal overheads and the first (contingent, unconfirmed) institutional contract; Y3 profit funds the plan's only hire and a small founder salary. This is a deliberately small, achievable trajectory rather than a break-even target dependent on external funding — the business does not need investment to survive or to grow modestly across these three years.</p>
 <hr />
-<h2 id="balance-sheet-forecast">14. Balance Sheet Forecast</h2>
+<h2 id="14-balance-sheet-forecast">14. Balance Sheet Forecast</h2>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th style="text-align: right;">Y1</th>
 <th style="text-align: right;">Y2</th>
@@ -2073,94 +1443,83 @@ zero-salary founder period.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Fixed assets (net)</td>
-<td style="text-align: right;">600</td>
-<td style="text-align: right;">2,100</td>
-<td style="text-align: right;">6,900</td>
+<td style="text-align: right;">450</td>
+<td style="text-align: right;">650</td>
+<td style="text-align: right;">1,150</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Cash at bank</td>
-<td style="text-align: right;">141,028</td>
-<td style="text-align: right;">821,256</td>
-<td style="text-align: right;">847,776</td>
+<td style="text-align: right;">1,920</td>
+<td style="text-align: right;">8,220</td>
+<td style="text-align: right;">16,420</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Trade receivables</td>
-<td style="text-align: right;">800</td>
-<td style="text-align: right;">6,200</td>
-<td style="text-align: right;">22,000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">1,500</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Stock / inventory</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total assets</strong></td>
-<td style="text-align: right;"><strong>142,428</strong></td>
-<td style="text-align: right;"><strong>829,556</strong></td>
-<td style="text-align: right;"><strong>876,676</strong></td>
+<td style="text-align: right;"><strong>2,370</strong></td>
+<td style="text-align: right;"><strong>9,370</strong></td>
+<td style="text-align: right;"><strong>19,070</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Trade payables</td>
-<td style="text-align: right;">(1,400)</td>
-<td style="text-align: right;">(4,200)</td>
-<td style="text-align: right;">(9,800)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">(1,000)</td>
+<td style="text-align: right;">(2,700)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Net assets</strong></td>
-<td style="text-align: right;"><strong>141,028</strong></td>
-<td style="text-align: right;"><strong>825,356</strong></td>
-<td style="text-align: right;"><strong>866,876</strong></td>
+<td style="text-align: right;"><strong>2,370</strong></td>
+<td style="text-align: right;"><strong>8,370</strong></td>
+<td style="text-align: right;"><strong>16,370</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Share capital</td>
-<td style="text-align: right;">3,000</td>
-<td style="text-align: right;">3,000</td>
-<td style="text-align: right;">3,000</td>
+<td style="text-align: right;">6,000</td>
+<td style="text-align: right;">6,000</td>
+<td style="text-align: right;">6,000</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Share premium</td>
-<td style="text-align: right;">150,000</td>
-<td style="text-align: right;">900,000</td>
-<td style="text-align: right;">900,000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Profit &amp; loss reserve</td>
-<td style="text-align: right;">(14,372)</td>
-<td style="text-align: right;">(87,144)</td>
-<td style="text-align: right;">(65,624)</td>
+<td style="text-align: right;">(3,630)</td>
+<td style="text-align: right;">2,370</td>
+<td style="text-align: right;">10,370</td>
 </tr>
-<tr class="odd">
-<td><strong>Shareholders’ funds</strong></td>
-<td style="text-align: right;"><strong>138,628</strong></td>
-<td style="text-align: right;"><strong>815,856</strong></td>
-<td style="text-align: right;"><strong>837,376</strong></td>
+<tr>
+<td><strong>Shareholders' funds</strong></td>
+<td style="text-align: right;"><strong>2,370</strong></td>
+<td style="text-align: right;"><strong>8,370</strong></td>
+<td style="text-align: right;"><strong>16,370</strong></td>
 </tr>
 </tbody>
 </table>
-<p>(Minor rounding differences are reconciled in the financial workbook,
-Appendix F.)</p>
+<p>No share premium exists in any year — there has been no external investment round, consistent with Section 10. Shareholders' funds grow from the £6,000 founder investment (less the small Y1 trading loss) to c.£16,370 by Y3, entirely through trading, not fundraising.</p>
 <hr />
-<h2 id="forecasted-stock-levels">15. Forecasted Stock Levels</h2>
-<p>DEQUAD is a pure software business and <strong>holds no
-inventory</strong>. Stock is <strong>£0</strong> across the entire
-forecast period. The line is retained in the workbook for template
-completeness only.</p>
+<h2 id="15-forecasted-stock-levels">15. Forecasted Stock Levels</h2>
+<p>DEQUAD is a pure software business and <strong>holds no inventory</strong>. Stock is <strong>£0</strong> across the entire forecast period. The line is retained in the workbook for template completeness only.</p>
 <hr />
-<h2 id="forecasted-advertising-marketing-expenditure">16. Forecasted
-Advertising / Marketing Expenditure</h2>
+<h2 id="16-forecasted-advertising-marketing-expenditure">16. Forecasted Advertising / Marketing Expenditure</h2>
 <table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Channel</th>
 <th style="text-align: right;">Y1</th>
 <th style="text-align: right;">Y2</th>
@@ -2168,73 +1527,62 @@ Advertising / Marketing Expenditure</h2>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>University partnership &amp; PR (NatWest network)</td>
-<td style="text-align: right;">£1,200</td>
-<td style="text-align: right;">£6,000</td>
-<td style="text-align: right;">£18,000</td>
+<td style="text-align: right;">£300</td>
+<td style="text-align: right;">£700</td>
+<td style="text-align: right;">£1,300</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Content / SEO / whitepaper</td>
-<td style="text-align: right;">£600</td>
-<td style="text-align: right;">£3,500</td>
-<td style="text-align: right;">£12,000</td>
+<td style="text-align: right;">£150</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£700</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>LinkedIn / paid B2B</td>
 <td style="text-align: right;">£0</td>
-<td style="text-align: right;">£4,000</td>
-<td style="text-align: right;">£14,000</td>
-</tr>
-<tr class="even">
-<td>Instagram / TikTok</td>
-<td style="text-align: right;">£600</td>
-<td style="text-align: right;">£7,500</td>
-<td style="text-align: right;">£22,000</td>
-</tr>
-<tr class="odd">
-<td>Google Search ads</td>
 <td style="text-align: right;">£300</td>
-<td style="text-align: right;">£3,000</td>
-<td style="text-align: right;">£10,000</td>
+<td style="text-align: right;">£700</td>
 </tr>
-<tr class="even">
+<tr>
+<td>Instagram / TikTok</td>
+<td style="text-align: right;">£150</td>
+<td style="text-align: right;">£500</td>
+<td style="text-align: right;">£1,000</td>
+</tr>
+<tr>
+<td>Google Search ads</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£200</td>
+<td style="text-align: right;">£500</td>
+</tr>
+<tr>
 <td>Student ambassador programme</td>
-<td style="text-align: right;">£900</td>
-<td style="text-align: right;">£4,000</td>
-<td style="text-align: right;">£16,000</td>
+<td style="text-align: right;">£300</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£800</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total</strong></td>
-<td style="text-align: right;"><strong>£3,600</strong></td>
-<td style="text-align: right;"><strong>£28,000</strong></td>
-<td style="text-align: right;"><strong>£92,000</strong></td>
+<td style="text-align: right;"><strong>£900</strong></td>
+<td style="text-align: right;"><strong>£2,500</strong></td>
+<td style="text-align: right;"><strong>£5,000</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Marketing as % of revenue</td>
-<td style="text-align: right;">23%</td>
-<td style="text-align: right;">16%</td>
-<td style="text-align: right;">14%</td>
+<td style="text-align: right;">n/a — Y1 revenue too small to be meaningful</td>
+<td style="text-align: right;">15.6%</td>
+<td style="text-align: right;">10.4%</td>
 </tr>
 </tbody>
 </table>
-<p>CAC compresses as the brand matures and network effects compound:
-institutional CAC falls from £3,600 (Y1) to £1,200 (Y3); premium-student
-CAC falls from £4.50 to £2.10.</p>
+<p>Marketing is deliberately kept to founder-led, low-cost channels throughout — there is no paid-acquisition budget in Y1, and spend only grows in line with actual revenue in Y2–Y3, not with any assumed funding round.</p>
 <hr />
-<h2 id="forecasted-fixed-asset-schedule">17. Forecasted Fixed Asset
-Schedule</h2>
+<h2 id="17-forecasted-fixed-asset-schedule">17. Forecasted Fixed Asset Schedule</h2>
 <table>
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Asset class</th>
 <th style="text-align: right;">Depreciation rate</th>
 <th style="text-align: right;">Y1 additions</th>
@@ -2244,279 +1592,619 @@ Schedule</h2>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Tangible — laptops &amp; equipment</td>
 <td style="text-align: right;">33%</td>
-<td style="text-align: right;">£600</td>
-<td style="text-align: right;">£1,800</td>
-<td style="text-align: right;">£5,000</td>
-<td style="text-align: right;">£4,000</td>
+<td style="text-align: right;">£500</td>
+<td style="text-align: right;">£500</td>
+<td style="text-align: right;">£900</td>
+<td style="text-align: right;">£850</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Intangible — capitalised R&amp;D</td>
 <td style="text-align: right;">20%</td>
+<td style="text-align: right;">£100</td>
+<td style="text-align: right;">£100</td>
 <td style="text-align: right;">£300</td>
-<td style="text-align: right;">£1,200</td>
-<td style="text-align: right;">£4,000</td>
-<td style="text-align: right;">£2,900</td>
+<td style="text-align: right;">£300</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total CAPEX</strong></td>
 <td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>£900</strong></td>
-<td style="text-align: right;"><strong>£3,000</strong></td>
-<td style="text-align: right;"><strong>£9,000</strong></td>
-<td style="text-align: right;"><strong>£6,900</strong></td>
+<td style="text-align: right;"><strong>£600</strong></td>
+<td style="text-align: right;"><strong>£600</strong></td>
+<td style="text-align: right;"><strong>£1,200</strong></td>
+<td style="text-align: right;"><strong>£1,150</strong></td>
 </tr>
 </tbody>
 </table>
-<p>The MVP is already built and contributed by the founders, so no
-upfront capitalisation is required. Y1 hardware is two laptops plus one
-spare.</p>
+<p>The MVP is already built and contributed by the founders, so no upfront capitalisation is required. Y1 hardware is two founder laptops; Y3 adds a laptop for the first part-time hire.</p>
 <hr />
-<h2 id="forecasted-staff-costs">18. Forecasted Staff Costs</h2>
-<p>All figures include the associated employer National Insurance and
-pension obligations, stated separately below.</p>
-<h3 id="y1-bootstrap">18.1 Y1 — bootstrap</h3>
+<h2 id="18-forecasted-staff-costs">18. Forecasted Staff Costs</h2>
+<p>All figures include the associated employer National Insurance and pension obligations, stated separately below. <strong>No salary is drawn by anyone until Y3, and only then to the extent institutional and premium revenue supports it — no external funding is assumed at any point.</strong></p>
+<h3 id="181-y1-bootstrap-unpaid-founders">18.1 Y1 — bootstrap, unpaid founders</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th style="text-align: right;">Y1 gross</th>
-<th style="text-align: right;">Months paid</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Founder A (CEO) — £1,500/mo from M7</td>
-<td style="text-align: right;">£9,000</td>
-<td style="text-align: right;">6</td>
+<tr>
+<td>Founder A (CEO)</td>
+<td style="text-align: right;">£0</td>
 </tr>
-<tr class="even">
-<td>Founder B (CTO) — £1,500/mo from M7</td>
-<td style="text-align: right;">£9,000</td>
-<td style="text-align: right;">6</td>
+<tr>
+<td>Founder B (CTO)</td>
+<td style="text-align: right;">£0</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Total Y1 gross</strong></td>
-<td style="text-align: right;"><strong>£18,000</strong></td>
-<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>£0</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Employer NI £1,200 + pension £540 + benefits £600 = <strong>£20,340
-total Y1 employment cost</strong>.</p>
-<h3 id="y2-first-hires">18.2 Y2 — first hires</h3>
+<p>Both founders fund personal living costs from their existing employment/freelance income throughout Y1. <strong>Total Y1 employment cost: £0.</strong></p>
+<h3 id="182-y2-still-unpaid-no-hires">18.2 Y2 — still unpaid, no hires</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th style="text-align: right;">Y2 gross</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Founder A (CEO)</td>
-<td style="text-align: right;">£24,000</td>
+<td style="text-align: right;">£0</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Founder B (CTO)</td>
-<td style="text-align: right;">£24,000</td>
+<td style="text-align: right;">£0</td>
 </tr>
-<tr class="odd">
-<td>Customer Success Manager (Q1)</td>
-<td style="text-align: right;">£32,000</td>
-</tr>
-<tr class="even">
-<td>Senior Backend Engineer (Q1)</td>
-<td style="text-align: right;">£48,000</td>
-</tr>
-<tr class="odd">
-<td>Safeguarding &amp; Trust Lead (Q2)</td>
-<td style="text-align: right;">£18,000</td>
-</tr>
-<tr class="even">
-<td>Marketing &amp; Partnerships (Q3)</td>
-<td style="text-align: right;">£10,000</td>
-</tr>
-<tr class="odd">
+<tr>
 <td><strong>Total Y2 gross</strong></td>
-<td style="text-align: right;"><strong>£156,000</strong></td>
+<td style="text-align: right;"><strong>£0</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Employer NI £14,000 + pension £4,680 + benefits £6,000 =
-<strong>£180,680 total Y2 employment cost</strong>.</p>
-<h3 id="y3-full-team">18.3 Y3 — full team</h3>
+<p>No hires are made in Y2 under this plan; the modest (contingent) institutional revenue and growing premium revenue are retained as cash buffer rather than spent on payroll. <strong>Total Y2 employment cost: £0.</strong></p>
+<h3 id="183-y3-first-modest-pay-first-hire">18.3 Y3 — first modest pay, first hire</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Role</th>
 <th style="text-align: right;">Y3 gross</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Founder A (CEO)</td>
-<td style="text-align: right;">£36,000</td>
+<tr>
+<td>Founder A (CEO) — £500/mo</td>
+<td style="text-align: right;">£6,000</td>
 </tr>
-<tr class="even">
-<td>Founder B (CTO)</td>
-<td style="text-align: right;">£36,000</td>
+<tr>
+<td>Founder B (CTO) — £500/mo</td>
+<td style="text-align: right;">£6,000</td>
 </tr>
-<tr class="odd">
-<td>Customer Success Manager #1</td>
-<td style="text-align: right;">£36,000</td>
+<tr>
+<td>Safeguarding &amp; Trust Lead (part-time, ~10 hrs/wk)</td>
+<td style="text-align: right;">£8,000</td>
 </tr>
-<tr class="even">
-<td>Senior Backend Engineer</td>
-<td style="text-align: right;">£56,000</td>
-</tr>
-<tr class="odd">
-<td>Safeguarding &amp; Trust Lead</td>
-<td style="text-align: right;">£42,000</td>
-</tr>
-<tr class="even">
-<td>Marketing &amp; Partnerships</td>
-<td style="text-align: right;">£38,000</td>
-</tr>
-<tr class="odd">
-<td>Data / ML Engineer (Q2 start)</td>
-<td style="text-align: right;">£40,000</td>
-</tr>
-<tr class="even">
-<td>Mobile Engineer (Q3 start)</td>
-<td style="text-align: right;">£25,000</td>
-</tr>
-<tr class="odd">
-<td>Founders’ Associate (Q3 start)</td>
-<td style="text-align: right;">£18,000</td>
-</tr>
-<tr class="even">
-<td>Engineer #2 (Q4 start)</td>
-<td style="text-align: right;">£12,000</td>
-</tr>
-<tr class="odd">
-<td>Customer Success Manager #2 (Q4 start)</td>
-<td style="text-align: right;">£13,000</td>
-</tr>
-<tr class="even">
+<tr>
 <td><strong>Total Y3 gross</strong></td>
-<td style="text-align: right;"><strong>£372,000</strong></td>
+<td style="text-align: right;"><strong>£20,000</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Employer NI £38,500 + pension £11,160 + benefits £16,000 =
-<strong>£437,660 total Y3 employment cost</strong>.</p>
-<h3 id="equity">18.4 Equity</h3>
-<p>All Y2+ hires receive HMRC-approved EMI options (4-year vest, 1-year
-cliff). Founders adopt customary investor-friendly reverse vesting at
-the pre-seed close.</p>
+<p>Employer NI ~£900 + pension ~£350 + other employment costs ~£250 = <strong>£21,500 total Y3 employment cost</strong>, funded entirely by Y3 revenue (Section 11).</p>
+<p>Headcount: <strong>2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / 2.5 FTE (Y3)</strong> — all UK-based, entirely self-funded. Scaling beyond this (additional engineering, customer success, marketing hires) is a longer-term ambition, not part of this 3-year plan, and would only follow proven multi-university revenue or a future funding round.</p>
+<h3 id="184-equity">18.4 Equity</h3>
+<p>The wider founding team (Section 7.2) hold EMI options on equity-only terms. No new EMI grants are modelled for the single Y3 hire's compensation above, which is cash-only; option grants for future hires would be considered if and when a funding round is raised — not assumed in this plan.</p>
 <hr />
-<h2 id="appendices">19. Appendices</h2>
+<h2 id="19-appendices">19. Appendices</h2>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Ref</th>
 <th>Document</th>
 <th>File</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>A</td>
 <td>Founder academic certificates (Yusuf Quadri)</td>
 <td><code>A_founder_academic_certificates.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>B</td>
 <td><strong>Founder CV — Yusuf Quadri (updated June 2026)</strong></td>
 <td><code>B_founder_cv.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>B-2</td>
 <td>Co-Founder CV — Yusuff Adeagbo (CTO)</td>
 <td><code>B_cofounder_cv.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>C</td>
 <td>Personal commitment &amp; undertaking</td>
 <td><code>C_personal_commitment_undertaking.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>D</td>
 <td>Wellbeing baseline methodology</td>
 <td><code>D_wellbeing_baseline_methodology.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>E</td>
 <td>Data Protection Impact Assessment (DPIA)</td>
 <td><code>E_dpia.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>F</td>
 <td>Financial model (annotated)</td>
-<td><code>DEQUAD_Financial_Model.xlsx</code></td>
+<td>See Appendix F below</td>
 </tr>
-<tr class="even">
+<tr>
 <td>G</td>
 <td>Job descriptions for first 6 hires</td>
 <td><code>G_job_descriptions.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>H</td>
 <td>University Letters of Interest (template)</td>
 <td><code>H_university_letter_of_interest_template.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>I</td>
 <td>Online Safety Act 2023 compliance statement</td>
 <td><code>I_online_safety_act_compliance.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>J</td>
 <td>Architecture diagram</td>
 <td><code>J_architecture_diagram.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>K</td>
 <td>Product screenshots</td>
 <td><code>K_product_screenshots.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>L</td>
 <td>Risk Register (UKES)</td>
 <td><code>DEQUAD_Risk_Register.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>M</td>
 <td>Decision-Maker Brief (UKES short track)</td>
 <td><code>DEQUAD_UKES_Decision_Brief.md</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>N</td>
-<td>Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon
-(Senior SWE), Chinyere Jennifer (Advisor)</td>
+<td>Wider Founding Team CVs — Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior SWE), Chinyere Jennifer (Advisor)</td>
 <td><code>N_wider_team_cvs.md</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>O</td>
-<td>Yusuf Quadri — Safeguarding &amp; Clinical-Awareness
-Certifications</td>
+<td>Yusuf Quadri — Safeguarding &amp; Clinical-Awareness Certifications</td>
 <td><code>O_safeguarding_certifications.md</code></td>
 </tr>
 </tbody>
 </table>
 <hr />
-<p><em>End of business plan. All figures are forecasts, not guarantees
-of future performance. This business plan was written by Yusuf Quadri
-(Founder &amp; CEO) with Yusuff Adeagbo (Co-Founder &amp; CTO) and is
-submitted to UKES as part of the UK Innovator Founder visa endorsement
-process — June 2026.</em></p>
+<h1 id="appendix-f-three-year-financial-model-self-funded">Appendix F — Three-Year Financial Model (Self-Funded)</h1>
+<p><em>Currency: GBP (£). Figures are aligned to Business Plan v5.0 §§11–14 (this document). This is a deliberately conservative, self-funded model: the £6,000 founder capital injection is the only funding assumed anywhere. No pre-seed, seed, Series A, grant or R&amp;D tax credit is assumed, committed, or required for the plan to remain solvent. No institutional revenue is assumed in Y1 — the pilot conversation with the University of Bedfordshire is not signed and nothing is guaranteed.</em></p>
+<hr />
+<h2 id="f1-revenue-forecast">F.1 Revenue Forecast</h2>
+<table>
+<thead>
+<tr>
+<th>Line item</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Universities (paid — avg in year)</td>
+<td style="text-align: right;">0 (nothing signed)</td>
+<td style="text-align: right;">0.5 (target, contingent)</td>
+<td style="text-align: right;">1.5 (target, contingent)</td>
+</tr>
+<tr>
+<td>Avg students per university</td>
+<td style="text-align: right;">10,000</td>
+<td style="text-align: right;">10,000</td>
+<td style="text-align: right;">10,000</td>
+</tr>
+<tr>
+<td>Institutional ARR</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£10,000</td>
+<td style="text-align: right;">£30,000</td>
+</tr>
+<tr>
+<td>NHS ICBs commissioned</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>NHS ARR</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£0</td>
+</tr>
+<tr>
+<td>Premium subscribers (avg)</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">300</td>
+</tr>
+<tr>
+<td>Premium ARR (£4.99/mo)</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£6,000</td>
+<td style="text-align: right;">£18,000</td>
+</tr>
+<tr>
+<td><strong>TOTAL REVENUE</strong></td>
+<td style="text-align: right;"><strong>£600</strong></td>
+<td style="text-align: right;"><strong>£16,000</strong></td>
+<td style="text-align: right;"><strong>£48,000</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Y1 assumes zero institutional revenue — no pilot is signed at the date of this plan. Premium revenue is modelled independently of any pilot, from the existing 80-person Bedfordshire beta cohort plus modest organic growth. Y2/Y3 institutional figures are targets only, contingent on the Bedfordshire conversation converting; the plan remains solvent (Section 12) even if it does not.</em></p>
+<hr />
+<h2 id="f2-cost-of-revenue-cogs">F.2 Cost of Revenue (COGS)</h2>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cloud hosting (MongoDB Atlas + Render)</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£1,200</td>
+<td style="text-align: right;">£2,400</td>
+</tr>
+<tr>
+<td>LLM / safeguarding inference (OpenAI gpt-4o-mini)</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£900</td>
+<td style="text-align: right;">£1,800</td>
+</tr>
+<tr>
+<td>Stripe processing</td>
+<td style="text-align: right;">£50</td>
+<td style="text-align: right;">£90</td>
+<td style="text-align: right;">£180</td>
+</tr>
+<tr>
+<td>SMS &amp; email notifications</td>
+<td style="text-align: right;">£150</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£800</td>
+</tr>
+<tr>
+<td>Customer-success tooling</td>
+<td style="text-align: right;">£200</td>
+<td style="text-align: right;">£500</td>
+<td style="text-align: right;">£900</td>
+</tr>
+<tr>
+<td><strong>Total COGS</strong></td>
+<td style="text-align: right;"><strong>£1,400</strong></td>
+<td style="text-align: right;"><strong>£3,100</strong></td>
+<td style="text-align: right;"><strong>£6,100</strong></td>
+</tr>
+<tr>
+<td><strong>Gross profit / (loss)</strong></td>
+<td style="text-align: right;"><strong>(£800)</strong></td>
+<td style="text-align: right;"><strong>£12,900</strong></td>
+<td style="text-align: right;"><strong>£41,900</strong></td>
+</tr>
+<tr>
+<td><strong>Gross margin</strong></td>
+<td style="text-align: right;">n/a (revenue too small)</td>
+<td style="text-align: right;">80.6%</td>
+<td style="text-align: right;">87.3%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="f3-operating-expenses">F.3 Operating Expenses</h2>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Payroll (salaries + employer NI + pension + benefits)</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£21,500</td>
+</tr>
+<tr>
+<td>Marketing (founder-led, low-cost channels)</td>
+<td style="text-align: right;">£900</td>
+<td style="text-align: right;">£2,500</td>
+<td style="text-align: right;">£5,000</td>
+</tr>
+<tr>
+<td>Software subscriptions</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£1,200</td>
+<td style="text-align: right;">£1,800</td>
+</tr>
+<tr>
+<td>Office / co-working (post-NatWest programme; low-cost/remote)</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£300</td>
+<td style="text-align: right;">£600</td>
+</tr>
+<tr>
+<td>Legal &amp; accountancy (out-of-programme)</td>
+<td style="text-align: right;">£300</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£1,200</td>
+</tr>
+<tr>
+<td>Insurance (D&amp;O, PI, Cyber, PL)</td>
+<td style="text-align: right;">£480</td>
+<td style="text-align: right;">£700</td>
+<td style="text-align: right;">£900</td>
+</tr>
+<tr>
+<td>Business support / misc</td>
+<td style="text-align: right;">£400</td>
+<td style="text-align: right;">£700</td>
+<td style="text-align: right;">£1,000</td>
+</tr>
+<tr>
+<td>Fixed assets capex</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£1,200</td>
+</tr>
+<tr>
+<td><strong>Total OPEX</strong></td>
+<td style="text-align: right;"><strong>£3,280</strong></td>
+<td style="text-align: right;"><strong>£6,600</strong></td>
+<td style="text-align: right;"><strong>£33,200</strong></td>
+</tr>
+<tr>
+<td><strong>Operating result</strong></td>
+<td style="text-align: right;"><strong>(£3,630)</strong> <em>(incl. depreciation, see §13)</em></td>
+<td style="text-align: right;"><strong>£6,500</strong></td>
+<td style="text-align: right;"><strong>£9,200</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="f4-annual-cash-flow-forecast">F.4 Annual Cash Flow Forecast</h2>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opening cash</td>
+<td style="text-align: right;">£6,000</td>
+<td style="text-align: right;">£1,920</td>
+<td style="text-align: right;">£8,220</td>
+</tr>
+<tr>
+<td>Cash from sales</td>
+<td style="text-align: right;">£600</td>
+<td style="text-align: right;">£16,000</td>
+<td style="text-align: right;">£48,000</td>
+</tr>
+<tr>
+<td><strong>Total receipts</strong></td>
+<td style="text-align: right;"><strong>£600</strong></td>
+<td style="text-align: right;"><strong>£16,000</strong></td>
+<td style="text-align: right;"><strong>£48,000</strong></td>
+</tr>
+<tr>
+<td>Cost of sales</td>
+<td style="text-align: right;">(£1,400)</td>
+<td style="text-align: right;">(£3,100)</td>
+<td style="text-align: right;">(£6,100)</td>
+</tr>
+<tr>
+<td>Payroll (incl. NI, pension, benefits)</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">(£21,500)</td>
+</tr>
+<tr>
+<td>Marketing</td>
+<td style="text-align: right;">(£900)</td>
+<td style="text-align: right;">(£2,500)</td>
+<td style="text-align: right;">(£5,000)</td>
+</tr>
+<tr>
+<td>Software subscriptions</td>
+<td style="text-align: right;">(£600)</td>
+<td style="text-align: right;">(£1,200)</td>
+<td style="text-align: right;">(£1,800)</td>
+</tr>
+<tr>
+<td>Office</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">(£300)</td>
+<td style="text-align: right;">(£600)</td>
+</tr>
+<tr>
+<td>Legal &amp; accountancy</td>
+<td style="text-align: right;">(£300)</td>
+<td style="text-align: right;">(£600)</td>
+<td style="text-align: right;">(£1,200)</td>
+</tr>
+<tr>
+<td>Insurance</td>
+<td style="text-align: right;">(£480)</td>
+<td style="text-align: right;">(£700)</td>
+<td style="text-align: right;">(£900)</td>
+</tr>
+<tr>
+<td>Business support / misc</td>
+<td style="text-align: right;">(£400)</td>
+<td style="text-align: right;">(£700)</td>
+<td style="text-align: right;">(£1,000)</td>
+</tr>
+<tr>
+<td>Fixed assets capex</td>
+<td style="text-align: right;">(£600)</td>
+<td style="text-align: right;">(£600)</td>
+<td style="text-align: right;">(£1,200)</td>
+</tr>
+<tr>
+<td>Corporation tax (prior-year liability, paid in arrears)</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">£0</td>
+<td style="text-align: right;">(£500)</td>
+</tr>
+<tr>
+<td><strong>Total expenditure</strong></td>
+<td style="text-align: right;"><strong>(£4,680)</strong></td>
+<td style="text-align: right;"><strong>(£9,700)</strong></td>
+<td style="text-align: right;"><strong>(£39,800)</strong></td>
+</tr>
+<tr>
+<td><strong>Net cash movement</strong></td>
+<td style="text-align: right;"><strong>(£4,080)</strong></td>
+<td style="text-align: right;"><strong>£6,300</strong></td>
+<td style="text-align: right;"><strong>£8,200</strong></td>
+</tr>
+<tr>
+<td><strong>Closing cash balance</strong></td>
+<td style="text-align: right;"><strong>£1,920</strong></td>
+<td style="text-align: right;"><strong>£8,220</strong></td>
+<td style="text-align: right;"><strong>£16,420</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>No pre-seed, seed or R&amp;D tax credit is assumed. Closing cash stays positive in every year, funded entirely by the £6,000 opening balance plus revenue — the plan does not depend on any pilot converting or any investor closing.</em></p>
+<hr />
+<h2 id="f5-funding-self-funded-only">F.5 Funding — self-funded only</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Timing</th>
+<th style="text-align: right;">Amount</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Founder equity injection</td>
+<td>M1 (Jun 2026)</td>
+<td style="text-align: right;">£6,000</td>
+<td><strong>Delivered — the only funding in this plan</strong></td>
+</tr>
+</tbody>
+</table>
+<p>No pre-seed, seed, Series A or other external investment is assumed, committed, or required anywhere in this 3-year model. If institutional traction significantly exceeds this conservative forecast, the founders may explore external investment beyond Year 3 — that scenario is outside the scope of these figures.</p>
+<hr />
+<h2 id="f6-headcount-plan">F.6 Headcount Plan</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Founders (CEO + CTO)</td>
+<td style="text-align: right;">2 (unpaid)</td>
+<td style="text-align: right;">2 (unpaid)</td>
+<td style="text-align: right;">2 (modest pay)</td>
+</tr>
+<tr>
+<td>Safeguarding &amp; Trust Lead (part-time)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td><strong>Total headcount / FTE</strong></td>
+<td style="text-align: right;"><strong>2 / 0 FTE (unpaid)</strong></td>
+<td style="text-align: right;"><strong>2 / 0 FTE (unpaid)</strong></td>
+<td style="text-align: right;"><strong>3 / c.2.5 FTE</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>No founder salary is drawn in Y1 or Y2; both founders fund personal living costs from existing employment (CEO: Change Grow Live; CTO: freelance engineering). Modest founder pay (£500/mo each) and the plan's only funded hire begin in Y3, funded entirely by revenue.</em></p>
+<hr />
+<h2 id="f7-key-unit-economics">F.7 Key Unit Economics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Y1</th>
+<th style="text-align: right;">Y2</th>
+<th style="text-align: right;">Y3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avg revenue per paid university</td>
+<td style="text-align: right;">n/a</td>
+<td style="text-align: right;">£20,000</td>
+<td style="text-align: right;">£20,000</td>
+</tr>
+<tr>
+<td>Avg CAC per university</td>
+<td style="text-align: right;">n/a (no paid channel)</td>
+<td style="text-align: right;">c.£2,500 (founder-led, low-cost)</td>
+<td style="text-align: right;">c.£3,300</td>
+</tr>
+<tr>
+<td>Avg premium subscriber revenue</td>
+<td style="text-align: right;">£59.88/yr</td>
+<td style="text-align: right;">£59.88/yr</td>
+<td style="text-align: right;">£59.88/yr</td>
+</tr>
+</tbody>
+</table>
+<p><em>Institutional unit economics are illustrative only in Y1–Y2 given the small, contingent sample size (0–0.5 universities). They are not presented as validated benchmarks until more than one paying institution exists.</em></p>
+<hr />
+<h2 id="f8-key-assumptions">F.8 Key Assumptions</h2>
+<ol>
+<li><strong>Institutional pricing:</strong> £2 per enrolled student per year (£20,000 for a 10,000-student university) — unchanged from the original pricing research (Section 5), but <strong>no institutional revenue is assumed in Y1</strong>.</li>
+<li><strong>Premium pricing:</strong> £4.99/month (£59.88/year), drawn from the existing 80-person Bedfordshire beta cohort and modest organic growth — independent of whether any institutional pilot converts.</li>
+<li><strong>No external funding assumed:</strong> the entire 3-year plan is funded by the £6,000 founder capital plus revenue. No pre-seed, seed, grant or R&amp;D tax credit is assumed or required.</li>
+<li><strong>Founder living costs:</strong> both founders are employed independently (CEO at Change Grow Live; CTO as a freelance engineer) and draw no salary from DEQUAD until Y3, and only then to the extent revenue supports it.</li>
+<li><strong>Pilot uncertainty:</strong> the University of Bedfordshire pilot is an early-stage, informal conversation only. No agreement, LOI or date is signed. It is modelled as a Y2 upside, not a Y1 certainty, and the plan remains solvent whether or not it converts.</li>
+<li><strong>No break-even target is set for this 3-year window</strong> — the plan targets modest, growing profitability and a growing cash reserve (Section 13), not a specific break-even date tied to external funding.</li>
+</ol>
+<hr />
+<p><em>End of business plan. All figures are forecasts, not guarantees of future performance. This business plan was written by Yusuf Quadri (Founder &amp; CEO) with Yusuff Adeagbo (Co-Founder &amp; CTO) and is submitted to UKES as part of the UK Innovator Founder visa endorsement process — August 2026 (v5.0, self-funded 3-year revision).</em></p>
 </body>
 </html>

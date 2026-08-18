@@ -10,7 +10,7 @@ The closed-network student-wellbeing platform for UK universities.
 Verified `.ac.uk` peer matching · daily mood telemetry · machine-assisted safeguarding triage.
 
 **Yusuf Quadri** (CEO) · **Yusuff Adeagbo** (CTO) · dequad.co.uk
-Pre-Seed · £150,000 · February 2026
+Self-funded 3-year plan · UKES Innovator Founder submission · August 2026
 
 </div>
 
@@ -94,7 +94,9 @@ Built with FastAPI + MongoDB + Expo (universal iOS / Android / web).
 |---|---|---:|
 | **TAM** | All UK universities + ICBs + UK student premium subs | **£86m / year** |
 | **SAM** | Russell-Group + post-92 unis > 10k students + their ICBs | **£28m / year** |
-| **SOM (5-yr)** | 12% SAM capture (matches Togetherall's Y5 share) | **£3.4m ARR by Y5** |
+| **SOM (5-yr, long-term reference only)** | 12% SAM capture (matches Togetherall's Y5 share) | **£3.4m ARR by Y5** |
+
+*This is a long-term market-opportunity reference, not a forecast — the committed 3-year plan (slide 09) targets a far smaller, self-funded base of c.£48k revenue by Y3.*
 
 - **2.86m** UK higher-ed students *(HESA 2023/24)*
 - **285** UK higher-ed institutions
@@ -130,10 +132,10 @@ B2B subscriptions cover the fixed cost base. Premium and ICB contracts are the u
 
 - 📅 **Business start date: 15 June 2026** (incorporation).
 - 🛠️ **MVP live in production** at dequad.co.uk — no further build-cost in Y1.
-- 👥 **~50 beta users** active across 3 UK universities.
-- 🏛️ **Anchor pilot — University of Bedfordshire** (discussion currently in progress). 12-week pilot launches **Sep 2026 (M4 — academic year start)**, runs through **Nov 2026 (M6)**. Paid-conversion conversations open **Dec 2026 (M7)**. Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
+- 👥 **80 verified beta users** at the University of Bedfordshire (42 daily-active, 6-week retention).
+- 🏛️ **Prospective pilot — University of Bedfordshire.** Early, informal conversation only — **no agreement, LOI or date signed.** A 12-week pilot has been proposed for **Sep–Nov 2026 (M4–M6)** as a target, contingent on the university's decision. Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
 - 🏦 **Santander Universities Pre-Incubator** — completed 2025.
-- 🏦 **NatWest Accelerator (London)** — joined **16 March 2026**. £31k of in-kind support delivered (office, legal, accountancy, mentoring).
+- 🏦 **NatWest Accelerator (London)** — joined **16 March 2026**. £31k of in-kind support delivered (office, legal, accountancy, mentoring), Y1 only.
 
 Two UK high-street banks have independently selected the team.
 
@@ -145,7 +147,7 @@ Two UK high-street banks have independently selected the team.
 
 ## 08 · Team
 
-A **founding team of five** — two named co-founders contributing £3,000 each in cash; three senior team members joining on equity-only terms, **no Year-1 salary**.
+A **founding team of five** — two named co-founders contributing £3,000 each in cash; three senior team members joining on equity-only terms, **no salary funded within this 3-year self-funded plan**.
 
 | Person | Role | Background |
 |---|---|---|
@@ -161,18 +163,18 @@ A **founding team of five** — two named co-founders contributing £3,000 each 
 
 <div class="slide" markdown="1">
 
-## 09 · Financials — 3-year forecast
+## 09 · Financials — 3-year forecast, self-funded
 
 | (£) | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | 15,988 | 175,808 | **659,280** |
-| Gross profit | 14,548 | 160,208 | 605,280 |
-| Gross margin | 91% | 91% | **92%** |
-| Operating profit / (loss) | (14,372) | (72,772) | **21,520** |
+| Revenue | 600 | 16,000 | **48,000** |
+| Gross profit / (loss) | (800) | 12,900 | 41,900 |
+| Gross margin | n/a | 81% | **87%** |
+| Operating profit / (loss) | (3,630) | 6,500 | **9,200** |
 
-**Operating profit positive Q4 Y3.** Cumulative loss before profitability ≈ **£87k** — exceptionally capital-efficient because the NatWest in-kind support and 6-month no-salary founder commitment hold Y1 burn to single digits.
+**No external investment is assumed anywhere in this forecast.** Y1's small loss (£3.6k) is absorbed entirely by the £6,000 founder capital; Y2 is modestly profitable; Y3 funds the plan's only hire and a small founder salary. Deliberately small, deliberately achievable.
 
-UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
+UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.5 FTE (Y3)**, all self-funded from revenue.
 
 </div>
 
@@ -184,14 +186,13 @@ UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
 
 | Month | Closing cash |
 |---|---:|
-| **M1 (Jun 2026)** — incorporation, £6k founder cash | £4,540 |
-| **M4 (Sep 2026)** — pilot launch (academic year start) | £3,670 |
-| **M6 (Nov 2026)** — 3-month pilot completes; lowest cash | **£3,550** |
-| **M7 (Dec 2026) — £150k pre-seed lands + Bedfordshire conversion conversations open** | **£149,680** |
-| **M12 (May 2027)** — Y1 close | **£141,028** |
+| **M1 (Jun 2026)** — incorporation, £6k founder cash | £5,070 |
+| **M4–M6 (Sep–Nov 2026)** — proposed pilot window, if agreed (not signed) | £4,120 → £3,420 |
+| **M7 (Dec 2026)** — Stripe premium billing goes live | £3,120 |
+| **M12 (May 2027)** — Y1 close | **£1,920** |
 
-> Cash is positive every single month of Year 1.
-> The 3-month Bedfordshire pilot (Sep–Nov 2026) is the critical commercial test — the £150k pre-seed bridge closes immediately after, on the basis of pilot outcome data.
+> Cash is positive every single month of Year 1 — on founder capital and premium subscriptions alone.
+> **No institutional revenue, pre-seed or other external funding is assumed at any point.** Whether or not the Bedfordshire pilot conversation converts, the plan does not depend on it to survive Year 1.
 
 </div>
 
@@ -199,24 +200,19 @@ UK jobs: **2 (Y1) → 6 (Y2) → 12 (Y3)**.
 
 <div class="slide" markdown="1">
 
-## 11 · The ask · £150,000 pre-seed
+## 11 · The plan · self-funded, no ask
 
-**Round:** Pre-seed bridge at **£1.2m post-money cap** (~12.5% equity).
-**Trigger:** 3-month University of Bedfordshire pilot completes (Sep–Nov 2026); conversion conversations open Dec 2026.
-**Timing:** **M7 — Dec 2026.**
-**Lead via:** Envestors angel network + NatWest Accelerator demo day Q3 Y1.
+**There is no funding ask.** DEQUAD's 3-year plan is funded entirely by **£6,000 of founder capital plus revenue** — no pre-seed, seed or other external investment is assumed, committed, or required for it to succeed.
 
-### Use of funds (£150k → 18 months)
+### Why this is the plan
 
-| Bucket | £ |
-|---|---:|
-| First 4 UK hires (Customer Success, Backend Eng, Safeguarding Lead, Marketing) | £105,000 |
-| Dual mobile builds (EAS iOS + Android) | £8,000 |
-| Marketing (Year 1 H2 + Year 2 H1) | £14,000 |
-| R&D engineering (federated learning, OCR student-ID verification) | £15,000 |
-| Reserves | £8,000 |
+| Reason | Detail |
+|---|---|
+| **Costs are scoped to fit £6,000** | Y1 total spend ≈£4,700 — hosting, tooling, basic legal/insurance, minimal founder-led marketing. No paid hires, no office lease. |
+| **No dependency on the Bedfordshire pilot** | Nothing is signed. If it converts, it's Y2+ upside (Section 11). If it doesn't, the plan is unaffected. |
+| **Growth is sequenced to revenue, not capital** | The plan's only hire (Y3, part-time) and modest founder pay are triggered by revenue actually landing — not by a funding round closing. |
 
-Next round: **£750k seed Q2 Y2** at £6m post — to scale to 20 paying universities.
+If institutional traction significantly exceeds this conservative forecast (5+ paying universities), the founders may explore external investment beyond Year 3 to accelerate growth — a future option, not a plan dependency.
 
 </div>
 
@@ -228,8 +224,8 @@ Next round: **£750k seed Q2 Y2** at £6m post — to scale to 20 paying univers
 
 > See loneliness early. Act before it becomes a crisis.
 
-**Live at dequad.co.uk** · MVP shipped · 5-person founding team
-NatWest Accelerator · Santander Universities · University of Bedfordshire pilot
+**Live at dequad.co.uk** · MVP shipped · 5-person founding team · self-funded
+NatWest Accelerator · Santander Universities · University of Bedfordshire (pilot conversation — nothing signed)
 
 **Yusuf Quadri** — yusuf@dequad.co.uk
 **Yusuff Adeagbo** — yusuff@dequad.co.uk
