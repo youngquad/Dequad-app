@@ -1,0 +1,84 @@
+{
+  "summary": "Tested reciprocal-like quota logic, weekly status/likes regressions, Profile > Preferences discovery-filter navigation, Connect header, and match-celebration E2E. Core matching backend: 4/5 passed; reciprocal likes at the cap work and preserve the DB counter, but an under-limit reciprocal response reports the wrong remaining budget. Match celebration passed with 37 visible animated confetti pieces, Keep Browsing dismissal, and Say Hi chat navigation. Reproduced a HIGH frontend integration defect: Connect blocks a reciprocal like locally when the user is at the cap, so the backend exemption is unreachable from a discovery card. Auth playbook subset: 2/5 passed; student cookie and bcrypt passed, while admin cookie, explicit credentialed CORS, and five-failure lockout failed.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/auth/email-login",
+        "issue": "Brute-force lockout is not enforced after five failed attempts. Six consecutive failures for one account all returned 401; the sixth should return 429 per the requested auth playbook.",
+        "priority": "HIGH"
+      },
+      {
+        "endpoint": "POST /api/auth/admin-login",
+        "issue": "Successful admin login does not set the session_token httpOnly cookie; only the Cloudflare __cf_bm cookie is present. Student login correctly sets Secure/HttpOnly/SameSite=None.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/matches/swipe",
+        "issue": "Under-limit reciprocal like preserves the persisted counter but incorrectly decrements response.remaining_likes_this_week (returned 1 while GET /subscription/status and DB correctly report 2). matches.py computes used = likes_this_week + 1 for every like instead of excluding is_reciprocal_like."
+      },
+      {
+        "endpoint": "CORS middleware / API responses",
+        "issue": "Credentialed explicit-origin playbook check fails: response Access-Control-Allow-Origin is '*' and backend config sets allow_credentials=False. This matches the current Bearer-token/credentials:'omit' architecture but does not satisfy the requested explicit-origin + credentials auth requirement."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Discovery Filters free-user upgrade prompt",
+        "issue": "Opening Discovery Filters with all 3 likes remaining displays 'Weekly like limit reached' and 'You've used all 3 likes'. Premium gating is expected, but this copy is false and misleading for the filter action.",
+        "selector": "text=Weekly like limit reached",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Reciprocal like from Connect at the weekly cap",
+        "issue": "Reproduced with B already liking A and A at 3/3: tapping B's card heart opens the weekly-limit upgrade modal and never opens the comment/send flow. The client-side guard in openCommentModal blocks before POST /matches/swipe, so the new backend reciprocal exemption cannot be used from Connect.",
+        "affected_selectors": ["profile section heart Pressable", "text=Weekly like limit reached"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_matching_features.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/iteration_13_matching.xml",
+    "/app/test_reports/pytest/iteration_13_auth_playbook.xml"
+  ],
+  "action_items": [
+    "In matches.py remaining budget calculation, add 1 only for a fresh non-reciprocal like, matching the counter update condition.",
+    "Remove or change the Connect openCommentModal cap precheck so reciprocal profiles can reach POST /matches/swipe; let the structured backend 403 decide whether a like is quota-blocked.",
+    "Use a filter-specific premium prompt/title when ?openFilters=1 is opened by a free user; do not claim the weekly like limit is exhausted.",
+    "Implement account-scoped/IP brute-force lockout after five failed auth attempts and retest the sixth response as 429.",
+    "Set the same secure httpOnly session cookie on admin-login as student login if cookie-based auth remains a playbook requirement.",
+    "Resolve the requested credentialed explicit-origin CORS requirement versus the current ingress '*' + Bearer/omit architecture; do not enable credentials while wildcard origin remains.",
+    "Clarify seed-admin password rotation policy: seed.py intentionally never overwrites an existing bcrypt password, so it does not meet the requested 'updates existing admin if password changed' behavior."
+  ],
+  "critical_code_review_comments": [
+    "matches.py line ~373 computes used = likes_this_week + (1 if action == 'like' else 0), diverging from line ~308 which correctly excludes reciprocal likes.",
+    "matches.tsx line ~284 performs a client quota rejection before the server can determine is_reciprocal_like; this masks the backend feature.",
+    "matches.tsx reuses showUpgradePrompt for two unrelated causes (quota exhaustion and premium-only filters), forcing incorrect quota copy for filter navigation.",
+    "The reusable profile LikeButton has no data-testid. On React Native web the surrounding data-testid attributes also did not reach the DOM, requiring geometric selectors for E2E.",
+    "Frontend lint remains red repository-wide (69 errors, 69 warnings); matches.tsx itself includes four no-unescaped-entities errors and several hook/unused warnings.",
+    "/app/auth_testing.md was absent, so auth verification used the explicit playbook checks in the review request and /app/memory/test_credentials.md."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_matching_features.py",
+    "/app/backend/tests/setup_match_ui.py",
+    "/app/backend/tests/cleanup_match_ui.py",
+    "/app/test_reports/iteration_13.json"
+  ],
+  "success_rate": {
+    "backend": "60% overall (core matching 4/5; selected auth playbook 2/5)",
+    "frontend": "86% of exercised functional checks; celebration, filters navigation, and header passed, reciprocal-at-cap UI failed"
+  },
+  "seed_data_creation": "Created three API-registered/OTP-verified TEST matching users for backend tests and temporary compatible UI users for Playwright. All users, sessions, matches, notifications, verification records, and chat records were cleaned after testing.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "Read /app/memory/test_credentials.md. Used ui.tester@student.beds.ac.uk for Preferences/Connect. Temporary credentials were generated only for disposable match users and removed.",
+  "context_for_next_testing_agent": "Re-run test_matching_features.py after fixing remaining budget; expect 5/5. For UI, set A to 3 likes with B already liking A and confirm tapping B reaches the send-like flow and produces the celebration instead of the upgrade modal. Match celebration is currently healthy: 37 on-screen pieces at 900ms, Keep Browsing dismissed, Say Hi navigated to /chat/{match.id}. Temporary UI data has been cleaned.",
+  "rca_of_the_issue": "The backend quota exemption was added to gating and persistence, but not to response-budget arithmetic. Separately, the frontend still treats remaining_likes_this_week <= 0 as an unconditional local rejection, so it never gives the backend a chance to recognize a reciprocal like. The filter entry reuses the same quota modal state, causing inaccurate copy. Auth failures are independent: admin_login never accepts Response/sets a cookie, rate limiting is generic rather than five-failure account lockout, and ingress emits wildcard CORS while application credentials are disabled."
+}

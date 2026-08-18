@@ -370,7 +370,7 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     remaining_likes = None
     next_reset = None
     if user_plan == "free":
-        used = likes_this_week + (1 if data.action == "like" else 0)
+        used = likes_this_week + (1 if (data.action == "like" and not is_reciprocal_like) else 0)
         remaining_likes = max(0, FREE_LIKES_PER_WEEK - used)
         next_reset = _next_week_reset().isoformat()
 

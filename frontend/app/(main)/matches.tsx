@@ -26,6 +26,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
 import MatchFiltersModal from '../../src/components/MatchFiltersModal';
+import ConfettiBurst from '../../src/components/ConfettiBurst';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { requestCurrentLocation } from '../../src/utils/location';
 import { notify } from '../../src/utils/alert';
@@ -83,6 +84,7 @@ export default function MatchesScreen() {
   const [swipeInfoLoaded, setSwipeInfoLoaded] = useState(false);
   const [now, setNow] = useState<number>(Date.now());
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [upgradePromptContext, setUpgradePromptContext] = useState<'likes' | 'filters'>('likes');
   const [likingSection, setLikingSection] = useState<string | null>(null);
   const [commentModal, setCommentModal] = useState<CommentModalData | null>(null);
   const [comment, setComment] = useState('');
@@ -108,6 +110,7 @@ export default function MatchesScreen() {
   useEffect(() => {
     if (openFilters !== '1' || !swipeInfoLoaded) return;
     if (!swipeInfo.is_premium) {
+      setUpgradePromptContext('filters');
       setShowUpgradePrompt(true);
     } else {
       setFilterModalOpen(true);
@@ -280,10 +283,9 @@ export default function MatchesScreen() {
 
   const openCommentModal = (profile: UserProfile, section: string) => {
     if (showLikeHint) dismissLikeHint();
-    if (!swipeInfo.is_premium && swipeInfo.remaining_likes_this_week !== null && swipeInfo.remaining_likes_this_week <= 0) {
-      setShowUpgradePrompt(true);
-      return;
-    }
+    // No local quota gate here: the backend exempts reciprocal likes (someone
+    // who already liked you) from the weekly limit, so we let it decide.
+    // A structured 403 from /matches/swipe reopens the upgrade prompt below.
 
     setCommentModal({
       profile,
@@ -332,6 +334,7 @@ export default function MatchesScreen() {
         goToNext();
       } else if (error?.message?.toLowerCase().includes('limit')) {
         setCommentModal(null);
+        setUpgradePromptContext('likes');
         setShowUpgradePrompt(true);
       }
       console.error('Like error:', error);
@@ -391,6 +394,7 @@ export default function MatchesScreen() {
     <Pressable 
       onPress={() => openCommentModal(profile, section)}
       disabled={disabled}
+      testID={`like-${section}-${profile.user_id}`}
       style={({ pressed }) => [
         styles.likeButton,
         pressed && styles.likeButtonPressed,
@@ -705,6 +709,7 @@ export default function MatchesScreen() {
                     style={styles.sendWithoutComment}
                     onPress={() => handleSendLike(false)}
                     disabled={isSending}
+                    testID="send-like-without-comment"
                   >
                     <Text style={styles.sendWithoutCommentText}>Send without comment</Text>
                   </TouchableOpacity>
@@ -745,10 +750,13 @@ export default function MatchesScreen() {
             <View style={styles.upgradeIcon}>
               <Ionicons name="diamond" size={48} color="#F59E0B" />
             </View>
-            <Text style={styles.upgradeTitle}>Weekly like limit reached</Text>
-            <Text style={styles.upgradeSubtitle}>
-              You've used all 3 likes for this week.{'\n'}
-              Likes refresh in {formatResetCountdown(swipeInfo.next_like_reset)} — or upgrade to Premium for unlimited likes now.
+            <Text style={styles.upgradeTitle} testID="upgrade-prompt-title">
+              {upgradePromptContext === 'filters' ? 'Premium feature' : 'Weekly like limit reached'}
+            </Text>
+            <Text style={styles.upgradeSubtitle} testID="upgrade-prompt-copy">
+              {upgradePromptContext === 'filters'
+                ? 'Discovery filters are a Premium feature.\nUpgrade to filter by course, campus, interests, distance and more.'
+                : `You've used all 3 likes for this week.\nLikes refresh in ${formatResetCountdown(swipeInfo.next_like_reset)} — or upgrade to Premium for unlimited likes now.`}
             </Text>
             <Pressable
               onPress={() => {
@@ -777,6 +785,7 @@ export default function MatchesScreen() {
       {/* Match Alert */}
       {matchAlert && (
         <View style={styles.modalOverlay}>
+          <ConfettiBurst />
           <View style={styles.matchModal}>
             <View style={styles.matchHearts}>
               <Text style={styles.matchEmoji}>💕</Text>
