@@ -759,7 +759,7 @@ _2025 – Present · London, United Kingdom_
 - Engineered the closed-network architecture: `.ac.uk` email verification with UK-student-domain policy, per-user wellbeing baseline detection, real-time crisis-keyword scanning, admin verification queue and safeguarding webhook.
 - Designed the safeguarding policy modelled on UUK Stepchange / Suicide-Safer Universities guidance — informed directly by day-to-day professional practice in adult safeguarding at Change Grow Live and the NHS; authored the UK GDPR DPIA, Lawful Basis register and Online Safety Act 2023 risk assessment.
 - **Joined the NatWest Accelerator (London cohort) on 16 March 2026**; previously completed the **Santander Universities Pre-Incubator programme (2025)**.
-- Anchor pilot discussion currently in progress with the **University of Bedfordshire**, leveraging two years' tenure as the university's Students' Union President.
+- In early, informal conversation about a possible pilot with the **University of Bedfordshire** — no agreement, LOI or date is signed — leveraging two years' tenure as the university's Students' Union President.
 - Recruited a wider founding team contributing on a pure-equity basis: Dr Gerald Marfo (CMO, PhD Digital Marketing), Adedapo Ajuwon (Senior Software Engineer), Chinyere Jennifer (Senior Advisor — MIGSO-PCUBED).
 
 ### Recovery Coordinator — Change Grow Live (Resolutions service)
@@ -804,7 +804,7 @@ _2021 – 2023 · Two consecutive terms · Luton / Bedfordshire, UK_
 - Represented **10,000+ students** at university senior-management level, including on safeguarding, student services, equality and welfare policy.
 - Managed a **£900,000 budget**, negotiating vendor contracts and partnerships; increased business–student collaborations by **30%**.
 - Led wellbeing, equality and inclusion initiatives; chaired meetings and influenced strategic decision-making across university committees.
-- Built the direct relationships with the Director of Student Services, safeguarding leads and senior leadership that now underpin DEQUAD's anchor pilot discussion.
+- Built the direct relationships with the Director of Student Services, safeguarding leads and senior leadership that now underpin DEQUAD's early, informal pilot conversation with the university — nothing signed to date.
 
 ### Ad-hoc Support Worker — Falcon Recruitment & Training
 _April 2021 – January 2023 · United Kingdom_
@@ -2287,7 +2287,7 @@ Deliberately minimal and founder-led — no paid-acquisition budget in Y1. Insti
 ### Yusuf Quadri — CEO / Product & Safeguarding Lead
 
 - UK-resident, full-time on DEQUAD.
-- **University of Bedfordshire Student Union President 2021–2023** (two consecutive terms). Represented the student body at senior-management level on student-services, safeguarding and welfare policy. This is the basis of DEQUAD's anchor pilot relationship with the same university.
+- **University of Bedfordshire Student Union President 2021–2023** (two consecutive terms). Represented the student body at senior-management level on student-services, safeguarding and welfare policy. This is the basis of DEQUAD's early, informal pilot conversation with the same university — no agreement is signed.
 - Completed the **Santander Universities Pre-Incubator programme** in 2025; admitted to the **NatWest Accelerator (London cohort)** on 16 March 2026.
 - **Seven safeguarding & clinical-awareness certifications** including Oliver McGowan Learning Disabilities & Autism, Adult Safeguarding Partnership Working, Suicide Prevention (2026), Data Protection & Information Security, and Safe Response to Challenging Situations (see Appendix O).
 - Built and shipped the entire MVP at dequad.co.uk.
