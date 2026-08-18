@@ -235,7 +235,7 @@ Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 
 > **Cash never dips below c.£1,900** across all of Year 1, and this holds true whether or not the Bedfordshire pilot conversation goes anywhere — no institutional revenue, no pre-seed and no other external funding is assumed in this schedule. The founders' relationship with the university (via the former SU presidency) is a genuine upside opportunity, but the business does not depend on it to survive Year 1.
 
-The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow Y1 (mo)" (to be regenerated to match this version).
+The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow Y1 (mo)".
 
 ---
 
@@ -362,5 +362,5 @@ DEQUAD is a **production-ready, accelerator-validated, self-funded** UK software
 
 ---
 
-*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — for UKES short-track endorsement review, June 2026.*
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — for UKES short-track endorsement review, August 2026 (v5.0, self-funded 3-year revision).*
 *Companion documents: `DEQUAD_UKES_Business_Plan.pdf`, `DEQUAD_Financial_Model.xlsx`, `DEQUAD_Risk_Register.pdf`.*

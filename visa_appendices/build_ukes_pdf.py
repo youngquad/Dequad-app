@@ -138,7 +138,7 @@ def merge_master_pdf() -> None:
         # Full plan
         ("DEQUAD_UKES_Business_Plan.pdf", "02 Business Plan"),
         # Pitch deck (visual narrative)
-        ("DEQUAD_Pitch_Deck.pdf", "03 Pitch Deck (12 slides)"),
+        ("DEQUAD_Pitch_Deck.pdf", "03 Pitch Deck (13 slides)"),
         # Risk register
         ("DEQUAD_Risk_Register.pdf", "04 Risk Register"),
         # Founder CVs

@@ -640,13 +640,13 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. No 
 | Ref | Document | File |
 |---|---|---|
 | A | Founder academic certificates (Yusuf Quadri) | `A_founder_academic_certificates.md` |
-| B | **Founder CV — Yusuf Quadri (updated June 2026)** | `B_founder_cv.md` |
+| B | **Founder CV — Yusuf Quadri (updated August 2026)** | `B_founder_cv.md` |
 | B-2 | Co-Founder CV — Yusuff Adeagbo (CTO) | `B_cofounder_cv.md` |
 | C | Personal commitment & undertaking | `C_personal_commitment_undertaking.md` |
 | D | Wellbeing baseline methodology | `D_wellbeing_baseline_methodology.md` |
 | E | Data Protection Impact Assessment (DPIA) | `E_dpia.md` |
 | F | Financial model (annotated) | See Appendix F below |
-| G | Job descriptions for first 6 hires | `G_job_descriptions.md` |
+| G | Job description for the plan's one funded hire (Year 3) | `G_job_descriptions.md` |
 | H | University Letters of Interest (template) | `H_university_letter_of_interest_template.md` |
 | I | Online Safety Act 2023 compliance statement | `I_online_safety_act_compliance.md` |
 | J | Architecture diagram | `J_architecture_diagram.md` |

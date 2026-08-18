@@ -43,7 +43,7 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 |---|---|---|
 | 1 | UKES Business Plan (full, 19 sections, v5.0 — self-funded 3-year revision, August 2026) | `DEQUAD_UKES_Business_Plan.pdf` |
 | 2 | Decision-Maker Brief (15-page short-track companion) | `DEQUAD_UKES_Decision_Brief.pdf` |
-| 3 | Pitch Deck (12 slides) | `DEQUAD_Pitch_Deck.pdf` |
+| 3 | Pitch Deck (13 slides) | `DEQUAD_Pitch_Deck.pdf` |
 | 4 | Financial Model (13-sheet Excel workbook, self-funded 3-year model) | `DEQUAD_Financial_Model.xlsx` |
 | 5 | Risk Register | `DEQUAD_Risk_Register.pdf` |
 | 6 | Founder CVs (Yusuf Quadri, Yusuff Adeagbo) | `B_founder_cv.pdf`, `B_cofounder_cv.pdf` |
@@ -56,7 +56,7 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 | 13 | Online Safety Act 2023 compliance memo | `I_online_safety_act_compliance.pdf` |
 | 14 | Architecture diagram | `J_architecture_diagram.pdf` |
 | 15 | Product screenshots | `K_product_screenshots.pdf` |
-| 16 | Job descriptions (first 4 hires) | `G_job_descriptions.pdf` |
+| 16 | Job description (the plan's one funded hire, Year 3) | `G_job_descriptions.pdf` |
 | 17 | University Letter of Interest template | `H_university_letter_of_interest_template.pdf` |
 
 ### Validation evidence

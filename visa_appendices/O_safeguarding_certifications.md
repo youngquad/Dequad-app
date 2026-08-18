@@ -66,4 +66,4 @@ The lead applicant commits to:
 
 *Copies of the original certificates can be supplied on request.*
 
-*Prepared by Yusuf Quadri, Founder & CEO — submitted to UKES as Appendix O to the Innovator Founder visa endorsement application, June 2026.*
+*Prepared by Yusuf Quadri, Founder & CEO — submitted to UKES as Appendix O to the Innovator Founder visa endorsement application, August 2026.*

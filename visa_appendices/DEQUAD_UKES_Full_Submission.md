@@ -640,13 +640,13 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. No 
 | Ref | Document | File |
 |---|---|---|
 | A | Founder academic certificates (Yusuf Quadri) | `A_founder_academic_certificates.md` |
-| B | **Founder CV — Yusuf Quadri (updated June 2026)** | `B_founder_cv.md` |
+| B | **Founder CV — Yusuf Quadri (updated August 2026)** | `B_founder_cv.md` |
 | B-2 | Co-Founder CV — Yusuff Adeagbo (CTO) | `B_cofounder_cv.md` |
 | C | Personal commitment & undertaking | `C_personal_commitment_undertaking.md` |
 | D | Wellbeing baseline methodology | `D_wellbeing_baseline_methodology.md` |
 | E | Data Protection Impact Assessment (DPIA) | `E_dpia.md` |
 | F | Financial model (annotated) | `DEQUAD_Financial_Model.xlsx` |
-| G | Job descriptions for first 6 hires | `G_job_descriptions.md` |
+| G | Job description for the plan's one funded hire (Year 3) | `G_job_descriptions.md` |
 | H | University Letters of Interest (template) | `H_university_letter_of_interest_template.md` |
 | I | Online Safety Act 2023 compliance statement | `I_online_safety_act_compliance.md` |
 | J | Architecture diagram | `J_architecture_diagram.md` |
@@ -963,7 +963,7 @@ Signed: ___________________________   Date: ___________________
 
 ---
 
-*Written by Yusuff Adeagbo (Co-Founder & CTO) and submitted to UKES as Appendix B-2 of the DEQUAD Innovator Founder visa endorsement application — June 2026.*
+*Written by Yusuff Adeagbo (Co-Founder & CTO) and submitted to UKES as Appendix B-2 of the DEQUAD Innovator Founder visa endorsement application — August 2026.*
 
 
 ---
@@ -1648,9 +1648,11 @@ ___________________________________
 
 | University | Signed by | Date | Status |
 |---|---|---|---|
-| University of Manchester | _Pending — discussion underway_ | _____________ | Verbal interest |
+| University of Bedfordshire | _Pending_ | _____________ | Early, informal conversation only — no LOI, MOU or verbal commitment yet; nothing is signed or guaranteed |
 | _______________ | _______________ | _____________ | _______________ |
 | _______________ | _______________ | _____________ | _______________ |
+
+_No formal Letter of Interest has been signed by any institution at the date of this application. The row above reflects the single active conversation described throughout this plan (Section 8.3); it is not a commitment._
 
 ---
 
@@ -2111,7 +2113,7 @@ The founders have accepted (and disclosed to UKES) the following lower-priority 
 
 ---
 
-*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — submitted to UKES as Appendix L to the Innovator Founder visa endorsement application, June 2026.*
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — submitted to UKES as Appendix L to the Innovator Founder visa endorsement application, August 2026.*
 
 
 ---
@@ -2441,7 +2443,7 @@ The 12 key risks the founders have identified and their mitigations:
 | R9 | Negative PR from a misidentified case | Medium | Reactive media plan; clinical advisory board; transparent reporting. |
 | R10 | International expansion delayed | Low | Not part of this 3-year plan; UK-only focus is deliberate and does not depend on any funding round to remain viable. |
 | R11 | LLM cost spike (model price changes) | Low | Multi-provider abstraction in place; can swap OpenAI ↔ Anthropic ↔ Gemini in < 1 day. |
-| R12 | Tighter immigration regime affecting talent | Low | Both co-founders are already UK-resident; first 6 hires all UK-based. |
+| R12 | Tighter immigration regime affecting talent | Low | Both co-founders are already UK-resident; the plan's only hire is UK-based. |
 
 Full risk register in `DEQUAD_Risk_Register.pdf`.
 
@@ -2479,7 +2481,7 @@ DEQUAD is a **production-ready, accelerator-validated, bootstrap-credible** UK s
 
 ---
 
-*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — for UKES short-track endorsement review, June 2026.*
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — for UKES short-track endorsement review, August 2026 (v5.0, self-funded 3-year revision).*
 *Companion documents: `DEQUAD_UKES_Business_Plan.pdf`, `DEQUAD_Financial_Model.xlsx`, `DEQUAD_Risk_Register.pdf`.*
 
 
@@ -2594,7 +2596,7 @@ Three appointments to a founding team alongside two co-founders is unusually dee
 
 ---
 
-*Compiled by Yusuf Quadri, Founder & CEO — CV content supplied and approved by each named team member. Submitted to UKES as Appendix N to the Innovator Founder visa endorsement application, June 2026.*
+*Compiled by Yusuf Quadri, Founder & CEO — CV content supplied and approved by each named team member. Submitted to UKES as Appendix N to the Innovator Founder visa endorsement application, August 2026.*
 
 
 ---
@@ -2668,4 +2670,4 @@ The lead applicant commits to:
 
 *Copies of the original certificates can be supplied on request.*
 
-*Prepared by Yusuf Quadri, Founder & CEO — submitted to UKES as Appendix O to the Innovator Founder visa endorsement application, June 2026.*
+*Prepared by Yusuf Quadri, Founder & CEO — submitted to UKES as Appendix O to the Innovator Founder visa endorsement application, August 2026.*

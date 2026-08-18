@@ -91,4 +91,4 @@ The founders have accepted (and disclosed to UKES) the following lower-priority 
 
 ---
 
-*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — submitted to UKES as Appendix L to the Innovator Founder visa endorsement application, June 2026.*
+*Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd — submitted to UKES as Appendix L to the Innovator Founder visa endorsement application, August 2026.*

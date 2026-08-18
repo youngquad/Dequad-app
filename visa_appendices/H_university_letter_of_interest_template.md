@@ -73,9 +73,11 @@ ___________________________________
 
 | University | Signed by | Date | Status |
 |---|---|---|---|
-| University of Manchester | _Pending — discussion underway_ | _____________ | Verbal interest |
+| University of Bedfordshire | _Pending_ | _____________ | Early, informal conversation only — no LOI, MOU or verbal commitment yet; nothing is signed or guaranteed |
 | _______________ | _______________ | _____________ | _______________ |
 | _______________ | _______________ | _____________ | _______________ |
+
+_No formal Letter of Interest has been signed by any institution at the date of this application. The row above reflects the single active conversation described throughout this plan (Section 8.3); it is not a commitment._
 
 ---
 
