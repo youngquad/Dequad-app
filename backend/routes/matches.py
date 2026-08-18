@@ -265,8 +265,25 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     if last_like_week != week_start:
         likes_this_week = 0
 
-    # Only LIKES are limited; skips/dislikes are unlimited.
-    if data.action == "like" and user_plan == "free" and likes_this_week >= FREE_LIKES_PER_WEEK:
+    # Liking back someone who already liked you completes an existing match
+    # rather than spending a fresh discovery-like, so it's exempt from the
+    # weekly quota below (checked early so we can reuse the same lookup
+    # further down instead of querying twice).
+    reverse_match = None
+    if data.action == "like":
+        reverse_match = await db.matches.find_one({
+            "user_id": data.target_user_id, "matched_user_id": current_user.user_id, "status": "liked"
+        }, {"_id": 0})
+    is_reciprocal_like = reverse_match is not None
+
+    # Only LIKES are limited; skips/dislikes are unlimited. Reciprocal likes
+    # (completing a match someone else already initiated) are never gated.
+    if (
+        data.action == "like"
+        and user_plan == "free"
+        and likes_this_week >= FREE_LIKES_PER_WEEK
+        and not is_reciprocal_like
+    ):
         raise HTTPException(status_code=403, detail={
             "message": "Weekly like limit reached",
             "limit": FREE_LIKES_PER_WEEK,
@@ -284,9 +301,11 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     if existing:
         raise HTTPException(status_code=400, detail="Already swiped on this user")
 
-    # Bookkeeping: only the like counter is incremented.
+    # Bookkeeping: only the like counter is incremented, and only for a
+    # fresh discovery like — reciprocal likes don't spend weekly budget
+    # since they were never gated by it in the first place.
     update_set = {"last_swipe_date": today}
-    if data.action == "like":
+    if data.action == "like" and not is_reciprocal_like:
         update_set["likes_this_week"] = likes_this_week + 1
         update_set["last_like_week"] = week_start
     await db.users.update_one(
@@ -317,10 +336,6 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
              "comment": data.comment, "liked_section": data.liked_section}
         )
 
-        reverse_match = await db.matches.find_one({
-            "user_id": data.target_user_id, "matched_user_id": current_user.user_id, "status": "liked"
-        }, {"_id": 0})
-
         if reverse_match:
             await db.matches.update_many(
                 {"$or": [
@@ -331,10 +346,10 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
             )
             mutual_match = target_user
 
-            original_like = await db.matches.find_one({
-                "user_id": data.target_user_id, "matched_user_id": current_user.user_id, "status": "liked"
-            })
-            like_comment = original_like.get("comment") if original_like else None
+            # Note: reverse_match was fetched before the update_many call
+            # above flipped its status to "accepted" — re-querying for
+            # status="liked" here would always return nothing.
+            like_comment = reverse_match.get("comment")
 
             match_msg_to_current = f"You matched with {target_user.get('name', 'someone')}! Start chatting now."
             match_msg_to_target = f"You matched with {current_user.name}!"
