@@ -87,8 +87,8 @@ The Children's Risk Assessment therefore treats DEQUAD as a service with **resid
 | OSA-mandated role | Person / function | Notes |
 |---|---|---|
 | Senior Manager Responsible for Compliance (OSA s. 56) | Yusuf Quadri, CEO (with Yusuff Adeagbo, CTO, as deputy) | Joint founder accountability documented in board minutes |
-| Designated Safeguarding Lead | _To be appointed Month 1 post-endorsement_ | Job description in Appendix G |
-| Data Protection Officer | _Outsourced fractional in Y1 (e.g. The DPO Centre, IT Governance); FTE in Y2_ | |
+| Designated Safeguarding Lead | _Yusuf Quadri, CEO, personally (a qualified safeguarding professional) through Y1–Y2; a dedicated part-time Safeguarding & Trust Lead is planned for Y3, contingent on 2+ paying universities and funded entirely by revenue — see Business Plan §18.3_ | Job description in Appendix G |
+| Data Protection Officer | _Outsourced fractional throughout Y1–Y2 (e.g. The DPO Centre, low-cost pay-as-you-go); an in-house FTE DPO is not assumed in this 3-year plan and would only be considered later if data-processing scale justifies it_ | |
 | Ofcom liaison point | Yusuf Quadri, CEO (Y1); transition to in-house counsel Y3 | |
 
 ---
