@@ -46,15 +46,15 @@ If institutional revenue scales beyond the conservative Y3 base case via pilot c
 
 This meets the Innovator Founder settlement job-creation criterion of 5 jobs for persons settled in the UK, each existing for at least 12 months, at an average salary of at least £25,000/year. These 5 roles are funded entirely from revenue generated after piloting, not from any external funding round.
 
-| # | Role | Commitment | Salary band | Mission / must-have |
-|---|---|---|---|---|
-| 1 | Student Ambassador | Full-time | £25,000/yr | *TBC* |
-| 2 | Social Media Manager | Full-time | £25,000/yr | *TBC* |
-| 3 | Marketing Intern | Full-time | £25,000/yr | *TBC* |
-| 4 | Sales Lead | Full-time | £25,000/yr | *TBC* |
-| 5 | Support Agent | Full-time | £25,000/yr | *TBC* |
+| # | Role | Commitment | Salary band | Hire timing | Reporting line | Mission / must-have |
+|---|---|---|---|---|---|---|
+| 1 | Student Ambassador | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CMO (Dr Gerald Marfo) | *TBC* |
+| 2 | Social Media Manager | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CMO (Dr Gerald Marfo) | *TBC* |
+| 3 | Marketing Intern | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CMO (Dr Gerald Marfo) | *TBC* |
+| 4 | Sales Lead | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CEO (Yusuf Quadri) | *TBC* |
+| 5 | Support Agent | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CEO (Yusuf Quadri) | *TBC* |
 
-Each of the 5 roles is £25,000/yr, all full-time — meeting the settlement job-creation criterion's average-salary threshold exactly. Hire dates, reporting lines and must-have criteria for roles 1–5 are not yet finalised and are not presented as committed here.
+Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institutional revenue scales via pilot conversion (5+ paying universities) — meeting the settlement job-creation criterion's average-salary threshold exactly. Must-have criteria for roles 1–5 are not yet finalised and are not presented as committed here.
 
 ## G.4 Further roles beyond the job-creation target — not part of this plan
 
