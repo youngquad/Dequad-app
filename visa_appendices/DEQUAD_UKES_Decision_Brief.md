@@ -317,7 +317,7 @@ The key risks the founders have identified and their mitigations:
 |---|---|---|---|
 | R1 | Bedfordshire pilot conversation never converts — nothing is signed | Medium | The plan is solvent at zero institutional revenue throughout Y1–Y3 (Page 9–10); no cost line depends on this converting. Two further pilot conversations scoped as independent upside. |
 | R2 | Co-founder hire delayed | High | Y1 build is solo-doable; founder personally covers technical work until co-founder onboarded. |
-| R3 | Institutional/premium revenue falls short of plan targets | Medium | No funding round is required at any point; the only consequence is that the single Y3 hire and modest founder pay are delayed, not that the business fails. |
+| R3 | Institutional/premium revenue falls short of plan targets | Medium | No funding round is required at any point; the only consequence is that the base-case Y3 hire and modest founder pay are delayed, not that the business fails. The upside-case 5-hire job-creation target simply does not trigger (see Risk Register R17). |
 | R4 | Safeguarding incident (false negative) | High | Human-in-the-loop for all high-risk flags; insurance in place; clinical advisory board recruited Q2 Y2. |
 | R5 | Togetherall/TalkCampus copy `.ac.uk` verification | Medium | First-mover land grab; safeguarding webhook + insights dashboard are deeper moats. |
 | R6 | OfS / Online Safety Act non-compliance | Medium | OSA risk assessment and reporting flows already shipped; ICO DPIA drafted; legal review via NatWest Mishcon panel. |
