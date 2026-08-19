@@ -1695,7 +1695,7 @@ Subject to satisfactory completion of our procurement process, including:
 
 ## Indicative pricing acceptance
 
-The pricing point of **£1.50 per enrolled student per annum** discussed with the DEQUAD team is within the indicative range we have allocated for digital-wellbeing tooling in the 2026/27 budget cycle.
+The pricing point of **£2.00 per enrolled student per annum** discussed with the DEQUAD team is within the indicative range we have allocated for digital-wellbeing tooling in the 2026/27 budget cycle.
 
 ## No commitment at this stage
 
