@@ -959,7 +959,7 @@ The undersigned confirms that he:
 - is committing full-time to DEQUAD as Chief Technology Officer;
 - is contributing **£3,000** of personal capital as founder share capital, to be evidenced by the share allotment return (Form SH01) to be filed with Companies House at incorporation;
 - agrees to a customary 4-year founder-vesting schedule with a 1-year cliff, to be put in place if and when any future external funding round is raised (none is assumed or required in this 3-year self-funded plan — Section 10);
-- accepts a £0 salary for the first six months of trading (Q1–Q2 Year 1) and a £1,500/month salary thereafter until the seed round.
+- accepts a £0 salary throughout Year 1 and Year 2, and a modest £500/month salary from Year 3 — funded entirely by revenue, not by any funding round.
 
 Signed: ___________________________   Date: ___________________
 
@@ -2197,7 +2197,7 @@ The founders have accepted (and disclosed to UKES) the following lower-priority 
 # DEQUAD — Decision-Maker Brief
 ## UKES Endorsement (Innovator Founder Visa) · Short-Track Review
 
-> **15-page brief.** Companion to the full Business Plan (`DEQUAD_UKES_Business_Plan.pdf`)
+> **17-page brief.** Companion to the full Business Plan (`DEQUAD_UKES_Business_Plan.pdf`)
 > and the Financial Model (`DEQUAD_Financial_Model.xlsx`). Use this document to
 > assess endorsement readiness in 20 minutes.
 

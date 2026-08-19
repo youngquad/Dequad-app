@@ -134,7 +134,7 @@ def merge_master_pdf() -> None:
         # Cover email (what UKES sees first — sent as the email body itself)
         ("UKES_Submission_Cover_Email.pdf", "00 Cover Email"),
         # Decision Brief — 15-page UKES short-track summary
-        ("DEQUAD_UKES_Decision_Brief.pdf", "01 Decision-Maker Brief (15 pages)"),
+        ("DEQUAD_UKES_Decision_Brief.pdf", "01 Decision-Maker Brief (17 pages)"),
         # Full plan
         ("DEQUAD_UKES_Business_Plan.pdf", "02 Business Plan"),
         # Pitch deck (visual narrative)
@@ -199,7 +199,7 @@ def main() -> None:
             APPDIR / "DEQUAD_UKES_Decision_Brief.md",
             APPDIR / "DEQUAD_UKES_Decision_Brief.html",
             APPDIR / "DEQUAD_UKES_Decision_Brief.pdf",
-            "DEQUAD — Decision-Maker Brief (15 pages)",
+            "DEQUAD — Decision-Maker Brief (17 pages)",
         ),
         (
             APPDIR / "DEQUAD_Risk_Register.md",

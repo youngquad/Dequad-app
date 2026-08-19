@@ -1,7 +1,7 @@
 # DEQUAD — Decision-Maker Brief
 ## UKES Endorsement (Innovator Founder Visa) · Short-Track Review
 
-> **15-page brief.** Companion to the full Business Plan (`DEQUAD_UKES_Business_Plan.pdf`)
+> **17-page brief.** Companion to the full Business Plan (`DEQUAD_UKES_Business_Plan.pdf`)
 > and the Financial Model (`DEQUAD_Financial_Model.xlsx`). Use this document to
 > assess endorsement readiness in 20 minutes.
 
