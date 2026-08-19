@@ -2,7 +2,7 @@
 
 *Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd.*
 
-This appendix documents the **one funded hire** in the self-funded 3-year plan referenced in main document §7.3, plus the basis on which any further hiring beyond Year 3 would be considered. This is a deliberate change from earlier drafts of this plan, which assumed a 42-role, 5-year hiring plan funded by pre-seed, seed and Series A rounds. None of that external funding is assumed in this version (Section 10), so the hiring plan has been rebuilt around what institutional and premium revenue can actually fund.
+This appendix documents the **one funded hire** in the conservative base-case plan referenced in main document §7.3, the **five-hire job-creation target** for the upside case (§10.4), and the basis on which any hiring beyond Year 3 would be considered. This is a deliberate change from earlier drafts of this plan, which assumed a 42-role, 5-year hiring plan funded by pre-seed, seed and Series A rounds. No external funding is assumed for the base case (Section 10); the hiring plan has been rebuilt around what institutional and premium revenue can actually fund, with the 5-hire job-creation target funded from revenue generated after piloting.
 
 All roles are **UK-based, PAYE, paying UK National Insurance contributions**, and recruited through fair and open processes.
 
@@ -16,7 +16,9 @@ All roles are **UK-based, PAYE, paying UK National Insurance contributions**, an
 | Y2 | 0 | 2 (founders, unpaid) | Revenue still too small/uncertain to justify a hire |
 | Y3 | 1 (part-time) | 3 (c.2.5 FTE) | Funded entirely by Y3 revenue, contingent on 2+ paying universities |
 
-Total Y3 wage bill (all roles, incl. modest founder pay): **£20,000 gross / £21,500 incl. employer NI, pension and other costs** (Section 18.3).
+Total Y3 wage bill (base case, all roles, incl. modest founder pay): **£20,000 gross / £21,500 incl. employer NI, pension and other costs** (Section 18.3).
+
+**Job-creation target, upside case:** if institutional revenue scales beyond the base case via pilot conversion (5+ paying universities), the target is **5 full-time hires** on top of the 2 founders (7 total), each sustained at least 12 months at an average salary of £25,000/year — a Y3 gross wage bill of c.£125,000 for the 5 hires, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ---
 
@@ -34,17 +36,37 @@ Total Y3 wage bill (all roles, incl. modest founder pay): **£20,000 gross / £2
 
 ---
 
-## G.3 Beyond Year 3 — not part of this plan
+## G.3 Job-creation target (upside case) — 5 full-time hires
 
-Further roles (engineering, customer success, sales, marketing, data/ML, operations) are a long-term ambition, not a commitment. They would only be made if institutional revenue significantly exceeds the conservative Y3 base case (Section 11) or if a future funding round is raised — neither of which is assumed here. No salary bands, hire dates or headcount targets are set for this later stage, to avoid presenting an unfunded plan as committed.
+If institutional revenue scales beyond the conservative Y3 base case via pilot conversion (5+ paying universities), the plan's job-creation target is **5 full-time UK roles**, each:
+
+- Full-time, UK-based, PAYE, paying UK National Insurance contributions
+- Sustained for at least 12 months
+- Paid an average salary of £25,000/year
+
+This meets the Innovator Founder settlement job-creation criterion of 5 jobs for persons settled in the UK, each existing for at least 12 months, at an average salary of at least £25,000/year. These 5 roles are funded entirely from revenue generated after piloting, not from any external funding round.
+
+| # | Role | Commitment | Salary band | Mission / must-have |
+|---|---|---|---|---|
+| 1 | Student Ambassador | Full-time | *TBC* | *TBC* |
+| 2 | Social Media Manager | Full-time | *TBC* | *TBC* |
+| 3 | Marketing Intern | Full-time | *TBC* | *TBC* |
+| 4 | Sales Lead | Full-time | *TBC* | *TBC* |
+| 5 | Support Agent | Full-time | *TBC* | *TBC* |
+
+Individual salary bands, hire dates, reporting lines and must-have criteria for roles 1–5 are not yet finalised and are not presented as committed here; only the aggregate — 5 full-time roles, average £25,000/year — is stated as the job-creation target.
+
+## G.4 Further roles beyond the job-creation target — not part of this plan
+
+Any hiring beyond the 5-hire job-creation target above is a longer-term ambition, not a commitment. It would only happen if institutional revenue significantly exceeds even the upside case, or if a future funding round is raised — neither of which is assumed here.
 
 ---
 
-## G.4 Diversity, equality, and inclusion commitments
+## G.5 Diversity, equality, and inclusion commitments
 
 Even at this small scale, DEQUAD commits to:
 
-- **Open advertising** for the Y3 hire on at least two channels for at least 14 days before any offer.
+- **Open advertising** for each Y3 hire on at least two channels for at least 14 days before any offer.
 - **Blind shortlisting** at CV-screening stage (name, university, address removed).
 - **Structured interview rubric.**
 - **Pay-band transparency** — salary published in the job advert.

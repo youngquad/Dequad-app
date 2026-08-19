@@ -17,7 +17,7 @@
 | External funding | **None assumed.** No pre-seed, seed or Series A anywhere in this plan |
 | Pilot status | **Early, informal conversation only** — no agreement, LOI or date signed. Proposed 12-week window **Sep–Nov 2026 (M4–M6)** is a target, not a commitment |
 | Profitability | Small Y1 trading loss (£3,630) absorbed by founder capital; profitable from Y2 (£6,000); Y3 profit £8,000 |
-| UK jobs | **2 unpaid founders → 2 unpaid founders → 3 people / c.2.5 FTE**, all self-funded from revenue |
+| UK jobs | Base case: **2 unpaid founders → 2 unpaid founders → 3 people / c.2.5 FTE**, self-funded from revenue. Job-creation target: **7 people (5 FT hires, avg. £25,000/yr, each 12+ months)** once revenue scales after pilot conversion — meets the Innovator Founder settlement job-creation criterion |
 | Market size (long-term reference, not the plan) | TAM **£86m/yr** UK · SAM **£28m** · SOM **£3.4m ARR by Y5 (aspirational)** — the committed 3-year plan targets c.£48k |
 | In-kind support | NatWest Accelerator: **£31,100/yr** (office, legal, accountancy) — **Year 1 only** |
 | Y1 monthly cash | Never dips below **c.£1,900**; closes the year at **£1,920** — on founder capital and premium subscriptions alone |

@@ -76,7 +76,7 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 | **Pilot conversations under way — nothing signed** | Early-stage conversations with the **University of Bedfordshire** Director of Student Services — the institution whose students the founder represented for two years. No pilot agreement, LOI or date is confirmed; the platform is already built and ready to onboard as soon as (and if) an agreement is reached. |
 | **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind through Y1, reducing DEQUAD's cash overheads. |
 | **Self-funded, conservative forecast** | Y1 revenue ~£600 → Y2 ~£16,000 → Y3 ~£48,000, funded entirely by the founders' **£6,000 opening capital** plus revenue generated in the period. **No pre-seed, seed or other external investment is assumed anywhere in this plan.** The base case assumes **zero institutional revenue in Y1** (no pilot is yet signed); one paying university is modelled as a Y2 upside contingent on conversion, rising to c.1.5–2 by Y3. |
-| **UK jobs — modest and self-funded** | 2 founders (Y1–Y2, unpaid by the company) → 3 people (2.5 FTE) by Y3, funded entirely from institutional and premium revenue, not external investment. |
+| **UK jobs** | Conservative base case: 2 founders (Y1–Y2, unpaid) → 3 people / c.2.5 FTE by Y3. **Job-creation target:** 7 people (2 founders + 5 full-time hires) once institutional revenue scales via pilot conversion — each of the 5 hires sustained at least 12 months at an average salary of £25,000/year, funded from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion. |
 
 We evidence all three Home Office endorsement criteria — **innovation, viability, scalability** — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.
 
@@ -133,7 +133,7 @@ The dual-sided model matters: students adopt because the core product is free an
 - **Intra-institution network effects.** Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).
 - **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. This 3-year plan conservatively models c.1.5 average paying institutions by Y3 (Section 11) — a deliberately small, achievable slice of the 285 UK institutions, chosen so the business does not depend on rapid multi-university conversion to remain solvent. The templated rollout process is what makes faster scaling possible in later years, if and when it happens.
 - **International optionality.** The closed-network model maps directly onto `.edu` (US), `.edu.au` (Australia) and EU academic domains — a £180m English-language HE TAM addressable post-Y3 without re-architecting the product.
-- **Team scale plan in place, sequenced to revenue.** A job description for the first funded hire (Safeguarding & Trust Lead, part-time) is already written (Appendix G); headcount grows 2 (unpaid founders) → 2 → 3 (2.5 FTE) across the self-funded 3-year forecast, all UK-based. Faster hiring would only follow proven multi-university traction and/or a future funding round, neither of which is assumed in this plan.
+- **Team scale plan in place, sequenced to revenue.** Conservative base case: headcount grows 2 (unpaid founders) → 2 → 3 (c.2.5 FTE) across the 3-year forecast, all UK-based. **Job-creation target:** 7 people (2 founders + 5 full-time hires, each sustained 12+ months at an average salary of £25,000/year) once institutional revenue scales via pilot conversion (§10.4) — funded from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ---
 
@@ -303,13 +303,15 @@ A PhD-credentialled CMO, a senior engineer and a MIGSO-PCUBED consultant all wor
 
 ### 7.3 Hiring plan
 
-This plan makes **one** funded hire within the 3-year forecast, timed strictly to revenue rather than to any funding round:
+**Conservative base case** — this plan makes **one** funded hire within the 3-year forecast, timed strictly to revenue rather than to any funding round:
 
 | Role | Hire date | Basis | Y3 gross |
 |---|---|---|---:|
 | Safeguarding & Trust Lead (part-time, ~10 hrs/wk) | Y3 — contingent on 2+ paying universities | Funded entirely by institutional revenue, not investment | £8,000 |
 
-Headcount: **2 (Y1, founders unpaid) → 2 (Y2, founders unpaid) → 3 people / 2.5 FTE (Y3, founders on modest pay + 1 part-time hire)** — all UK-based, entirely self-funded from revenue. Further hires (engineering, customer success, marketing) are **not assumed** in this plan; they would only be made beyond Year 3 if revenue growth or a future funding round justifies them.
+Headcount (conservative base case): **2 (Y1, founders unpaid) → 2 (Y2, founders unpaid) → 3 people / 2.5 FTE (Y3, founders on modest pay + 1 part-time hire)** — all UK-based, entirely self-funded from revenue.
+
+**Job-creation target, upside case (§10.4):** once institutional revenue scales beyond this base case via pilot conversion, headcount grows to **7 people (2 founders + 5 full-time hires)** — see Appendix G for role-by-role detail *[titles, hire dates and salary bands TBC]*. Each of the 5 hires is sustained for at least 12 months at an average salary of £25,000/year, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ### 7.4 Recruitment strategy
 
@@ -368,7 +370,7 @@ The Y1 base-case forecast assumes **zero institutional revenue** — no pilot si
 | **Strengths** | **Weaknesses** |
 |---|---|
 | Production MVP live with real beta students — build risk retired. | Cash-light start (£6,000 founder capital, no external investment). |
-| CEO is a practising safeguarding professional (CGL + NHS) — unmatched credibility with university safeguarding buyers. | Two-person core team — key-person risk until the first funded hire in Y3. |
+| CEO is a practising safeguarding professional (CGL + NHS) — unmatched credibility with university safeguarding buyers. | Two-person core team — key-person risk until the first hire (base case) or the five-hire job-creation target (upside case) lands in Y3. |
 | Early, informal conversations with Bedfordshire via the founder's SU-President relationships. | **No signed pilot, LOI or paying customer at the date of this plan — institutional revenue is a target, not a commitment.** |
 | Two independent UK-bank validations: Santander Pre-Incubator (2025) + NatWest Accelerator (Mar 2026). | Limited consumer brand awareness at launch. |
 | £31,100/yr NatWest in-kind support incl. London office (Y1 only). | Cyber Essentials accreditation pending. |
@@ -421,7 +423,7 @@ This support is why £6,000 of founder cash is sufficient: DEQUAD pays no rent, 
 
 **This £6,000 is the only funding assumed anywhere in this business plan.** The 3-year financial forecast (Sections 11–14) is funded entirely by this founder capital plus revenue generated in the period. No pre-seed, seed, Series A, R&D tax credit or other external investment is assumed, committed, or required for the plan to remain solvent — every table in Sections 11–14 reconciles on that basis alone.
 
-If institutional traction significantly exceeds this conservative forecast (for example, 5+ paying universities), the founders may explore external investment beyond Year 3 to accelerate growth. That scenario is not part of the numbers presented here and carries no commitment, timeline, or dependency for this plan to succeed.
+If institutional traction significantly exceeds this conservative forecast — for example, 5+ paying universities converting after the pilot stage — the resulting institutional revenue funds this plan's job-creation target: **5 full-time UK roles, each sustained for at least 12 months at an average salary of £25,000/year**, meeting the Innovator Founder settlement job-creation criterion. This growth is funded entirely from revenue generated after piloting, not external investment, and is not part of the conservative £48,000 Y3 base case reconciled in Sections 11–14 (Appendix F).
 
 ### 10.5 Founder Investment Statement (visa requirement)
 
@@ -616,7 +618,7 @@ Both founders fund personal living costs from their existing employment/freelanc
 
 No hires are made in Y2 under this plan; the modest (contingent) institutional revenue and growing premium revenue are retained as cash buffer rather than spent on payroll. **Total Y2 employment cost: £0.**
 
-### 18.3 Y3 — first modest pay, first hire
+### 18.3 Y3 — conservative base case (first modest pay, first hire)
 
 | Role | Y3 gross |
 |---|---:|
@@ -627,11 +629,13 @@ No hires are made in Y2 under this plan; the modest (contingent) institutional r
 
 Employer NI ~£900 + pension ~£350 + other employment costs ~£250 = **£21,500 total Y3 employment cost**, funded entirely by Y3 revenue (Section 11).
 
-Headcount: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / 2.5 FTE (Y3)** — all UK-based, entirely self-funded. Scaling beyond this (additional engineering, customer success, marketing hires) is a longer-term ambition, not part of this 3-year plan, and would only follow proven multi-university revenue or a future funding round.
+Headcount (conservative base case): **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / 2.5 FTE (Y3)** — all UK-based, entirely self-funded from the £48,000 conservative Y3 revenue.
+
+**Job-creation target (upside case, §10.4):** if institutional revenue scales beyond this base case once pilot universities convert (5+ paying universities), the plan's job-creation target is **7 people (2 founders + 5 full-time hires)**, each of the 5 hires sustained at least 12 months at an average salary of £25,000/year — funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion. This upside is not reconciled in the conservative model below.
 
 ### 18.4 Equity
 
-The wider founding team (Section 7.2) hold EMI options on equity-only terms. No new EMI grants are modelled for the single Y3 hire's compensation above, which is cash-only; option grants for future hires would be considered if and when a funding round is raised — not assumed in this plan.
+The wider founding team (Section 7.2) hold EMI options on equity-only terms. Option grants for the 5 Y3 hires are TBC.
 
 ---
 
@@ -646,7 +650,7 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. No 
 | D | Wellbeing baseline methodology | `D_wellbeing_baseline_methodology.md` |
 | E | Data Protection Impact Assessment (DPIA) | `E_dpia.md` |
 | F | Financial model (annotated) | See Appendix F below |
-| G | Job description for the plan's one funded hire (Year 3) | `G_job_descriptions.md` |
+| G | Job description for the base-case hire, plus the plan's five-hire job-creation target (Year 3) | `G_job_descriptions.md` |
 | H | University Letters of Interest (template) | `H_university_letter_of_interest_template.md` |
 | I | Online Safety Act 2023 compliance statement | `I_online_safety_act_compliance.md` |
 | J | Architecture diagram | `J_architecture_diagram.md` |
@@ -750,6 +754,8 @@ No pre-seed, seed, Series A or other external investment is assumed, committed, 
 
 ## F.6 Headcount Plan
 
+**Conservative base case** (reconciled against the £48,000 Y3 revenue above):
+
 | Role | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
 | Founders (CEO + CTO) | 2 (unpaid) | 2 (unpaid) | 2 (modest pay) |
@@ -757,6 +763,8 @@ No pre-seed, seed, Series A or other external investment is assumed, committed, 
 | **Total headcount / FTE** | **2 / 0 FTE (unpaid)** | **2 / 0 FTE (unpaid)** | **3 / c.2.5 FTE** |
 
 *No founder salary is drawn in Y1 or Y2; both founders fund personal living costs from existing employment (CEO: Change Grow Live; CTO: freelance engineering). Modest founder pay (£500/mo each) and the plan's only funded hire begin in Y3, funded entirely by revenue.*
+
+**Job-creation target, upside case (§10.4):** once institutional revenue scales beyond this base case via pilot conversion, headcount grows to **7 (2 founders + 5 full-time hires)**, each of the 5 hires sustained at least 12 months at an average salary of £25,000/year — funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ---
 

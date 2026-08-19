@@ -33,7 +33,7 @@ A short summary of the business:
 - **Live, working product** at https://dequad.co.uk (FastAPI backend, React Native / Expo native + web frontends, MongoDB persistence), built end-to-end with my co-founder Yusuff Adeagbo (CTO).
 - **Verified-student peer network** (`.ac.uk` email gate), per-user wellbeing baseline detection, safeguarding pipeline with escalation to a Designated Safeguarding Lead, and 24/7 support chat.
 - **Two-sided business model:** free for students, paid by universities (£2 per student per year).
-- **Self-funded 3-year plan:** £6,000 of founder capital plus revenue — no external investment assumed or required. Conservative and deliberately modest: growing from 2 unpaid founders to 3 people by Year 3.
+- **Self-funded 3-year plan:** £6,000 of founder capital plus revenue — no external investment assumed or required. Conservative and deliberately modest: growing from 2 unpaid founders to 3 people by Year 3 (base case), with a job-creation target of 7 people (5 full-time hires, avg. £25,000/yr, each sustained 12+ months) once revenue scales after pilot conversion.
 
 A full endorsement submission document plus supporting appendices is ready to share.
 

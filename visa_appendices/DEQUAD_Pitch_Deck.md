@@ -174,7 +174,7 @@ A **founding team of five** — two named co-founders contributing £3,000 each 
 
 **No external investment is assumed anywhere in this forecast.** Y1's small loss (£3.6k) is absorbed entirely by the £6,000 founder capital; Y2 is modestly profitable; Y3 funds the plan's only hire and a small founder salary. Deliberately small, deliberately achievable.
 
-UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.5 FTE (Y3)**, all self-funded from revenue.
+UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.5 FTE (Y3)**, conservative base case, self-funded from revenue. **Job-creation target:** 7 people (5 full-time hires, avg. £25,000/yr, each sustained 12+ months) once revenue scales after pilot conversion — meeting the Innovator Founder settlement job-creation criterion.
 
 </div>
 

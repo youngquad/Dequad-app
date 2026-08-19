@@ -33,7 +33,7 @@ I am writing to formally submit my application for an **Innovator Founder endors
 
 2. **Viability.** The MVP is already live in production with 80 verified beta users at the University of Bedfordshire (42 daily-active). The safeguarding pipeline was designed by the lead applicant, a practising safeguarding professional — currently a Recovery Coordinator at Change Grow Live (safeguarding referrals, dynamic risk assessment, multi-agency working) with concurrent NHS mental-health experience at East London NHS Foundation Trust. I am in early, informal conversation about a possible pilot at the **University of Bedfordshire** — no agreement, LOI or date is signed, and nothing is guaranteed; a 12-week window has been proposed for **September–November 2026 (M4–M6)** as a target only. The 3-year plan is entirely self-funded: £6,000 of founder capital plus revenue, with no institutional revenue assumed in Year 1 and no pre-seed, seed or other external investment assumed anywhere. Cash flow remains positive every single month of Year 1 on that basis alone, supported by £31,000 of in-kind benefits from the NatWest Accelerator (London) in Year 1.
 
-3. **Scalability.** Three-year UK revenue forecast £0.6k → £16k → £48k, deliberately conservative and self-funded, growing from 2 unpaid founders to 3 people (c.2.5 FTE) by Year 3 — no external funding round is assumed to enable this growth. University pricing is a simple **£2 per enrolled student per year** — roughly half the effective per-student cost of the closest incumbent. The business model is software-only (gross margin reaching ~87% by Year 3) and addresses a £28m UK SAM, with international expansion (£180m TAM) treated as a longer-term ambition beyond this 3-year plan, not an assumption within it.
+3. **Scalability.** Three-year UK revenue forecast £0.6k → £16k → £48k, deliberately conservative and self-funded, growing from 2 unpaid founders to 3 people (c.2.5 FTE) by Year 3 in the base case — no external funding round is assumed to enable this growth. Job-creation target: 7 people (5 full-time hires, average salary £25,000/year, each sustained at least 12 months) once institutional revenue scales after pilot conversion, funded entirely from that revenue and meeting the Innovator Founder settlement job-creation criterion. University pricing is a simple **£2 per enrolled student per year** — roughly half the effective per-student cost of the closest incumbent. The business model is software-only (gross margin reaching ~87% by Year 3) and addresses a £28m UK SAM, with international expansion (£180m TAM) treated as a longer-term ambition beyond this 3-year plan, not an assumption within it.
 
 ### Document pack enclosed
 
@@ -56,7 +56,7 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 | 13 | Online Safety Act 2023 compliance memo | `I_online_safety_act_compliance.pdf` |
 | 14 | Architecture diagram | `J_architecture_diagram.pdf` |
 | 15 | Product screenshots | `K_product_screenshots.pdf` |
-| 16 | Job description (the plan's one funded hire, Year 3) | `G_job_descriptions.pdf` |
+| 16 | Job description (base-case hire) plus the plan's five-hire job-creation target, Year 3 | `G_job_descriptions.pdf` |
 | 17 | University Letter of Interest template | `H_university_letter_of_interest_template.pdf` |
 
 ### Validation evidence

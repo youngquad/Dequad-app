@@ -25,7 +25,7 @@
 | **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring), Y1 only |
 | **External funding ask** | **None.** This is a self-funded 3-year plan; no pre-seed, seed or other investment is required or assumed |
 | **3-yr revenue** | £0.6k → £16k → £48k |
-| **3-yr UK jobs** | 2 (unpaid founders) → 2 (unpaid founders) → 3 people / c.2.5 FTE, entirely self-funded |
+| **3-yr UK jobs** | Base case: 2 (unpaid founders) → 2 (unpaid founders) → 3 people / c.2.5 FTE, entirely self-funded. **Job-creation target:** 7 people (5 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion — meets the Innovator Founder settlement job-creation criterion |
 | **Profitability** | Modest trading loss in Y1 (£3.6k), profitable from Y2 — no break-even "event" needed since no external funding is assumed |
 | **Endorsement criteria met** | ✅ Innovation · ✅ Viability · ✅ Scalability |
 
@@ -265,7 +265,9 @@ Y1 is the only loss-making year, and the loss (£3.6k) is fully absorbed by the 
 | Safeguarding & Trust Lead (part-time) | 0 | 0 | 1 |
 | **Total UK jobs** | **2** | **2** | **3 (c.2.5 FTE)** |
 
-All self-funded from revenue — no headcount in this table depends on any external funding round, none of which is assumed. Further roles (engineering, customer success, sales, marketing) are a longer-term ambition beyond Year 3, not part of this plan.
+Conservative base case — all self-funded from revenue, no external funding round assumed.
+
+**Job-creation target (upside case):** once institutional revenue scales beyond this base case via pilot conversion, headcount grows to **7 (2 founders + 5 full-time hires)** — each of the 5 hires sustained for at least 12 months at an average salary of £25,000/year, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ### Beyond direct jobs
 
@@ -338,7 +340,7 @@ DEQUAD is a **production-ready, accelerator-validated, self-funded** UK software
 
 1. **Real product, real users** — the MVP is live, has real beta users at the University of Bedfordshire, and is governed by a DPIA-cleared safeguarding policy that ships before public launch.
 2. **Capital efficiency and self-sufficiency** — the business survives all three years on **£6,000 of founder cash plus revenue alone**, with no external funding assumed, committed, or required at any point. The NatWest Accelerator in-kind support and an extended no-salary founder commitment (Y1–Y2) make this possible.
-3. **Credible, honestly-scoped UK growth** — 2 unpaid founders (Y1–Y2) growing to 3 people / c.2.5 FTE by Y3, all self-funded from revenue; 0 to c.1.5 average paying universities by Y3, modelled as a target, not a guarantee.
+3. **Credible, honestly-scoped UK growth** — 2 unpaid founders (Y1–Y2) growing to 3 people / c.2.5 FTE by Y3 in the conservative base case, all self-funded from revenue; 0 to c.1.5 average paying universities by Y3, modelled as a target, not a guarantee. **Job-creation target:** 7 people (5 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion, meeting the Innovator Founder settlement job-creation criterion.
 
 ### What endorsement enables
 
