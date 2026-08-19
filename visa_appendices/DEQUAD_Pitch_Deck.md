@@ -112,7 +112,7 @@ International optionality post-Y3: `.edu`, `.edu.au`, EU domains → **£180m TA
 
 ## 06 · Business model
 
-Three revenue lines — software-only, **92% gross margin** by Y3.
+Three revenue lines — software-only, **87% gross margin** by Y3.
 
 | Customer | What they receive | Price |
 |---|---|---:|
@@ -186,9 +186,9 @@ UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.
 
 | Month | Closing cash |
 |---|---:|
-| **M1 (Jun 2026)** — incorporation, £6k founder cash | £5,070 |
-| **M4–M6 (Sep–Nov 2026)** — proposed pilot window, if agreed (not signed) | £4,120 → £3,420 |
-| **M7 (Dec 2026)** — Stripe premium billing goes live | £3,120 |
+| **M1 (Jun 2026)** — incorporation, £6k founder cash | £4,965 |
+| **M4–M6 (Sep–Nov 2026)** — proposed pilot window, if agreed (not signed) | £4,304 → £3,708 |
+| **M7 (Dec 2026)** — Stripe premium billing goes live | £3,435 |
 | **M12 (May 2027)** — Y1 close | **£1,920** |
 
 > Cash is positive every single month of Year 1 — on founder capital and premium subscriptions alone.

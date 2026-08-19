@@ -220,18 +220,18 @@ Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 
 | Month | Inflows | Outflows | Closing balance |
 |---|---:|---:|---:|
-| **M1 (Jun 2026)** — incorporation, laptops, initial setup | £6,000 founder | (£930) | **£5,070** |
-| M2 (Jul 2026) | — | (£300) | **£4,770** |
-| M3 (Aug 2026) | — | (£300) | **£4,470** |
-| **M4 (Sep 2026)** — proposed pilot window opens, if agreed (not signed) | — | (£350) | **£4,120** |
-| M5 (Oct 2026) | — | (£350) | **£3,770** |
-| **M6 (Nov 2026)** — proposed pilot window closes, if it happened | — | (£350) | **£3,420** |
-| **M7 (Dec 2026)** — Stripe premium billing goes live | £50 sales | (£350) | **£3,120** |
-| M8 (Jan 2027) | £70 sales | (£350) | **£2,840** |
-| M9 (Feb 2027) | £90 sales | (£350) | **£2,580** |
-| M10 (Mar 2027) | £110 sales | (£350) | **£2,340** |
-| M11 (Apr 2027) | £130 sales | (£350) | **£2,120** |
-| **M12 (May 2027)** — Y1 close | £150 sales | (£350) | **£1,920** |
+| **M1 (Jun 2026)** — incorporation, laptops, initial setup | £6,000 founder | (£1,035) | **£4,965** |
+| M2 (Jul 2026) | — | (£135) | **£4,830** |
+| M3 (Aug 2026) | — | (£243) | **£4,587** |
+| **M4 (Sep 2026)** — proposed pilot window opens, if agreed (not signed) | — | (£283) | **£4,304** |
+| M5 (Oct 2026) | — | (£293) | **£4,011** |
+| **M6 (Nov 2026)** — proposed pilot window closes, if it happened | — | (£303) | **£3,708** |
+| **M7 (Dec 2026)** — Stripe premium billing goes live | £50 sales | (£323) | **£3,435** |
+| M8 (Jan 2027) | £70 sales | (£333) | **£3,172** |
+| M9 (Feb 2027) | £90 sales | (£343) | **£2,919** |
+| M10 (Mar 2027) | £110 sales | (£353) | **£2,676** |
+| M11 (Apr 2027) | £130 sales | (£363) | **£2,443** |
+| **M12 (May 2027)** — Y1 close | £150 sales | (£673) | **£1,920** |
 
 > **Cash never dips below c.£1,900** across all of Year 1, and this holds true whether or not the Bedfordshire pilot conversation goes anywhere — no institutional revenue, no pre-seed and no other external funding is assumed in this schedule. The founders' relationship with the university (via the former SU presidency) is a genuine upside opportunity, but the business does not depend on it to survive Year 1.
 
