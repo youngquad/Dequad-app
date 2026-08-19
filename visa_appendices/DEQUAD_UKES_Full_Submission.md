@@ -853,7 +853,7 @@ Institutional sales motion in UK higher education, NHS commissioning pathways (I
 | Activity | Provider | Target completion |
 |---|---|---|
 | Level 2 Safeguarding Adults — Awareness (refresher) | iHasco / Virtual College | Month 1 post-endorsement |
-| Cyber Essentials Plus certification (organisational) | IASME-accredited certifying body | Month 6 post-endorsement |
+| Cyber Essentials Plus certification (organisational) | IASME-accredited certifying body | Q1 Year 2 (ahead of the Q2 Year 2 penetration test) |
 | ICO data-protection foundations | UK ICO Online | Month 2 post-endorsement |
 | NHS DSPT Toolkit familiarisation | NHS England | Month 9 post-endorsement |
 
@@ -1980,7 +1980,7 @@ All Personally Identifiable Information (PII) and Special Category Data (mental-
 | Audit logging | Structured logs to centralised store; safeguarding events retained 7 years | UK DPA 2018 |
 | Backups | Daily MongoDB Atlas snapshots, 30-day retention; quarterly restore drills | NCSC Cloud Security Principles |
 | Vulnerability scanning | Dependabot + weekly OWASP ZAP scan | NCSC Cloud Security |
-| Penetration testing | Annual external pen-test (Y1 onward) by CREST-approved firm | Cyber Essentials Plus requirement |
+| Penetration testing | Annual external pen-test (from Q2 Year 2) by CREST-approved firm | Cyber Essentials Plus requirement |
 
 ## J.5 Scalability headroom
 
@@ -2148,7 +2148,7 @@ Risk score traffic-light:
 | **R12** | **LLM provider price spike (OpenAI / Anthropic) materially raises COGS** | Vendor | 3 | 2 | **6** | 🟡 | CTO | Multi-provider abstraction (Emergent integrations) in place — can swap providers in < 1 day; tier-down to smaller / open-source model for low-risk classification tasks. |
 | **R13** | **Negative national PR from a misreported case or social-media pile-on** | Reputation | 2 | 4 | **8** | 🟡 | CEO | Reactive PR plan drawing on NatWest Accelerator mentoring; clear transparency policy; clinical advisory board to provide third-party voice. |
 | **R14** | **Key engineering hire leaves in Y2** | Team | 2 | 3 | **6** | 🟡 | CTO | EMI options with 4-year vest + 1-year cliff; documentation and pairing culture; contractor pool identified for emergency cover. |
-| **R15** | **Tighter UK immigration regime restricts future hires** | Regulatory | 3 | 2 | **6** | 🟡 | CEO | Both co-founders already UK-resident; first 12 hires are UK-only; secure sponsor licence once headcount > 10. |
+| **R15** | **Tighter UK immigration regime restricts future hires** | Regulatory | 3 | 2 | **6** | 🟡 | CEO | Both co-founders already UK-resident; all hires within this plan (up to 5, per the job-creation target — Appendix G) are UK-only, settled workers; a sponsor licence would only become relevant if headcount grows beyond this plan's scope, which is not assumed here. |
 | **R16** | **Founder burnout (working unpaid through Y1–Y2)** | Team / Personal | 3 | 3 | **9** | 🟠 | Both founders | Founders draw no DEQUAD salary until Y3, and fund living costs from existing employment/freelance income throughout — a deliberate, disclosed choice, not a funding-gated one; mandated weekly off-day; mentor check-ins through NatWest Accelerator. |
 | **R17** | **5-hire job-creation target (upside case) not achieved by the settlement application stage** | Regulatory / Commercial | 3 | 3 | **9** | 🟠 | CEO | The job-creation target (§10.4, Appendix G) is presented throughout this application as an illustrative, revenue-contingent upside — not a commitment to UKES — so falling short of it does not itself breach any undertaking made here. It is contingent on institutional revenue scaling to 6+ paying universities (Appendix F, "Upside Case (Y3)" sheet), which is not assumed in the conservative base case this plan is built on. If settlement timing requires the job-creation route specifically, the founders would delay the settlement application until either this target or an alternative Home Office settlement criterion (e.g. business-growth metrics) is genuinely met, rather than presenting an unfunded commitment as achieved. |
 

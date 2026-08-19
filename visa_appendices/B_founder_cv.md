@@ -129,7 +129,7 @@ Institutional sales motion in UK higher education, NHS commissioning pathways (I
 | Activity | Provider | Target completion |
 |---|---|---|
 | Level 2 Safeguarding Adults — Awareness (refresher) | iHasco / Virtual College | Month 1 post-endorsement |
-| Cyber Essentials Plus certification (organisational) | IASME-accredited certifying body | Month 6 post-endorsement |
+| Cyber Essentials Plus certification (organisational) | IASME-accredited certifying body | Q1 Year 2 (ahead of the Q2 Year 2 penetration test) |
 | ICO data-protection foundations | UK ICO Online | Month 2 post-endorsement |
 | NHS DSPT Toolkit familiarisation | NHS England | Month 9 post-endorsement |
 

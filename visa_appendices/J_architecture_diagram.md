@@ -99,7 +99,7 @@ All Personally Identifiable Information (PII) and Special Category Data (mental-
 | Audit logging | Structured logs to centralised store; safeguarding events retained 7 years | UK DPA 2018 |
 | Backups | Daily MongoDB Atlas snapshots, 30-day retention; quarterly restore drills | NCSC Cloud Security Principles |
 | Vulnerability scanning | Dependabot + weekly OWASP ZAP scan | NCSC Cloud Security |
-| Penetration testing | Annual external pen-test (Y1 onward) by CREST-approved firm | Cyber Essentials Plus requirement |
+| Penetration testing | Annual external pen-test (from Q2 Year 2) by CREST-approved firm | Cyber Essentials Plus requirement |
 
 ## J.5 Scalability headroom
 
