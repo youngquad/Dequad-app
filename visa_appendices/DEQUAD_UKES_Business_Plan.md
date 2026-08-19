@@ -407,7 +407,7 @@ The co-founders contribute **£6,000 of personal capital (£3,000 each)** at inc
 |---|---:|
 | London office co-working (3 desks) | £12,000 |
 | Legal advice (Mishcon de Reya, DLA Piper panels) | £4,500 |
-| Accountancy support | £3,600 |
+| Accountancy support (PwC alumni network) | £3,600 |
 | Banking & business introductions | £2,000 |
 | Investor pitch coaching & mentoring | £5,000 |
 | Demo day & PR placement | £4,000 |
