@@ -44,7 +44,7 @@ The full submission pack is attached as a single merged PDF (`DEQUAD_UKES_FULL_S
 | 1 | UKES Business Plan (full, 19 sections, v5.0 — self-funded 3-year revision, August 2026) | `DEQUAD_UKES_Business_Plan.pdf` |
 | 2 | Decision-Maker Brief (15-page short-track companion) | `DEQUAD_UKES_Decision_Brief.pdf` |
 | 3 | Pitch Deck (13 slides) | `DEQUAD_Pitch_Deck.pdf` |
-| 4 | Financial Model (13-sheet Excel workbook, self-funded 3-year model) | `DEQUAD_Financial_Model.xlsx` |
+| 4 | Financial Model (14-sheet Excel workbook, self-funded 3-year model plus illustrative job-creation upside case) | `DEQUAD_Financial_Model.xlsx` |
 | 5 | Risk Register | `DEQUAD_Risk_Register.pdf` |
 | 6 | Founder CVs (Yusuf Quadri, Yusuff Adeagbo) | `B_founder_cv.pdf`, `B_cofounder_cv.pdf` |
 | 7 | Wider team CVs (Dr Gerald Marfo, Adedapo Ajuwon, Chinyere Jennifer) | `N_wider_team_cvs.pdf` |
