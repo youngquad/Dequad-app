@@ -1861,7 +1861,7 @@ The external legal opinion to be commissioned in Month 2 post-endorsement will c
 6. Boilerplate Terms of Service and Acceptable Use Policy review;
 7. Confirmation that the founder's senior-manager-responsible accountability is appropriately recorded.
 
-Estimated cost: **£8,000–£12,000** (firm fee dependent). Budgeted in Year-1 P&L (Appendix F).
+Estimated cost: **£8,000–£12,000** (firm fee dependent). This exceeds the £4,500 NatWest in-kind legal allocation (Business Plan §10.3) and is not separately budgeted in the Y1 cash P&L (Appendix F, where Y1 legal & accountancy is £300, out-of-programme only). The founders will either scope a narrower opinion within the NatWest in-kind panel's capacity, or fund the shortfall from founder cash reserves or defer to Y2 once revenue supports it — this is not yet a fully funded commitment.
 
 ---
 
