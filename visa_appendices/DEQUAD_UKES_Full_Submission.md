@@ -1589,6 +1589,7 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 |---|---|
 | Mission | Drive on-campus adoption at partner universities — represent DEQUAD at freshers' fairs, SU events and society meetups; run peer referral pushes; feed student feedback back into the product roadmap |
 | Must-have | Current student or recent graduate of a UK university; prior involvement in SU, society or student-rep leadership preferred; comfortable representing the brand in person on campus |
+| Recruitment channel | University careers portals, partner-university SU/society networks, LinkedIn |
 
 ### G.3.2 Social Media Manager
 
@@ -1596,6 +1597,7 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 |---|---|
 | Mission | Own DEQUAD's organic and paid social presence (Instagram, TikTok, LinkedIn) to drive premium subscriber growth and brand awareness among UK students; plan the content calendar around each partner university's rollout |
 | Must-have | Proven social media management experience, ideally with a consumer or student-facing brand; content creation and platform-analytics skills |
+| Recruitment channel | LinkedIn, Otta, NatWest Accelerator alumni network |
 
 ### G.3.3 Marketing Intern
 
@@ -1603,6 +1605,7 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 |---|---|
 | Mission | Support the Social Media Manager and CMO with content production, campus marketing collateral and campaign execution across partner universities |
 | Must-have | Marketing, digital media or related degree/coursework; strong writing and basic design skills; based in or able to work from London |
+| Recruitment channel | University careers portals (placements), Bright Network, LinkedIn |
 
 ### G.3.4 Sales Lead
 
@@ -1610,6 +1613,7 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 |---|---|
 | Mission | Own the institutional sales pipeline end-to-end — lead generation, outreach, and closing paid university and NHS ICB contracts; manage each account from pilot conversion through renewal |
 | Must-have | B2B/enterprise sales experience, ideally in EdTech, higher education or public-sector software; able to run a full sales cycle independently |
+| Recruitment channel | Otta, LinkedIn, NatWest Accelerator alumni network |
 
 ### G.3.5 Support Agent
 
@@ -1617,6 +1621,7 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 |---|---|
 | Mission | Front-line support for students and university admins via in-app chat and email; triage non-safeguarding queries directly and escalate safeguarding-relevant issues to the Safeguarding & Trust Lead per the existing escalation pathway |
 | Must-have | Prior customer support experience; empathetic, clear written communication; completes DEQUAD's safeguarding awareness training within the first month |
+| Recruitment channel | LinkedIn, Otta |
 
 *These five job descriptions are a first draft for review — mission and must-have detail is not yet finalised or presented as committed.*
 
