@@ -1443,9 +1443,11 @@ The DPIA will be re-reviewed annually, on the appointment of the DPO, and immedi
 | Legal & accountancy (out-of-programme) | £300 | £600 | £1,200 |
 | Insurance (D&O, PI, Cyber, PL) | £480 | £700 | £900 |
 | Business support / misc | £400 | £700 | £1,000 |
-| Fixed assets capex | £600 | £600 | £1,200 |
-| **Total OPEX** | **£3,280** | **£6,600** | **£33,200** |
-| **Operating result** | **(£3,630)** *(incl. depreciation, see §13)* | **£6,500** | **£9,200** |
+| Depreciation & amortisation | £150 | £400 | £700 |
+| **Total OPEX** | **£2,830** | **£6,400** | **£32,700** |
+| **Operating result** | **(£3,630)** | **£6,500** | **£9,200** |
+
+*Fixed assets capex (£600 / £600 / £1,200) is a balance-sheet item, capitalised and depreciated over its useful life rather than expensed in full — it appears as a cash outflow in the Cash Flow Forecast (§F.4) but not in Total OPEX above, which instead includes the depreciation charge.*
 
 ---
 
