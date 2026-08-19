@@ -1545,7 +1545,7 @@ All roles are **UK-based, PAYE, paying UK National Insurance contributions**, an
 
 Total Y3 wage bill (base case, all roles, incl. modest founder pay): **£20,000 gross / £21,500 incl. employer NI, pension and other costs** (Section 18.3).
 
-**Job-creation target, upside case:** if institutional revenue scales beyond the base case via pilot conversion (5+ paying universities), the target is **5 full-time hires** on top of the 2 founders (7 total), each sustained at least 12 months at an average salary of £25,000/year — a Y3 gross wage bill of c.£125,000 for the 5 hires, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
+**Job-creation target, upside case:** if institutional revenue scales beyond the base case via pilot conversion (5+ paying universities), the target is **5 full-time hires** on top of the 2 founders (7 total), each sustained at least 12 months at an average salary of £25,000/year — a Y3 gross wage bill of £125,000 for the 5 hires, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ---
 
