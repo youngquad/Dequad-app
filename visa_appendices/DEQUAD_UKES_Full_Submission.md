@@ -934,7 +934,7 @@ Yusuff Adeagbo is the co-founder and Chief Technology Officer of DEQUAD. He comb
 
 As CTO, Yusuff is responsible for:
 
-- **Engineering delivery** — owning the FastAPI / MongoDB backend and the Expo / React Native universal frontend; hiring and managing the first engineering team members from Y2 onward.
+- **Engineering delivery** — owning the FastAPI / MongoDB backend and the Expo / React Native universal frontend, with Adedapo Ajuwon (Senior Software Engineer, equity-only wider-team member) providing additional engineering capacity; further paid engineering hires are a longer-term ambition beyond this 3-year plan, not a commitment (Appendix G).
 - **Infrastructure & security** — cloud (Render, Cloudflare), Cyber Essentials roadmap, secrets management, GDPR/DPA-by-design, OSA-2023 compliance reporting flows.
 - **Product UX** — collaborating with the CEO and CMO on user-experience decisions across the matching, mood-tracking and safeguarding modules.
 - **R&D claim leadership** — documenting qualifying R&D activity in line with HMRC SME R&D Tax Credit guidance.
