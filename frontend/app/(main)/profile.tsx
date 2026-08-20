@@ -18,8 +18,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { api, API_URL } from '../../src/services/api';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { notify } from '../../src/utils/alert';
@@ -144,50 +142,6 @@ export default function ProfileScreen() {
       setPhotos(user.photos);
     }
   }, [user?.photos]);
-
-  useEffect(() => {
-    registerForPushNotifications();
-  }, []);
-
-  const registerForPushNotifications = async () => {
-    // Push notifications only work on physical devices with development builds
-    // Expo Go has limitations with push notifications since SDK 53
-    if (!Device.isDevice) {
-      return;
-    }
-
-    try {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      
-      if (finalStatus !== 'granted') {
-        return;
-      }
-      
-      // Note: Push tokens require a projectId which is only available in development builds
-      // In Expo Go, this will fail gracefully
-      try {
-        const token = (await Notifications.getExpoPushTokenAsync({
-          projectId: '0ad6a13c-845f-4ab4-9177-ba5031d2462d'
-        })).data;
-        
-        // Save push token to backend
-        if (token && sessionToken) {
-          await api.put('/profile', { push_token: token }, sessionToken);
-        }
-      } catch (tokenError) {
-        // This is expected in Expo Go - push notifications require a development build
-        console.error('Push notifications require a development build.');
-      }
-    } catch (error) {
-      console.error('Error registering for push notifications:', error);
-    }
-  };
 
   const pickImage = async (index: number) => {
     try {
