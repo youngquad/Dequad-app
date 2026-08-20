@@ -30,6 +30,12 @@ export default function ChatLayout() {
           title: 'Chat',
         }}
       />
+      <Stack.Screen
+        name="profile/[matchId]"
+        options={{
+          title: 'Profile',
+        }}
+      />
     </Stack>
   );
 }

@@ -450,6 +450,33 @@ async def get_accepted_matches(current_user: User = Depends(get_current_user)):
     return result
 
 
+@router.get("/matches/{match_id}/profile")
+async def get_matched_user_profile(match_id: str, current_user: User = Depends(get_current_user)):
+    """Public profile of the other person in an accepted match — same
+    ownership check as /chat/send, same field allowlist as discover."""
+    match = await db.matches.find_one({
+        "id": match_id,
+        "$or": [
+            {"user_id": current_user.user_id},
+            {"matched_user_id": current_user.user_id},
+        ],
+        "status": "accepted",
+    }, {"_id": 0})
+    if not match:
+        raise HTTPException(status_code=403, detail="Match not found or not accepted")
+
+    other_user_id = (
+        match["matched_user_id"]
+        if match["user_id"] == current_user.user_id
+        else match["user_id"]
+    )
+    other_user = await db.users.find_one({"user_id": other_user_id}, {"_id": 0})
+    if not other_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return _public_profile(other_user)
+
+
 @router.get("/matches/likes-received/count")
 async def get_likes_received_count(current_user: User = Depends(get_current_user)):
     """Cheap polling endpoint for the Connect-tab badge.

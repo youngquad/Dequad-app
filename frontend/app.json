@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dequad.wellbeing",
-      "buildNumber": "14"
+      "buildNumber": "15"
     },
     "android": {
       "package": "com.dequad.wellbeing",

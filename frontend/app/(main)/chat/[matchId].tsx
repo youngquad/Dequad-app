@@ -13,7 +13,7 @@ import {
   AppState,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../../src/contexts/ThemeContext';
@@ -57,6 +57,7 @@ function formatDivider(dateString: string) {
 export default function ChatScreen() {
   const { matchId, name, picture } = useLocalSearchParams<{ matchId: string; name: string; picture?: string }>();
   const navigation = useNavigation();
+  const router = useRouter();
   const { theme: t } = useTheme();
   const styles = useMemo(() => createStyles(t), [t]);
   const { sessionToken, user, isAuthenticated } = useAuth();
@@ -79,7 +80,17 @@ export default function ChatScreen() {
     isMounted.current = true;
     
     navigation.setOptions({
-      title: name || 'Chat',
+      headerTitle: () => (
+        <TouchableOpacity
+          style={styles.headerTitleButton}
+          onPress={() =>
+            router.push(`/(main)/chat/profile/${matchId}?name=${encodeURIComponent(name || '')}`)
+          }
+        >
+          <Text style={styles.headerTitleText} numberOfLines={1}>{name || 'Chat'}</Text>
+          <Ionicons name="chevron-forward" size={16} color={t.textFaint} />
+        </TouchableOpacity>
+      ),
     });
 
     // Hide the bottom Tabs bar while the conversation thread is open so it
@@ -364,6 +375,17 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   keyboardView: {
     flex: 1,
+  },
+  headerTitleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  headerTitleText: {
+    color: t.text,
+    fontSize: 17,
+    fontWeight: 'bold',
+    maxWidth: 200,
   },
   loadingContainer: {
     flex: 1,
