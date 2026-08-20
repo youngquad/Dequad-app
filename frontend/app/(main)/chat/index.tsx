@@ -44,14 +44,7 @@ function formatRelative(iso?: string | null): string {
 
 function previewMessage(text?: string | null): string {
   if (!text) return '';
-  // Messages are end-to-end encrypted. If decryption fails (e.g. legacy
-  // plaintext or different device key), fall back to the raw text rather than
-  // showing an error string in the inbox.
-  try {
-    const plain = decrypt(text);
-    if (plain && !plain.startsWith('[Unable to decrypt')) return plain;
-  } catch {}
-  return text;
+  return decrypt(text);
 }
 
 export default function ChatListScreen() {
@@ -103,7 +96,7 @@ export default function ChatListScreen() {
     return (
       <TouchableOpacity
         style={styles.matchItem}
-        onPress={() => router.push(`/(main)/chat/${item.match_id}?name=${encodeURIComponent(item.user.name)}`)}
+        onPress={() => router.push(`/(main)/chat/${item.match_id}?name=${encodeURIComponent(item.user.name)}&picture=${encodeURIComponent(item.user.picture || '')}`)}
       >
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>{getInitials(item.user.name)}</Text>

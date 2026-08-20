@@ -22,11 +22,17 @@ export function encrypt(text: string): string {
 }
 
 export function decrypt(cipherText: string): string {
+  if (!cipherText) return cipherText;
   try {
     const bytes = CryptoJS.AES.decrypt(cipherText, SECRET_KEY);
-    return bytes.toString(CryptoJS.enc.Utf8);
+    const plain = bytes.toString(CryptoJS.enc.Utf8);
+    // SEC-005 (2026-07) stopped encrypting new messages client-side (see
+    // chat/[matchId].tsx) so the backend safeguarding filter can scan
+    // plaintext. AES-decrypting plaintext throws or yields nothing, so
+    // treat that as "already plaintext" instead of surfacing an error —
+    // legacy messages encrypted under SECRET_KEY still decrypt normally.
+    return plain || cipherText;
   } catch (error) {
-    console.error('Decryption error:', error);
-    return '[Unable to decrypt message]';
+    return cipherText;
   }
 }

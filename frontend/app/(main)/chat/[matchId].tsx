@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
@@ -17,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../../src/contexts/ThemeContext';
 import { api } from '../../../src/services/api';
-import { encrypt, decrypt } from '../../../src/utils/encryption';
+import { decrypt } from '../../../src/utils/encryption';
 import SafeguardingAlert from '../../../src/components/SafeguardingAlert';
 
 interface Message {
@@ -28,8 +29,33 @@ interface Message {
   created_at: string;
 }
 
+// A silence longer than this gets its own centered "Today 3:45 PM" style divider,
+// independent of who sent the surrounding messages.
+const DIVIDER_GAP_MS = 30 * 60 * 1000;
+
+function getInitials(name?: string) {
+  if (!name) return '?';
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+function formatDivider(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  if (date.toDateString() === now.toDateString()) return `Today ${time}`;
+  if (date.toDateString() === yesterday.toDateString()) return `Yesterday ${time}`;
+  return `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${time}`;
+}
+
 export default function ChatScreen() {
-  const { matchId, name } = useLocalSearchParams<{ matchId: string; name: string }>();
+  const { matchId, name, picture } = useLocalSearchParams<{ matchId: string; name: string; picture?: string }>();
   const navigation = useNavigation();
   const { theme: t } = useTheme();
   const styles = useMemo(() => createStyles(t), [t]);
@@ -165,6 +191,25 @@ export default function ChatScreen() {
     }
   };
 
+  const shouldShowDivider = (index: number) => {
+    if (index === 0) return true;
+    const prev = new Date(messages[index - 1].created_at);
+    const curr = new Date(messages[index].created_at);
+    if (prev.toDateString() !== curr.toDateString()) return true;
+    return curr.getTime() - prev.getTime() > DIVIDER_GAP_MS;
+  };
+
+  const isFirstInGroup = (index: number) => {
+    if (shouldShowDivider(index)) return true;
+    return messages[index - 1].sender_id !== messages[index].sender_id;
+  };
+
+  const isLastInGroup = (index: number) => {
+    if (index === messages.length - 1) return true;
+    if (shouldShowDivider(index + 1)) return true;
+    return messages[index + 1].sender_id !== messages[index].sender_id;
+  };
+
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString('en-US', {
@@ -173,32 +218,58 @@ export default function ChatScreen() {
     });
   };
 
-  const renderMessage = ({ item }: { item: Message }) => {
+  const renderMessage = ({ item, index }: { item: Message; index: number }) => {
     const isOwnMessage = item.sender_id === user?.user_id;
     const decryptedText = decrypt(item.text);
+    const firstInGroup = isFirstInGroup(index);
+    const lastInGroup = isLastInGroup(index);
+    const showDivider = shouldShowDivider(index);
 
     return (
-      <View
-        style={[
-          styles.messageContainer,
-          isOwnMessage ? styles.ownMessage : styles.otherMessage,
-        ]}
-      >
+      <View>
+        {showDivider && (
+          <View style={styles.dividerRow}>
+            <Text style={styles.dividerText}>{formatDivider(item.created_at)}</Text>
+          </View>
+        )}
         <View
           style={[
-            styles.messageBubble,
-            isOwnMessage ? styles.ownBubble : styles.otherBubble,
+            styles.messageContainer,
+            isOwnMessage ? styles.ownMessage : styles.otherMessage,
+            { marginTop: firstInGroup ? 12 : 2 },
           ]}
         >
-          <Text style={[styles.messageText, !isOwnMessage && styles.otherMessageText]}>{decryptedText}</Text>
-          <View style={styles.messageFooter}>
-            <Text style={[styles.messageTime, !isOwnMessage && styles.otherMessageTime]}>{formatTime(item.created_at)}</Text>
-            <Ionicons
-              name="lock-closed"
-              size={10}
-              color={isOwnMessage ? 'rgba(255,255,255,0.6)' : t.textFaint}
-              style={styles.lockIcon}
-            />
+          {!isOwnMessage && (
+            <View style={styles.avatarSlot}>
+              {lastInGroup ? (
+                picture ? (
+                  <Image source={{ uri: picture }} style={styles.avatarImage} />
+                ) : (
+                  <View style={styles.avatarFallback}>
+                    <Text style={styles.avatarFallbackText}>{getInitials(name)}</Text>
+                  </View>
+                )
+              ) : null}
+            </View>
+          )}
+          <View
+            style={[
+              styles.messageBubble,
+              isOwnMessage ? styles.ownBubble : styles.otherBubble,
+            ]}
+          >
+            <Text style={[styles.messageText, !isOwnMessage && styles.otherMessageText]}>{decryptedText}</Text>
+            {lastInGroup && (
+              <View style={styles.messageFooter}>
+                <Text style={[styles.messageTime, !isOwnMessage && styles.otherMessageTime]}>{formatTime(item.created_at)}</Text>
+                <Ionicons
+                  name="lock-closed"
+                  size={10}
+                  color={isOwnMessage ? 'rgba(255,255,255,0.6)' : t.textFaint}
+                  style={styles.lockIcon}
+                />
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -315,29 +386,61 @@ const createStyles = (t: Theme) => StyleSheet.create({
     padding: 16,
     flexGrow: 1,
   },
-  messageContainer: {
-    marginBottom: 12,
+  dividerRow: {
+    alignItems: 'center',
+    marginVertical: 14,
   },
-  ownMessage: {
+  dividerText: {
+    color: t.textFaint,
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  messageContainer: {
+    flexDirection: 'row',
     alignItems: 'flex-end',
   },
+  ownMessage: {
+    justifyContent: 'flex-end',
+  },
   otherMessage: {
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  avatarSlot: {
+    width: 28,
+    height: 28,
+    marginRight: 8,
+  },
+  avatarImage: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+  },
+  avatarFallback: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: t.accent,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarFallbackText: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: 'bold',
   },
   messageBubble: {
-    maxWidth: '80%',
-    borderRadius: 18,
-    padding: 12,
+    maxWidth: '75%',
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
   },
   ownBubble: {
     backgroundColor: t.isDark ? '#5B9BD5' : '#0F2942',
-    borderBottomRightRadius: 4,
   },
   otherBubble: {
     backgroundColor: t.card,
     borderWidth: t.isDark ? 0 : 1,
     borderColor: t.border,
-    borderBottomLeftRadius: 4,
   },
   messageText: {
     color: '#fff',
