@@ -24,11 +24,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dequad.wellbeing",
-      "buildNumber": "17"
+      "buildNumber": "19"
     },
     "android": {
       "package": "com.dequad.wellbeing",
-      "versionCode": 27,
+      "versionCode": 28,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
