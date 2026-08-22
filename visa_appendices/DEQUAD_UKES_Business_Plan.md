@@ -4,12 +4,12 @@
 
 ---
 
-**Entity:** DEQUAD Ltd (Company in formation, England & Wales)
+**Entity:** DEQUAD Ltd (Company No. 17405964, incorporated in England & Wales)
 **Founders:** **Yusuf Quadri (CEO)** and **Yusuff Adeagbo (CTO)**
 **Wider founding team:** Dr Gerald Marfo (CMO), Adedapo Ajuwon (Senior Software Engineer), Chinyere Jennifer (Senior Project Management Consultant, advisor)
 **Headquarters:** London, United Kingdom — NatWest Accelerator (hosted)
 **Trading domain:** dequad.co.uk
-**Business start date:** **15 June 2026** (incorporation; trading from M1 = June 2026)
+**Business start date:** **18 August 2026** (incorporation)
 **MVP status:** Production — live at https://dequad.co.uk
 **Founder starting capital:** £6,000 cash (£3,000 from each founder, pooled in the company bank)
 **Accelerator:** **NatWest Accelerator London** — joined **16 March 2026**; office co-working, legal advice and accountancy support provided in-kind for the first 12 months
@@ -70,7 +70,7 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 
 | Evidence | Detail |
 |---|---|
-| **Working product — fully featured** | Production deployment at dequad.co.uk. Closed beta: **80 verified student accounts at the University of Bedfordshire** (42 daily-active over 6 weeks). As at August 2026, the platform ships: verified peer matching (60+ categorised interests), daily mood telemetry, lecture feedback, graded safeguarding alerts, AI-powered per-institution wellbeing analysis, university insights dashboard with growth KPIs, and per-university CSV exports. Engineering build cost in Y1: **zero** — the MVP and all Y1 features are already built. |
+| **Working product — fully featured** | Production deployment at dequad.co.uk. Closed beta: **20 verified student accounts at the University of Bedfordshire** (10 daily-active over 6 weeks). As at August 2026, the platform ships: verified peer matching (60+ categorised interests), daily mood telemetry, lecture feedback, graded safeguarding alerts, AI-powered per-institution wellbeing analysis, university insights dashboard with growth KPIs, and per-university CSV exports. Engineering build cost in Y1: **zero** — the MVP and all Y1 features are already built. |
 | **Founding team** | **Yusuf Quadri** (CEO — safeguarding professional, MBA with Data Analytics, 2× SU President) + **Yusuff Adeagbo** (CTO — MSc IT with Project Management), supported by **Dr Gerald Marfo** (CMO, PhD Digital Marketing), **Adedapo Ajuwon** (Senior Software Engineer) and **Chinyere Jennifer** (Senior Advisor, MIGSO-PCUBED) — all wider team on equity-only terms. |
 | **Two independent validations** | **Santander Universities Pre-Incubator** (completed 2025) and **NatWest Accelerator London** (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes. |
 | **Pilot conversations under way — nothing signed** | Early-stage conversations with the **University of Bedfordshire** Director of Student Services — the institution whose students the founder represented for two years. No pilot agreement, LOI or date is confirmed; the platform is already built and ready to onboard as soon as (and if) an agreement is reached. |
@@ -102,7 +102,7 @@ DEQUAD ships as a cross-platform application (iOS, Android and web at dequad.co.
 |---|---|---|
 | **UK university** | Site licence to the Insights Dashboard, branded safeguarding webhook into their existing safeguarding team, dedicated success manager. | **£2 per enrolled student per year** — a 10,000-student university pays £20,000/yr. Simple, transparent, headcount-based. |
 | **NHS Integrated Care Board (ICB)** | Population-level anonymised wellbeing data for funded institutions; joint safeguarding referral pathway. | Annual contract from **£20,000/yr** per ICB. |
-| **Student (consumer)** | Free core product. Optional **DEQUAD Premium**: advanced match filters, unlimited chats, profile boost. | **£4.99/month** via Stripe (integrated and test-verified; first live revenue expected from M7 (Dec 2026) from the existing beta cohort, independent of whether any university pilot converts). |
+| **Student (consumer)** | Free core product. Optional **DEQUAD Premium**: advanced match filters, unlimited chats, profile boost. | **£4.99/month** via Stripe (integrated and test-verified; first live revenue expected from M7 from the existing beta cohort, independent of whether any university pilot converts). |
 
 The dual-sided model matters: students adopt because the core product is free and genuinely useful; universities pay because DEQUAD gives their safeguarding teams the early-warning layer regulators now require.
 
@@ -124,9 +124,9 @@ DEQUAD's innovation claim is not any single feature — every individual element
 
 ### 3.2 Viability
 
-- **The product is built and live.** The largest single risk in most early-stage plans — can they ship? — is already retired. dequad.co.uk is in production with 80 verified beta users at the University of Bedfordshire (42 daily-active, 6-week retention window), Stripe billing integrated (test-mode; converting to live on first paid contract), and all safeguarding alert flows exercised end-to-end.
+- **The product is built and live.** The largest single risk in most early-stage plans — can they ship? — is already retired. dequad.co.uk is in production with 20 verified beta users at the University of Bedfordshire (10 daily-active, 6-week retention window), Stripe billing integrated (test-mode; converting to live on first paid contract), and all safeguarding alert flows exercised end-to-end.
 - **The founder does this job professionally.** Safeguarding-first is not a marketing phrase: the CEO manages safeguarding caseloads at Change Grow Live and has NHS mental-health ward experience. This is decisive credibility in university procurement conversations, which are led by safeguarding and student-services professionals.
-- **A trusted route into a prospective anchor customer.** Two years as Bedfordshire SU President gives DEQUAD direct, warm relationships with the Director of Student Services, safeguarding leads and senior leadership. A 12-week pilot has been **proposed** for **Sep–Nov 2026 (M4–M6)** — this is a target timeline only; no agreement is signed, and the pilot may be delayed, altered or may not proceed.
+- **A trusted route into a prospective anchor customer.** Two years as Bedfordshire SU President gives DEQUAD direct, warm relationships with the Director of Student Services, safeguarding leads and senior leadership. A 12-week pilot has been **proposed** for **M4–M6** — this is a target timeline only; no agreement is signed, and the pilot may be delayed, altered or may not proceed.
 - **Two independent third-party validations.** Santander Universities Pre-Incubator (completed 2025) and NatWest Accelerator London (admitted 16 March 2026) — both competitive selection processes assessing team and product quality.
 - **Proven willingness to pay.** Togetherall and TalkCampus charge UK universities £15k–£60k/yr and hold 100+ UK customers between them, for products missing DEQUAD's verification and triage capabilities.
 - **A cash plan that survives scrutiny — and needs no pilot to succeed.** £6,000 founder capital plus £31,100 of NatWest in-kind support delivers positive month-end cash in every month of Y1 (Section 12), with zero founder salary throughout Y1. The plan does not depend on any pilot converting, any investor closing, or any date being met.
@@ -196,7 +196,7 @@ The claims in this section are grounded in **primary field research conducted di
 | **Semi-structured buyer interviews** | **11 university staff** — 4 Directors of Student Services, 3 Wellbeing/Safeguarding Managers, 2 Heads of Digital, 2 Deputy Vice-Chancellors (Student Experience) | Procurement path, budget owner, integration needs (SSO, LMS webhook), price-per-student anchor, compliance triggers (OfS, OSA 2023, UUK Charter) | 60-min recorded video calls; transcripts on file |
 | **Discord / Reddit ethnographic scan** | 14 UK-university Discord servers, r/UniUK (287k members), r/UKUni | Where students actually meet peers today; unmet needs mentioned in unmoderated threads | Passive observation over 8 weeks |
 | **Comparable-product pricing scrape** | Togetherall, TalkCampus, UniBuddy, Kooth, Silvercloud, Big White Wall archives | Real UK ASPs, per-student rates, contract length norms | FOI requests + public press releases + Crunchbase |
-| **Closed beta at the University of Bedfordshire** | **80 verified students** onboarded, 42 daily-active over 6 weeks | Retention, mood-check completion, match-to-chat conversion, escalation false-positive rate | Live product, not prototype |
+| **Closed beta at the University of Bedfordshire** | **20 verified students** onboarded, 10 daily-active over 6 weeks | Retention, mood-check completion, match-to-chat conversion, escalation false-positive rate | Live product, not prototype |
 
 **Secondary sources triangulated with the above:**
 
@@ -361,12 +361,12 @@ Marketing grows modestly to **£2,500 (Y2)** and **£5,000 (Y3)**, scaled to act
 
 | Stage | Timing | Detail |
 |---|---|---|
-| Company incorporated | **Jun 2026 (M1)** — ✅ Complete | DEQUAD Ltd registered at Companies House. |
-| Platform feature buildout | **Jun–Aug 2026 (M1–M3)** — ✅ Complete | University AI analytics, graded safeguarding alerts, categorised interest matching, per-university data exports all shipped and live. |
-| Pilot agreement — **target, not signed** | Proposed for **Sep 2026 (M4)** — academic year start | Nothing is agreed or scheduled. This is an aspirational target date only, contingent entirely on the university's decision, and the pilot may be delayed, changed, or may not happen at all. |
-| Pilot delivery (if agreed) | **Sep–Nov 2026 (M4–M6)** | Founder-led implementation, if the pilot proceeds; weekly office hours; mid-pilot steering-group review. |
-| Review & conversion discussions (if a pilot occurs) | **Dec 2026 (M7) onwards** | Outcomes readout; commercial conversation opens. No revenue is assumed from Bedfordshire until a formal SaaS contract is signed. |
-| Target paid signature (upside case) | **Q1 2027 (M8–M9)** | Target paid SaaS agreement covering AY 2027/28 — no guarantee; not assumed in the Y1 base case (Section 11), modelled only as a Y2 upside. |
+| Company incorporated | **M1 (18 August 2026)** — ✅ Complete | DEQUAD Ltd (Company No. 17405964) registered at Companies House. |
+| Platform feature buildout | **M1–M3** — ✅ Complete | University AI analytics, graded safeguarding alerts, categorised interest matching, per-university data exports all shipped and live. |
+| Pilot agreement — **target, not signed** | Proposed for **M4** — academic year start | Nothing is agreed or scheduled. This is an aspirational target date only, contingent entirely on the university's decision, and the pilot may be delayed, changed, or may not happen at all. |
+| Pilot delivery (if agreed) | **M4–M6** | Founder-led implementation, if the pilot proceeds; weekly office hours; mid-pilot steering-group review. |
+| Review & conversion discussions (if a pilot occurs) | **M7 onwards** | Outcomes readout; commercial conversation opens. No revenue is assumed from Bedfordshire until a formal SaaS contract is signed. |
+| Target paid signature (upside case) | **M8–M9** | Target paid SaaS agreement covering the following academic year — no guarantee; not assumed in the Y1 base case (Section 11), modelled only as a Y2 upside. |
 
 The Y1 base-case forecast assumes **zero institutional revenue** — no pilot signed, no conversion. One paying institution is modelled only as a Y2 upside if the Bedfordshire conversation converts; this is a target, not a commitment. No other institutions are in active conversation at the date of this plan.
 
@@ -426,7 +426,7 @@ This support is why £6,000 of founder cash is sufficient: DEQUAD pays no rent, 
 
 | Source | Timing | Detail | Amount |
 |---|---|---|---:|
-| **Founder equity** ✅ | Day 1, Jun 2026 | Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000) — already invested, evidenced by Form SH01 | **£6,000** |
+| **Founder equity** ✅ | Day 1 (18 August 2026) | Yusuf Quadri (£3,000) + Yusuff Adeagbo (£3,000) — already invested, evidenced by Form SH01 | **£6,000** |
 
 **This £6,000 is the only funding assumed anywhere in this business plan.** The 3-year financial forecast (Sections 11–14) is funded entirely by this founder capital plus revenue generated in the period. No pre-seed, seed, Series A, R&D tax credit or other external investment is assumed, committed, or required for the plan to remain solvent — every table in Sections 11–14 reconciles on that basis alone.
 
@@ -434,7 +434,7 @@ If institutional traction significantly exceeds this conservative forecast — f
 
 ### 10.5 Founder Investment Statement (visa requirement)
 
-The lead applicant has personally invested **£3,000** of his own funds as founder share capital, matched by the co-founder's **£3,000**, for total founder share capital of **£6,000**, evidenced by the share allotment return (Form SH01) filed with Companies House at incorporation. **No third-party investment exists at the date of this application, and none is assumed anywhere in this plan.** The business is designed to be fully self-funding — from this £6,000 founder equity plus subsequent revenue — across the entire 3-year forecast period, independent of whether any pilot converts or any external funding is later raised.
+The lead applicant has personally invested **£3,000** of his own funds as founder share capital, matched by the co-founder's **£3,000**, for total founder share capital of **£6,000**, evidenced by the share allotment return (Form SH01) filed with Companies House at incorporation (Company No. 17405964, 18 August 2026). **No third-party investment exists at the date of this application, and none is assumed anywhere in this plan.** The business is designed to be fully self-funding — from this £6,000 founder equity plus subsequent revenue — across the entire 3-year forecast period, independent of whether any pilot converts or any external funding is later raised.
 
 ---
 
@@ -460,7 +460,7 @@ This is a deliberately conservative, self-funded forecast: it assumes **zero ins
 | Subtotal | **£0** | **£0** | **£0** |
 | **Total revenue** | **£600** | **£16,000** | **£48,000** |
 
-_Y1 note: no institutional revenue is assumed — nothing is signed. Premium subscriptions are modelled independently of the Bedfordshire pilot, drawn from the existing 80-person beta cohort and modest organic growth; 20 average paying subscribers is a conservative estimate, not tied to any pilot outcome. Y2 note: 0.5 average paying institutions is a target only, contingent on the Bedfordshire conversation converting to a signed, paid contract — the base case does not require this to happen for the plan to remain solvent (Section 12). Y3 note: 1.5 average paying institutions assumes one renewal plus one further signed pilot — this remains a small fraction (well under 1%) of the 285 UK institutions. No NHS ICB revenue is assumed within this 3-year plan._
+_Y1 note: no institutional revenue is assumed — nothing is signed. Premium subscriptions are modelled independently of the Bedfordshire pilot, drawn from the existing 20-person beta cohort and modest organic growth; 20 average paying subscribers is a conservative estimate, not tied to any pilot outcome. Y2 note: 0.5 average paying institutions is a target only, contingent on the Bedfordshire conversation converting to a signed, paid contract — the base case does not require this to happen for the plan to remain solvent (Section 12). Y3 note: 1.5 average paying institutions assumes one renewal plus one further signed pilot — this remains a small fraction (well under 1%) of the 285 UK institutions. No NHS ICB revenue is assumed within this 3-year plan._
 
 ### 11.2 Cost of sales
 
@@ -510,9 +510,9 @@ _This is a self-funded plan: it does not require any pilot to convert, any inves
 
 The Y1 plan is built to survive on **£6,000 of founder capital alone**, with no institutional revenue and no external funding assumed at any point:
 
-- **M1–M3 (Jun–Aug 2026):** operating burn of ≈£250–£400/month (hosting, tooling, incorporation costs), funded entirely by the £6,000 founder injection. No founder salary drawn. Both founders fund personal living costs from their existing employment income (CEO from Change Grow Live; CTO from freelance engineering). Platform features built and shipped during this period.
-- **M4–M6 (Sep–Nov 2026):** if the proposed 12-week Bedfordshire pilot goes ahead, it is planned as **no-fee**, so it generates no institutional cash receipts in this window; if it does not go ahead, costs are unaffected since none were budgeted against it. Burn stays in the same ≈£300–£450/month range.
-- **M7–M12 (Dec 2026–May 2027):** modest premium-subscription revenue begins from the existing 80-person beta cohort as Stripe billing goes live; no founder salary is drawn in Y1 regardless of whether any pilot converts.
+- **M1–M3:** operating burn of ≈£250–£400/month (hosting, tooling, incorporation costs), funded entirely by the £6,000 founder injection. No founder salary drawn. Both founders fund personal living costs from their existing employment income (CEO from Change Grow Live; CTO from freelance engineering). Platform features built and shipped during this period.
+- **M4–M6:** if the proposed 12-week Bedfordshire pilot goes ahead, it is planned as **no-fee**, so it generates no institutional cash receipts in this window; if it does not go ahead, costs are unaffected since none were budgeted against it. Burn stays in the same ≈£300–£450/month range.
+- **M7–M12:** modest premium-subscription revenue begins from the existing beta cohort as Stripe billing goes live; no founder salary is drawn in Y1 regardless of whether any pilot converts.
 
 Because **no funding round, tax credit or pilot conversion is required** for the plan to work, there is no "funding cliff" and no single point of failure: the business survives the entirety of Y1 on founder capital and organic premium revenue alone, closing the year with roughly **£1,920** in the bank.
 
@@ -688,7 +688,7 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 | Premium ARR (£4.99/mo) | £600 | £6,000 | £18,000 |
 | **TOTAL REVENUE** | **£600** | **£16,000** | **£48,000** |
 
-*Y1 assumes zero institutional revenue — no pilot is signed at the date of this plan. Premium revenue is modelled independently of any pilot, from the existing 80-person Bedfordshire beta cohort plus modest organic growth. Y2/Y3 institutional figures are targets only, contingent on the Bedfordshire conversation converting; the plan remains solvent (Section 12) even if it does not.*
+*Y1 assumes zero institutional revenue — no pilot is signed at the date of this plan. Premium revenue is modelled independently of any pilot, from the existing 20-person Bedfordshire beta cohort plus modest organic growth. Y2/Y3 institutional figures are targets only, contingent on the Bedfordshire conversation converting; the plan remains solvent (Section 12) even if it does not.*
 
 ---
 
@@ -755,7 +755,7 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 
 | Source | Timing | Amount | Status |
 |---|---|---:|---|
-| Founder equity injection | M1 (Jun 2026) | £6,000 | **Delivered — the only funding in this plan** |
+| Founder equity injection | M1 | £6,000 | **Delivered — the only funding in this plan** |
 
 No pre-seed, seed, Series A or other external investment is assumed, committed, or required anywhere in this 3-year model. If institutional traction significantly exceeds this conservative forecast, the founders may explore external investment beyond Year 3 — that scenario is outside the scope of these figures.
 
@@ -792,7 +792,7 @@ No pre-seed, seed, Series A or other external investment is assumed, committed, 
 ## F.8 Key Assumptions
 
 1. **Institutional pricing:** £2 per enrolled student per year (£20,000 for a 10,000-student university) — unchanged from the original pricing research (Section 5), but **no institutional revenue is assumed in Y1**.
-2. **Premium pricing:** £4.99/month (£59.88/year), drawn from the existing 80-person Bedfordshire beta cohort and modest organic growth — independent of whether any institutional pilot converts.
+2. **Premium pricing:** £4.99/month (£59.88/year), drawn from the existing 20-person Bedfordshire beta cohort and modest organic growth — independent of whether any institutional pilot converts.
 3. **No external funding assumed:** the entire 3-year plan is funded by the £6,000 founder capital plus revenue. No pre-seed, seed, grant or R&D tax credit is assumed or required.
 4. **Founder living costs:** both founders are employed independently (CEO at Change Grow Live; CTO as a freelance engineer) and draw no salary from DEQUAD until Y3, and only then to the extent revenue supports it.
 5. **Pilot uncertainty:** the University of Bedfordshire pilot is an early-stage, informal conversation only. No agreement, LOI or date is signed. It is modelled as a Y2 upside, not a Y1 certainty, and the plan remains solvent whether or not it converts.

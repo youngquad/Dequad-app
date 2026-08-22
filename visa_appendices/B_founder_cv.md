@@ -31,7 +31,7 @@ This combination — daily professional practice in adult safeguarding and menta
 
 ## Experience
 
-### Founder & CEO — DEQUAD (DEQUAD Ltd, in formation)
+### Founder & CEO — DEQUAD (DEQUAD Ltd, Company No. 17405964)
 _2025 – Present · London, United Kingdom_
 
 - Co-founded DEQUAD with **Yusuff Adeagbo (CTO)** — a UK-headquartered safeguarding-first student-wellbeing platform live in production at dequad.co.uk.

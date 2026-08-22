@@ -9,13 +9,13 @@
 | Question they'll probe | Your answer |
 |---|---|
 | Founder capital invested | **£6,000** total — **£3,000 each** founder, evidenced by Form SH01 at incorporation — the ONLY funding assumed anywhere in this plan |
-| Business start date | **15 June 2026** (incorporation; trading month M1 = June 2026) |
+| Business start date | **18 August 2026** (incorporation, Company No. 17405964) |
 | Revenue forecast | Y1 **£600** → Y2 **£16,000** → Y3 **£48,000** — deliberately conservative and self-funded |
 | University price point | **£2 per enrolled student per year** (10k-student uni = £20,000/yr; Togetherall ~£40k flat, TalkCampus ~£25k) — but **£0 institutional revenue is assumed in Y1**, nothing is signed |
 | Premium price | **£4.99/month** via Stripe — live and processing today, independent of any pilot |
 | Gross margin | n/a (Y1, revenue too small) → 81% (Y2) → **87% (Y3)** |
 | External funding | **None assumed.** No pre-seed, seed or Series A anywhere in this plan |
-| Pilot status | **Early, informal conversation only** — no agreement, LOI or date signed. Proposed 12-week window **Sep–Nov 2026 (M4–M6)** is a target, not a commitment |
+| Pilot status | **Early, informal conversation only** — no agreement, LOI or date signed. Proposed 12-week window **M4–M6** is a target, not a commitment |
 | Profitability | Small Y1 trading loss (£3,630) absorbed by founder capital; profitable from Y2 (£6,000); Y3 profit £8,000 |
 | UK jobs | Base case: **2 unpaid founders → 2 unpaid founders → 3 people / c.2.5 FTE**, self-funded from revenue. Job-creation target: **7 people (5 FT hires, avg. £25,000/yr, each 12+ months)** once revenue scales after pilot conversion — meets the Innovator Founder settlement job-creation criterion |
 | Market size (long-term reference, not the plan) | TAM **£86m/yr** UK · SAM **£28m** · SOM **£3.4m ARR by Y5 (aspirational)** — the committed 3-year plan targets c.£48k |
@@ -28,7 +28,7 @@
 
 **INNOVATION** — "DEQUAD is the only UK platform combining `.ac.uk`-verified peer matching, daily wellbeing telemetry and machine-assisted safeguarding triage that escalates to the university's safeguarding lead via webhook. Togetherall is anonymous, TalkCampus has no triage, UniBuddy is pre-enrolment, Bumble/Discord have no verification or safeguarding. I designed the triage myself — I file real safeguarding referrals weekly as a Recovery Coordinator at Change Grow Live."
 
-**VIABILITY** — "The product is already live at dequad.co.uk with 80 verified beta users at the University of Bedfordshire (42 daily-active) — build risk is retired. Two banks validated us competitively: Santander Pre-Incubator (2025) and NatWest Accelerator (March 2026). I'm in early conversation about a possible pilot at Bedfordshire, where I was SU President for two years — but nothing is signed, and the plan doesn't depend on it converting. Cash is positive every month of Y1–Y3 on £6k of founder capital plus revenue alone — no external funding required."
+**VIABILITY** — "The product is already live at dequad.co.uk with 20 verified beta users at the University of Bedfordshire (10 daily-active) — build risk is retired. Two banks validated us competitively: Santander Pre-Incubator (2025) and NatWest Accelerator (March 2026). I'm in early conversation about a possible pilot at Bedfordshire, where I was SU President for two years — but nothing is signed, and the plan doesn't depend on it converting. Cash is positive every month of Y1–Y3 on £6k of founder capital plus revenue alone — no external funding required."
 
 **SCALABILITY** — "Software-only, gross margin reaching ~87% by Y3. Each university onboards in 6 weeks — but this 3-year plan deliberately models just c.1.5 average paying institutions by Y3, a small, achievable slice of the 285 UK institutions, so viability never depends on rapid multi-university growth. The templated rollout is what makes faster scaling *possible* later, if traction proves out — international expansion (.edu, .edu.au) is a longer-term ambition beyond this plan, not a Year 1–3 assumption."
 

@@ -1,7 +1,7 @@
 # Appendix E — Data Protection Impact Assessment (DPIA)
 
-**Controller:** DEQUAD Ltd (in formation), United Kingdom
-**Processor:** DEQUAD Ltd (in formation)
+**Controller:** DEQUAD Ltd (Company No. 17405964), United Kingdom
+**Processor:** DEQUAD Ltd (Company No. 17405964)
 **Processing activity covered:** Operation of the DEQUAD platform — verified-student peer matching, daily mood tracking, in-app messaging, safeguarding scanning, and 24/7 support chat.
 **DPIA version:** v0.4 (draft)
 **Author:** Yusuf Quadri, CEO (acting controller representative)

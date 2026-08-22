@@ -11,15 +11,15 @@
 
 | | |
 |---|---|
-| **Business start date** | **15 June 2026** (incorporation) |
-| **Entity** | DEQUAD Ltd (in formation, England & Wales) |
+| **Business start date** | **18 August 2026** (incorporation) |
+| **Entity** | DEQUAD Ltd (Company No. 17405964, incorporated in England & Wales) |
 | **Founders** | **Yusuf Quadri** (CEO) + **Yusuff Adeagbo** (CTO) |
 | **Wider founding team** | **Dr Gerald Marfo** (CMO, PhD Digital Marketing) · **Adedapo Ajuwon** (Senior SWE) · **Chinyere Jennifer** (Senior Advisor — MIGSO-PCUBED PM) |
 | **HQ** | London — NatWest Accelerator (joined **16 March 2026**) |
 | **Prior validation** | **Santander Universities Pre-Incubator** — completed 2025 |
 | **Founder anchor** | Yusuf Quadri served as **University of Bedfordshire SU President 2021–2023** |
 | **MVP** | Live in production at https://dequad.co.uk |
-| **Beta users** | 80 verified accounts at University of Bedfordshire (42 daily-active, 6-week retention) |
+| **Beta users** | 20 verified accounts at University of Bedfordshire (10 daily-active, 6-week retention) |
 | **Pilot status** | **Early, informal conversation with University of Bedfordshire — nothing signed, nothing guaranteed** |
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders) — the only funding assumed anywhere in this plan** |
 | **In-kind support** | £31,100/yr from NatWest Accelerator (office, legal, accountancy, mentoring), Y1 only |
@@ -66,7 +66,7 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 ### Viability ✅
 
 - Production MVP is live, in beta with real students.
-- **Prospective pilot with University of Bedfordshire — proposed, not signed.** The founder's former institution, where he served two terms as SU President (2021–2023). A 12-week pilot has been proposed for **Sep–Nov 2026 (M4–M6)**; this is a target only, contingent on the university's decision, and may not happen.
+- **Prospective pilot with University of Bedfordshire — proposed, not signed.** The founder's former institution, where he served two terms as SU President (2021–2023). A 12-week pilot has been proposed for **M4–M6**; this is a target only, contingent on the university's decision, and may not happen.
 - Two independent UK-bank programme validations: **Santander Universities Pre-Incubator (2025)** + **NatWest Accelerator (joined 16 March 2026)**.
 - £6,000 founder cash (£3k each) + £31,100 in-kind NatWest support **carries the business through Y1–Y3 with positive closing cash balances, without requiring the pilot to convert or any external funding** (see Page 9).
 - B2B SaaS revenue model is proven in the adjacent market — Togetherall serves 60+ UK universities at ~£40k/year.
@@ -158,7 +158,7 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 
 - **University of Bedfordshire** — early, informal conversation only. Lead founder served two terms as SU President there (2021–2023); direct relationships with student services and safeguarding leads. No agreement, LOI or date is confirmed.
 - **Two further peer institutions** — early-stage pilot scoping (anonymised for now); equally unconfirmed.
-- **Beta cohort active** — the existing 80-person University of Bedfordshire beta cohort uses DEQUAD, independent of any formal pilot or contract.
+- **Beta cohort active** — the existing 20-person University of Bedfordshire beta cohort uses DEQUAD, independent of any formal pilot or contract.
 
 ### Y1 marketing spend: £900
 
@@ -221,18 +221,18 @@ Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 
 | Month | Inflows | Outflows | Closing balance |
 |---|---:|---:|---:|
-| **M1 (Jun 2026)** — incorporation, laptops, initial setup | £6,000 founder | (£1,035) | **£4,965** |
-| M2 (Jul 2026) | — | (£135) | **£4,830** |
-| M3 (Aug 2026) | — | (£243) | **£4,587** |
-| **M4 (Sep 2026)** — proposed pilot window opens, if agreed (not signed) | — | (£283) | **£4,304** |
-| M5 (Oct 2026) | — | (£293) | **£4,011** |
-| **M6 (Nov 2026)** — proposed pilot window closes, if it happened | — | (£303) | **£3,708** |
-| **M7 (Dec 2026)** — Stripe premium billing goes live | £50 sales | (£323) | **£3,435** |
-| M8 (Jan 2027) | £70 sales | (£333) | **£3,172** |
-| M9 (Feb 2027) | £90 sales | (£343) | **£2,919** |
-| M10 (Mar 2027) | £110 sales | (£353) | **£2,676** |
-| M11 (Apr 2027) | £130 sales | (£363) | **£2,443** |
-| **M12 (May 2027)** — Y1 close | £150 sales | (£673) | **£1,920** |
+| **M1** — incorporation, laptops, initial setup | £6,000 founder | (£1,035) | **£4,965** |
+| M2 | — | (£135) | **£4,830** |
+| M3 | — | (£243) | **£4,587** |
+| **M4** — proposed pilot window opens, if agreed (not signed) | — | (£283) | **£4,304** |
+| M5 | — | (£293) | **£4,011** |
+| **M6** — proposed pilot window closes, if it happened | — | (£303) | **£3,708** |
+| **M7** — Stripe premium billing goes live | £50 sales | (£323) | **£3,435** |
+| M8 | £70 sales | (£333) | **£3,172** |
+| M9 | £90 sales | (£343) | **£2,919** |
+| M10 | £110 sales | (£353) | **£2,676** |
+| M11 | £130 sales | (£363) | **£2,443** |
+| **M12** — Y1 close | £150 sales | (£673) | **£1,920** |
 
 > **Cash never dips below c.£1,900** across all of Year 1, and this holds true whether or not the Bedfordshire pilot conversation goes anywhere — no institutional revenue, no pre-seed and no other external funding is assumed in this schedule. The founders' relationship with the university (via the former SU presidency) is a genuine upside opportunity, but the business does not depend on it to survive Year 1.
 

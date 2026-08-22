@@ -130,10 +130,10 @@ B2B subscriptions cover the fixed cost base. Premium and ICB contracts are the u
 
 ## 07 · Traction
 
-- 📅 **Business start date: 15 June 2026** (incorporation).
+- 📅 **Business start date: 18 August 2026** (incorporation, Company No. 17405964).
 - 🛠️ **MVP live in production** at dequad.co.uk — no further build-cost in Y1.
-- 👥 **80 verified beta users** at the University of Bedfordshire (42 daily-active, 6-week retention).
-- 🏛️ **Prospective pilot — University of Bedfordshire.** Early, informal conversation only — **no agreement, LOI or date signed.** A 12-week pilot has been proposed for **Sep–Nov 2026 (M4–M6)** as a target, contingent on the university's decision. Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
+- 👥 **20 verified beta users** at the University of Bedfordshire (10 daily-active, 6-week retention).
+- 🏛️ **Prospective pilot — University of Bedfordshire.** Early, informal conversation only — **no agreement, LOI or date signed.** A 12-week pilot has been proposed for **M4–M6** as a target, contingent on the university's decision. Lead founder was Bedfordshire SU President 2021–2023 — direct relationships with student services and safeguarding leads.
 - 🏦 **Santander Universities Pre-Incubator** — completed 2025.
 - 🏦 **NatWest Accelerator (London)** — joined **16 March 2026**. £31k of in-kind support delivered (office, legal, accountancy, mentoring), Y1 only.
 
@@ -186,10 +186,10 @@ UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.
 
 | Month | Closing cash |
 |---|---:|
-| **M1 (Jun 2026)** — incorporation, £6k founder cash | £4,965 |
-| **M4–M6 (Sep–Nov 2026)** — proposed pilot window, if agreed (not signed) | £4,304 → £3,708 |
-| **M7 (Dec 2026)** — Stripe premium billing goes live | £3,435 |
-| **M12 (May 2027)** — Y1 close | **£1,920** |
+| **M1** — incorporation, £6k founder cash | £4,965 |
+| **M4–M6** — proposed pilot window, if agreed (not signed) | £4,304 → £3,708 |
+| **M7** — Stripe premium billing goes live | £3,435 |
+| **M12** — Y1 close | **£1,920** |
 
 > Cash is positive every single month of Year 1 — on founder capital and premium subscriptions alone.
 > **No institutional revenue, pre-seed or other external funding is assumed at any point.** Whether or not the Bedfordshire pilot conversation converts, the plan does not depend on it to survive Year 1.

@@ -1,6 +1,6 @@
 # Appendix I — Online Safety Act 2023 Compliance Opinion
 
-**Subject of opinion:** DEQUAD (DEQUAD Ltd in formation), operated at https://dequad.co.uk
+**Subject of opinion:** DEQUAD (DEQUAD Ltd, Company No. 17405964), operated at https://dequad.co.uk
 **Author of internal assessment:** Yusuf Quadri (Founder)
 **External counsel of record:** [Law firm to be appointed — recommended panel: Bristows, Mishcon, Wiggin, Schillings]
 **Date of latest review:** ___________________
