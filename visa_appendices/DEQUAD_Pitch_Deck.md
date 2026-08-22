@@ -167,12 +167,12 @@ A **founding team of five** — two named co-founders contributing £3,000 each 
 
 | (£) | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | 600 | 16,000 | **48,000** |
-| Gross profit / (loss) | (800) | 12,900 | 41,900 |
+| Revenue | 150 | 16,000 | **48,000** |
+| Gross profit / (loss) | (1,250) | 12,900 | 41,900 |
 | Gross margin | n/a | 81% | **87%** |
-| Operating profit / (loss) | (3,630) | 6,500 | **9,200** |
+| Operating profit / (loss) | (4,080) | 6,500 | **9,200** |
 
-**No external investment is assumed anywhere in this forecast.** Y1's small loss (£3.6k) is absorbed entirely by the £6,000 founder capital; Y2 is modestly profitable; Y3 funds the plan's only hire and a small founder salary. Deliberately small, deliberately achievable.
+**No external investment is assumed anywhere in this forecast.** Y1's small loss (£4.1k) is absorbed entirely by the £6,000 founder capital; Y2 is modestly profitable; Y3 funds the plan's only hire and a small founder salary. Deliberately small, deliberately achievable.
 
 UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.5 FTE (Y3)**, conservative base case, self-funded from revenue. **Job-creation target:** 5 people (3 full-time hires, avg. £25,000/yr, each sustained 12+ months) once revenue scales after pilot conversion — meeting the Innovator Founder settlement job-creation criterion.
 
@@ -188,8 +188,8 @@ UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.
 |---|---:|
 | **M1** — incorporation, £6k founder cash | £4,965 |
 | **M4–M6** — proposed pilot window, if agreed (not signed) | £4,304 → £3,708 |
-| **M7** — Stripe premium billing goes live | £3,435 |
-| **M12** — Y1 close | **£1,920** |
+| **M7** — Stripe premium billing goes live | £3,395 |
+| **M12** — Y1 close | **£1,470** |
 
 > Cash is positive every single month of Year 1 — on founder capital and premium subscriptions alone.
 > **No institutional revenue, pre-seed or other external funding is assumed at any point.** Whether or not the Bedfordshire pilot conversation converts, the plan does not depend on it to survive Year 1.

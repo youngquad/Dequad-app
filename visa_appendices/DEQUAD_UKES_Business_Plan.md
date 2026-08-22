@@ -75,7 +75,7 @@ The lead founder, **Yusuf Quadri**, is a **practising frontline safeguarding pro
 | **Two independent validations** | **Santander Universities Pre-Incubator** (completed 2025) and **NatWest Accelerator London** (joined 16 March 2026). Two UK high-street banks independently selected this team through competitive processes. |
 | **Pilot conversations under way — nothing signed** | Early-stage conversations with the **University of Bedfordshire** Director of Student Services — the institution whose students the founder represented for two years. No pilot agreement, LOI or date is confirmed; the platform is already built and ready to onboard as soon as (and if) an agreement is reached. |
 | **In-kind runway** | NatWest Accelerator provides London office, legal and accountancy support worth **£31,100/yr** in-kind through Y1, reducing DEQUAD's cash overheads. |
-| **Self-funded, conservative forecast** | Y1 revenue ~£600 → Y2 ~£16,000 → Y3 ~£48,000, funded entirely by the founders' **£6,000 opening capital** plus revenue generated in the period. **No pre-seed, seed or other external investment is assumed anywhere in this plan.** The base case assumes **zero institutional revenue in Y1** (no pilot is yet signed); one paying university is modelled as a Y2 upside contingent on conversion, rising to c.1.5 by Y3. |
+| **Self-funded, conservative forecast** | Y1 revenue ~£150 → Y2 ~£16,000 → Y3 ~£48,000, funded entirely by the founders' **£6,000 opening capital** plus revenue generated in the period. **No pre-seed, seed or other external investment is assumed anywhere in this plan.** The base case assumes **zero institutional revenue in Y1** (no pilot is yet signed); one paying university is modelled as a Y2 upside contingent on conversion, rising to c.1.5 by Y3. |
 | **UK jobs** | Conservative base case: 2 founders (Y1–Y2, unpaid) → 3 people / c.2.5 FTE by Y3. **Job-creation target:** 5 people (2 founders + 3 full-time hires) once institutional revenue scales via pilot conversion — each of the 3 hires sustained at least 12 months at an average salary of £25,000/year, funded from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion. |
 
 We evidence all three Home Office endorsement criteria — **innovation, viability, scalability** — with a shipped product, a frontline-qualified founding team, third-party programme validation, and a deliberately conservative financial model.
@@ -135,7 +135,7 @@ DEQUAD's innovation claim is not any single feature — every individual element
 
 DEQUAD scales the way a software business is supposed to: revenue grows far faster than cost or headcount, because the product — not additional people — carries the growth.
 
-- **Revenue grows ~80x while the core team barely grows at all.** Total revenue rises from £600 (Y1) to £48,000 (Y3) — an ~80-fold increase — while the founder-led core team grows from 2 unpaid founders to just 3 people (c.2.5 FTE) over the same period (Section 18). That gap between revenue growth and headcount growth *is* the scalability case, made concrete rather than asserted.
+- **Revenue grows sharply while the core team barely grows at all.** Total revenue rises from a deliberately small £150 in Y1 — reflecting a self-funded, pre-institutional-revenue starting point — to £48,000 by Y3, while the founder-led core team grows from 2 unpaid founders to just 3 people (c.2.5 FTE) over the same period (Section 18). That gap between revenue growth and headcount growth *is* the scalability case, made concrete rather than asserted.
 - **Software-only marginal cost.** An incremental student costs ~£0.05/month in hosting; gross margin reaches **87.3%** by Y3.
 - **Intra-institution network effects.** Every additional verified student raises the platform's value for every other student at the same university — driving the organic growth that keeps CAC falling (Section 16).
 - **Repeatable institutional rollout.** Each new university onboards through a templated 6-week implementation. This 3-year plan conservatively models c.1.5 average paying institutions by Y3 (Section 11) — a deliberately small, achievable slice of the 285 UK institutions, chosen so the business does not depend on rapid multi-university conversion to remain solvent. The templated rollout process is what makes faster scaling possible in later years, if and when it happens.
@@ -440,7 +440,7 @@ The lead applicant has personally invested **£3,000** of his own funds as found
 
 ## 11. Revenue and Cost of Sales Forecast
 
-This is a deliberately conservative, self-funded forecast: it assumes **zero institutional revenue in Y1** (no pilot is signed at the date of this plan), rising only if the Bedfordshire conversation converts to a Y2 upside. Institutional conversion is a target, not a commitment. Customer-acquisition numbers: 0 average paying institutions in Y1, 0.5 in Y2 (one pilot converting mid-year, contingent), c.1.5 in Y3; and 20 → 100 → 300 average paying premium students, funded entirely by the £6,000 founder capital plus revenue (Section 12).
+This is a deliberately conservative, self-funded forecast: it assumes **zero institutional revenue in Y1** (no pilot is signed at the date of this plan), rising only if the Bedfordshire conversation converts to a Y2 upside. Institutional conversion is a target, not a commitment. Customer-acquisition numbers: 0 average paying institutions in Y1, 0.5 in Y2 (one pilot converting mid-year, contingent), c.1.5 in Y3; and 5 → 100 → 300 average paying premium students, funded entirely by the £6,000 founder capital plus revenue (Section 12).
 
 ### 11.1 Revenue forecast (annual, GBP)
 
@@ -453,14 +453,14 @@ This is a deliberately conservative, self-funded forecast: it assumes **zero ins
 | Average paying institutions in year | 0 | 0.5 (contingent, not signed) | 1.5 (contingent) |
 | Subtotal | **£0** | **£10,000** | **£30,000** |
 | **DEQUAD Premium (B2C)** | | | |
-| Average paying students | 20 | 100 | 300 |
+| Average paying students | 5 | 100 | 300 |
 | Price (£/mo) | 4.99 | 4.99 | 4.99 |
-| Subtotal | **£600** | **£6,000** | **£18,000** |
+| Subtotal | **£150** | **£6,000** | **£18,000** |
 | **NHS ICB pilot** | | | |
 | Subtotal | **£0** | **£0** | **£0** |
-| **Total revenue** | **£600** | **£16,000** | **£48,000** |
+| **Total revenue** | **£150** | **£16,000** | **£48,000** |
 
-_Y1 note: no institutional revenue is assumed — nothing is signed. Premium subscriptions are modelled independently of the Bedfordshire pilot, drawn from the existing 20-person beta cohort and modest organic growth; 20 average paying subscribers is a conservative estimate, not tied to any pilot outcome. Y2 note: 0.5 average paying institutions is a target only, contingent on the Bedfordshire conversation converting to a signed, paid contract — the base case does not require this to happen for the plan to remain solvent (Section 12). Y3 note: 1.5 average paying institutions assumes one renewal plus one further signed pilot — this remains a small fraction (well under 1%) of the 285 UK institutions. No NHS ICB revenue is assumed within this 3-year plan._
+_Y1 note: no institutional revenue is assumed — nothing is signed. Premium subscriptions are modelled independently of the Bedfordshire pilot, drawn from the existing 20-person beta cohort and modest organic growth; 5 average paying subscribers is a conservative estimate, not tied to any pilot outcome. Y2 note: 0.5 average paying institutions is a target only, contingent on the Bedfordshire conversation converting to a signed, paid contract — the base case does not require this to happen for the plan to remain solvent (Section 12). Y3 note: 1.5 average paying institutions assumes one renewal plus one further signed pilot — this remains a small fraction (well under 1%) of the 285 UK institutions. No NHS ICB revenue is assumed within this 3-year plan._
 
 ### 11.2 Cost of sales
 
@@ -472,7 +472,7 @@ _Y1 note: no institutional revenue is assumed — nothing is signed. Premium sub
 | SMS & email | £150 | £400 | £800 |
 | Customer-success tooling | £200 | £500 | £900 |
 | **Total cost of sales** | **£1,400** | **£3,100** | **£6,100** |
-| **Gross profit** | **(£800)** | **£12,900** | **£41,900** |
+| **Gross profit** | **(£1,250)** | **£12,900** | **£41,900** |
 | **Gross margin %** | n/a — revenue too small to be meaningful | 80.6% | 87.3% |
 
 _Y1 gross profit is negative because minimum viable infrastructure cost (hosting, safeguarding-inference API) exceeds the small Y1 revenue base — normal for a pre-revenue-stage bootstrap and fully absorbed within the £6,000 founder capital (Section 12)._
@@ -487,9 +487,9 @@ No external investment, grant or tax credit is assumed anywhere in this table �
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | 6,000 | 1,920 | 8,220 |
-| Cash from sales | 600 | 16,000 | 48,000 |
-| **Total receipts** | **600** | **16,000** | **48,000** |
+| Opening cash | 6,000 | 1,470 | 7,770 |
+| Cash from sales | 150 | 16,000 | 48,000 |
+| **Total receipts** | **150** | **16,000** | **48,000** |
 | Cost of sales | (1,400) | (3,100) | (6,100) |
 | Payroll (incl. NI, pension, benefits) | 0 | 0 | (21,500) |
 | Marketing | (900) | (2,500) | (5,000) |
@@ -501,10 +501,10 @@ No external investment, grant or tax credit is assumed anywhere in this table �
 | Fixed assets capex | (600) | (600) | (1,200) |
 | Corporation tax (paid in arrears, prior-year liability) | 0 | 0 | (500) |
 | **Total expenditure** | **(4,680)** | **(9,700)** | **(39,800)** |
-| **Net cash movement** | **(4,080)** | **6,300** | **8,200** |
-| **Closing cash balance** | **1,920** | **8,220** | **16,420** |
+| **Net cash movement** | **(4,530)** | **6,300** | **8,200** |
+| **Closing cash balance** | **1,470** | **7,770** | **15,970** |
 
-_This is a self-funded plan: it does not require any pilot to convert, any investor to close, or any grant to be awarded to remain solvent. Closing cash stays positive throughout, growing from the £6,000 opening balance to c.£16,420 by the end of Y3 — modest, but achievable and fully within the founders' own control. If institutional revenue is delayed or does not materialise at all, Y1–Y2 costs are scoped to still fit comfortably within the £6,000 founder capital plus modest premium revenue alone (see 12.2)._
+_This is a self-funded plan: it does not require any pilot to convert, any investor to close, or any grant to be awarded to remain solvent. Closing cash stays positive throughout, growing from the £6,000 opening balance to c.£15,970 by the end of Y3 — modest, but achievable and fully within the founders' own control. If institutional revenue is delayed or does not materialise at all, Y1–Y2 costs are scoped to still fit comfortably within the £6,000 founder capital plus modest premium revenue alone (see 12.2)._
 
 ### 12.2 Year 1 monthly cash flow — the critical view
 
@@ -514,7 +514,7 @@ The Y1 plan is built to survive on **£6,000 of founder capital alone**, with no
 - **M4–M6:** if the proposed 12-week Bedfordshire pilot goes ahead, it is planned as **no-fee**, so it generates no institutional cash receipts in this window; if it does not go ahead, costs are unaffected since none were budgeted against it. Burn stays in the same ≈£300–£450/month range.
 - **M7–M12:** modest premium-subscription revenue begins from the existing beta cohort as Stripe billing goes live; no founder salary is drawn in Y1 regardless of whether any pilot converts.
 
-Because **no funding round, tax credit or pilot conversion is required** for the plan to work, there is no "funding cliff" and no single point of failure: the business survives the entirety of Y1 on founder capital and organic premium revenue alone, closing the year with roughly **£1,920** in the bank.
+Because **no funding round, tax credit or pilot conversion is required** for the plan to work, there is no "funding cliff" and no single point of failure: the business survives the entirety of Y1 on founder capital and organic premium revenue alone, closing the year with roughly **£1,470** in the bank.
 
 ---
 
@@ -522,9 +522,9 @@ Because **no funding round, tax credit or pilot conversion is required** for the
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | 600 | 16,000 | 48,000 |
+| Revenue | 150 | 16,000 | 48,000 |
 | Cost of sales | (1,400) | (3,100) | (6,100) |
-| **Gross profit / (loss)** | **(800)** | **12,900** | **41,900** |
+| **Gross profit / (loss)** | **(1,250)** | **12,900** | **41,900** |
 | Salaries | 0 | 0 | (20,000) |
 | Employer NI | 0 | 0 | (900) |
 | Employer pension (3%) | 0 | 0 | (350) |
@@ -536,11 +536,11 @@ Because **no funding round, tax credit or pilot conversion is required** for the
 | Insurance | (480) | (700) | (900) |
 | Business support / misc | (400) | (700) | (1,000) |
 | **Total overheads** | **(2,680)** | **(6,000)** | **(32,000)** |
-| **EBITDA** | **(3,480)** | **6,900** | **9,900** |
+| **EBITDA** | **(3,930)** | **6,900** | **9,900** |
 | Depreciation & amortisation | (150) | (400) | (700) |
-| **Operating profit / (loss)** | **(3,630)** | **6,500** | **9,200** |
+| **Operating profit / (loss)** | **(4,080)** | **6,500** | **9,200** |
 | Corporation tax | 0 | (500) | (1,200) |
-| **Profit / (loss) after tax** | **(3,630)** | **6,000** | **8,000** |
+| **Profit / (loss) after tax** | **(4,080)** | **6,000** | **8,000** |
 
 This is a self-funded plan: it assumes **no equity investment of any kind** — Y1's small loss is absorbed entirely by the £6,000 founder capital, not by any pre-seed or seed round. Y2 turns modestly profitable on the back of minimal overheads and the first (contingent, unconfirmed) institutional contract; Y3 profit funds the plan's only hire and a small founder salary. This is a deliberately small, achievable trajectory rather than a break-even target dependent on external funding — the business does not need investment to survive or to grow modestly across these three years.
 
@@ -551,18 +551,18 @@ This is a self-funded plan: it assumes **no equity investment of any kind** — 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
 | Fixed assets (net) | 450 | 650 | 1,150 |
-| Cash at bank | 1,920 | 8,220 | 16,420 |
+| Cash at bank | 1,470 | 7,770 | 15,970 |
 | Trade receivables | 0 | 500 | 1,500 |
 | Stock / inventory | 0 | 0 | 0 |
-| **Total assets** | **2,370** | **9,370** | **19,070** |
+| **Total assets** | **1,920** | **8,920** | **18,620** |
 | Trade payables | 0 | (1,000) | (2,700) |
-| **Net assets** | **2,370** | **8,370** | **16,370** |
+| **Net assets** | **1,920** | **7,920** | **15,920** |
 | Share capital | 6,000 | 6,000 | 6,000 |
 | Share premium | 0 | 0 | 0 |
-| Profit & loss reserve | (3,630) | 2,370 | 10,370 |
-| **Shareholders' funds** | **2,370** | **8,370** | **16,370** |
+| Profit & loss reserve | (4,080) | 1,920 | 9,920 |
+| **Shareholders' funds** | **1,920** | **7,920** | **15,920** |
 
-No share premium exists in any year — there has been no external investment round, consistent with Section 10. Shareholders' funds grow from the £6,000 founder investment (less the small Y1 trading loss) to c.£16,370 by Y3, entirely through trading, not fundraising.
+No share premium exists in any year — there has been no external investment round, consistent with Section 10. Shareholders' funds grow from the £6,000 founder investment (less the small Y1 trading loss) to c.£15,920 by Y3, entirely through trading, not fundraising.
 
 ---
 
@@ -684,9 +684,9 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 | Institutional ARR | £0 | £10,000 | £30,000 |
 | NHS ICBs commissioned | 0 | 0 | 0 |
 | NHS ARR | £0 | £0 | £0 |
-| Premium subscribers (avg) | 20 | 100 | 300 |
-| Premium ARR (£4.99/mo) | £600 | £6,000 | £18,000 |
-| **TOTAL REVENUE** | **£600** | **£16,000** | **£48,000** |
+| Premium subscribers (avg) | 5 | 100 | 300 |
+| Premium ARR (£4.99/mo) | £150 | £6,000 | £18,000 |
+| **TOTAL REVENUE** | **£150** | **£16,000** | **£48,000** |
 
 *Y1 assumes zero institutional revenue — no pilot is signed at the date of this plan. Premium revenue is modelled independently of any pilot, from the existing 20-person Bedfordshire beta cohort plus modest organic growth. Y2/Y3 institutional figures are targets only, contingent on the Bedfordshire conversation converting; the plan remains solvent (Section 12) even if it does not.*
 
@@ -702,7 +702,7 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 | SMS & email notifications | £150 | £400 | £800 |
 | Customer-success tooling | £200 | £500 | £900 |
 | **Total COGS** | **£1,400** | **£3,100** | **£6,100** |
-| **Gross profit / (loss)** | **(£800)** | **£12,900** | **£41,900** |
+| **Gross profit / (loss)** | **(£1,250)** | **£12,900** | **£41,900** |
 | **Gross margin** | n/a (revenue too small) | 80.6% | 87.3% |
 
 ---
@@ -720,7 +720,7 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 | Business support / misc | £400 | £700 | £1,000 |
 | Depreciation & amortisation | £150 | £400 | £700 |
 | **Total OPEX** | **£2,830** | **£6,400** | **£32,700** |
-| **Operating result** | **(£3,630)** | **£6,500** | **£9,200** |
+| **Operating result** | **(£4,080)** | **£6,500** | **£9,200** |
 
 *Fixed assets capex (£600 / £600 / £1,200) is a balance-sheet item, capitalised and depreciated over its useful life rather than expensed in full — it appears as a cash outflow in the Cash Flow Forecast (§F.4) but not in Total OPEX above, which instead includes the depreciation charge.*
 
@@ -730,9 +730,9 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 
 | Line | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Opening cash | £6,000 | £1,920 | £8,220 |
-| Cash from sales | £600 | £16,000 | £48,000 |
-| **Total receipts** | **£600** | **£16,000** | **£48,000** |
+| Opening cash | £6,000 | £1,470 | £7,770 |
+| Cash from sales | £150 | £16,000 | £48,000 |
+| **Total receipts** | **£150** | **£16,000** | **£48,000** |
 | Cost of sales | (£1,400) | (£3,100) | (£6,100) |
 | Payroll (incl. NI, pension, benefits) | £0 | £0 | (£21,500) |
 | Marketing | (£900) | (£2,500) | (£5,000) |
@@ -744,8 +744,8 @@ The wider founding team (Section 7.2) hold EMI options on equity-only terms. Opt
 | Fixed assets capex | (£600) | (£600) | (£1,200) |
 | Corporation tax (prior-year liability, paid in arrears) | £0 | £0 | (£500) |
 | **Total expenditure** | **(£4,680)** | **(£9,700)** | **(£39,800)** |
-| **Net cash movement** | **(£4,080)** | **£6,300** | **£8,200** |
-| **Closing cash balance** | **£1,920** | **£8,220** | **£16,420** |
+| **Net cash movement** | **(£4,530)** | **£6,300** | **£8,200** |
+| **Closing cash balance** | **£1,470** | **£7,770** | **£15,970** |
 
 *No pre-seed, seed or R&D tax credit is assumed. Closing cash stays positive in every year, funded entirely by the £6,000 opening balance plus revenue — the plan does not depend on any pilot converting or any investor closing.*
 

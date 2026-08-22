@@ -24,9 +24,9 @@
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders) — the only funding assumed anywhere in this plan** |
 | **In-kind support** | £31,100/yr from NatWest Accelerator (office, legal, accountancy, mentoring), Y1 only |
 | **External funding ask** | **None.** This is a self-funded 3-year plan; no pre-seed, seed or other investment is required or assumed |
-| **3-yr revenue** | £0.6k → £16k → £48k |
+| **3-yr revenue** | £0.15k → £16k → £48k |
 | **3-yr UK jobs** | Base case: 2 (unpaid founders) → 2 (unpaid founders) → 3 people / c.2.5 FTE, entirely self-funded. **Job-creation target:** 5 people (3 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion — meets the Innovator Founder settlement job-creation criterion |
-| **Profitability** | Modest trading loss in Y1 (£3.6k), profitable from Y2 — no break-even "event" needed since no external funding is assumed |
+| **Profitability** | Modest trading loss in Y1 (£4.1k), profitable from Y2 — no break-even "event" needed since no external funding is assumed |
 | **Endorsement criteria met** | ✅ Innovation · ✅ Viability · ✅ Scalability |
 
 ---
@@ -73,7 +73,7 @@ No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — c
 
 ### Scalability ✅
 
-- **Revenue grows ~80x (£600 → £48,000, Y1 to Y3) while the core team grows from 2 to just 3 people.** That gap between revenue growth and headcount growth is the scalability case made concrete, not asserted.
+- **Revenue grows sharply (£150 → £48,000, Y1 to Y3) while the core team grows from 2 to just 3 people.** That gap between revenue growth and headcount growth is the scalability case made concrete, not asserted.
 - Software-only marginal cost → gross margin reaches ~87% by Y3.
 - Within-institution network effects accelerate intra-uni adoption.
 - 6-week implementation per new university enables a repeatable rollout process, deliberately modelled conservatively at c.1.5 paying institutions by Y3 (out of 285 total UK) so the plan does not depend on rapid conversion.
@@ -227,14 +227,14 @@ Full CVs in Appendix N (`N_wider_team_cvs.pdf`).
 | **M4** — proposed pilot window opens, if agreed (not signed) | — | (£283) | **£4,304** |
 | M5 | — | (£293) | **£4,011** |
 | **M6** — proposed pilot window closes, if it happened | — | (£303) | **£3,708** |
-| **M7** — Stripe premium billing goes live | £50 sales | (£323) | **£3,435** |
-| M8 | £70 sales | (£333) | **£3,172** |
-| M9 | £90 sales | (£343) | **£2,919** |
-| M10 | £110 sales | (£353) | **£2,676** |
-| M11 | £130 sales | (£363) | **£2,443** |
-| **M12** — Y1 close | £150 sales | (£673) | **£1,920** |
+| **M7** — Stripe premium billing goes live | £10 sales | (£323) | **£3,395** |
+| M8 | £15 sales | (£333) | **£3,077** |
+| M9 | £20 sales | (£343) | **£2,754** |
+| M10 | £25 sales | (£353) | **£2,426** |
+| M11 | £35 sales | (£363) | **£2,098** |
+| **M12** — Y1 close | £45 sales | (£673) | **£1,470** |
 
-> **Cash never dips below c.£1,900** across all of Year 1, and this holds true whether or not the Bedfordshire pilot conversation goes anywhere — no institutional revenue, no pre-seed and no other external funding is assumed in this schedule. The founders' relationship with the university (via the former SU presidency) is a genuine upside opportunity, but the business does not depend on it to survive Year 1.
+> **Cash never dips below c.£1,400** across all of Year 1, and this holds true whether or not the Bedfordshire pilot conversation goes anywhere — no institutional revenue, no pre-seed and no other external funding is assumed in this schedule. The founders' relationship with the university (via the former SU presidency) is a genuine upside opportunity, but the business does not depend on it to survive Year 1.
 
 The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow Y1 (mo)".
 
@@ -244,15 +244,15 @@ The full monthly schedule is in `DEQUAD_Financial_Model.xlsx`, sheet "Cash Flow 
 
 | | Y1 | Y2 | Y3 |
 |---|---:|---:|---:|
-| Revenue | £600 | £16,000 | £48,000 |
+| Revenue | £150 | £16,000 | £48,000 |
 | Cost of Sales | (£1,400) | (£3,100) | (£6,100) |
-| Gross Profit / (loss) | (£800) | £12,900 | £41,900 |
+| Gross Profit / (loss) | (£1,250) | £12,900 | £41,900 |
 | Gross margin % | n/a | 80.6% | 87.3% |
 | Total overheads (incl. payroll) | (£2,680) | (£6,000) | (£32,000) |
-| **EBITDA** | **(£3,480)** | **£6,900** | **£9,900** |
-| **Operating profit / (loss)** | **(£3,630)** | **£6,500** | **£9,200** |
+| **EBITDA** | **(£3,930)** | **£6,900** | **£9,900** |
+| **Operating profit / (loss)** | **(£4,080)** | **£6,500** | **£9,200** |
 
-Y1 is the only loss-making year, and the loss (£3.6k) is fully absorbed by the £6,000 founder capital — no equity round funds it. Y2 turns modestly profitable on minimal overheads and a small (contingent) institutional contract; Y3 profit funds the plan's only hire and modest founder pay. **No break-even "event" is needed** because no external funding is assumed at any point — the business is solvent throughout.
+Y1 is the only loss-making year, and the loss (£4.1k) is fully absorbed by the £6,000 founder capital — no equity round funds it. Y2 turns modestly profitable on minimal overheads and a small (contingent) institutional contract; Y3 profit funds the plan's only hire and modest founder pay. **No break-even "event" is needed** because no external funding is assumed at any point — the business is solvent throughout.
 
 ---
 
