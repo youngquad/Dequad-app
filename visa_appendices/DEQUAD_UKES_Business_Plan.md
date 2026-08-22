@@ -642,7 +642,7 @@ Headcount (conservative base case): **2 unpaid founders (Y1) → 2 unpaid founde
 
 ### 18.4 Equity
 
-The wider founding team (Section 7.2) hold EMI options on equity-only terms. Option grants for the 5 Y3 hires are TBC.
+The wider founding team (Section 7.2) hold EMI options on equity-only terms. Option grants for the 3 Y3 hires are TBC.
 
 ---
 
