@@ -174,7 +174,7 @@ A **founding team of five** — two named co-founders contributing £3,000 each 
 
 **No external investment is assumed anywhere in this forecast.** Y1's small loss (£3.6k) is absorbed entirely by the £6,000 founder capital; Y2 is modestly profitable; Y3 funds the plan's only hire and a small founder salary. Deliberately small, deliberately achievable.
 
-UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.5 FTE (Y3)**, conservative base case, self-funded from revenue. **Job-creation target:** 7 people (5 full-time hires, avg. £25,000/yr, each sustained 12+ months) once revenue scales after pilot conversion — meeting the Innovator Founder settlement job-creation criterion.
+UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.5 FTE (Y3)**, conservative base case, self-funded from revenue. **Job-creation target:** 5 people (3 full-time hires, avg. £25,000/yr, each sustained 12+ months) once revenue scales after pilot conversion — meeting the Innovator Founder settlement job-creation criterion.
 
 </div>
 
@@ -212,7 +212,7 @@ UK jobs: **2 unpaid founders (Y1) → 2 unpaid founders (Y2) → 3 people / c.2.
 | **No dependency on the Bedfordshire pilot** | Nothing is signed. If it converts, it's Y2+ upside (Section 11). If it doesn't, the plan is unaffected. |
 | **Growth is sequenced to revenue, not capital** | The plan's only hire (Y3, part-time) and modest founder pay are triggered by revenue actually landing — not by a funding round closing. |
 
-If institutional traction significantly exceeds this conservative forecast (5+ paying universities), the founders may explore external investment beyond Year 3 to accelerate growth — a future option, not a plan dependency.
+If institutional traction significantly exceeds this conservative forecast (6+ paying universities), the founders may explore external investment beyond Year 3 to accelerate growth — a future option, not a plan dependency.
 
 </div>
 

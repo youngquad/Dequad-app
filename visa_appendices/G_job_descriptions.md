@@ -2,7 +2,7 @@
 
 *Written and prepared by Yusuf Quadri, Founder & CEO, DEQUAD Ltd.*
 
-This appendix documents the **one funded hire** in the conservative base-case plan referenced in main document §7.3, the **five-hire job-creation target** for the upside case (§10.4), and the basis on which any hiring beyond Year 3 would be considered. This is a deliberate change from earlier drafts of this plan, which assumed a 42-role, 5-year hiring plan funded by pre-seed, seed and Series A rounds. No external funding is assumed for the base case (Section 10); the hiring plan has been rebuilt around what institutional and premium revenue can actually fund, with the 5-hire job-creation target funded from revenue generated after piloting.
+This appendix documents the **one funded hire** in the conservative base-case plan referenced in main document §7.3, the **three-hire job-creation target** for the upside case (§10.4), and the basis on which any hiring beyond Year 3 would be considered. This is a deliberate change from earlier drafts of this plan, which assumed a 42-role, 5-year hiring plan funded by pre-seed, seed and Series A rounds. No external funding is assumed for the base case (Section 10); the hiring plan has been rebuilt around what institutional and premium revenue can actually fund, with the 3-hire job-creation target funded from revenue generated after piloting, and deliberately kept lean — every role either drives the revenue that funds it (Sales Lead) or is essential to serving the resulting student and institutional base safely (Support Agent, Student Ambassador).
 
 All roles are **UK-based, PAYE, paying UK National Insurance contributions**, and recruited through fair and open processes.
 
@@ -18,7 +18,7 @@ All roles are **UK-based, PAYE, paying UK National Insurance contributions**, an
 
 Total Y3 wage bill (base case, all roles, incl. modest founder pay): **£20,000 gross / £21,500 incl. employer NI, pension and other costs** (Section 18.3).
 
-**Job-creation target, upside case:** if institutional revenue scales beyond the base case via pilot conversion (5+ paying universities), the target is **5 full-time hires** on top of the 2 founders (7 total), each sustained at least 12 months at an average salary of £25,000/year — a Y3 gross wage bill of £125,000 for the 5 hires, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
+**Job-creation target, upside case:** if institutional revenue scales beyond the base case via pilot conversion (6+ paying universities), the target is **3 full-time hires** on top of the 2 founders (5 total), each sustained at least 12 months at an average salary of £25,000/year — a Y3 gross wage bill of £75,000 for the 3 hires, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ---
 
@@ -36,51 +36,25 @@ Total Y3 wage bill (base case, all roles, incl. modest founder pay): **£20,000 
 
 ---
 
-## G.3 Job-creation target (upside case) — 5 full-time hires
+## G.3 Job-creation target (upside case) — 3 full-time hires
 
-If institutional revenue scales beyond the conservative Y3 base case via pilot conversion (5+ paying universities), the plan's job-creation target is **5 full-time UK roles**, each:
+If institutional revenue scales beyond the conservative Y3 base case via pilot conversion (6+ paying universities), the plan's job-creation target is **3 full-time UK roles**, each:
 
 - Full-time, UK-based, PAYE, paying UK National Insurance contributions
 - Sustained for at least 12 months
 - Paid an average salary of £25,000/year
 
-This meets the Innovator Founder settlement job-creation criterion of 5 jobs for persons settled in the UK, each existing for at least 12 months, at an average salary of at least £25,000/year. These 5 roles are funded entirely from revenue generated after piloting, not from any external funding round.
+These 3 roles are funded entirely from revenue generated after piloting, not from any external funding round. The target is deliberately kept to three — one role that directly drives the institutional revenue funding it, and two that are essential to serving the resulting student and university base — rather than the larger, marketing-heavy hiring plan considered in earlier drafts.
 
 | # | Role | Commitment | Salary band | Hire timing | Reporting line |
 |---|---|---|---|---|---|
-| 1 | Student Ambassador | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CMO (Dr Gerald Marfo) |
-| 2 | Social Media Manager | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CMO (Dr Gerald Marfo) |
-| 3 | Marketing Intern | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CMO (Dr Gerald Marfo) |
-| 4 | Sales Lead | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CEO (Yusuf Quadri) |
-| 5 | Support Agent | Full-time | £25,000/yr | Year 3, contingent on 5+ paying universities | CEO (Yusuf Quadri) |
+| 1 | Sales Lead | Full-time | £25,000/yr | Year 3, contingent on 6+ paying universities | CEO (Yusuf Quadri) |
+| 2 | Support Agent | Full-time | £25,000/yr | Year 3, contingent on 6+ paying universities | CEO (Yusuf Quadri) |
+| 3 | Student Ambassador | Full-time | £25,000/yr | Year 3, contingent on 6+ paying universities | CMO (Dr Gerald Marfo) |
 
-Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institutional revenue scales via pilot conversion (5+ paying universities) — meeting the settlement job-creation criterion's average-salary threshold exactly. Mission and must-have detail for each role follows below.
+Each of the 3 roles is £25,000/yr, all full-time, hired in Year 3 once institutional revenue scales via pilot conversion (6+ paying universities) — meeting the settlement job-creation criterion's average-salary threshold exactly. Mission and must-have detail for each role follows below.
 
-### G.3.1 Student Ambassador
-
-| Field | Detail |
-|---|---|
-| Mission | Drive on-campus adoption at partner universities — represent DEQUAD at freshers' fairs, SU events and society meetups; run peer referral pushes; feed student feedback back into the product roadmap |
-| Must-have | Current student or recent graduate of a UK university; prior involvement in SU, society or student-rep leadership preferred; comfortable representing the brand in person on campus |
-| Recruitment channel | University careers portals, partner-university SU/society networks, LinkedIn |
-
-### G.3.2 Social Media Manager
-
-| Field | Detail |
-|---|---|
-| Mission | Own DEQUAD's organic and paid social presence (Instagram, TikTok, LinkedIn) to drive premium subscriber growth and brand awareness among UK students; plan the content calendar around each partner university's rollout |
-| Must-have | Proven social media management experience, ideally with a consumer or student-facing brand; content creation and platform-analytics skills |
-| Recruitment channel | LinkedIn, Otta, NatWest Accelerator alumni network |
-
-### G.3.3 Marketing Intern
-
-| Field | Detail |
-|---|---|
-| Mission | Support the Social Media Manager and CMO with content production, campus marketing collateral and campaign execution across partner universities |
-| Must-have | Marketing, digital media or related degree/coursework; strong writing and basic design skills; based in or able to work from London |
-| Recruitment channel | University careers portals (placements), Bright Network, LinkedIn |
-
-### G.3.4 Sales Lead
+### G.3.1 Sales Lead
 
 | Field | Detail |
 |---|---|
@@ -88,7 +62,7 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 | Must-have | B2B/enterprise sales experience, ideally in EdTech, higher education or public-sector software; able to run a full sales cycle independently |
 | Recruitment channel | Otta, LinkedIn, NatWest Accelerator alumni network |
 
-### G.3.5 Support Agent
+### G.3.2 Support Agent
 
 | Field | Detail |
 |---|---|
@@ -96,11 +70,19 @@ Each of the 5 roles is £25,000/yr, all full-time, hired in Year 3 once institut
 | Must-have | Prior customer support experience; empathetic, clear written communication; completes DEQUAD's safeguarding awareness training within the first month |
 | Recruitment channel | LinkedIn, Otta |
 
-*These five job descriptions are a first draft for review — mission and must-have detail is not yet finalised or presented as committed.*
+### G.3.3 Student Ambassador
+
+| Field | Detail |
+|---|---|
+| Mission | Drive on-campus adoption at partner universities — represent DEQUAD at freshers' fairs, SU events and society meetups; run peer referral pushes; feed student feedback back into the product roadmap |
+| Must-have | Current student or recent graduate of a UK university; prior involvement in SU, society or student-rep leadership preferred; comfortable representing the brand in person on campus |
+| Recruitment channel | University careers portals, partner-university SU/society networks, LinkedIn |
+
+*These three job descriptions are a first draft for review — mission and must-have detail is not yet finalised or presented as committed.*
 
 ## G.4 Further roles beyond the job-creation target — not part of this plan
 
-Any hiring beyond the 5-hire job-creation target above is a longer-term ambition, not a commitment. It would only happen if institutional revenue significantly exceeds even the upside case, or if a future funding round is raised — neither of which is assumed here.
+Any hiring beyond the 3-hire job-creation target above is a longer-term ambition, not a commitment. It would only happen if institutional revenue significantly exceeds even the upside case, or if a future funding round is raised — neither of which is assumed here.
 
 ---
 

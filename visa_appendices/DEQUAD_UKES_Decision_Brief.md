@@ -22,10 +22,10 @@
 | **Beta users** | 80 verified accounts at University of Bedfordshire (42 daily-active, 6-week retention) |
 | **Pilot status** | **Early, informal conversation with University of Bedfordshire — nothing signed, nothing guaranteed** |
 | **Starting cash** | **£6,000 (£3,000 from each of 2 founders) — the only funding assumed anywhere in this plan** |
-| **In-kind support** | £31,000/yr from NatWest Accelerator (office, legal, accountancy, mentoring), Y1 only |
+| **In-kind support** | £31,100/yr from NatWest Accelerator (office, legal, accountancy, mentoring), Y1 only |
 | **External funding ask** | **None.** This is a self-funded 3-year plan; no pre-seed, seed or other investment is required or assumed |
 | **3-yr revenue** | £0.6k → £16k → £48k |
-| **3-yr UK jobs** | Base case: 2 (unpaid founders) → 2 (unpaid founders) → 3 people / c.2.5 FTE, entirely self-funded. **Job-creation target:** 7 people (5 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion — meets the Innovator Founder settlement job-creation criterion |
+| **3-yr UK jobs** | Base case: 2 (unpaid founders) → 2 (unpaid founders) → 3 people / c.2.5 FTE, entirely self-funded. **Job-creation target:** 5 people (3 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion — meets the Innovator Founder settlement job-creation criterion |
 | **Profitability** | Modest trading loss in Y1 (£3.6k), profitable from Y2 — no break-even "event" needed since no external funding is assumed |
 | **Endorsement criteria met** | ✅ Innovation · ✅ Viability · ✅ Scalability |
 
@@ -61,22 +61,23 @@ DEQUAD is the **only UK product** combining:
 - continuous mood telemetry tied to engagement,
 - and **machine-assisted safeguarding triage with a real-time webhook to university DSLs**.
 
-No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — combines more than two of these (see comparison table on Page 4).
+No competitor — Togetherall, TalkCampus, UniBuddy, Bumble BFF or Discord — combines more than two of these (see comparison table on Page 4). This is not a founder assertion: in the primary buyer research underpinning this plan, 9 of 11 university safeguarding and student-services leads named identity-verified peer networks as their single biggest unmet need. And it is not easily copied — the founders' own Risk Register treats a competitor copying the `.ac.uk` layer as a live, scored risk (not a hypothetical), and names the moats that survive it: the safeguarding webhook, the graded-alert taxonomy and the insights dashboard, none of which can be replicated without also rebuilding practitioner-designed triage logic.
 
 ### Viability ✅
 
 - Production MVP is live, in beta with real students.
 - **Prospective pilot with University of Bedfordshire — proposed, not signed.** The founder's former institution, where he served two terms as SU President (2021–2023). A 12-week pilot has been proposed for **Sep–Nov 2026 (M4–M6)**; this is a target only, contingent on the university's decision, and may not happen.
 - Two independent UK-bank programme validations: **Santander Universities Pre-Incubator (2025)** + **NatWest Accelerator (joined 16 March 2026)**.
-- £6,000 founder cash (£3k each) + £31,000 in-kind NatWest support **carries the business through Y1–Y3 with positive closing cash balances, without requiring the pilot to convert or any external funding** (see Page 9).
+- £6,000 founder cash (£3k each) + £31,100 in-kind NatWest support **carries the business through Y1–Y3 with positive closing cash balances, without requiring the pilot to convert or any external funding** (see Page 9).
 - B2B SaaS revenue model is proven in the adjacent market — Togetherall serves 60+ UK universities at ~£40k/year.
 
 ### Scalability ✅
 
+- **Revenue grows ~80x (£600 → £48,000, Y1 to Y3) while the core team grows from 2 to just 3 people.** That gap between revenue growth and headcount growth is the scalability case made concrete, not asserted.
 - Software-only marginal cost → gross margin reaches ~87% by Y3.
 - Within-institution network effects accelerate intra-uni adoption.
 - 6-week implementation per new university enables a repeatable rollout process, deliberately modelled conservatively at c.1.5 paying institutions by Y3 (out of 285 total UK) so the plan does not depend on rapid conversion.
-- Closed-network model maps cleanly to `.edu` / `.edu.au` / EU domains post-Y3 → **£180m TAM** in EN-language HE markets, as a longer-term opportunity beyond this 3-year plan.
+- International optionality is architectural, not aspirational: the `.ac.uk` verification engine is a configurable domain allow-list, so the same mechanism maps cleanly to `.edu` / `.edu.au` / EU domains post-Y3 → **£180m TAM** in EN-language HE markets, as a longer-term opportunity beyond this 3-year plan.
 
 ---
 
@@ -267,7 +268,7 @@ Y1 is the only loss-making year, and the loss (£3.6k) is fully absorbed by the 
 
 Conservative base case — all self-funded from revenue, no external funding round assumed.
 
-**Job-creation target (upside case):** once institutional revenue scales beyond this base case via pilot conversion, headcount grows to **7 (2 founders + 5 full-time hires)** — each of the 5 hires sustained for at least 12 months at an average salary of £25,000/year, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
+**Job-creation target (upside case):** once institutional revenue scales beyond this base case via pilot conversion, headcount grows to **5 (2 founders + 3 full-time hires)** — each of the 3 hires sustained for at least 12 months at an average salary of £25,000/year, funded entirely from revenue generated after piloting, meeting the Innovator Founder settlement job-creation criterion.
 
 ### Beyond direct jobs
 
@@ -317,7 +318,7 @@ The key risks the founders have identified and their mitigations:
 |---|---|---|---|
 | R1 | Bedfordshire pilot conversation never converts — nothing is signed | Medium | The plan is solvent at zero institutional revenue throughout Y1–Y3 (Page 9–10); no cost line depends on this converting. Two further pilot conversations scoped as independent upside. |
 | R2 | Co-founder hire delayed | High | Y1 build is solo-doable; founder personally covers technical work until co-founder onboarded. |
-| R3 | Institutional/premium revenue falls short of plan targets | Medium | No funding round is required at any point; the only consequence is that the base-case Y3 hire and modest founder pay are delayed, not that the business fails. The upside-case 5-hire job-creation target simply does not trigger (see Risk Register R17). |
+| R3 | Institutional/premium revenue falls short of plan targets | Medium | No funding round is required at any point; the only consequence is that the base-case Y3 hire and modest founder pay are delayed, not that the business fails. The upside-case 3-hire job-creation target simply does not trigger (see Risk Register R17). |
 | R4 | Safeguarding incident (false negative) | High | Human-in-the-loop for all high-risk flags; insurance in place; clinical advisory board recruited Q2 Y2. |
 | R5 | Togetherall/TalkCampus copy `.ac.uk` verification | Medium | First-mover land grab; safeguarding webhook + insights dashboard are deeper moats. |
 | R6 | OfS / Online Safety Act non-compliance | Medium | OSA risk assessment and reporting flows already shipped; ICO DPIA drafted; legal review via NatWest Mishcon panel. |
@@ -340,7 +341,7 @@ DEQUAD is a **production-ready, accelerator-validated, self-funded** UK software
 
 1. **Real product, real users** — the MVP is live, has real beta users at the University of Bedfordshire, and is governed by a DPIA-cleared safeguarding policy that ships before public launch.
 2. **Capital efficiency and self-sufficiency** — the business survives all three years on **£6,000 of founder cash plus revenue alone**, with no external funding assumed, committed, or required at any point. The NatWest Accelerator in-kind support and an extended no-salary founder commitment (Y1–Y2) make this possible.
-3. **Credible, honestly-scoped UK growth** — 2 unpaid founders (Y1–Y2) growing to 3 people / c.2.5 FTE by Y3 in the conservative base case, all self-funded from revenue; 0 to c.1.5 average paying universities by Y3, modelled as a target, not a guarantee. **Job-creation target:** 7 people (5 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion, meeting the Innovator Founder settlement job-creation criterion.
+3. **Credible, honestly-scoped UK growth** — 2 unpaid founders (Y1–Y2) growing to 3 people / c.2.5 FTE by Y3 in the conservative base case, all self-funded from revenue; 0 to c.1.5 average paying universities by Y3, modelled as a target, not a guarantee. **Job-creation target:** 5 people (3 full-time hires, avg. £25,000/yr, each 12+ months) once revenue scales after pilot conversion, meeting the Innovator Founder settlement job-creation criterion.
 
 ### What endorsement enables
 
