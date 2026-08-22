@@ -22,6 +22,14 @@ export interface Theme {
   tabBarBg: string;
   inputBg: string;
   ctaGradient: [string, string];
+  // Fixed brand accents (identical in both themes, like `accent`) used for
+  // "like"/match UI and premium/upgrade UI — consolidated here so the same
+  // pink/amber values aren't hand-copied as raw hex across every screen.
+  love: string;
+  loveGradient: [string, string];
+  premium: string;
+  premiumGradient: [string, string];
+  tagAccent: string;
 }
 
 export const darkTheme: Theme = {
@@ -42,6 +50,11 @@ export const darkTheme: Theme = {
   tabBarBg: 'rgba(15, 23, 42, 0.97)',
   inputBg: '#1E293B',
   ctaGradient: ['#5B9BD5', '#4A90C2'],
+  love: '#EC4899',
+  loveGradient: ['#EC4899', '#F472B6'],
+  premium: '#F59E0B',
+  premiumGradient: ['#F59E0B', '#FBBF24'],
+  tagAccent: '#818CF8',
 };
 
 export const lightTheme: Theme = {
@@ -62,6 +75,11 @@ export const lightTheme: Theme = {
   tabBarBg: 'rgba(255, 255, 255, 0.98)',
   inputBg: '#F8FAFC',
   ctaGradient: ['#0F2942', '#1E3A5F'],
+  love: '#EC4899',
+  loveGradient: ['#EC4899', '#F472B6'],
+  premium: '#F59E0B',
+  premiumGradient: ['#F59E0B', '#FBBF24'],
+  tagAccent: '#818CF8',
 };
 
 interface ThemeContextValue {

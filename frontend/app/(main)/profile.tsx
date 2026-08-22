@@ -745,7 +745,7 @@ export default function ProfileScreen() {
               >
                 <Text style={styles.interestTagText}>{interest}</Text>
                 {isEditing && (
-                  <Ionicons name="close-circle" size={14} color="#818CF8" style={{ marginLeft: 4 }} />
+                  <Ionicons name="close-circle" size={14} color={t.tagAccent} style={{ marginLeft: 4 }} />
                 )}
               </TouchableOpacity>
             ))}
@@ -792,7 +792,7 @@ export default function ProfileScreen() {
                       onPress={() => toggleInterest(interest)}
                     >
                       {selected && (
-                        <Ionicons name="checkmark" size={12} color="#818CF8" style={{ marginRight: 4 }} />
+                        <Ionicons name="checkmark" size={12} color={t.tagAccent} style={{ marginRight: 4 }} />
                       )}
                       <Text style={[styles.interestChipText, selected && styles.interestChipTextSelected]}>
                         {interest}
@@ -870,7 +870,7 @@ export default function ProfileScreen() {
               onPress={() => router.push('/(main)/subscription')}
             >
               <View style={styles.premiumIconContainer}>
-                <Ionicons name="diamond" size={24} color="#F59E0B" />
+                <Ionicons name="diamond" size={24} color={t.premium} />
               </View>
               <View style={styles.premiumInfo}>
                 <Text style={styles.premiumTitle}>DEQUAD Premium</Text>
@@ -884,7 +884,7 @@ export default function ProfileScreen() {
                   <Text style={styles.premiumActiveText}>Active</Text>
                 </View>
               ) : (
-                <Ionicons name="chevron-forward" size={20} color="#F59E0B" />
+                <Ionicons name="chevron-forward" size={20} color={t.premium} />
               )}
             </TouchableOpacity>
 
@@ -1174,7 +1174,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     flex: 1,
   },
   premiumTitle: {
-    color: '#F59E0B',
+    color: t.premium,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -1220,7 +1220,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     flex: 1,
   },
   supportTitle: {
-    color: '#818CF8',
+    color: t.tagAccent,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -1376,7 +1376,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontWeight: '500',
   },
   optionTextSelected: {
-    color: '#818CF8',
+    color: t.tagAccent,
   },
   ethnicityScrollWrap: {
     position: 'relative',
@@ -1409,7 +1409,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontSize: 14,
   },
   ethnicityTextSelected: {
-    color: '#818CF8',
+    color: t.tagAccent,
   },
   studyStyleGrid: {
     flexDirection: 'row',
@@ -1504,7 +1504,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderColor: 'rgba(129, 140, 248, 0.3)',
   },
   interestCountText: {
-    color: '#818CF8',
+    color: t.tagAccent,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -1578,7 +1578,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontSize: 13,
   },
   interestChipTextSelected: {
-    color: '#818CF8',
+    color: t.tagAccent,
     fontWeight: '600',
   },
   interestsDisplay: {
@@ -1603,7 +1603,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderRadius: 16,
   },
   interestTagText: {
-    color: '#818CF8',
+    color: t.tagAccent,
     fontSize: 13,
     fontWeight: '500',
   },

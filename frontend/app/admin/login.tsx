@@ -19,6 +19,7 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DequadLogo } from '../../src/components/DequadLogo';
+import { Fonts } from '../../src/constants/fonts';
 
 export default function AdminLoginScreen() {
   const router = useRouter();
@@ -222,8 +223,8 @@ const styles = StyleSheet.create({
   },
   adminBadgeText: { color: '#7A5A00', fontSize: 11, fontWeight: '800', letterSpacing: 1.6 },
   title: {
-    color: '#0F2942', fontSize: 36, fontWeight: '700',
-    fontFamily: 'Playfair Display, Georgia, serif',
+    color: '#0F2942', fontSize: 36,
+    fontFamily: Fonts.headingBold,
     lineHeight: 42, marginBottom: 14, letterSpacing: -0.5,
   },
   lede: { color: '#4F6076', fontSize: 15, lineHeight: 23, marginBottom: 28 },

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -15,17 +15,19 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/contexts/AuthContext';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { DequadLogo } from '../../src/components/DequadLogo';
 
 /**
- * Login screen — uses the landing-page palette (soft blue background, navy
- * text, white card, Playfair headings) so the auth flow feels like a natural
- * continuation of the marketing site. Admin access is no longer shown here;
- * it lives on its own page at `/admin-access`.
+ * Login screen — mirrors the app's shared theme (ThemeContext) so it follows
+ * the user's light/dark preference instead of a fixed palette. Admin access
+ * is no longer shown here; it lives on its own page at `/admin-access`.
  */
 export default function LoginScreen() {
   const router = useRouter();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const { login, loginWithEmail, registerWithEmail, isLoading } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -111,7 +113,7 @@ export default function LoginScreen() {
           showsVerticalScrollIndicator={false}
         >
           <Pressable style={styles.backButton} onPress={() => router.back()} data-testid="login-back">
-            <Ionicons name="arrow-back" size={20} color="#0F2942" />
+            <Ionicons name="arrow-back" size={20} color={t.text} />
           </Pressable>
 
           <Animated.View
@@ -138,12 +140,12 @@ export default function LoginScreen() {
             <View style={styles.card}>
               {mode === 'signup' && (
                 <View style={styles.inputWrap}>
-                  <Ionicons name="person-outline" size={18} color="#4F6076" style={styles.inputIcon} />
+                  <Ionicons name="person-outline" size={18} color={t.textMuted} style={styles.inputIcon} />
                   <TextInput
                     value={name}
                     onChangeText={setName}
                     placeholder="Your name (optional)"
-                    placeholderTextColor="#94A3B0"
+                    placeholderTextColor={t.textFaint}
                     style={styles.input}
                     data-testid="auth-name-input"
                     autoCapitalize="words"
@@ -151,12 +153,12 @@ export default function LoginScreen() {
                 </View>
               )}
               <View style={styles.inputWrap}>
-                <Ionicons name="mail-outline" size={18} color="#4F6076" style={styles.inputIcon} />
+                <Ionicons name="mail-outline" size={18} color={t.textMuted} style={styles.inputIcon} />
                 <TextInput
                   value={email}
                   onChangeText={setEmail}
                   placeholder="Email address"
-                  placeholderTextColor="#94A3B0"
+                  placeholderTextColor={t.textFaint}
                   style={styles.input}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -165,12 +167,12 @@ export default function LoginScreen() {
                 />
               </View>
               <View style={styles.inputWrap}>
-                <Ionicons name="lock-closed-outline" size={18} color="#4F6076" style={styles.inputIcon} />
+                <Ionicons name="lock-closed-outline" size={18} color={t.textMuted} style={styles.inputIcon} />
                 <TextInput
                   value={password}
                   onChangeText={setPassword}
                   placeholder={mode === 'signup' ? 'Create a password (8+ characters)' : 'Password'}
-                  placeholderTextColor="#94A3B0"
+                  placeholderTextColor={t.textFaint}
                   style={styles.input}
                   secureTextEntry
                   data-testid="auth-password-input"
@@ -248,43 +250,43 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#F6FAFE' },
+const createStyles = (t: Theme) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: t.bg },
   flex: { flex: 1 },
   scroll: { flexGrow: 1, paddingHorizontal: 24, paddingTop: 16, paddingBottom: 48 },
   backButton: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1, borderColor: '#DDE8F2',
+    backgroundColor: t.card,
+    borderWidth: 1, borderColor: t.border,
     alignItems: 'center', justifyContent: 'center',
     marginBottom: 24,
   },
   content: { maxWidth: 520, width: '100%', alignSelf: 'center' },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 28 },
-  brandWordmark: { color: '#0F2942', fontWeight: '800', fontSize: 13, letterSpacing: 2.4 },
+  brandWordmark: { color: t.text, fontWeight: '800', fontSize: 13, letterSpacing: 2.4 },
   kicker: {
-    color: '#4F6076', fontSize: 12, fontWeight: '700',
+    color: t.textMuted, fontSize: 12, fontWeight: '700',
     letterSpacing: 2.6, marginBottom: 14,
   },
   title: {
-    color: '#0F2942', fontSize: 36, fontWeight: '700',
+    color: t.text, fontSize: 36, fontWeight: '700',
     lineHeight: 42, marginBottom: 14, letterSpacing: -0.5,
   },
-  lede: { color: '#4F6076', fontSize: 16, lineHeight: 24, marginBottom: 28 },
+  lede: { color: t.textMuted, fontSize: 16, lineHeight: 24, marginBottom: 28 },
   card: {
-    backgroundColor: '#FFFFFF', borderRadius: 24, padding: 24,
-    borderWidth: 1, borderColor: '#DDE8F2',
-    shadowColor: '#0F2942', shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 },
+    backgroundColor: t.card, borderRadius: 24, padding: 24,
+    borderWidth: 1, borderColor: t.border,
+    shadowColor: t.isDark ? '#000000' : t.text, shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 },
     elevation: 2,
   },
   inputWrap: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#F6FAFE', borderRadius: 14, paddingHorizontal: 14,
-    borderWidth: 1, borderColor: '#DDE8F2', marginBottom: 12,
+    backgroundColor: t.inputBg, borderRadius: 14, paddingHorizontal: 14,
+    borderWidth: 1, borderColor: t.border, marginBottom: 12,
   },
   inputIcon: { marginRight: 10 },
-  input: { flex: 1, paddingVertical: 14, color: '#0F2942', fontSize: 15 },
-  errorText: { color: '#B91C1C', fontSize: 13, marginBottom: 10, textAlign: 'center' },
+  input: { flex: 1, paddingVertical: 14, color: t.text, fontSize: 15 },
+  errorText: { color: t.danger, fontSize: 13, marginBottom: 10, textAlign: 'center' },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -298,40 +300,40 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 5,
     borderWidth: 1.5,
-    borderColor: '#94A3B0',
-    backgroundColor: '#FFFFFF',
+    borderColor: t.textFaint,
+    backgroundColor: t.card,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
   },
   checkboxOn: {
-    backgroundColor: '#4FB89F',
-    borderColor: '#4FB89F',
+    backgroundColor: t.success,
+    borderColor: t.success,
   },
   checkboxLabel: {
     flex: 1,
-    color: '#4F6076',
+    color: t.textMuted,
     fontSize: 12.5,
     lineHeight: 18,
   },
-  checkboxLabelStrong: { color: '#0F2942', fontWeight: '700' },
+  checkboxLabelStrong: { color: t.text, fontWeight: '700' },
   primaryBtn: {
-    backgroundColor: '#5B9BD5', paddingVertical: 14, borderRadius: 999, alignItems: 'center',
+    backgroundColor: t.accent, paddingVertical: 14, borderRadius: 999, alignItems: 'center',
     minHeight: 52, justifyContent: 'center', marginTop: 4,
   },
   btnDisabled: { opacity: 0.6 },
-  primaryBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
+  primaryBtnText: { color: t.primaryText, fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
   forgotLink: { paddingVertical: 14, alignItems: 'center' },
-  forgotLinkText: { color: '#5B9BD5', fontSize: 13, fontWeight: '600' },
+  forgotLinkText: { color: t.accent, fontSize: 13, fontWeight: '600' },
   modeRow: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     flexWrap: 'wrap', paddingTop: 4,
   },
-  modeText: { color: '#4F6076', fontSize: 13 },
-  modeAccent: { color: '#5B9BD5', fontSize: 13, fontWeight: '700' },
+  modeText: { color: t.textMuted, fontSize: 13 },
+  modeAccent: { color: t.accent, fontSize: 13, fontWeight: '700' },
   terms: {
-    color: '#4F6076', fontSize: 12, textAlign: 'center',
+    color: t.textMuted, fontSize: 12, textAlign: 'center',
     lineHeight: 18, marginTop: 28, paddingHorizontal: 8,
   },
-  termsLink: { color: '#0F2942', fontWeight: '600', textDecorationLine: 'underline' },
+  termsLink: { color: t.text, fontWeight: '600', textDecorationLine: 'underline' },
 });

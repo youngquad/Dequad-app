@@ -224,7 +224,7 @@ export default function SubscriptionScreen() {
             <Ionicons 
               name={status?.is_premium ? "diamond" : "person"} 
               size={20} 
-              color={status?.is_premium ? "#F59E0B" : "#9CA3AF"} 
+              color={status?.is_premium ? t.premium : t.textFaint}
             />
             <Text style={[
               styles.planBadgeText,
@@ -257,7 +257,7 @@ export default function SubscriptionScreen() {
           {/* Premium Card */}
           <View style={styles.premiumCard}>
             <View style={styles.premiumHeader}>
-              <Ionicons name="diamond" size={40} color="#F59E0B" />
+              <Ionicons name="diamond" size={40} color={t.premium} />
               <Text style={styles.premiumTitle}>DEQUAD Premium</Text>
               <Text style={styles.premiumPrice}>{status?.price || '£4.99/month'}</Text>
             </View>
@@ -279,7 +279,7 @@ export default function SubscriptionScreen() {
 
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
-                  <Ionicons name="star" size={24} color="#F59E0B" />
+                  <Ionicons name="star" size={24} color={t.premium} />
                 </View>
                 <View style={styles.featureContent}>
                   <Text style={styles.featureTitle}>Priority Matching</Text>
@@ -464,7 +464,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     color: t.textMuted,
   },
   premiumBadgeText: {
-    color: '#F59E0B',
+    color: t.premium,
   },
   swipeCounter: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -502,7 +502,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderRadius: 20,
     padding: 24,
     borderWidth: 2,
-    borderColor: '#F59E0B',
+    borderColor: t.premium,
     marginBottom: 20,
   },
   premiumHeader: {
@@ -519,7 +519,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   premiumPrice: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#F59E0B',
+    color: t.premium,
   },
   featuresSection: {
     marginBottom: 24,
@@ -584,7 +584,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F59E0B',
+    backgroundColor: t.premium,
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
@@ -644,7 +644,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#818CF8',
+    color: t.tagAccent,
     marginBottom: 12,
   },
   infoText: {

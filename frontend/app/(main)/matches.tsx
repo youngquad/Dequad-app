@@ -394,7 +394,7 @@ export default function MatchesScreen() {
         pressed && styles.likeButtonPressed,
       ]}
     >
-      <Ionicons name="heart" size={20} color="#EC4899" />
+      <Ionicons name="heart" size={20} color={t.love} />
     </Pressable>
   );
 
@@ -713,7 +713,7 @@ export default function MatchesScreen() {
                     disabled={isSending || !comment.trim()}
                   >
                     <LinearGradient
-                      colors={comment.trim() ? ['#EC4899', '#F472B6'] : ['#4B5563', '#6B7280']}
+                      colors={comment.trim() ? t.loveGradient : ['#4B5563', '#6B7280']}
                       style={styles.sendWithCommentButton}
                     >
                       {isSending ? (
@@ -742,7 +742,7 @@ export default function MatchesScreen() {
               style={styles.upgradeGlow}
             />
             <View style={styles.upgradeIcon}>
-              <Ionicons name="diamond" size={48} color="#F59E0B" />
+              <Ionicons name="diamond" size={48} color={t.premium} />
             </View>
             <Text style={styles.upgradeTitle} testID="upgrade-prompt-title">
               {upgradePromptContext === 'filters' ? 'Premium feature' : 'Weekly like limit reached'}
@@ -759,7 +759,7 @@ export default function MatchesScreen() {
               }}
             >
               <LinearGradient
-                colors={['#F59E0B', '#FBBF24']}
+                colors={t.premiumGradient}
                 style={styles.upgradeButton}
               >
                 <Ionicons name="diamond" size={18} color="#fff" />
@@ -797,7 +797,7 @@ export default function MatchesScreen() {
               testID="match-say-hi-btn"
             >
               <LinearGradient
-                colors={['#EC4899', '#F472B6']}
+                colors={t.loveGradient}
                 style={[styles.matchButton, { marginBottom: 10 }]}
               >
                 <Ionicons name="chatbubble" size={18} color="#fff" />
@@ -830,7 +830,7 @@ export default function MatchesScreen() {
             >
               {limitHit ? (
                 <View style={styles.swipeCounter}>
-                  <Ionicons name="time-outline" size={16} color="#FBBF24" />
+                  <Ionicons name="time-outline" size={16} color={t.premium} />
                   <Text style={styles.swipeResetText} numberOfLines={1}>
                     Likes refresh in {formatResetCountdown(swipeInfo.next_like_reset)}
                   </Text>
@@ -854,7 +854,7 @@ export default function MatchesScreen() {
                 </View>
               )}
               <View style={styles.upgradeBadge}>
-                <Ionicons name="diamond" size={14} color="#F59E0B" />
+                <Ionicons name="diamond" size={14} color={t.premium} />
               </View>
             </TouchableOpacity>
           );
@@ -879,14 +879,14 @@ export default function MatchesScreen() {
           activeOpacity={0.8}
           testID="likes-you-icon-button"
         >
-          <Ionicons name="heart" size={18} color="#EC4899" />
+          <Ionicons name="heart" size={18} color={t.love} />
         </TouchableOpacity>
       </View>
 
       {/* One-time tip for the per-section heart buttons */}
       {showLikeHint && (
         <View style={styles.likeHintBanner}>
-          <Ionicons name="heart" size={14} color="#EC4899" />
+          <Ionicons name="heart" size={14} color={t.love} />
           <Text style={styles.likeHintText}>
             Tap the heart on a photo, bio, or interest to like that specific thing
           </Text>
@@ -1094,8 +1094,8 @@ const createStyles = (t: Theme) => StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#EC4899',
-    shadowColor: '#EC4899',
+    borderColor: t.love,
+    shadowColor: t.love,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -1156,7 +1156,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   interestTagText: {
     fontSize: 13,
-    color: '#818CF8',
+    color: t.tagAccent,
     fontWeight: '500',
   },
   additionalPhotos: {
@@ -1261,7 +1261,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   commentModalSection: {
     fontSize: 14,
-    color: '#EC4899',
+    color: t.love,
     marginTop: 2,
   },
   commentPrompt: {
@@ -1462,7 +1462,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   matchTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#EC4899',
+    color: t.love,
     marginBottom: 8,
   },
   matchSubtitle: {
@@ -1540,7 +1540,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     borderColor: 'rgba(245, 158, 11, 0.35)',
   },
   swipeResetText: {
-    color: '#FBBF24',
+    color: t.premium,
     fontSize: 13,
     fontWeight: '600',
     maxWidth: 200,
@@ -1561,7 +1561,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     backgroundColor: t.border,
   },
   swipeDotActive: {
-    backgroundColor: '#EC4899',
+    backgroundColor: t.love,
   },
   swipeCounterText: {
     color: t.textMuted,
@@ -1578,7 +1578,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
     gap: 6,
   },
   upgradeBadgeText: {
-    color: '#F59E0B',
+    color: t.premium,
     fontSize: 12,
     fontWeight: '600',
   },

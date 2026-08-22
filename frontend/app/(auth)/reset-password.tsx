@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -16,9 +16,13 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { api } from '../../src/services/api';
 import { DequadLogo } from '../../src/components/DequadLogo';
+import { useTheme, Theme } from '../../src/contexts/ThemeContext';
+import { Fonts } from '../../src/constants/fonts';
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const params = useLocalSearchParams<{ token?: string }>();
   const token = (params.token as string) || '';
 
@@ -81,7 +85,7 @@ export default function ResetPasswordScreen() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <Pressable style={styles.backButton} onPress={() => router.replace('/(auth)/login')} data-testid="reset-back">
-            <Ionicons name="arrow-back" size={20} color="#0F2942" />
+            <Ionicons name="arrow-back" size={20} color={t.text} />
           </Pressable>
 
           <View style={styles.content}>
@@ -106,7 +110,7 @@ export default function ResetPasswordScreen() {
 
             <View style={styles.card}>
               {verifying ? (
-                <View style={styles.center}><ActivityIndicator color="#5B9BD5" /></View>
+                <View style={styles.center}><ActivityIndicator color={t.accent} /></View>
               ) : done ? (
                 <TouchableOpacity
                   style={styles.primaryBtn}
@@ -131,24 +135,24 @@ export default function ResetPasswordScreen() {
               ) : (
                 <View>
                   <View style={styles.inputWrap}>
-                    <Ionicons name="lock-closed-outline" size={18} color="#4F6076" style={styles.inputIcon} />
+                    <Ionicons name="lock-closed-outline" size={18} color={t.textMuted} style={styles.inputIcon} />
                     <TextInput
                       value={password}
                       onChangeText={setPassword}
                       placeholder="New password (8+ characters)"
-                      placeholderTextColor="#94A3B0"
+                      placeholderTextColor={t.textFaint}
                       secureTextEntry
                       style={styles.input}
                       data-testid="reset-password-input"
                     />
                   </View>
                   <View style={styles.inputWrap}>
-                    <Ionicons name="lock-closed-outline" size={18} color="#4F6076" style={styles.inputIcon} />
+                    <Ionicons name="lock-closed-outline" size={18} color={t.textMuted} style={styles.inputIcon} />
                     <TextInput
                       value={confirm}
                       onChangeText={setConfirm}
                       placeholder="Confirm new password"
-                      placeholderTextColor="#94A3B0"
+                      placeholderTextColor={t.textFaint}
                       secureTextEntry
                       style={styles.input}
                       data-testid="reset-confirm-input"
@@ -162,7 +166,7 @@ export default function ResetPasswordScreen() {
                     data-testid="reset-submit"
                   >
                     {submitting ? (
-                      <ActivityIndicator color="#FFFFFF" />
+                      <ActivityIndicator color={t.primaryText} />
                     ) : (
                       <Text style={styles.primaryBtnText}>Update password</Text>
                     )}
@@ -177,44 +181,44 @@ export default function ResetPasswordScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#F6FAFE' },
+const createStyles = (t: Theme) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: t.bg },
   flex: { flex: 1 },
   scroll: { flexGrow: 1, paddingHorizontal: 24, paddingTop: 16, paddingBottom: 48 },
   backButton: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#DDE8F2',
+    backgroundColor: t.card, borderWidth: 1, borderColor: t.border,
     alignItems: 'center', justifyContent: 'center', marginBottom: 24,
   },
   content: { maxWidth: 520, width: '100%', alignSelf: 'center' },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 28 },
-  brandWordmark: { color: '#0F2942', fontWeight: '800', fontSize: 13, letterSpacing: 2.4 },
-  kicker: { color: '#4F6076', fontSize: 12, fontWeight: '700', letterSpacing: 2.6, marginBottom: 14 },
+  brandWordmark: { color: t.text, fontWeight: '800', fontSize: 13, letterSpacing: 2.4 },
+  kicker: { color: t.textMuted, fontSize: 12, fontWeight: '700', letterSpacing: 2.6, marginBottom: 14 },
   title: {
-    color: '#0F2942', fontSize: 32, fontWeight: '700',
-    fontFamily: 'Playfair Display, Georgia, serif',
+    color: t.text, fontSize: 32,
+    fontFamily: Fonts.headingBold,
     lineHeight: 38, marginBottom: 14, letterSpacing: -0.5,
   },
-  lede: { color: '#4F6076', fontSize: 16, lineHeight: 24, marginBottom: 28 },
-  email: { color: '#0F2942', fontWeight: '700' },
+  lede: { color: t.textMuted, fontSize: 16, lineHeight: 24, marginBottom: 28 },
+  email: { color: t.text, fontWeight: '700' },
   card: {
-    backgroundColor: '#FFFFFF', borderRadius: 24, padding: 24,
-    borderWidth: 1, borderColor: '#DDE8F2',
-    shadowColor: '#0F2942', shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 2,
+    backgroundColor: t.card, borderRadius: 24, padding: 24,
+    borderWidth: 1, borderColor: t.border,
+    shadowColor: t.isDark ? '#000000' : t.text, shadowOpacity: 0.05, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 2,
   },
   center: { alignItems: 'center', paddingVertical: 24 },
   inputWrap: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#F6FAFE',
+    flexDirection: 'row', alignItems: 'center', backgroundColor: t.inputBg,
     borderRadius: 14, paddingHorizontal: 14, marginBottom: 12,
-    borderWidth: 1, borderColor: '#DDE8F2',
+    borderWidth: 1, borderColor: t.border,
   },
   inputIcon: { marginRight: 10 },
-  input: { flex: 1, paddingVertical: 14, color: '#0F2942', fontSize: 15 },
-  errorText: { color: '#B91C1C', fontSize: 13, marginBottom: 12, textAlign: 'center' },
+  input: { flex: 1, paddingVertical: 14, color: t.text, fontSize: 15 },
+  errorText: { color: t.danger, fontSize: 13, marginBottom: 12, textAlign: 'center' },
   primaryBtn: {
-    backgroundColor: '#5B9BD5', paddingVertical: 14, borderRadius: 999, alignItems: 'center',
+    backgroundColor: t.accent, paddingVertical: 14, borderRadius: 999, alignItems: 'center',
     minHeight: 52, justifyContent: 'center', marginTop: 4,
   },
   btnDisabled: { opacity: 0.6 },
-  primaryBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
+  primaryBtnText: { color: t.primaryText, fontSize: 14, fontWeight: '700', letterSpacing: 0.4 },
 });

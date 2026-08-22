@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../src/contexts/AuthContext';
 import { DequadLogo } from '../src/components/DequadLogo';
+import { useTheme, Theme } from '../src/contexts/ThemeContext';
+import { Fonts } from '../src/constants/fonts';
 
 /**
  * Email-verification (OTP) screen. After signup, users land here with their
@@ -23,6 +25,8 @@ import { DequadLogo } from '../src/components/DequadLogo';
  */
 export default function VerifyEmail() {
   const router = useRouter();
+  const { theme: t } = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const params = useLocalSearchParams<{ email?: string }>();
   const { verifyEmail, resendVerification } = useAuth();
 
@@ -141,7 +145,7 @@ export default function VerifyEmail() {
             onPress={() => router.back()}
             data-testid="verify-back"
           >
-            <Ionicons name="arrow-back" size={20} color="#0F2942" />
+            <Ionicons name="arrow-back" size={20} color={t.text} />
           </Pressable>
 
           <View style={styles.brandRow}>
@@ -199,7 +203,7 @@ export default function VerifyEmail() {
             data-testid="verify-submit"
           >
             {submitting ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={t.primaryText} />
             ) : (
               <Text style={styles.submitText}>Verify & continue</Text>
             )}
@@ -207,7 +211,7 @@ export default function VerifyEmail() {
 
           {cooldown > 0 ? (
             <View style={styles.cooldownPill} data-testid="verify-cooldown-timer">
-              <Ionicons name="time-outline" size={16} color="#4F6076" />
+              <Ionicons name="time-outline" size={16} color={t.textMuted} />
               <Text style={styles.cooldownText}>
                 You can request a new code in{' '}
                 <Text style={styles.cooldownSeconds}>{cooldown}s</Text>
@@ -232,61 +236,60 @@ export default function VerifyEmail() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#F4F7FB' },
+const createStyles = (t: Theme) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: t.bg },
   flex: { flex: 1 },
   scroll: { paddingHorizontal: 24, paddingVertical: 32, gap: 14 },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: t.card,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
   },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
   brandWordmark: {
-    color: '#0F2942',
+    color: t.text,
     fontWeight: '900',
     fontSize: 20,
     letterSpacing: 5,
   },
-  kicker: { color: '#4FB89F', fontWeight: '800', fontSize: 12, letterSpacing: 3 },
+  kicker: { color: t.success, fontWeight: '800', fontSize: 12, letterSpacing: 3 },
   title: {
-    color: '#0F2942',
+    color: t.text,
     fontSize: 30,
-    fontWeight: '900',
-    fontFamily: Platform.OS === 'web' ? '"Playfair Display", serif' : undefined,
+    fontFamily: Fonts.headingBlack,
     marginVertical: 4,
   },
-  lede: { color: '#4F6076', fontSize: 15, lineHeight: 22, marginBottom: 12 },
-  emailStrong: { color: '#0F2942', fontWeight: '700' },
+  lede: { color: t.textMuted, fontSize: 15, lineHeight: 22, marginBottom: 12 },
+  emailStrong: { color: t.text, fontWeight: '700' },
   codeRow: { flexDirection: 'row', gap: 8, justifyContent: 'space-between', marginVertical: 16 },
   codeInput: {
     width: 50,
     height: 60,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#D5DCE5',
-    backgroundColor: '#fff',
+    borderColor: t.border,
+    backgroundColor: t.inputBg,
     textAlign: 'center',
     fontSize: 26,
     fontWeight: '800',
-    color: '#0F2942',
+    color: t.text,
   },
-  codeInputFilled: { borderColor: '#4FB89F', backgroundColor: '#F0FAF6' },
-  error: { color: '#D63B45', fontSize: 14, fontWeight: '600' },
-  info: { color: '#0F7A5E', fontSize: 14, fontWeight: '600' },
+  codeInputFilled: { borderColor: t.success, backgroundColor: t.isDark ? t.card : '#F0FAF6' },
+  error: { color: t.danger, fontSize: 14, fontWeight: '600' },
+  info: { color: t.success, fontSize: 14, fontWeight: '600' },
   submit: {
-    backgroundColor: '#0F2942',
+    backgroundColor: t.primary,
     paddingVertical: 16,
     borderRadius: 999,
     alignItems: 'center',
     marginTop: 16,
   },
   submitDisabled: { opacity: 0.45 },
-  submitText: { color: '#fff', fontWeight: '800', fontSize: 16 },
+  submitText: { color: t.primaryText, fontWeight: '800', fontSize: 16 },
   resendBtn: { paddingVertical: 12, alignItems: 'center' },
   cooldownPill: {
     flexDirection: 'row',
@@ -294,16 +297,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     alignSelf: 'center',
-    backgroundColor: '#EAEFF5',
+    backgroundColor: t.inputBg,
     borderRadius: 999,
     paddingVertical: 10,
     paddingHorizontal: 18,
     marginTop: 4,
   },
-  cooldownText: { color: '#4F6076', fontSize: 14, fontWeight: '600' },
-  cooldownSeconds: { color: '#0F2942', fontWeight: '900' },
-  resendText: { color: '#4FB89F', fontWeight: '700', fontSize: 14 },
-  resendTextDisabled: { color: '#94A3B0' },
-  helper: { color: '#4F6076', fontSize: 13, textAlign: 'center', marginTop: 8 },
-  helperLink: { color: '#0F2942', fontWeight: '700', textDecorationLine: 'underline' },
+  cooldownText: { color: t.textMuted, fontSize: 14, fontWeight: '600' },
+  cooldownSeconds: { color: t.text, fontWeight: '900' },
+  resendText: { color: t.success, fontWeight: '700', fontSize: 14 },
+  resendTextDisabled: { color: t.textFaint },
+  helper: { color: t.textMuted, fontSize: 13, textAlign: 'center', marginTop: 8 },
+  helperLink: { color: t.text, fontWeight: '700', textDecorationLine: 'underline' },
 });
