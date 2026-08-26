@@ -569,22 +569,6 @@ export default function MatchesScreen() {
             </View>
           )}
 
-          {/* Additional Photos */}
-          {profile.photos && profile.photos.length > 1 && (
-            <View style={styles.additionalPhotos}>
-              {profile.photos.slice(1, 3).map((photo, i) => (
-                <View key={`${profile.user_id}-photo-${i}-${photo.slice(-12)}`} style={styles.additionalPhotoContainer}>
-                  <Image source={{ uri: photo }} style={styles.additionalPhoto} />
-                  <LikeButton
-                    section={`photo${i+2}`}
-                    disabled={!isCurrentProfile}
-                    profile={profile}
-                  />
-                </View>
-              ))}
-            </View>
-          )}
-
           {/* Next / Skip Signpost */}
           <TouchableOpacity
             style={styles.skipButton}
@@ -1003,19 +987,23 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   photoDots: {
     position: 'absolute',
-    top: 12,
-    left: 12,
-    right: 12,
+    bottom: 14,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
-    gap: 4,
+    justifyContent: 'center',
+    gap: 6,
   },
   photoDot: {
-    flex: 1,
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: 'rgba(255,255,255,0.35)',
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.45)',
   },
   photoDotActive: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
     backgroundColor: '#fff',
   },
   nameContainer: {
@@ -1158,23 +1146,6 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontSize: 13,
     color: t.tagAccent,
     fontWeight: '500',
-  },
-  additionalPhotos: {
-    flexDirection: 'row',
-    marginHorizontal: 16,
-    marginTop: 16,
-    gap: 12,
-  },
-  additionalPhotoContainer: {
-    flex: 1,
-    height: 200,
-    borderRadius: 16,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  additionalPhoto: {
-    width: '100%',
-    height: '100%',
   },
   skipButton: {
     flexDirection: 'row',
