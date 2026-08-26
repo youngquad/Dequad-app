@@ -8,10 +8,14 @@ Runs directly against MongoDB + preview URL, restores state at teardown.
 from __future__ import annotations
 import os, hashlib, asyncio, requests, pytest
 from motor.motor_asyncio import AsyncIOMotorClient
+from dotenv import dotenv_values
 
-API_URL = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001").rstrip("/")
-MONGO_URL = os.environ["MONGO_URL"]
-DB_NAME = os.environ["DB_NAME"]
+_backend_env = dotenv_values("/app/backend/.env")
+_frontend_env = dotenv_values("/app/frontend/.env")
+
+API_URL = (os.environ.get("REACT_APP_BACKEND_URL") or _frontend_env["REACT_APP_BACKEND_URL"]).rstrip("/")
+MONGO_URL = os.environ.get("MONGO_URL") or _backend_env["MONGO_URL"]
+DB_NAME = os.environ.get("DB_NAME") or _backend_env["DB_NAME"]
 
 ADMIN_EMAIL = "quadri.yusuf@dequad.com"
 ADMIN_PASSWORD = "Oluwatobi11@"

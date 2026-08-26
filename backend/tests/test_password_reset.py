@@ -12,10 +12,20 @@ import os
 import time
 import uuid
 import hashlib
+import sys
 import pytest
 import requests
 from pathlib import Path
 from pymongo import MongoClient
+
+sys.path.insert(0, "/app/backend")
+from helpers.passwords import verify_and_maybe_rehash  # noqa: E402
+
+
+def _password_matches(stored_hash: str, password: str) -> bool:
+    """Passwords are bcrypt ($2b$) since SEC-001; legacy SHA-256 still verifies."""
+    ok, _ = verify_and_maybe_rehash(password, stored_hash)
+    return ok
 
 
 # --- Env loading (REACT_APP_BACKEND_URL + MONGO_URL/DB_NAME) -----------------
@@ -106,6 +116,11 @@ class TestStudentResetFlow:
         }
         r = http.post(f"{API}/auth/register", json=creds)
         assert r.status_code == 200, r.text
+        # 2026-06 OTP flow: skip the emailed code so login tests can run.
+        client = MongoClient(MONGO_URL)
+        client[DB_NAME].users.update_one(
+            {"email": creds["email"].lower()}, {"$set": {"email_verified": True}}
+        )
         return creds
 
     def test_forgot_password_creates_student_reset_record(self, http, mongo_db, student):
@@ -151,8 +166,8 @@ class TestStudentResetFlow:
         assert r.status_code == 200, r.text
 
         user_doc = mongo_db.users.find_one({"email": student["email"].lower()})
-        expected_hash = hashlib.sha256(new_pw.encode()).hexdigest()
-        assert user_doc["password_hash"] == expected_hash, "password_hash was not updated"
+        assert user_doc["password_hash"].startswith("$2b$"), "password_hash must be bcrypt"
+        assert _password_matches(user_doc["password_hash"], new_pw), "password_hash was not updated"
         assert "admin_password" not in user_doc or not user_doc.get("admin_password"), (
             "admin_password should NOT be set on a student reset"
         )
@@ -264,8 +279,8 @@ class TestAdminResetRegression:
         assert r.status_code == 200, r.text
 
         user_doc = mongo_db.users.find_one({"email": ADMIN_EMAIL.lower()})
-        expected_hash = hashlib.sha256(self.NEW_ADMIN_PASSWORD.encode()).hexdigest()
-        assert user_doc["admin_password"] == expected_hash, (
+        assert user_doc["admin_password"].startswith("$2b$"), "admin_password must be bcrypt"
+        assert _password_matches(user_doc["admin_password"], self.NEW_ADMIN_PASSWORD), (
             "admin_password was not updated on admin reset"
         )
         # Role must remain admin
@@ -301,6 +316,4 @@ class TestAdminResetRegression:
 
         # Verify hash in DB matches the canonical password.
         user_doc = mongo_db.users.find_one({"email": ADMIN_EMAIL.lower()})
-        assert user_doc["admin_password"] == hashlib.sha256(
-            ORIGINAL_ADMIN_PASSWORD.encode()
-        ).hexdigest()
+        assert _password_matches(user_doc["admin_password"], ORIGINAL_ADMIN_PASSWORD)

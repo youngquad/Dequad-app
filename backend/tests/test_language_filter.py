@@ -175,17 +175,16 @@ class TestDemoChatData:
     
     def test_demo_matches_exist(self):
         """Test that demo matches are seeded for test-user-001"""
-        import asyncio
-        from database import db
-        
-        async def check_matches():
-            matches = await db.matches.find({
-                "user_id": "test-user-001",
-                "status": "accepted"
-            }).to_list(10)
-            return matches
-        
-        matches = self.loop.run_until_complete(check_matches())
+        # Sync pymongo: the shared motor client is bound to a loop that other
+        # tests in this class close, so reuse of `db` here raises
+        # "Event loop is closed".
+        from pymongo import MongoClient
+        from dotenv import dotenv_values
+        import os as _os
+        _be = dotenv_values("/app/backend/.env")
+        _client = MongoClient(_os.environ.get("MONGO_URL") or _be["MONGO_URL"])
+        _db = _client[_os.environ.get("DB_NAME") or _be["DB_NAME"]]
+        matches = list(_db.matches.find({"user_id": "test-user-001", "status": "accepted"}).limit(10))
         assert len(matches) >= 2, f"Expected at least 2 matches for test-user-001, got {len(matches)}"
         
         matched_users = [m["matched_user_id"] for m in matches]
@@ -195,14 +194,13 @@ class TestDemoChatData:
     
     def test_chat_messages_have_correct_structure(self):
         """Test that chat messages have required fields"""
-        import asyncio
-        from database import db
-        
-        async def check_structure():
-            msg = await db.chat_messages.find_one({})
-            return msg
-        
-        msg = self.loop.run_until_complete(check_structure())
+        from pymongo import MongoClient
+        from dotenv import dotenv_values
+        import os as _os
+        _be = dotenv_values("/app/backend/.env")
+        _client = MongoClient(_os.environ.get("MONGO_URL") or _be["MONGO_URL"])
+        _db = _client[_os.environ.get("DB_NAME") or _be["DB_NAME"]]
+        msg = _db.chat_messages.find_one({})
         assert msg is not None, "No chat messages found"
         assert "match_id" in msg, "Chat message missing match_id"
         assert "sender_id" in msg, "Chat message missing sender_id"

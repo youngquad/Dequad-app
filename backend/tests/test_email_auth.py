@@ -13,9 +13,25 @@ import time
 import uuid
 import pytest
 import requests
+from dotenv import dotenv_values
+from pymongo import MongoClient
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://review-extractor-2.preview.emergentagent.com").rstrip("/")
+_frontend_env = dotenv_values("/app/frontend/.env")
+_backend_env = dotenv_values("/app/backend/.env")
+
+BASE_URL = (os.environ.get("REACT_APP_BACKEND_URL") or _frontend_env["REACT_APP_BACKEND_URL"]).rstrip("/")
 API = f"{BASE_URL}/api"
+
+_mongo = MongoClient(os.environ.get("MONGO_URL") or _backend_env["MONGO_URL"])
+_db = _mongo[os.environ.get("DB_NAME") or _backend_env["DB_NAME"]]
+
+
+def _force_verify(email: str):
+    """2026-06 OTP flow: registration no longer returns a session token, the
+    account must be email-verified first. Tests short-circuit the emailed OTP
+    by flipping the flag directly in Mongo."""
+    _db.users.update_one({"email": email.lower()}, {"$set": {"email_verified": True}})
+    _db.email_verifications.delete_one({"email": email.lower()})
 
 # Seeded admin per /app/memory/test_credentials.md
 ADMIN_EMAIL = "quadri.yusuf@dequad.com"
@@ -47,15 +63,21 @@ def registered_user(client, fresh_user):
     r = client.post(f"{API}/auth/register", json=fresh_user)
     assert r.status_code == 200, f"Register failed: {r.status_code} {r.text}"
     body = r.json()
-    assert "session_token" in body and body["session_token"]
-    assert "user" in body and body["user"]["email"] == fresh_user["email"]
-    return {"creds": fresh_user, "user": body["user"], "session_token": body["session_token"]}
+    assert body.get("email_verification_required") is True
+    assert "user" in body and body["user"]["email"] == fresh_user["email"].lower()
+    _force_verify(fresh_user["email"])
+    login = client.post(
+        f"{API}/auth/email-login",
+        json={"email": fresh_user["email"], "password": fresh_user["password"]},
+    )
+    assert login.status_code == 200, login.text
+    return {"creds": fresh_user, "user": login.json()["user"], "session_token": login.json()["session_token"]}
 
 
 # --- /auth/register ---------------------------------------------------------
 
 class TestRegister:
-    def test_register_success_returns_user_and_token_and_cookie(self, client):
+    def test_register_success_requires_email_verification(self, client):
         ts = int(time.time())
         creds = {
             "email": f"TEST_reg_{ts}_{uuid.uuid4().hex[:6]}@student.leeds.ac.uk",
@@ -71,10 +93,16 @@ class TestRegister:
         assert "user_id" in body["user"]
         assert "password_hash" not in body["user"]
         assert "_id" not in body["user"]
-        # token
-        assert isinstance(body.get("session_token"), str) and len(body["session_token"]) > 10
-        # cookie
-        assert "session_token" in r.cookies, f"Set-Cookie missing session_token: {r.cookies}"
+        # 2026-06 OTP flow: no session issued until email is verified
+        assert body.get("email_verification_required") is True
+        assert body["user"].get("email_verified") is False
+        assert body.get("session_token") is None
+        # login must be blocked pre-verification
+        pre = client.post(
+            f"{API}/auth/email-login",
+            json={"email": creds["email"], "password": creds["password"]},
+        )
+        assert pre.status_code in (401, 403), pre.text
 
     def test_register_invalid_email_returns_400(self, client):
         r = client.post(f"{API}/auth/register", json={"email": "not-an-email", "password": "Test12345!"})
