@@ -267,7 +267,15 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - Pulled features tested + Match Celebration built (June 2026): ConfettiBurst.tsx (RN Animated, native+web) renders over Its-a-Match modal — E2E verified (37 pieces, Say Hi->chat, Keep Browsing). Fixed 3 bugs found by tester: matches.py budget arithmetic excludes reciprocal likes; matches.tsx removed local quota gate blocking reciprocal likes at cap (backend 403 decides); upgrade prompt is context-aware (filters vs likes copy). iteration_14: 100% pass. Known backlog (intentionally deferred): brute-force lockout, admin-login httpOnly cookie, ingress wildcard CORS, repo-wide lint
 
 
-## Connect: Instagram-style photo dots (August 2026)
+## Deployment readiness fixes (August 2026)
+- Fixed 4 deployment blockers found by deployment_agent before user's redeploy:
+  1. `seed.py` no longer hard-deletes legacy staff emails on every boot — moved to login-time block via `BLOCKED_LEGACY_EMAILS` set in `routes/auth.py` (checked in both `/auth/email-login` and `/auth/admin-login`). Manual cleanup script: `python3 -m scripts.purge_blocked_legacy_accounts`.
+  2. `server.py` lifespan no longer runs the destructive `dedupe_users_and_index_email()` (hard-deletes duplicate user rows) on every boot — only the new non-destructive `ensure_email_unique_index()` runs automatically. Full dedupe is manual-only: `python3 -m scripts.migrate_dedupe_users`.
+  3. Added unprefixed `@app.get("/health")` directly on the FastAPI `app` object in `server.py` (in addition to existing `/api/health`) — infra liveness/readiness probes hit the backend pod directly, bypassing the `/api` ingress prefix. Verified `curl localhost:8001/health` -> 200.
+  4. Root `.gitignore` had `.env`/`.env.*`/`*.env` lines (contradicting an existing comment saying .env must stay tracked for Emergent deploy) — removed. Verified via `git check-ignore -v backend/.env frontend/.env` -> not ignored.
+  5. Also fixed an N+1 query pattern in `admin.py`'s `bulk_ai_analysis` (looped 2 queries per student) — now reuses the existing `_bulk_mood_and_alerts` batched helper.
+  6. Added `memory/test_credentials.md` to `.gitignore` so real seed passwords aren't pushed to GitHub.
+- Final deployment_agent scan: **no blockers**, deploy-ready. User needs to redeploy (fixes `/health` 404s seen in prod logs, running pod predates the route) and use "Save to GitHub" to push.
 - Changed `photoDots`/`photoDot`/`photoDotActive` styles in matches.tsx from top full-width segmented bars to small round dots at bottom-center of the photo (Instagram post carousel look), per user request. Removed the redundant "Additional Photos" thumbnail section further down the card (photos 2/3 were duplicated there — carousel already shows all photos). Existing swipe/paging behavior on the main photo carousel unchanged. Verified visually via a direct Playwright script (screenshot_tool was flaky again this session for this RN-web app — used /opt/plugins-venv/bin/python3 with the `playwright` package directly as a reliable fallback).
 
 ## Connect: photos fix + filter button moved back (August 2026)

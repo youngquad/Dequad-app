@@ -90,8 +90,31 @@ def _pick_kept(docs: Iterable[dict]) -> dict:
     return min(docs, key=key)
 
 
+async def ensure_email_unique_index(db) -> None:
+    """Just the safe, non-destructive part: ensure the unique index on
+    `users.email` exists. Called automatically on every boot. Does NOT touch
+    any existing documents."""
+    try:
+        await db.users.create_index("email", unique=True, name="email_unique")
+        logger.info("Ensured unique index users.email")
+    except DuplicateKeyError as e:
+        logger.error(
+            f"Unique index creation failed — duplicates still present: {e}. "
+            f"Run `python3 -m scripts.migrate_dedupe_users` manually to merge them first."
+        )
+    except OperationFailure as e:
+        # 85 = IndexOptionsConflict (index already exists with different options)
+        if getattr(e, "code", None) == 85:
+            logger.info("users.email index already exists with different options — leaving as-is")
+        else:
+            raise
+
+
 async def dedupe_users_and_index_email(db) -> dict:
-    """Run the dedupe + add unique email index. Idempotent."""
+    """Run the dedupe + add unique email index. DESTRUCTIVE (hard-deletes stale
+    duplicate rows) — intentionally NOT wired into server.py's automatic
+    startup path. Run manually via `python3 -m scripts.migrate_dedupe_users`
+    only when duplicate-email rows are known to exist."""
     stats = {"duplicate_emails": 0, "users_merged": 0, "refs_relinked": 0, "users_deleted": 0}
 
     groups = await _email_duplicate_groups(db)
@@ -121,21 +144,13 @@ async def dedupe_users_and_index_email(db) -> dict:
                 f"deleted {res.deleted_count} dup(s), relinked refs"
             )
 
-    # Add the unique index — safe to call repeatedly.
-    try:
-        await db.users.create_index("email", unique=True, name="email_unique")
-        logger.info("Ensured unique index users.email")
-    except DuplicateKeyError as e:
-        logger.error(
-            f"Unique index creation failed — duplicates still present: {e}. "
-            f"Re-running the merge logic should resolve."
-        )
-    except OperationFailure as e:
-        # 85 = IndexOptionsConflict (index already exists with different options)
-        if getattr(e, "code", None) == 85:
-            logger.info("users.email index already exists with different options — leaving as-is")
-        else:
-            raise
-
+    await ensure_email_unique_index(db)
     logger.info(f"User dedupe migration: {stats}")
     return stats
+
+
+if __name__ == "__main__":
+    import asyncio
+    from database import db as _db
+
+    asyncio.run(dedupe_users_and_index_email(_db))

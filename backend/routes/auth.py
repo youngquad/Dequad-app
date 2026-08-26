@@ -28,6 +28,14 @@ from config import ADMIN_SECRET_CODE
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+# Legacy/blocked accounts that must never authenticate again, without a
+# destructive DB delete running automatically on every boot (SEC follow-up,
+# 2026-08). Adedapo.Ajuwon is intentionally blocked from student login (2026-06).
+BLOCKED_LEGACY_EMAILS = {
+    "yusuff@dequad.com", "gerald@dequad.com", "dapo@dequad.com",
+    "chinyere@dequad.com", "adedapo.ajuwon@dequad.com",
+}
+
 
 # ---- Email-verification (OTP) helpers -----------------------------------
 
@@ -413,6 +421,8 @@ async def resend_verification(data: ResendVerificationRequest):
 async def email_login(data: EmailLoginRequest, response: Response):
     """Email + password sign-in for existing accounts (non-Google users)."""
     email_lower = (data.email or "").lower().strip()
+    if email_lower in BLOCKED_LEGACY_EMAILS:
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
     user = await db.users.find_one({"email": email_lower}, {"_id": 0})
     if not user or not user.get("password_hash"):
         raise HTTPException(status_code=401, detail="Invalid email or password.")
@@ -470,6 +480,8 @@ async def email_login(data: EmailLoginRequest, response: Response):
 @router.post("/auth/admin-login")
 async def admin_login(data: AdminLoginRequest):
     email_lower = (data.email or "").lower().strip()
+    if email_lower in BLOCKED_LEGACY_EMAILS:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
     if not email_lower.endswith("@dequad.com"):
         raise HTTPException(
             status_code=403,

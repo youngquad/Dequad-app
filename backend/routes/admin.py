@@ -839,24 +839,24 @@ async def bulk_ai_analysis(admin: User = Depends(require_admin), university: Opt
     if university: query["university"] = university
     students = await db.users.find(query, {"_id": 0}).limit(limit).to_list(limit)
 
+    user_ids = [s.get("user_id") for s in students if s.get("user_id")]
+    bulk = await _bulk_mood_and_alerts(user_ids, mood_limit=20)
+
     results = []
     high_risk_count = medium_risk_count = 0
     for student in students:
         user_id = student.get("user_id")
-        mood_entries = await db.mood_entries.find({"user_id": user_id}, {"_id": 0}).sort("created_at", -1).limit(20).to_list(20)
-        if mood_entries:
-            avg_mood = sum(e.get("mood", 5) for e in mood_entries) / len(mood_entries)
-            risk_score = max(0, 100 - (avg_mood * 10))
-        else:
-            avg_mood = None; risk_score = 50
-        alert_count = await db.safeguarding_alerts.count_documents({"user_id": user_id})
+        b = bulk.get(user_id, {"avg_mood": None, "mood_count": 0, "alert_count": 0})
+        avg_mood = b["avg_mood"]
+        alert_count = b["alert_count"]
+        risk_score = max(0, 100 - (avg_mood * 10)) if avg_mood else 50
         if risk_score > 70 or alert_count > 0: risk_level = "high"; high_risk_count += 1
         elif risk_score > 40: risk_level = "medium"; medium_risk_count += 1
         else: risk_level = "low"
         results.append({"user_id": user_id, "name": student.get("name"), "email": student.get("email"),
                          "university": student.get("university"), "average_mood": round(avg_mood, 2) if avg_mood else None,
                          "risk_score": round(risk_score), "risk_level": risk_level,
-                         "mood_entries_count": len(mood_entries), "safeguarding_alerts": alert_count})
+                         "mood_entries_count": b["mood_count"], "safeguarding_alerts": alert_count})
     results.sort(key=lambda x: x["risk_score"], reverse=True)
     return {"students_analyzed": len(results), "high_risk_count": high_risk_count, "medium_risk_count": medium_risk_count,
             "low_risk_count": len(results) - high_risk_count - medium_risk_count, "university_filter": university, "results": results}

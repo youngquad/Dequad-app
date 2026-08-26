@@ -13,7 +13,7 @@ from helpers.mood_reminder import mood_reminder_worker
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
-from scripts.migrate_dedupe_users import dedupe_users_and_index_email
+from scripts.migrate_dedupe_users import ensure_email_unique_index
 
 from routes import auth, profile, mood, feedback, matches, chat, notifications, university_admin, admin, admin_invites, subscription, core, reports, support
 
@@ -25,13 +25,15 @@ logger = logging.getLogger("server")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    # Run user dedupe BEFORE seed so the seed admin upsert doesn't fight with duplicate
-    # admin rows. Also adds the unique email index that prevents the bug recurring.
+    # Non-destructive only: ensure the unique index on users.email exists so
+    # the duplicate-row bug can't recur. The actual dedupe (which hard-deletes
+    # stale rows) is NOT run automatically — it's a manual one-off via
+    # `python3 -m scripts.migrate_dedupe_users`, run only when duplicates are
+    # known to exist.
     try:
-        result = await dedupe_users_and_index_email(db)
-        logger.info(f"user dedupe migration: {result}")
+        await ensure_email_unique_index(db)
     except Exception as e:
-        logger.error(f"user dedupe migration failed (non-fatal): {e}")
+        logger.error(f"users.email unique index check failed (non-fatal): {e}")
     await seed_admin_and_test_users()
     await load_approved_keywords()
     # 2dsphere index on users.location powers distance-based match filtering
@@ -64,6 +66,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="DEQUAD API", lifespan=lifespan)
+
+
+@app.get("/health")
+async def infra_health_check():
+    """Unprefixed health route for infra probes that hit the backend pod
+    directly (bypassing the /api ingress prefix used by the app itself)."""
+    return {"status": "healthy"}
+
 
 # Middleware order: outermost runs first → CORS → Logging → Rate Limit → Route
 app.add_middleware(RateLimitMiddleware)

@@ -300,15 +300,12 @@ async def seed_admin_and_test_users():
             "picture": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
         },
     ]
-    # Remove legacy and now-blocked accounts (idempotent).
-    removed_emails = [
-        "yusuff@dequad.com", "gerald@dequad.com", "dapo@dequad.com", "chinyere@dequad.com",
-        # Adedapo.Ajuwon is intentionally blocked from student login (2026-06).
-        "adedapo.ajuwon@dequad.com",
-    ]
-    cleanup = await db.users.delete_many({"email": {"$in": removed_emails}})
-    if cleanup.deleted_count:
-        logger.info(f"Removed {cleanup.deleted_count} legacy/blocked staff demo account(s)")
+    # NOTE: legacy/blocked staff emails (yusuff@, gerald@, dapo@, chinyere@,
+    # adedapo.ajuwon@dequad.com) are no longer deleted automatically here —
+    # that was a destructive delete_many running on every boot. They're now
+    # blocked at login time via BLOCKED_LEGACY_EMAILS in routes/auth.py. Any
+    # leftover rows can be cleaned up manually with
+    # `python3 -m scripts.purge_blocked_legacy_accounts` if needed.
 
     for staff in (staff_accounts if seed_demo else []):
         staff_email_lower = staff["email"].lower()
