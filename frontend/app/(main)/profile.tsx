@@ -896,6 +896,36 @@ export default function ProfileScreen() {
               )}
             </View>
 
+            {/* Photo nudge — cards with 2-3 photos perform much better */}
+            {!isEditing && photos.filter(Boolean).length < 2 && (
+              <TouchableOpacity
+                style={styles.photoNudge}
+                onPress={() => {
+                  setActiveSection('photos');
+                  setIsEditing(true);
+                }}
+                data-testid="photo-nudge-banner"
+              >
+                <View style={styles.photoNudgeIcon}>
+                  <Ionicons name="images" size={22} color="#F59E0B" />
+                </View>
+                <View style={styles.photoNudgeInfo}>
+                  <Text style={styles.photoNudgeTitle}>
+                    {photos.filter(Boolean).length === 0
+                      ? 'Add photos to your card'
+                      : 'Your card could look even better'}
+                  </Text>
+                  <Text style={styles.photoNudgeSubtitle}>
+                    Profiles with 3 photos get way more likes — add up to {3 - photos.filter(Boolean).length} more
+                  </Text>
+                </View>
+                <View style={styles.photoNudgeCta}>
+                  <Text style={styles.photoNudgeCtaText}>Add</Text>
+                  <Ionicons name="chevron-forward" size={14} color="#F59E0B" />
+                </View>
+              </TouchableOpacity>
+            )}
+
             {/* Admin Dashboard Link */}
             {user?.role === 'admin' && (
               <TouchableOpacity
@@ -1185,6 +1215,52 @@ const createStyles = (t: Theme) => StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
+  },
+  photoNudge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 158, 11, 0.35)',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 16,
+  },
+  photoNudgeIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  photoNudgeInfo: {
+    flex: 1,
+  },
+  photoNudgeTitle: {
+    color: t.text,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  photoNudgeSubtitle: {
+    color: t.textMuted,
+    fontSize: 13,
+    marginTop: 2,
+  },
+  photoNudgeCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 14,
+    gap: 2,
+  },
+  photoNudgeCtaText: {
+    color: '#F59E0B',
+    fontSize: 14,
+    fontWeight: '600',
   },
   editButton: {
     flexDirection: 'row',

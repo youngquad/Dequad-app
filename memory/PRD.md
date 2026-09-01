@@ -313,3 +313,7 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - testIDs: profile-preview-btn (data-testid), profile-preview-modal, profile-preview-close, preview-photo-carousel, preview-photo-prev/next. NOTE: RN components need testID prop (not data-testid) to be findable by Playwright.
 - Verified via direct Playwright: modal opens, 2-photo carousel + arrows + dots work, bio/interests render, close works.
 - ui.tester account now has profile data (2 photos, bio, interests, course) — kept intentionally for future UI testing.
+
+## Photo nudge banner (Sept 2026)
+- Profile screen shows an amber nudge banner (data-testid photo-nudge-banner) when the user has <2 photos: "Profiles with 3 photos get way more likes". Tapping it enters edit mode on the Photos section. Hidden while editing or once 2+ photos exist.
+- Playwright-verified: banner shows with 1 photo, click opens photo editor, hidden with 2 photos.
