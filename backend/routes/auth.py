@@ -23,6 +23,11 @@ from helpers.email import (
     send_welcome_email,
 )
 from helpers.uk_student_email import classify_email
+from helpers.login_lockout import (
+    clear_login_failures,
+    ensure_login_allowed,
+    record_login_failure,
+)
 from config import ADMIN_SECRET_CODE
 
 logger = logging.getLogger(__name__)
@@ -418,18 +423,23 @@ async def resend_verification(data: ResendVerificationRequest):
 
 
 @router.post("/auth/email-login")
-async def email_login(data: EmailLoginRequest, response: Response):
+async def email_login(data: EmailLoginRequest, response: Response, request: Request):
     """Email + password sign-in for existing accounts (non-Google users)."""
     email_lower = (data.email or "").lower().strip()
+    await ensure_login_allowed(db, "student", email_lower, request)
     if email_lower in BLOCKED_LEGACY_EMAILS:
+        await record_login_failure(db, "student", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid email or password.")
     user = await db.users.find_one({"email": email_lower}, {"_id": 0})
     if not user or not user.get("password_hash"):
+        await record_login_failure(db, "student", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid email or password.")
 
     ok, new_hash = verify_and_maybe_rehash(data.password, user["password_hash"])
     if not ok:
+        await record_login_failure(db, "student", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid email or password.")
+    await clear_login_failures(db, "student", email_lower, request)
     if new_hash:
         # Legacy SHA-256 hash matched — persist the fresh bcrypt hash so the
         # next login uses the strong scheme. Fire-and-forget style; on DB
@@ -478,9 +488,11 @@ async def email_login(data: EmailLoginRequest, response: Response):
 
 
 @router.post("/auth/admin-login")
-async def admin_login(data: AdminLoginRequest):
+async def admin_login(data: AdminLoginRequest, response: Response, request: Request):
     email_lower = (data.email or "").lower().strip()
+    await ensure_login_allowed(db, "admin", email_lower, request)
     if email_lower in BLOCKED_LEGACY_EMAILS:
+        await record_login_failure(db, "admin", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid email or password")
     if not email_lower.endswith("@dequad.com"):
         raise HTTPException(
@@ -490,11 +502,19 @@ async def admin_login(data: AdminLoginRequest):
 
     user = await db.users.find_one({"email": email_lower}, {"_id": 0})
     if not user:
+        await record_login_failure(db, "admin", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     stored_password = user.get("admin_password")
 
-    if data.admin_code == ADMIN_SECRET_CODE:
+    # Never treat a missing configuration value as a valid recovery code.
+    # Previously, ADMIN_SECRET_CODE="" plus admin_code="" could promote any
+    # existing @dequad.com account to platform admin.
+    if (
+        ADMIN_SECRET_CODE
+        and data.admin_code
+        and secrets.compare_digest(data.admin_code, ADMIN_SECRET_CODE)
+    ):
         password_hash = hash_password(data.password)
         await db.users.update_one(
             {"email": email_lower},
@@ -504,11 +524,14 @@ async def admin_login(data: AdminLoginRequest):
         stored_password = password_hash
 
     if not stored_password:
+        await record_login_failure(db, "admin", email_lower, request)
         raise HTTPException(status_code=401, detail="Admin password not set. Use admin code to set up.")
 
     ok, new_hash = verify_and_maybe_rehash(data.password, stored_password)
     if not ok:
+        await record_login_failure(db, "admin", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid email or password")
+    await clear_login_failures(db, "admin", email_lower, request)
     if new_hash:
         try:
             await db.users.update_one(
@@ -529,6 +552,12 @@ async def admin_login(data: AdminLoginRequest):
         "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
         "is_admin_session": True
     })
+
+    response.set_cookie(
+        key="session_token", value=session_token,
+        httponly=True, secure=True, samesite="none", path="/",
+        max_age=7 * 24 * 60 * 60,
+    )
 
     return {
         "session_token": session_token,

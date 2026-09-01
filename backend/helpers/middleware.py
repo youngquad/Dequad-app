@@ -71,17 +71,21 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """
     In-memory sliding-window rate limiter.
-    - General endpoints: 100 requests / 60s per IP
-    - Auth endpoints:     10 requests / 60s per IP
+    - General endpoints: 600 requests / 60s per IP
+    - Auth endpoints:    120 requests / 60s per IP and endpoint
     - Webhook endpoints:  exempt (server-to-server)
+
+    Account/password lockout is handled separately in login_lockout.py. Keeping
+    auth traffic in endpoint-specific buckets prevents registration or OTP
+    traffic from locking every login route for a university on shared Wi-Fi.
     """
 
     # Limits are env-tunable so testing/CI environments (which pound the
     # /auth/* endpoints from a single IP) can widen the window without
     # touching source. Production defaults are strict but not so strict they
     # break Playwright / pytest suites.
-    GENERAL_LIMIT = int(os.environ.get("RATE_LIMIT_GENERAL", "100"))
-    AUTH_LIMIT = int(os.environ.get("RATE_LIMIT_AUTH", "30"))
+    GENERAL_LIMIT = int(os.environ.get("RATE_LIMIT_GENERAL", "600"))
+    AUTH_LIMIT = int(os.environ.get("RATE_LIMIT_AUTH", "120"))
     WINDOW_SECONDS = 60
 
     AUTH_PREFIXES = ("/api/auth/admin-login", "/api/auth/email-login",
@@ -89,7 +93,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                      "/api/auth/resend-verification",
                      "/api/auth/forgot-password", "/api/auth/reset-password",
                      "/api/university-admin/login")
-    EXEMPT_PREFIXES = ("/api/subscription/webhook", "/api/stripe/university-webhook")
+    EXEMPT_PREFIXES = (
+        "/api/subscription/webhook",
+        "/api/subscription/revenuecat-webhook",
+        "/api/stripe/university-webhook",
+    )
 
     def __init__(self, app):
         super().__init__(app)
@@ -109,7 +117,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         now = time.time()
 
         is_auth = any(path.startswith(p) for p in self.AUTH_PREFIXES)
-        bucket = f"auth:{client_ip}" if is_auth else f"gen:{client_ip}"
+        bucket = f"auth:{client_ip}:{path}" if is_auth else f"gen:{client_ip}"
         limit = self.AUTH_LIMIT if is_auth else self.GENERAL_LIMIT
 
         self._prune(bucket, now)
