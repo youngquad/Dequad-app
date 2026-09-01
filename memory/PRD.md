@@ -307,3 +307,9 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - Fix: added prev/next chevron arrows on the Connect photo carousel (testIDs photo-prev-/photo-next-{user_id}), work with mouse and touch; hidden at first/last photo; also filtered null photo entries (photoList).
 - Verified via direct Playwright in preview: arrows advance photos, dots update, arrows hide at ends. All temp test data reverted.
 - Note: platform screenshot_tool cannot click RN-web login; use direct Playwright (pip install playwright) instead.
+
+## Profile Preview feature (Sept 2026)
+- New "Preview" button (eye icon) next to Edit Profile on the Profile screen — opens ProfileCardPreview modal (/app/frontend/src/components/ProfileCardPreview.tsx) showing the user's own Connect card exactly as others see it: photo carousel with dots + prev/next arrows, name/age/pronouns/university overlay, course/study style, About me, Interests. Previews unsaved edits too. Empty states nudge: "No photos yet", "No bio yet — profiles with a bio get more likes".
+- testIDs: profile-preview-btn (data-testid), profile-preview-modal, profile-preview-close, preview-photo-carousel, preview-photo-prev/next. NOTE: RN components need testID prop (not data-testid) to be findable by Playwright.
+- Verified via direct Playwright: modal opens, 2-photo carousel + arrows + dots work, bio/interests render, close works.
+- ui.tester account now has profile data (2 photos, bio, interests, course) — kept intentionally for future UI testing.

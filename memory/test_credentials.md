@@ -68,3 +68,6 @@ Use credentials from `/app/backend/seed.py` for individual student logins.
 - Email: ui.tester@student.beds.ac.uk
 - Password: UiTester123!
 - Verified: yes (can log in at /(auth)/login)
+
+## ui.tester profile data (Sept 2026)
+ui.tester@student.beds.ac.uk now has: 2 photos (unsplash URLs), bio "Testing profiles over coffee and code.", interests [Photography, Coffee], course Software Engineering, University of Bedfordshire, age 22. Kept for UI testing (Connect card / profile preview).

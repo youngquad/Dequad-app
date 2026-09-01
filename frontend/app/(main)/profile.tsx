@@ -22,6 +22,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { notify } from '../../src/utils/alert';
 import ConfirmDeleteAccountModal from '../../src/components/ConfirmDeleteAccountModal';
+import ProfileCardPreview from '../../src/components/ProfileCardPreview';
 
 const INTEREST_CATEGORIES: { label: string; icon: string; items: string[] }[] = [
   {
@@ -112,6 +113,7 @@ export default function ProfileScreen() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [activeSection, setActiveSection] = useState<'photos' | 'basic' | 'preferences' | 'interests'>('photos');
   
   // Photos
@@ -873,6 +875,14 @@ export default function ProfileScreen() {
 
             {/* Edit Button */}
             <View style={styles.editRow}>
+              <TouchableOpacity
+                style={styles.previewButton}
+                onPress={() => setShowPreview(true)}
+                data-testid="profile-preview-btn"
+              >
+                <Ionicons name="eye" size={18} color="#8B5CF6" />
+                <Text style={styles.previewButtonText}>Preview</Text>
+              </TouchableOpacity>
               {!isEditing ? (
                 <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
                   <Ionicons name="pencil" size={18} color={t.accent} />
@@ -998,6 +1008,23 @@ export default function ProfileScreen() {
           visible={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={performAccountDeletion}
+        />
+
+        <ProfileCardPreview
+          visible={showPreview}
+          onClose={() => setShowPreview(false)}
+          profile={{
+            name: user?.name,
+            age: age || user?.age,
+            pronouns: pronouns || user?.pronouns,
+            show_pronouns: showPronouns,
+            university: university || user?.university,
+            course: course || user?.course,
+            study_style: studyStyle || user?.study_style,
+            bio: bio || user?.bio,
+            interests: selectedInterests,
+            photos: photos,
+          }}
         />
       </KeyboardAvoidingView>
 
@@ -1139,8 +1166,25 @@ const createStyles = (t: Theme) => StyleSheet.create({
     marginLeft: 6,
   },
   editRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    gap: 12,
     marginBottom: 16,
+  },
+  previewButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(139, 92, 246, 0.15)',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  previewButtonText: {
+    color: '#8B5CF6',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
   editButton: {
     flexDirection: 'row',
