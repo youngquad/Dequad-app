@@ -72,6 +72,8 @@ export default function ChatScreen() {
   const hasErrorRef = useRef(false);
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
+  const [icebreakers, setIcebreakers] = useState<string[]>([]);
+  const [isLoadingIcebreakers, setIsLoadingIcebreakers] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const isMounted = useRef(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -142,6 +144,14 @@ export default function ChatScreen() {
     };
   }, [matchId, sessionToken, isAuthenticated]);
 
+  const hasFetchedIcebreakers = useRef(false);
+  useEffect(() => {
+    if (!isLoading && messages.length === 0 && !hasFetchedIcebreakers.current) {
+      hasFetchedIcebreakers.current = true;
+      loadIcebreakers();
+    }
+  }, [isLoading, messages.length]);
+
   const loadMessages = async () => {
     if (!matchId || !sessionToken || !isMounted.current) return;
     
@@ -163,6 +173,24 @@ export default function ChatScreen() {
       if (isMounted.current) {
         setIsLoading(false);
       }
+    }
+  };
+
+  const loadIcebreakers = async () => {
+    setIsLoadingIcebreakers(true);
+    setIcebreakers([]);
+    let full = '';
+    try {
+      await api.stream('GET', `/chat/${matchId}/icebreakers`, undefined, (chunk) => {
+        full += chunk;
+      }, sessionToken);
+      setIcebreakers(
+        full.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 3)
+      );
+    } catch (error) {
+      console.error('Error loading icebreakers:', error);
+    } finally {
+      setIsLoadingIcebreakers(false);
     }
   };
 
@@ -338,6 +366,31 @@ export default function ChatScreen() {
           }
         />
 
+        {icebreakers.length > 0 && messages.length === 0 && (
+          <View style={styles.icebreakersWrap}>
+            <View style={styles.icebreakersHeader}>
+              <Ionicons name="sparkles" size={13} color={t.accent} />
+              <Text style={styles.icebreakersTitle}>AI icebreakers</Text>
+            </View>
+            {icebreakers.map((line, i) => (
+              <TouchableOpacity
+                key={i}
+                style={styles.icebreakerChip}
+                onPress={() => setInputText(line)}
+                data-testid={`icebreaker-chip-${i}`}
+              >
+                <Text style={styles.icebreakerChipText}>{line}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+        {isLoadingIcebreakers && messages.length === 0 && (
+          <View style={styles.icebreakersLoading}>
+            <ActivityIndicator size="small" color={t.accent} />
+            <Text style={styles.icebreakersLoadingText}>Thinking of ways to break the ice...</Text>
+          </View>
+        )}
+
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -512,6 +565,54 @@ const createStyles = (t: Theme) => StyleSheet.create({
     backgroundColor: t.surface,
     borderTopWidth: 1,
     borderTopColor: t.border,
+  },
+  icebreakersWrap: {
+    paddingHorizontal: 12,
+    paddingTop: 10,
+    paddingBottom: 4,
+    backgroundColor: t.surface,
+    borderTopWidth: 1,
+    borderTopColor: t.border,
+    gap: 6,
+  },
+  icebreakersHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginBottom: 2,
+  },
+  icebreakersTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: t.accent,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+  },
+  icebreakerChip: {
+    backgroundColor: t.card,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: t.border,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  icebreakerChipText: {
+    fontSize: 14,
+    color: t.text,
+  },
+  icebreakersLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: t.surface,
+    borderTopWidth: 1,
+    borderTopColor: t.border,
+  },
+  icebreakersLoadingText: {
+    fontSize: 13,
+    color: t.textMuted,
   },
   input: {
     flex: 1,

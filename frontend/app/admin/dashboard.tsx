@@ -139,6 +139,8 @@ export default function AdminDashboard() {
   const [riskDistribution, setRiskDistribution] = useState<RiskDistribution | null>(null);
   const [bulkAnalysis, setBulkAnalysis] = useState<BulkAnalysisResult[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [aiInsightsText, setAiInsightsText] = useState('');
+  const [isGeneratingInsights, setIsGeneratingInsights] = useState(false);
 
   // Kept at parent level because the Safeguarding tab embeds a per-university
   // AI-analysis quick widget (`Analyze by University` section). The dedicated
@@ -313,6 +315,21 @@ export default function AdminDashboard() {
       Alert.alert('Error', 'Failed to run bulk analysis');
     } finally {
       setIsAnalyzing(false);
+    }
+  };
+
+  const runAiInsights = async () => {
+    setIsGeneratingInsights(true);
+    setAiInsightsText('');
+    try {
+      await api.stream('POST', '/admin/analytics/ai-insights', {}, (chunk) => {
+        setAiInsightsText((prev) => prev + chunk);
+      }, sessionToken);
+    } catch (error) {
+      console.error('Error generating AI insights:', error);
+      Alert.alert('Error', 'Failed to generate AI insights');
+    } finally {
+      setIsGeneratingInsights(false);
     }
   };
 
@@ -1103,6 +1120,33 @@ export default function AdminDashboard() {
                 ))}
               </View>
               <Text style={styles.chartNote}>Average mood score by day (scale 1-10)</Text>
+            </View>
+
+            {/* AI Insights (GPT-5.4-mini) */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>AI Insights</Text>
+              <TouchableOpacity
+                style={styles.analyzeButton}
+                onPress={runAiInsights}
+                disabled={isGeneratingInsights}
+                data-testid="generate-ai-insights-button"
+              >
+                {isGeneratingInsights ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="sparkles" size={20} color="#fff" />
+                    <Text style={styles.analyzeButtonText}>Generate AI Insights</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+              {(aiInsightsText || isGeneratingInsights) && (
+                <View style={styles.aiInsightsCard} data-testid="ai-insights-result">
+                  <Text style={styles.aiInsightsText}>
+                    {aiInsightsText || 'Thinking...'}
+                  </Text>
+                </View>
+              )}
             </View>
 
             {/* Bulk AI Analysis */}

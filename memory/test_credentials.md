@@ -39,8 +39,8 @@ Public registration of `@dequad.com` is blocked by the `.ac.uk` policy.
 | yusufquadri83@gmail.com | Yusuf Quadri | `Oluwatobi11@` | `SEED_STAFF_PASSWORD_YUSUF_QUADRI` | Founder's personal student-side account |
 
 **Blocked / removed from DB:**
-- `Adedapo.Ajuwon@dequad.com` (intentionally blocked from student login)
-- Legacy first-name-only emails: `yusuff@`, `gerald@`, `dapo@`, `chinyere@dequad.com` (deleted on seed)
+- `Adedapo.Ajuwon@dequad.com` (intentionally blocked from student login — checked at login time via `BLOCKED_LEGACY_EMAILS` in `routes/auth.py`, no destructive delete)
+- Legacy first-name-only emails: `yusuff@`, `gerald@`, `dapo@`, `chinyere@dequad.com` (also blocked at login time, same mechanism — 2026-08 security fix, was previously deleted on every boot)
 
 Tested: 11/11 regressions pass — `/app/backend/tests/test_staff_demo_login.py`.
 

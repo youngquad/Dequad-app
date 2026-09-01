@@ -135,6 +135,58 @@ class ApiService {
   async delete(endpoint: string, token?: string | null) {
     return this.request('DELETE', endpoint, undefined, token);
   }
+
+  /** Reads a text/event-stream response, calling onChunk for each `data: ` line.
+   * Uses the streaming body reader on web; falls back to reading the full
+   * response at once on native (where fetch doesn't expose a body reader). */
+  async stream(
+    method: string,
+    endpoint: string,
+    data: any,
+    onChunk: (text: string) => void,
+    token?: string | null
+  ): Promise<void> {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    let authToken = token || (await this.getStoredToken());
+    if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      method,
+      headers,
+      body: data ? JSON.stringify(data) : undefined,
+      credentials: 'omit',
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `HTTP error ${response.status}`);
+    }
+
+    const handleEvents = (raw: string) => {
+      for (const line of raw.split('\n\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const chunk = line.slice(6);
+        if (chunk === '[DONE]') return;
+        onChunk(chunk);
+      }
+    };
+
+    const reader = (response.body as any)?.getReader?.();
+    if (!reader) {
+      handleEvents(await response.text());
+      return;
+    }
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop() || '';
+      handleEvents(parts.join('\n\n'));
+    }
+    if (buffer) handleEvents(buffer);
+  }
 }
 
 export const api = new ApiService();

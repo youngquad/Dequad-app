@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 
 from database import db
 from models import User, ChatMessage, SendMessage
 from helpers.auth import get_current_user
 from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert, check_language_filter
 from helpers.notifications import send_push_notification
+from helpers.ai import stream_ai_response
 
 router = APIRouter()
 
@@ -197,3 +199,52 @@ async def get_messages(match_id: str, current_user: User = Depends(get_current_u
     )
 
     return messages
+
+
+@router.get("/chat/{match_id}/icebreakers")
+async def get_icebreakers(match_id: str, current_user: User = Depends(get_current_user)):
+    """AI-generated (GPT-5.4-mini) conversation-starter suggestions for a
+    match, based on both students' course/interests — streamed as SSE."""
+    match = await db.matches.find_one({
+        "id": match_id,
+        "$or": [
+            {"user_id": current_user.user_id},
+            {"matched_user_id": current_user.user_id},
+        ],
+        "status": "accepted",
+    }, {"_id": 0})
+    if not match:
+        raise HTTPException(status_code=403, detail="Match not found or not accepted")
+
+    other_user_id = (
+        match["matched_user_id"] if match["user_id"] == current_user.user_id else match["user_id"]
+    )
+    other = await db.users.find_one(
+        {"user_id": other_user_id},
+        {"_id": 0, "name": 1, "course": 1, "interests": 1, "bio": 1},
+    ) or {}
+
+    system_message = (
+        "You suggest short, friendly conversation-starter questions for two UK university "
+        "students who just matched on a student-connection app. Output ONLY 3 icebreakers, "
+        "one per line, no numbering, no quotes, each under 100 characters."
+    )
+    user_text = (
+        f"Me: studying {current_user.course or 'unknown course'}, interests: "
+        f"{', '.join(current_user.interests or []) or 'none listed'}.\n"
+        f"{other.get('name', 'They')}: studying {other.get('course') or 'unknown course'}, "
+        f"interests: {', '.join(other.get('interests') or []) or 'none listed'}, "
+        f"bio: \"{other.get('bio') or ''}\".\n"
+        "Suggest 3 icebreaker openers I could send them."
+    )
+
+    async def event_generator():
+        async for chunk in stream_ai_response(system_message, user_text):
+            yield f"data: {chunk}\n\n"
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

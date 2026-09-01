@@ -124,6 +124,7 @@ export default function ProfileScreen() {
   const [course, setCourse] = useState(user?.course || '');
   const [age, setAge] = useState(user?.age?.toString() || '');
   const [bio, setBio] = useState(user?.bio || '');
+  const [isBioAssisting, setIsBioAssisting] = useState(false);
   const [gender, setGender] = useState(user?.gender || '');
   const [pronouns, setPronouns] = useState(user?.pronouns || '');
   const [showPronouns, setShowPronouns] = useState(user?.show_pronouns !== false);
@@ -224,6 +225,20 @@ export default function ProfileScreen() {
       setInterestedIn(newInterested.filter((i) => i !== option));
     } else {
       setInterestedIn([...newInterested, option]);
+    }
+  };
+
+  const handleBioAssist = async () => {
+    setIsBioAssisting(true);
+    setBio('');
+    try {
+      await api.stream('POST', '/profile/bio-assist', { tone: null }, (chunk) => {
+        setBio((prev) => prev + chunk);
+      });
+    } catch (error: any) {
+      notify.error(error?.message || 'Could not generate a bio right now');
+    } finally {
+      setIsBioAssisting(false);
     }
   };
 
@@ -567,7 +582,26 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.field}>
-        <Text style={styles.fieldLabel}>Bio</Text>
+        <View style={styles.bioLabelRow}>
+          <Text style={styles.fieldLabel}>Bio</Text>
+          {isEditing && (
+            <TouchableOpacity
+              style={styles.aiAssistButton}
+              onPress={handleBioAssist}
+              disabled={isBioAssisting}
+              data-testid="bio-ai-assist-button"
+            >
+              {isBioAssisting ? (
+                <ActivityIndicator size="small" color={t.accent} />
+              ) : (
+                <Ionicons name="sparkles" size={14} color={t.accent} />
+              )}
+              <Text style={styles.aiAssistButtonText}>
+                {isBioAssisting ? 'Writing...' : 'Write with AI'}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
         {isEditing ? (
           <TextInput
             style={[styles.input, styles.textArea]}
@@ -1337,6 +1371,28 @@ const createStyles = (t: Theme) => StyleSheet.create({
     color: t.textMuted,
     marginBottom: 8,
     fontWeight: '600',
+  },
+  bioLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  aiAssistButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 14,
+    backgroundColor: 'rgba(91, 155, 213, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(91, 155, 213, 0.3)',
+  },
+  aiAssistButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: t.accent,
   },
   fieldValue: {
     fontSize: 16,

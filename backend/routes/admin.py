@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi.responses import StreamingResponse
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel
@@ -14,6 +15,8 @@ from models import (
     User, KeywordActionRequest, AlertFeedbackRequest
 )
 from helpers.auth import require_admin
+from helpers.ai import stream_ai_response
+from helpers.admin_analytics import get_ai_insight_records
 from helpers.email import (
     is_smtp_configured, send_email_async, get_admin_emails,
     create_safeguarding_email_html, create_safeguarding_email_text,
@@ -1218,39 +1221,40 @@ async def get_retention_analytics(admin: User = Depends(require_admin)):
 
 
 @router.post("/admin/analytics/ai-insights")
-async def get_ai_insights(admin: User = Depends(require_admin)):
+async def get_ai_insights(admin: User = Depends(require_admin), university: Optional[str] = None):
+    """Plain-English AI summary (GPT-5.4-mini) of current mood/safeguarding
+    trends across the platform (or one university) — streamed as SSE."""
     now = datetime.now(timezone.utc); month_ago = now - timedelta(days=30)
-    total_students = await db.users.count_documents({"role": "student"})
-    all_moods = await db.mood_entries.find({"created_at": {"$gte": month_ago}}, {"mood": 1, "user_id": 1}).to_list(10000)
-    mood_distribution = {i: 0 for i in range(1, 11)}
-    for m in all_moods: mood_distribution[m["mood"]] = mood_distribution.get(m["mood"], 0) + 1
-    risk_scores = await db.risk_scores.find({"created_at": {"$gte": month_ago}}, {"risk_score": 1}).to_list(10000)
-    high_risk = len([r for r in risk_scores if r["risk_score"] >= 70])
-    medium_risk = len([r for r in risk_scores if 40 <= r["risk_score"] < 70])
-    low_risk = len([r for r in risk_scores if r["risk_score"] < 40])
-    uni_counts = await db.users.aggregate([
-        {"$match": {"role": "student", "university": {"$ne": None}}},
-        {"$group": {"_id": "$university", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}}, {"$limit": 5}
-    ]).to_list(5)
+    records = await get_ai_insight_records(db, university, month_ago)
+    total_students = records["total_students"]
+    all_moods = records["moods"]
+    avg_mood = round(sum(m.get("mood", 5) for m in all_moods) / len(all_moods), 2) if all_moods else None
+    alerts = records["alerts"]
+    high_risk = sum(1 for a in alerts if a.get("risk_level") == "high")
+    medium_risk = sum(1 for a in alerts if a.get("risk_level") == "medium")
 
-    try:
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"admin_insights_{uuid.uuid4().hex[:8]}",
-            system_message="""You are an educational analytics AI. Respond in JSON:
-{"summary": "overview", "retention_insights": [], "dropout_risk_factors": [],
- "recommendations": [], "priority_actions": [], "positive_trends": []}"""
-        ).with_model("openai", "gpt-4o")
-        response = await chat.send_message(UserMessage(
-            text=f"Platform (30d): Students={total_students}, Moods={len(all_moods)}, Distribution={mood_distribution}, Risk: H={high_risk} M={medium_risk} L={low_risk}, Unis={[{'name': u['_id'], 'students': u['count']} for u in uni_counts]}"
-        ))
-        try: insights = json.loads(response)
-        except json.JSONDecodeError: insights = {"summary": response, "retention_insights": [], "dropout_risk_factors": [], "recommendations": [], "priority_actions": [], "positive_trends": []}
-    except Exception as e:
-        logger.error(f"AI insights error: {e}")
-        insights = {"summary": "Unable to generate AI insights", "retention_insights": [], "dropout_risk_factors": [], "recommendations": [], "priority_actions": [], "positive_trends": []}
+    system_message = (
+        "You are a student wellbeing analyst summarizing dashboard data for a university "
+        "admin. Be concise and plain-English: 2-3 short sentences on what the numbers mean, "
+        "then a single actionable recommendation. No headers, no bullet lists, no markdown."
+    )
+    user_text = (
+        f"Scope: {university or 'all universities'} (last 30 days). "
+        f"Students: {total_students}. Mood check-ins: {len(all_moods)}, average mood "
+        f"(1-10 scale): {avg_mood if avg_mood is not None else 'no data yet'}. "
+        f"Safeguarding alerts: {len(alerts)} total ({high_risk} high risk, {medium_risk} medium risk)."
+    )
 
-    return {"insights": insights, "data_summary": {"total_students": total_students, "mood_entries_count": len(all_moods),
-            "high_risk_count": high_risk, "medium_risk_count": medium_risk, "low_risk_count": low_risk}}
+    async def event_generator():
+        async for chunk in stream_ai_response(system_message, user_text):
+            yield f"data: {chunk}\n\n"
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 # ==================== AI LEARNING ====================

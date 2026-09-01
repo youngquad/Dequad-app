@@ -28,6 +28,7 @@ from helpers.login_lockout import (
     ensure_login_allowed,
     record_login_failure,
 )
+from helpers.account_deletion import delete_user_records
 from config import ADMIN_SECRET_CODE
 
 logger = logging.getLogger(__name__)
@@ -707,27 +708,7 @@ async def delete_my_account(
         except Exception as exc:
             logger.warning(f"Stripe cleanup skipped during delete for {email}: {exc}")
 
-    # Cascade-delete every collection that references the user.
-    deleted_counts = {
-        "users": (await db.users.delete_many({"user_id": uid})).deleted_count,
-        "user_sessions": (await db.user_sessions.delete_many({"user_id": uid})).deleted_count,
-        "sessions": (await db.sessions.delete_many({"user_id": uid})).deleted_count,
-        "matches": (await db.matches.delete_many(
-            {"$or": [{"user_id": uid}, {"matched_user_id": uid}, {"target_user_id": uid}]}
-        )).deleted_count,
-        "chat_messages": (await db.chat_messages.delete_many(
-            {"$or": [{"sender_id": uid}, {"recipient_id": uid}]}
-        )).deleted_count,
-        "mood_entries": (await db.mood_entries.delete_many({"user_id": uid})).deleted_count,
-        "feedback": (await db.feedback.delete_many({"user_id": uid})).deleted_count,
-        "reports": (await db.reports.delete_many(
-            {"$or": [{"reporter_id": uid}, {"reported_id": uid}]}
-        )).deleted_count,
-        "support_messages": (await db.support_messages.delete_many({"user_id": uid})).deleted_count,
-        "notifications": (await db.notifications.delete_many({"user_id": uid})).deleted_count,
-        "email_verifications": (await db.email_verifications.delete_many({"email": email})).deleted_count,
-        "safeguarding_alerts": (await db.safeguarding_alerts.delete_many({"user_id": uid})).deleted_count,
-    }
+    deleted_counts = await delete_user_records(db, uid, email)
 
     response.delete_cookie(key="session_token", path="/")
     response.delete_cookie(key="session_token", path="/", domain=None, secure=True, samesite="none")
