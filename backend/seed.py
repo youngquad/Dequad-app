@@ -92,7 +92,9 @@ async def seed_admin_and_test_users():
          "course": "Computer Science", "study_style": "Visual Learner",
          "bio": "Passionate about AI and machine learning! Looking for study partners who love coding as much as I do.",
          "interests": ["Programming", "AI", "Gaming", "Music", "Coffee"],
-         "photos": ["https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1765648636065-fd5c0884b629?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-002", "email": "james.chen@test.edu", "name": "James Chen", "age": 22, "gender": "male",
@@ -100,7 +102,9 @@ async def seed_admin_and_test_users():
          "course": "Data Science", "study_style": "Night Owl",
          "bio": "Data nerd by day, gamer by night. Always up for deep discussions about tech and philosophy.",
          "interests": ["Data Science", "Philosophy", "Gaming", "Hiking", "Photography"],
-         "photos": ["https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-003", "email": "sofia.martinez@test.edu", "name": "Sofia Martinez", "age": 20, "gender": "female",
@@ -108,7 +112,9 @@ async def seed_admin_and_test_users():
          "course": "Psychology", "study_style": "Early Bird",
          "bio": "Psychology student fascinated by human behavior. Love yoga, meditation, and meaningful conversations.",
          "interests": ["Psychology", "Yoga", "Reading", "Art", "Travel"],
-         "photos": ["https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1765648636178-60e73bcc865e?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-004", "email": "alex.thompson@test.edu", "name": "Alex Thompson", "age": 23, "gender": "non-binary",
@@ -116,7 +122,9 @@ async def seed_admin_and_test_users():
          "course": "Environmental Science", "study_style": "Group Study",
          "bio": "Eco-warrior saving the planet one study session at a time! Let's discuss climate change over coffee.",
          "interests": ["Environment", "Sustainability", "Hiking", "Coffee", "Documentaries"],
-         "photos": ["https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop"],
+         "photos": ["https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=400&h=500&fit=crop"],
          "picture": "https://images.pexels.com/photos/5538626/pexels-photo-5538626.jpeg?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-005", "email": "priya.patel@test.edu", "name": "Priya Patel", "age": 21, "gender": "female",
@@ -124,7 +132,9 @@ async def seed_admin_and_test_users():
          "course": "Business Analytics", "study_style": "Visual Learner",
          "bio": "Future entrepreneur building the next big thing! Love networking and brainstorming sessions.",
          "interests": ["Business", "Startups", "Finance", "Networking", "Fitness"],
-         "photos": ["https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop"],
+         "photos": ["https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1554284126-aa88f22d8b74?w=400&h=500&fit=crop"],
          "picture": "https://images.pexels.com/photos/7683910/pexels-photo-7683910.jpeg?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "premium"},
         {"user_id": "test-user-006", "email": "oliver.wright@test.edu", "name": "Oliver Wright", "age": 22, "gender": "male",
@@ -132,7 +142,9 @@ async def seed_admin_and_test_users():
          "course": "Mechanical Engineering", "study_style": "Night Owl",
          "bio": "Engineering student who loves building things. From drones to furniture, I'm always tinkering.",
          "interests": ["Engineering", "3D Printing", "Drones", "Football", "Music"],
-         "photos": ["https://images.unsplash.com/photo-1655977237812-ee6beb137203?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1655977237812-ee6beb137203?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1655977237812-ee6beb137203?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-007", "email": "amara.okafor@test.edu", "name": "Amara Okafor", "age": 20, "gender": "female",
@@ -140,7 +152,9 @@ async def seed_admin_and_test_users():
          "course": "Biomedical Science", "study_style": "Early Bird",
          "bio": "Future doctor in the making! I love science, cooking Nigerian food, and spontaneous road trips.",
          "interests": ["Medicine", "Cooking", "Travel", "Dance", "Volunteering"],
-         "photos": ["https://images.unsplash.com/photo-1611877247362-93a1536ad38e?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1611877247362-93a1536ad38e?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1611877247362-93a1536ad38e?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "premium"},
         {"user_id": "test-user-008", "email": "lucas.fernandez@test.edu", "name": "Lucas Fernandez", "age": 23, "gender": "male",
@@ -148,7 +162,9 @@ async def seed_admin_and_test_users():
          "course": "Architecture", "study_style": "Visual Learner",
          "bio": "Architecture student with a passion for sustainable design. Sketch pads and coffee are my daily essentials.",
          "interests": ["Architecture", "Sketching", "Photography", "Sustainability", "Coffee"],
-         "photos": ["https://images.pexels.com/photos/31367494/pexels-photo-31367494.jpeg?w=400&h=400&fit=crop"],
+         "photos": ["https://images.pexels.com/photos/31367494/pexels-photo-31367494.jpeg?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=500&fit=crop"],
          "picture": "https://images.pexels.com/photos/31367494/pexels-photo-31367494.jpeg?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-009", "email": "zara.ahmed@test.edu", "name": "Zara Ahmed", "age": 21, "gender": "female",
@@ -156,7 +172,9 @@ async def seed_admin_and_test_users():
          "course": "Law", "study_style": "Group Study",
          "bio": "Aspiring barrister who debates for fun. I enjoy mock trials, poetry slams, and weekend hikes.",
          "interests": ["Law", "Debate", "Poetry", "Hiking", "Theatre"],
-         "photos": ["https://images.unsplash.com/photo-1565564277651-c2e8f8155017?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1565564277651-c2e8f8155017?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1565564277651-c2e8f8155017?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-010", "email": "ethan.kim@test.edu", "name": "Ethan Kim", "age": 22, "gender": "male",
@@ -164,7 +182,9 @@ async def seed_admin_and_test_users():
          "course": "Mathematics", "study_style": "Solo Study",
          "bio": "Maths geek who finds beauty in equations. Also a competitive chess player and amateur pianist.",
          "interests": ["Mathematics", "Chess", "Piano", "Coding", "Running"],
-         "photos": ["https://images.unsplash.com/photo-1639654655546-68bc1f21e9e3?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1639654655546-68bc1f21e9e3?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1639654655546-68bc1f21e9e3?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "premium"},
         {"user_id": "test-user-011", "email": "chloe.williams@test.edu", "name": "Chloe Williams", "age": 20, "gender": "female",
@@ -172,7 +192,9 @@ async def seed_admin_and_test_users():
          "course": "English Literature", "study_style": "Early Bird",
          "bio": "Bookworm and aspiring writer. You'll find me in the library or at an open mic night.",
          "interests": ["Literature", "Writing", "Open Mic", "Yoga", "Vintage Fashion"],
-         "photos": ["https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
         {"user_id": "test-user-012", "email": "daniel.johnson@test.edu", "name": "Daniel Johnson", "age": 24, "gender": "male",
@@ -180,10 +202,16 @@ async def seed_admin_and_test_users():
          "course": "Music Production", "study_style": "Night Owl",
          "bio": "Producer, DJ, and part-time philosophy student. Making beats by night, questioning existence by day.",
          "interests": ["Music Production", "DJing", "Philosophy", "Skateboarding", "Film"],
-         "photos": ["https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop"],
+         "photos": ["https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=500&fit=crop",
+                    "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=500&fit=crop"],
          "picture": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
          "role": "student", "profile_completed": True, "created_at": datetime.now(timezone.utc), "subscription_status": "free"},
     ]
+
+    # Demo profiles are hidden from real users in production. Preview/demo
+    # environments can expose them by setting SEED_DEMO_HIDDEN=false.
+    demo_hidden = os.environ.get("SEED_DEMO_HIDDEN", "true").strip().lower() != "false"
 
     for profile in (test_profiles if seed_demo else []):
         # All seeded profiles bypass email verification — they're synthetic.
@@ -191,7 +219,7 @@ async def seed_admin_and_test_users():
         # PROD hardening (2026-08): seeded demo profiles are hidden from real
         # users' discover deck / likes-received feed. They still exist for
         # investor/UKES walkthrough demos but are invisible to public traffic.
-        profile["hidden_from_discovery"] = True
+        profile["hidden_from_discovery"] = demo_hidden
         profile["is_demo_account"] = True
         existing = await db.users.find_one({"user_id": profile["user_id"]})
         if not existing:
@@ -202,7 +230,7 @@ async def seed_admin_and_test_users():
                 "photos": profile["photos"], "picture": profile["picture"],
                 "role": "student", "interested_in": profile["interested_in"], "gender": profile["gender"],
                 "email_verified": True,
-                "hidden_from_discovery": True,
+                "hidden_from_discovery": demo_hidden,
                 "is_demo_account": True,
             }})
             logger.info(f"Test profile updated: {profile['name']}")
@@ -376,25 +404,27 @@ async def seed_admin_and_test_users():
         # Founder's personal student-side account
         "founder_personal_email": "yusufquadri83@gmail.com",
     }
-    hide_result = await db.users.update_many(
-        {
-            "$or": [
-                {"email": {"$regex": r"@test\.edu$", "$options": "i"}},
-                {"email": {"$regex": r"@dequad\.com$", "$options": "i"}, "role": "student"},
-                {"email": "yusufquadri83@gmail.com"},
-                {"user_id": {"$regex": r"^test-user-"}},
-                {"user_id": {"$regex": r"^staff-"}},
-            ],
-            "$and": [
-                {"$or": [
-                    {"hidden_from_discovery": {"$exists": False}},
-                    {"hidden_from_discovery": False},
-                ]},
-            ],
-        },
-        {"$set": {"hidden_from_discovery": True, "is_demo_account": True}},
-    )
-    if hide_result.modified_count:
+    hide_result = None
+    if demo_hidden:
+        hide_result = await db.users.update_many(
+            {
+                "$or": [
+                    {"email": {"$regex": r"@test\.edu$", "$options": "i"}},
+                    {"email": {"$regex": r"@dequad\.com$", "$options": "i"}, "role": "student"},
+                    {"email": "yusufquadri83@gmail.com"},
+                    {"user_id": {"$regex": r"^test-user-"}},
+                    {"user_id": {"$regex": r"^staff-"}},
+                ],
+                "$and": [
+                    {"$or": [
+                        {"hidden_from_discovery": {"$exists": False}},
+                        {"hidden_from_discovery": False},
+                    ]},
+                ],
+            },
+            {"$set": {"hidden_from_discovery": True, "is_demo_account": True}},
+        )
+    if hide_result and hide_result.modified_count:
         logger.info(
             f"Backfilled hidden_from_discovery on {hide_result.modified_count} demo/founder profiles"
         )
