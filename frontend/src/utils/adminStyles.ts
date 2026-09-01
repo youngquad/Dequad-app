@@ -392,6 +392,19 @@ export const adminStyles = StyleSheet.create({
   analysisResults: {
     marginTop: 12,
   },
+  aiInsightsCard: {
+    marginTop: 12,
+    backgroundColor: '#EEF2FF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#C7D2FE',
+    padding: 14,
+  },
+  aiInsightsText: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: '#3730A3',
+  },
   analysisResultsTitle: {
     fontSize: 14,
     fontWeight: '600',
