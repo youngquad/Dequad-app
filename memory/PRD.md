@@ -296,3 +296,8 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - Verified healthy end-to-end via own Playwright script (screenshot_tool was unreliable/flaky for this RN-web app in this session — do not trust a single flaky screenshot as evidence of a broken app; cross-check with a direct script or testing_agent): login -> /mood redirect works, /matches renders with photo carousel + new filter button + likes-you button, /profile Preferences no longer shows Discovery Filters. No console/page errors.
 - `python3 -m pytest backend/tests/` full suite has many pre-existing failures/errors (BASE_URL env var missing scheme in test harness, admin httpOnly-cookie/bruteforce-lockout not implemented, CORS wildcard) — these are known pre-existing gaps (see P1 backlog below), NOT regressions from this pull. Core matching suite (`test_matching_features.py`, 5 tests) still passes in isolation.
 - User must use "Save to GitHub" only for pushing; this pull was read-only (fetch + ff merge), nothing was pushed.
+
+## GitHub pull (June 2026, latest)
+- Re-added `origin` remote, fast-forwarded main by 1 commit: "Fix backend authentication lockouts and data integrity (#3)".
+- New backend files: helpers/account_deletion.py, helpers/admin_analytics.py, helpers/login_lockout.py + 2 unit test files; updates to auth.py, admin.py, subscription.py, university_admin.py, middleware.py, server.py.
+- Verified after pull: backend restarted cleanly, /api/health 200, student + staff email-login OK via preview URL, new unit tests 6/6 pass.
