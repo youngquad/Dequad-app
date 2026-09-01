@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from datetime import datetime, timezone
-import hashlib
 import uuid
 import os
 import logging
+import re
 import stripe
 
 from database import db
 from models import User, CreateCheckoutRequest, UniversitySubscriptionRequest
 from helpers.auth import get_current_user
+from helpers.passwords import hash_password
 from config import (
     STRIPE_WEBHOOK_SECRET, STRIPE_UNIVERSITY_WEBHOOK_SECRET,
     STRIPE_PRICE_AMOUNT, STRIPE_PRICE_CURRENCY,
@@ -363,20 +364,56 @@ async def revenuecat_webhook(request: Request):
 
 # ==================== UNIVERSITY SUBSCRIPTION ====================
 
+@router.get("/university/pricing")
+async def get_university_pricing():
+    """Public pricing metadata retained for older web/mobile clients."""
+    price = UNIVERSITY_PRICE_AMOUNT / 100
+    return {
+        "price": price,
+        "currency": UNIVERSITY_PRICE_CURRENCY.upper(),
+        "currency_symbol": "£",
+        "formatted_price": f"£{price:.2f}/month",
+        "features": [
+            "University wellbeing dashboard",
+            "Anonymised engagement and mood insights",
+            "Safeguarding alerts and reporting",
+            "Student community administration",
+        ],
+    }
+
+
+@router.post("/university/subscribe", include_in_schema=False)
 @router.post("/stripe/create-university-checkout")
 async def create_university_checkout(data: UniversitySubscriptionRequest):
+    university_name = data.university_name.strip()
+    admin_email = data.admin_email.lower().strip()
+    existing = await db.users.find_one({
+        "role": "university_admin",
+        "$or": [
+            {"email": admin_email},
+            {
+                "university_admin_for": {
+                    "$regex": f"^{re.escape(university_name)}$",
+                    "$options": "i",
+                }
+            },
+        ],
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="This university already has an admin account")
+
     try:
-        customer = stripe.Customer.create(email=data.admin_email, name=data.admin_name,
-            metadata={"university": data.university_name, "expected_students": str(data.expected_students or 0), "contact_phone": data.contact_phone or ""})
+        customer = stripe.Customer.create(email=admin_email, name=data.admin_name,
+            metadata={"university": university_name, "expected_students": str(data.expected_students or 0), "contact_phone": data.contact_phone or ""})
         app_url = os.environ.get("APP_URL", "").rstrip("/")
         checkout_session = stripe.checkout.Session.create(
             customer=customer.id, mode="subscription", payment_method_types=["card"],
             line_items=[{"price_data": {"currency": UNIVERSITY_PRICE_CURRENCY, "unit_amount": UNIVERSITY_PRICE_AMOUNT,
                 "recurring": {"interval": "month"}, "product_data": {"name": UNIVERSITY_PRODUCT_NAME,
-                    "description": f"Dashboard access for {data.university_name}"}}, "quantity": 1}],
+                    "description": f"Dashboard access for {university_name}"}}, "quantity": 1}],
             success_url=data.success_url or f"{app_url}/university-subscription-success?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=data.cancel_url or app_url,
-            metadata={"university": data.university_name, "admin_email": data.admin_email, "admin_name": data.admin_name,
+            metadata={"university": university_name, "admin_email": admin_email, "admin_name": data.admin_name,
                       "type": "university_subscription"}, allow_promotion_codes=True
         )
         return {"checkout_url": checkout_session.url, "session_id": checkout_session.id}
@@ -403,8 +440,14 @@ async def university_stripe_webhook(request: Request):
             admin_name = metadata.get("admin_name")
             import secrets, string
             password = ''.join(secrets.choice(string.ascii_letters + string.digits + "!@#$%") for _ in range(12))
-            password_hash = hashlib.sha256(password.encode()).hexdigest()
-            existing = await db.users.find_one({"email": admin_email, "role": "university_admin"})
+            password_hash = hash_password(password)
+            existing = await db.users.find_one({
+                "role": "university_admin",
+                "$or": [
+                    {"email": admin_email},
+                    {"university_admin_for": university},
+                ],
+            })
             if not existing:
                 uni_admin = {
                     "user_id": f"uni-admin-{uuid.uuid4().hex[:8]}", "email": admin_email, "name": admin_name,

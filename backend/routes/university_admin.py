@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 import re
@@ -11,6 +11,11 @@ from database import db
 from models import User, UserSession, UniversityAdminCreate, UniversityAdminLogin
 from helpers.auth import get_current_user, require_admin, require_university_admin
 from helpers.passwords import hash_password, verify_and_maybe_rehash
+from helpers.login_lockout import (
+    clear_login_failures,
+    ensure_login_allowed,
+    record_login_failure,
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -18,14 +23,15 @@ router = APIRouter()
 
 @router.post("/university-admin/register")
 async def register_university_admin(data: UniversityAdminCreate, admin: User = Depends(require_admin)):
-    existing = await db.users.find_one({"email": data.email})
+    email_lower = data.email.lower().strip()
+    existing = await db.users.find_one({"email": email_lower})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
     password_hash = hash_password(data.password)
     uni_admin = {
         "user_id": str(uuid.uuid4()),
-        "email": data.email, "name": data.name,
+        "email": email_lower, "name": data.name,
         "role": "university_admin", "university_admin_for": data.university,
         "university": data.university, "admin_password": password_hash,
         "created_at": datetime.now(timezone.utc), "profile_completed": True
@@ -35,14 +41,23 @@ async def register_university_admin(data: UniversityAdminCreate, admin: User = D
 
 
 @router.post("/university-admin/login")
-async def university_admin_login(data: UniversityAdminLogin):
-    user = await db.users.find_one({"email": data.email, "role": "university_admin"}, {"_id": 0})
+async def university_admin_login(
+    data: UniversityAdminLogin, response: Response, request: Request
+):
+    email_lower = data.email.lower().strip()
+    await ensure_login_allowed(db, "university_admin", email_lower, request)
+    user = await db.users.find_one(
+        {"email": email_lower, "role": "university_admin"}, {"_id": 0}
+    )
     if not user or not user.get("admin_password"):
+        await record_login_failure(db, "university_admin", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     ok, new_hash = verify_and_maybe_rehash(data.password, user["admin_password"])
     if not ok:
+        await record_login_failure(db, "university_admin", email_lower, request)
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    await clear_login_failures(db, "university_admin", email_lower, request)
     if new_hash:
         try:
             await db.users.update_one(
@@ -60,6 +75,11 @@ async def university_admin_login(data: UniversityAdminLogin):
         expires_at=datetime.now(timezone.utc) + timedelta(days=7)
     )
     await db.sessions.insert_one(session.dict())
+    response.set_cookie(
+        key="session_token", value=session_token,
+        httponly=True, secure=True, samesite="none", path="/",
+        max_age=7 * 24 * 60 * 60,
+    )
     return {"session_token": session_token, "user": user}
 
 

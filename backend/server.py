@@ -11,6 +11,7 @@ from helpers.safeguarding import load_approved_keywords
 from helpers.first_match_nudge import first_match_nudge_worker
 from helpers.mood_reminder import mood_reminder_worker
 from helpers.middleware import RequestLoggingMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
+from helpers.login_lockout import ensure_login_attempt_index
 from seed import seed_admin_and_test_users
 from scripts.migrate_chat_pair_id import migrate_chat_pair_id
 from scripts.migrate_dedupe_users import ensure_email_unique_index
@@ -34,6 +35,10 @@ async def lifespan(app: FastAPI):
         await ensure_email_unique_index(db)
     except Exception as e:
         logger.error(f"users.email unique index check failed (non-fatal): {e}")
+    try:
+        await ensure_login_attempt_index(db)
+    except Exception as e:
+        logger.error(f"login-attempt TTL index check failed (non-fatal): {e}")
     await seed_admin_and_test_users()
     await load_approved_keywords()
     # 2dsphere index on users.location powers distance-based match filtering

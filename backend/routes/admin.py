@@ -16,6 +16,7 @@ from models import (
 )
 from helpers.auth import require_admin
 from helpers.ai import stream_ai_response
+from helpers.admin_analytics import get_ai_insight_records
 from helpers.email import (
     is_smtp_configured, send_email_async, get_admin_emails,
     create_safeguarding_email_html, create_safeguarding_email_text,
@@ -1224,17 +1225,11 @@ async def get_ai_insights(admin: User = Depends(require_admin), university: Opti
     """Plain-English AI summary (GPT-5.4-mini) of current mood/safeguarding
     trends across the platform (or one university) — streamed as SSE."""
     now = datetime.now(timezone.utc); month_ago = now - timedelta(days=30)
-    student_query = {"role": "student"}
-    if university:
-        student_query["university"] = university
-    total_students = await db.users.count_documents(student_query)
-    all_moods = await db.mood_entries.find(
-        {"created_at": {"$gte": month_ago}}, {"mood": 1, "user_id": 1}
-    ).to_list(10000)
+    records = await get_ai_insight_records(db, university, month_ago)
+    total_students = records["total_students"]
+    all_moods = records["moods"]
     avg_mood = round(sum(m.get("mood", 5) for m in all_moods) / len(all_moods), 2) if all_moods else None
-    alerts = await db.safeguarding_alerts.find(
-        {"created_at": {"$gte": month_ago}}, {"_id": 0, "risk_level": 1}
-    ).to_list(10000)
+    alerts = records["alerts"]
     high_risk = sum(1 for a in alerts if a.get("risk_level") == "high")
     medium_risk = sum(1 for a in alerts if a.get("risk_level") == "medium")
 
