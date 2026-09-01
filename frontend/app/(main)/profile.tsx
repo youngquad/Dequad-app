@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  PanResponder,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -188,6 +189,56 @@ export default function ProfileScreen() {
       { text: 'Remove', style: 'destructive', onPress: doRemove },
     ]);
   };
+
+  // --- Photo drag-to-reorder (works with mouse and touch, no extra deps) ---
+  const photosRef = React.useRef<string[]>(photos);
+  photosRef.current = photos;
+  const pickImageRef = React.useRef<(i: number) => void>(() => {});
+  const [drag, setDrag] = useState<{ index: number; dx: number } | null>(null);
+  const slotWidthRef = React.useRef(120);
+
+  const dragTargetFor = (index: number, dx: number) => {
+    const list = photosRef.current.filter(Boolean);
+    const from = list.indexOf(photosRef.current[index]);
+    if (from === -1) return index;
+    const step = slotWidthRef.current + 12;
+    return Math.max(0, Math.min(list.length - 1, from + Math.round(dx / step)));
+  };
+
+  const photoPanResponders = useMemo(
+    () =>
+      [0, 1, 2].map((index) =>
+        PanResponder.create({
+          // Claim the gesture at start so the parent Touchable can't swallow
+          // moves; a tap (no movement) still opens the photo picker on release.
+          onStartShouldSetPanResponder: () => true,
+          onMoveShouldSetPanResponder: () => true,
+          onPanResponderMove: (_e, g) => {
+            if (Math.abs(g.dx) > 4) setDrag({ index, dx: g.dx });
+          },
+          onPanResponderRelease: (_e, g) => {
+            if (Math.abs(g.dx) < 8 && Math.abs(g.dy) < 8) {
+              setDrag(null);
+              pickImageRef.current(index);
+              return;
+            }
+            const list = photosRef.current.filter(Boolean);
+            const uri = photosRef.current[index];
+            const from = list.indexOf(uri);
+            const target = dragTargetFor(index, g.dx);
+            if (from !== -1 && target !== from) {
+              list.splice(from, 1);
+              list.splice(target, 0, uri);
+              setPhotos(list);
+            }
+            setDrag(null);
+          },
+          onPanResponderTerminate: () => setDrag(null),
+        })
+      ),
+    []
+  );
+  pickImageRef.current = pickImage;
 
   const toggleInterest = (interest: string) => {
     if (selectedInterests.includes(interest)) {
@@ -399,20 +450,42 @@ export default function ProfileScreen() {
   const renderPhotosSection = () => (
     <View style={styles.section}>
       <Text style={styles.fieldLabel}>Profile Photos (Up to 3)</Text>
-      <Text style={styles.photoHint}>Add photos to show in your profile card when matching</Text>
+      <Text style={styles.photoHint}>
+        {isEditing && photos.filter(Boolean).length > 1
+          ? 'Drag a photo left or right to reorder — the first photo is your main'
+          : 'Add photos to show in your profile card when matching'}
+      </Text>
       <View style={styles.photosGrid}>
-        {[0, 1, 2].map((index) => (
+        {[0, 1, 2].map((index) => {
+          const isDragging = drag?.index === index;
+          const dropTarget =
+            drag && !isDragging && dragTargetFor(drag.index, drag.dx) === index;
+          return (
           <TouchableOpacity
             key={index}
-            style={styles.photoSlot}
+            style={[
+              styles.photoSlot,
+              isDragging && {
+                transform: [{ translateX: drag!.dx }, { scale: 1.05 }],
+                zIndex: 10,
+                opacity: 0.9,
+              },
+              dropTarget && styles.photoSlotDropTarget,
+            ]}
+            onLayout={(e) => { slotWidthRef.current = e.nativeEvent.layout.width; }}
             onPress={() => isEditing && pickImage(index)}
             disabled={!isEditing}
           >
             {photos[index] ? (
-              <View style={styles.photoContainer}>
+              <View
+                style={styles.photoContainer}
+                {...(isEditing ? photoPanResponders[index].panHandlers : {})}
+                testID={`photo-slot-${index}`}
+              >
                 <Image
                   source={{ uri: photos[index] }}
                   style={styles.photoImage}
+                  {...({ draggable: false } as any)}
                 />
                 {isEditing && (
                   <TouchableOpacity
@@ -421,6 +494,11 @@ export default function ProfileScreen() {
                   >
                     <Ionicons name="close-circle" size={24} color="#EF4444" />
                   </TouchableOpacity>
+                )}
+                {isEditing && photos.filter(Boolean).length > 1 && (
+                  <View style={styles.dragHandle} pointerEvents="none">
+                    <Ionicons name="reorder-two" size={16} color="#fff" />
+                  </View>
                 )}
                 {index === 0 && (
                   <View style={styles.mainPhotoBadge}>
@@ -441,7 +519,8 @@ export default function ProfileScreen() {
               </View>
             )}
           </TouchableOpacity>
-        ))}
+          );
+        })}
       </View>
     </View>
   );
@@ -1406,6 +1485,19 @@ const createStyles = (t: Theme) => StyleSheet.create({
     aspectRatio: 4/5,
     borderRadius: 12,
     overflow: 'hidden',
+  },
+  photoSlotDropTarget: {
+    borderWidth: 2,
+    borderColor: '#F59E0B',
+  },
+  dragHandle: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   photoContainer: {
     flex: 1,

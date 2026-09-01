@@ -317,3 +317,9 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 ## Photo nudge banner (Sept 2026)
 - Profile screen shows an amber nudge banner (data-testid photo-nudge-banner) when the user has <2 photos: "Profiles with 3 photos get way more likes". Tapping it enters edit mode on the Photos section. Hidden while editing or once 2+ photos exist.
 - Playwright-verified: banner shows with 1 photo, click opens photo editor, hidden with 2 photos.
+
+## Photo drag-to-reorder (Sept 2026)
+- Profile > Photos (edit mode): drag a photo left/right to reorder; first slot = Main. PanResponder-based (no new deps), works with mouse + touch. Dragged photo translates + scales, drop-target slot gets amber border, grip icon shows on photos when 2+.
+- Key implementation notes (profile.tsx): PanResponder must claim onStartShouldSetPanResponder=true on the photo container (parent TouchableOpacity otherwise swallows moves on RN-web); tap detection (<8px movement) on release still opens the image picker (pickImageRef avoids stale closures); Image needs draggable=false to stop native browser image-drag.
+- Playwright-verified: drag swaps order, Save persists new order to backend, tap still opens file chooser.
+- Testing gotcha: photo slots are tall — scroll_into_view + click upper part of photo, or the sticky Save bar intercepts the mouse.
