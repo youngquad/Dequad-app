@@ -77,6 +77,9 @@ export default function MatchesScreen() {
   // Which photo (0-2) is showing for each profile's card, keyed by user_id —
   // lets each card in the FlatList browse its own photos independently.
   const [photoIndices, setPhotoIndices] = useState<Record<string, number>>({});
+  // Refs to each card's photo carousel so arrows/tap-zones can drive it (mouse
+  // users on web can't drag a paging ScrollView).
+  const photoScrollRefs = useRef<Record<string, ScrollView | null>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [matchAlert, setMatchAlert] = useState<{ user: UserProfile; matchId: string } | null>(null);
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ remaining_likes_this_week: 3, is_premium: false, next_like_reset: null });
@@ -399,9 +402,10 @@ export default function MatchesScreen() {
   );
 
   const renderProfile = ({ item: profile, index }: { item: UserProfile; index: number }) => {
-    const hasPhoto = profile.photos && profile.photos.length > 0;
+    const photoList = (profile.photos || []).filter(Boolean);
+    const hasPhoto = photoList.length > 0;
     const isCurrentProfile = index === currentIndex;
-    const photoCount = profile.photos?.length ?? 0;
+    const photoCount = photoList.length;
     const activePhotoIndex = Math.min(photoIndices[profile.user_id] || 0, Math.max(photoCount - 1, 0));
 
     const onPhotoScrollEnd = (e: any) => {
@@ -409,6 +413,12 @@ export default function MatchesScreen() {
       if (newIndex !== activePhotoIndex) {
         setPhotoIndices((prev) => ({ ...prev, [profile.user_id]: newIndex }));
       }
+    };
+
+    const goToPhoto = (idx: number) => {
+      const clamped = Math.max(0, Math.min(idx, photoCount - 1));
+      photoScrollRefs.current[profile.user_id]?.scrollTo({ x: clamped * width, animated: true });
+      setPhotoIndices((prev) => ({ ...prev, [profile.user_id]: clamped }));
     };
 
     return (
@@ -428,9 +438,10 @@ export default function MatchesScreen() {
                 showsHorizontalScrollIndicator={false}
                 scrollEnabled={isCurrentProfile}
                 onMomentumScrollEnd={onPhotoScrollEnd}
+                ref={(r) => { photoScrollRefs.current[profile.user_id] = r; }}
                 testID={`photo-carousel-${profile.user_id}`}
               >
-                {profile.photos!.map((photo, i) => (
+                {photoList.map((photo, i) => (
                   <Image
                     key={`${profile.user_id}-slide-${i}`}
                     source={{ uri: photo }}
@@ -452,13 +463,35 @@ export default function MatchesScreen() {
             {/* Dots track which photo is showing in the carousel above */}
             {photoCount > 1 && (
               <View style={styles.photoDots} pointerEvents="none">
-                {profile.photos!.map((_, i) => (
+                {photoList.map((_, i) => (
                   <View
                     key={`${profile.user_id}-dot-${i}`}
                     style={[styles.photoDot, i === activePhotoIndex && styles.photoDotActive]}
                   />
                 ))}
               </View>
+            )}
+
+            {/* Prev/next arrows — mouse users on web can't swipe a paging carousel */}
+            {photoCount > 1 && activePhotoIndex > 0 && (
+              <TouchableOpacity
+                style={[styles.photoNavBtn, styles.photoNavLeft]}
+                onPress={() => goToPhoto(activePhotoIndex - 1)}
+                disabled={!isCurrentProfile}
+                testID={`photo-prev-${profile.user_id}`}
+              >
+                <Ionicons name="chevron-back" size={22} color="#fff" />
+              </TouchableOpacity>
+            )}
+            {photoCount > 1 && activePhotoIndex < photoCount - 1 && (
+              <TouchableOpacity
+                style={[styles.photoNavBtn, styles.photoNavRight]}
+                onPress={() => goToPhoto(activePhotoIndex + 1)}
+                disabled={!isCurrentProfile}
+                testID={`photo-next-${profile.user_id}`}
+              >
+                <Ionicons name="chevron-forward" size={22} color="#fff" />
+              </TouchableOpacity>
             )}
 
             {/* Report Button - Top Right */}
@@ -1005,6 +1038,23 @@ const createStyles = (t: Theme) => StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: '#fff',
+  },
+  photoNavBtn: {
+    position: 'absolute',
+    top: '45%',
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 5,
+  },
+  photoNavLeft: {
+    left: 12,
+  },
+  photoNavRight: {
+    right: 12,
   },
   nameContainer: {
     flexDirection: 'row',

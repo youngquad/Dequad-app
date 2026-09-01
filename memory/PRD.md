@@ -301,3 +301,9 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - Re-added `origin` remote, fast-forwarded main by 1 commit: "Fix backend authentication lockouts and data integrity (#3)".
 - New backend files: helpers/account_deletion.py, helpers/admin_analytics.py, helpers/login_lockout.py + 2 unit test files; updates to auth.py, admin.py, subscription.py, university_admin.py, middleware.py, server.py.
 - Verified after pull: backend restarted cleanly, /api/health 200, student + staff email-login OK via preview URL, new unit tests 6/6 pass.
+
+## Connect photo navigation fix (Sept 2026)
+- Root cause of "production not working" report: production bundle WAS up to date (verified photoDots/photo-carousel in live bundle at dequad.co.uk). User was on desktop with a mouse — RN-web paging ScrollView cannot be dragged with a mouse, and the viewed profiles had 1 photo + no bio (dots/bio section only render when data exists).
+- Fix: added prev/next chevron arrows on the Connect photo carousel (testIDs photo-prev-/photo-next-{user_id}), work with mouse and touch; hidden at first/last photo; also filtered null photo entries (photoList).
+- Verified via direct Playwright in preview: arrows advance photos, dots update, arrows hide at ends. All temp test data reverted.
+- Note: platform screenshot_tool cannot click RN-web login; use direct Playwright (pip install playwright) instead.
