@@ -27,6 +27,7 @@ import { MatchCardSkeleton } from '../../src/components/SkeletonLoader';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
 import MatchFiltersModal from '../../src/components/MatchFiltersModal';
 import ConfettiBurst from '../../src/components/ConfettiBurst';
+import PhotoViewer from '../../src/components/PhotoViewer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { requestCurrentLocation } from '../../src/utils/location';
 import { notify } from '../../src/utils/alert';
@@ -100,6 +101,7 @@ export default function MatchesScreen() {
   const [comment, setComment] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [reportTarget, setReportTarget] = useState<UserProfile | null>(null);
+  const [photoViewer, setPhotoViewer] = useState<{ photos: string[]; index: number; title: string; userId: string } | null>(null);
   // Premium-gated filter state (persisted in AsyncStorage across sessions)
   const [filters, setFilters] = useState<{
     gender?: string;
@@ -469,15 +471,21 @@ export default function MatchesScreen() {
                 testID={`photo-carousel-${profile.user_id}`}
               >
                 {photoList.map((photo, i) => (
-                  <Image
+                  <Pressable
                     key={`${profile.user_id}-slide-${i}`}
-                    source={{ uri: photo }}
                     style={styles.mainPhotoSlide}
-                    contentFit="cover"
-                    transition={200}
-                    cachePolicy="memory-disk"
-                    recyclingKey={`${profile.user_id}-${i}`}
-                  />
+                    onPress={() => isCurrentProfile && setPhotoViewer({ photos: photoList, index: i, title: profile.name, userId: profile.user_id })}
+                    testID={`photo-slide-${profile.user_id}-${i}`}
+                  >
+                    <Image
+                      source={{ uri: photo }}
+                      style={styles.mainPhotoSlideImage}
+                      contentFit="cover"
+                      transition={200}
+                      cachePolicy="memory-disk"
+                      recyclingKey={`${profile.user_id}-${i}`}
+                    />
+                  </Pressable>
                 ))}
               </ScrollView>
             ) : (
@@ -662,6 +670,20 @@ export default function MatchesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* Full-screen photo viewer (tap a card photo) — keeps the card's dots in sync */}
+      <PhotoViewer
+        visible={photoViewer !== null}
+        photos={photoViewer?.photos || []}
+        initialIndex={photoViewer?.index || 0}
+        title={photoViewer?.title}
+        onClose={() => setPhotoViewer(null)}
+        onIndexChange={(i) => {
+          if (!photoViewer) return;
+          photoScrollRefs.current[photoViewer.userId]?.scrollTo({ x: i * width, animated: false });
+          setPhotoIndices((prev) => ({ ...prev, [photoViewer.userId]: i }));
+        }}
+      />
+
       {/* Report Profile Modal */}
       <ReportProfileModal
         visible={reportTarget !== null}
@@ -1071,6 +1093,10 @@ const createStyles = (t: Theme, width: number, cardHeight: number) => StyleSheet
   },
   mainPhotoSlide: {
     width,
+    height: '100%',
+  },
+  mainPhotoSlideImage: {
+    width: '100%',
     height: '100%',
   },
   mainPhotoPlaceholder: {

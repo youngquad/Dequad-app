@@ -334,3 +334,9 @@ User complaint: functions lag / don't update until reload on phone. Root causes:
 - `src/utils/haptics.ts` (new, no-op on web): like/match/skip/mood select/submit/save/send.
 - Tested: Playwright mobile viewport (390x844) by main agent + testing agent iteration_15 — all pass, 0 JS errors. NOT yet user-confirmed on a real device; not deployed.
 - ENV: frontend runs with CI=true (see memory/env_notes.md) → NO hot reload; restart frontend after edits.
+
+## Card Photo Zoom (June 2026)
+- New `src/components/PhotoViewer.tsx`: full-screen black modal with paging FlatList of photos, pinch-to-zoom (RNGH Gesture.Pinch, up to 4x), pan while zoomed, double-tap zoom to 2.5x at tap point / reset, prev/next arrows (hidden while zoomed), counter "n / N", dots, close, safe-area aware. Uses RN Animated + RNGH `runOnJS(true)` (no reanimated). GestureHandlerRootView wraps the modal content (needed on Android).
+- Connect (matches.tsx): each carousel slide is now a Pressable (testID photo-slide-{uid}-{i}) → opens viewer at that photo; viewer index changes sync back to the card carousel/dots. testIDs: photo-viewer, photo-viewer-close/prev/next/counter, photo-viewer-image-{i}.
+- Gotcha: Pressable wrapper needs the slide size style (width + height 100%) or it collapses to 0px on web.
+- Playwright-verified (mobile viewport): open, counter, next, dbl-tap → matrix(2.5…), reset, close, dots synced. Not yet user-confirmed on device; not deployed.
