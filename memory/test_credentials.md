@@ -71,3 +71,8 @@ Use credentials from `/app/backend/seed.py` for individual student logins.
 
 ## ui.tester profile data (Sept 2026)
 ui.tester@student.beds.ac.uk now has: 2 photos (unsplash URLs), bio "Testing profiles over coffee and code.", interests [Photography, Coffee], course Software Engineering, University of Bedfordshire, age 22. Kept for UI testing (Connect card / profile preview).
+
+## Demo student with an existing match (set 2026-06 for chat UI testing)
+- Email: emma.wilson@test.edu
+- Password: EmmaTest123!
+- Has accepted match with James Chen (match_id d4b80d07-3234-4ba4-8519-6e6afb79eaee)

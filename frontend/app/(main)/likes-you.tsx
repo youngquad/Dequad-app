@@ -21,6 +21,8 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { api } from '../../src/services/api';
 import { useRouter } from 'expo-router';
 import ReportProfileModal from '../../src/components/ReportProfileModal';
+import { haptic } from '../../src/utils/haptics';
+import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
 
 const { width } = Dimensions.get('window');
 
@@ -52,14 +54,14 @@ export default function LikesYouScreen() {
   const [respondingTo, setRespondingTo] = useState<string | null>(null);
   const [reportTarget, setReportTarget] = useState<LikeData['user'] | null>(null);
 
-  useEffect(() => {
-    loadLikes();
-  }, []);
+  useRefreshOnFocus(() => loadLikes());
 
   const loadLikes = async () => {
     try {
-      const data = await api.get('/matches/likes-received', sessionToken);
-      setLikes(data);
+      await api.getCached('/matches/likes-received', sessionToken, (data) => {
+        setLikes(data);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error loading likes:', error);
     } finally {
@@ -89,6 +91,7 @@ export default function LikesYouScreen() {
 
       // Remove the like card from this screen now that we've responded.
       setLikes(prev => prev.filter(l => l.like_id !== like.like_id));
+      haptic.success();
 
       // BUG FIX: the swipe response shape is { match: { id, ... }, is_mutual, matched_user, ... }
       // It does NOT have a top-level `match_id`. Previously this prevented any chat navigation.

@@ -1,0 +1,33 @@
+{
+  "summary": "Frontend-only mobile-viewport (390x844, is_mobile, has_touch) regression pass on Dequad. Verified login (UI tester -> /mood), Connect deck (2-3 rendered cards with photo carousels, dots, next arrow, About me / Interests sections), optimistic Skip (deck reshuffled within ~319ms — previous top card scrolled off to y=-164 and a new card appeared; skip API POST /api/matches/swipe fired without a spinner), Discovery Filters premium prompt (title 'Premium feature', Maybe Later dismisses), Likes You navigation (/likes-you loads, back returns to /mood — see note), Profile edit persistence in edit mode (bio typed into 'Tell us about yourself...' textarea in Basic tab remained intact after a 3.5s wait; Cancel exits edit mode and DB bio is unchanged), and all 5 tabs navigable twice (Mood/Feedback/Connect/Chat/Profile) with zero pageerrors and zero console errors. Chat flow with Emma -> James: chat list shows James Chen row, thread opens, last bubble visible above composer, send button (data-testid chat-send-button) causes optimistic bubble in ~69ms, composer clears immediately, no duplicate bubble after polling, bubble scrolled into view (y+h=738 <= 844), and returning to chat list shows 'You: TEST_ITER15_…' preview. Cleaned up the sent chat message from Mongo (chat_messages.text) after testing.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Connect (/matches)", "issues": ["Card content is taller than the mobile viewport: the 'Skip' text button sits at y≈1002 (below the 844px fold) and only becomes reachable after the user scrolls the card content. This is not a regression (bottom tab bar itself does NOT overlap the controls — the controls are simply below the fold), but on a 390x844 device the primary Skip affordance requires a scroll to discover. Consider a persistent floating like/skip control or reducing the About/Interests block height so Skip is above the fold."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/tests_ui/mobile_test.py",
+    "/app/tests_ui/chat_test.py",
+    "/app/tests_ui/it15_mood.png",
+    "/app/tests_ui/it15_connect.png",
+    "/app/tests_ui/it15_after_skip.png",
+    "/app/tests_ui/it15_chat_list.png",
+    "/app/tests_ui/it15_chat_thread.png"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "matches.tsx is still ~1500 lines — consider splitting the deck, filter modal, and like-flow modals into subcomponents for maintainability (pre-existing, not a regression).",
+    "The 'Sending…' pending footer transitions to a timestamp faster than 500ms in this environment (bubble at t+69ms already had a rendered timestamp when polled at t+500ms). Behavior is correct (fast optimistic + fast server ack) but tests that assert visibility of 'Sending…' must poll within the first ~100ms of send or the state cannot be observed on web."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "n/a (frontend-only run)", "frontend": "100% (7/7 requested flows)" },
+  "test_credentials": "Used credentials from /app/memory/test_credentials.md — ui.tester@student.beds.ac.uk / UiTester123! and emma.wilson@test.edu / EmmaTest123! (match_id d4b80d07-3234-4ba4-8519-6e6afb79eaee).",
+  "seed_data_creation": "None. One transient chat message (TEST_ITER15_1788867229) was sent in the Emma/James thread and deleted from Mongo `chat_messages` (filter by text prefix TEST_ITER15_) after the test — cleanup confirmed 1 doc removed. UI tester bio remained 'Testing profiles over coffee and code.' after Cancel — no persisted change.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Notes for next tester: (1) The Connect swipe deck renders 2-3 cards concurrently and detecting 'which card is visible' by first-in-DOM is unreliable — measure by the card whose y offset is >= 0 (the previous top card scrolls to y=-164 after skip). (2) The Skip button lives BELOW the 844px fold on mobile viewport (y≈1002) — must scroll_into_view_if_needed before clicking. (3) Emma/James match_id: d4b80d07-3234-4ba4-8519-6e6afb79eaee. Chat message content is stored in Mongo field `text` on collection `chat_messages` (not `content`). (4) Composer element is the TEXTAREA nearest the composer bottom. (5) send button testID: chat-send-button; upgrade prompt title testID: upgrade-prompt-title; likes-you-icon-button, open-discovery-filters-button, photo-carousel-<uid>, photo-next-<uid> all resolve reliably.",
+  "rca_of_the_issue": "No functional regression. All mobile polish behaviors from the review request behave as expected: optimistic Skip (deck advances before API returns), optimistic chat send (<100ms bubble, no duplicate after poll, auto scroll-to-end), profile edit no longer wipes typed input while in edit mode (useRefreshOnFocus skips refreshUser when isEditing), premium prompt gating for free users on Discovery Filters, and no uncaught JS errors across all 5 tabs traversed twice."
+}

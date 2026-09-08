@@ -323,3 +323,14 @@ Verified end-to-end via UI: logged in as admin → clicked through Subs / Unis /
 - Key implementation notes (profile.tsx): PanResponder must claim onStartShouldSetPanResponder=true on the photo container (parent TouchableOpacity otherwise swallows moves on RN-web); tap detection (<8px movement) on release still opens the image picker (pickImageRef avoids stale closures); Image needs draggable=false to stop native browser image-drag.
 - Playwright-verified: drag swaps order, Save persists new order to backend, tap still opens file chooser.
 - Testing gotcha: photo slots are tall — scroll_into_view + click upper part of photo, or the sticky Save bar intercepts the mouse.
+
+## Mobile polish pass (June 2026) — "smooth on mobile, no reload needed"
+User complaint: functions lag / don't update until reload on phone. Root causes: screens only fetched on mount (tabs stay mounted → stale until app restart), non-optimistic skip/send, stale-closure filter reload, hard-coded Dimensions/tab-bar sizes, no request timeout.
+- `src/hooks/useRefreshOnFocus.ts` (new): refetch on screen focus + app foreground (AppState 'active', only when focused). Applied to Mood, Feedback, Connect (swipe quota + exhausted deck), Likes You, Chat list, Profile (skipped while editing).
+- `api.getCached()` stale-while-revalidate (AsyncStorage, key includes token tail) → Mood/Feedback/Likes/Chat list paint instantly from cache then refresh. 20s AbortController timeout on all requests (friendly "Connection timed out" error).
+- Connect: deck loads only after filters + premium flag known (premium filters now applied on first fetch; onApply passes filters explicitly — fixed stale closure); Skip is optimistic (advances before API); floating Skip pill (testID floating-skip-button) above the tab bar so it's reachable without scrolling; card/photo heights from measured deck (onLayout) + useWindowDimensions instead of module-level Dimensions; expo-image with memory-disk cache for carousel; hitSlop on filter/likes icons; haptics.
+- Chat thread: optimistic send (pending bubble "Sending…" → timestamp), input clears instantly, failure restores text + notify; polling bails out when list unchanged (no re-render flicker), pending bubbles preserved; scroll-to-end effect on message count; keyboardVerticalOffset = real header height (iOS); keyboardDismissMode; testID chat-send-button. Chat list: RefreshControl.
+- Tab bar: height 60 + safe-area bottom inset (was fixed 88/76), tabBarHideOnKeyboard on Android; badges refresh on foreground.
+- `src/utils/haptics.ts` (new, no-op on web): like/match/skip/mood select/submit/save/send.
+- Tested: Playwright mobile viewport (390x844) by main agent + testing agent iteration_15 — all pass, 0 JS errors. NOT yet user-confirmed on a real device; not deployed.
+- ENV: frontend runs with CI=true (see memory/env_notes.md) → NO hot reload; restart frontend after edits.

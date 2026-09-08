@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../../src/contexts/ThemeContext';
 import { api } from '../../../src/services/api';
 import { decrypt } from '../../../src/utils/encryption';
 import { MoodCardSkeleton } from '../../../src/components/SkeletonLoader';
+import { useRefreshOnFocus } from '../../../src/hooks/useRefreshOnFocus';
 
 interface MatchedUser {
   match_id: string;
@@ -54,29 +56,30 @@ export default function ChatListScreen() {
   const styles = useMemo(() => createStyles(t), [t]);
   const [matches, setMatches] = useState<MatchedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadMatches = useCallback(async () => {
     try {
-      const data = await api.get('/matches/accepted', sessionToken);
-      setMatches(data);
+      await api.getCached('/matches/accepted', sessionToken, (data) => {
+        setMatches(data);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error loading matches:', error);
     } finally {
       setIsLoading(false);
+      setRefreshing(false);
     }
   }, [sessionToken]);
 
-  useEffect(() => {
-    loadMatches();
-  }, [loadMatches]);
+  // Refresh on first open, whenever the user comes back to the inbox, and
+  // when the app returns to the foreground — keeps previews/unread in sync.
+  useRefreshOnFocus(loadMatches);
 
-  // Refresh whenever the user comes back to the inbox so the "last message"
-  // preview stays in sync after sending/receiving in a thread.
-  useFocusEffect(
-    useCallback(() => {
-      loadMatches();
-    }, [loadMatches]),
-  );
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadMatches();
+  };
 
   const getInitials = (name: string) => {
     return name
@@ -160,6 +163,9 @@ export default function ChatListScreen() {
             keyExtractor={(item) => item.match_id}
             renderItem={renderMatch}
             contentContainerStyle={styles.listContent}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={t.accent} colors={[t.accent]} />
+            }
           />
         </>
       )}

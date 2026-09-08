@@ -21,6 +21,8 @@ import SafeguardingAlert from '../../src/components/SafeguardingAlert';
 import { MoodCardSkeleton } from '../../src/components/SkeletonLoader';
 import { MOODS, getMoodInfo } from '../../src/utils/moods';
 import { notify } from '../../src/utils/alert';
+import { haptic } from '../../src/utils/haptics';
+import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
 
 interface MoodEntry {
   id: string;
@@ -120,7 +122,6 @@ export default function MoodScreen() {
   const headerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    loadMoodHistory();
     // Header entrance animation
     Animated.timing(headerAnim, {
       toValue: 1,
@@ -129,10 +130,14 @@ export default function MoodScreen() {
     }).start();
   }, []);
 
+  useRefreshOnFocus(() => loadMoodHistory());
+
   const loadMoodHistory = async () => {
     try {
-      const data = await api.get('/mood', sessionToken);
-      setMoodHistory(data);
+      await api.getCached('/mood', sessionToken, (data) => {
+        setMoodHistory(data);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error loading mood history:', error);
     } finally {
@@ -160,6 +165,7 @@ export default function MoodScreen() {
         setSafeguardingAlert(response.safeguarding_alert);
         setShowSafeguardingModal(true);
       } else {
+        haptic.success();
         // Show success animation
         setShowSuccess(true);
         Animated.sequence([
@@ -300,7 +306,7 @@ export default function MoodScreen() {
                   key={mood.value}
                   mood={mood}
                   isSelected={selectedMood === mood.value}
-                  onPress={() => setSelectedMood(mood.value)}
+                  onPress={() => { haptic.selection(); setSelectedMood(mood.value); }}
                   styles={styles}
                 />
               ))}

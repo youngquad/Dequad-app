@@ -4,11 +4,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
+  useWindowDimensions,
   ActivityIndicator,
   Animated,
   Pressable,
-  Image,
   ScrollView,
   FlatList,
   TextInput,
@@ -16,7 +15,8 @@ import {
   Platform,
   Modal,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
@@ -30,8 +30,8 @@ import ConfettiBurst from '../../src/components/ConfettiBurst';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { requestCurrentLocation } from '../../src/utils/location';
 import { notify } from '../../src/utils/alert';
-
-const { width, height } = Dimensions.get('window');
+import { haptic } from '../../src/utils/haptics';
+import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
 
 interface UserProfile {
   user_id: string;
@@ -69,7 +69,15 @@ interface CommentModalData {
 
 export default function MatchesScreen() {
   const { theme: t } = useTheme();
-  const styles = useMemo(() => createStyles(t), [t]);
+  const { width, height: windowHeight } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  // Mirrors the tab bar height set in (main)/_layout.tsx so floating controls sit above it.
+  const tabBarHeight = 60 + Math.max(insets.bottom, 12);
+  // Measured height of the deck area so cards fill exactly the space between
+  // the top banner and the tab bar on any phone (no hard-coded offsets).
+  const [deckHeight, setDeckHeight] = useState(0);
+  const cardHeight = deckHeight || windowHeight - 200;
+  const styles = useMemo(() => createStyles(t, width, cardHeight), [t, width, cardHeight]);
   const router = useRouter();
   const { sessionToken } = useAuth();
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
@@ -157,11 +165,28 @@ export default function MatchesScreen() {
   }, [filters, filtersLoaded]);
 
   useEffect(() => {
-    loadProfiles();
     loadSwipeStatus();
   }, []);
 
-  const loadProfiles = async (reset: boolean = false) => {
+  // Load the deck only once both the persisted filters and the premium flag are
+  // known, so premium filters are applied on the very first fetch (previously
+  // the deck loaded before /subscription/status resolved and ignored them).
+  useEffect(() => {
+    if (filtersLoaded && swipeInfoLoaded) loadProfiles(false);
+  }, [filtersLoaded, swipeInfoLoaded]);
+
+  // Coming back from Likes You / Premium / background: refresh the like quota
+  // and, if the deck was exhausted, look for new people without a manual reload.
+  useRefreshOnFocus(() => {
+    if (!swipeInfoLoaded) return;
+    loadSwipeStatus();
+    if (!isLoading && profiles.length > 0 && currentIndex >= profiles.length) loadProfiles(false);
+  });
+
+  const loadProfiles = async (
+    reset: boolean = false,
+    overrides?: { filters?: typeof filters; isPremium?: boolean },
+  ) => {
     try {
       if (reset) {
         setProfiles([]);
@@ -171,16 +196,17 @@ export default function MatchesScreen() {
       // Build query string from active filters + reset flag
       const params = new URLSearchParams();
       if (reset) params.set('reset', 'true');
-      const isPremium = !!swipeInfo?.is_premium;
+      const isPremium = overrides?.isPremium ?? !!swipeInfo?.is_premium;
+      const f = overrides?.filters ?? filters;
       if (isPremium) {
-        if (filters.gender) params.set('gender', filters.gender);
-        if (filters.min_age) params.set('min_age', String(filters.min_age));
-        if (filters.max_age) params.set('max_age', String(filters.max_age));
-        if (filters.university) params.set('university', filters.university);
-        if (filters.education_level) params.set('education_level', filters.education_level);
-        if (filters.city) params.set('city', filters.city);
-        if (filters.max_distance_km && hasLocation) {
-          params.set('max_distance_km', String(filters.max_distance_km));
+        if (f.gender) params.set('gender', f.gender);
+        if (f.min_age) params.set('min_age', String(f.min_age));
+        if (f.max_age) params.set('max_age', String(f.max_age));
+        if (f.university) params.set('university', f.university);
+        if (f.education_level) params.set('education_level', f.education_level);
+        if (f.city) params.set('city', f.city);
+        if (f.max_distance_km && hasLocation) {
+          params.set('max_distance_km', String(f.max_distance_km));
         }
       }
       const qs = params.toString();
@@ -310,7 +336,10 @@ export default function MatchesScreen() {
       );
       
       if (result.is_mutual && result.matched_user && result?.match?.id) {
+        haptic.success();
         setMatchAlert({ user: result.matched_user, matchId: result.match.id });
+      } else {
+        haptic.light();
       }
       
       const remaining = result.remaining_likes_this_week ?? result.remaining_swipes;
@@ -341,18 +370,16 @@ export default function MatchesScreen() {
   };
 
   const handleSkip = async (profile: UserProfile) => {
-    // Skips are unlimited — no limit check.
+    // Skips are unlimited — advance immediately (optimistic) and record in the background.
+    haptic.selection();
+    goToNext();
     try {
       await api.post(
         '/matches/swipe',
         { target_user_id: profile.user_id, action: 'dislike' },
         sessionToken
       );
-      goToNext();
     } catch (error: any) {
-      if (error?.message?.includes('Already swiped')) {
-        goToNext();
-      }
       console.error('Skip error:', error);
     }
   };
@@ -446,6 +473,10 @@ export default function MatchesScreen() {
                     key={`${profile.user_id}-slide-${i}`}
                     source={{ uri: photo }}
                     style={styles.mainPhotoSlide}
+                    contentFit="cover"
+                    transition={200}
+                    cachePolicy="memory-disk"
+                    recyclingKey={`${profile.user_id}-${i}`}
                   />
                 ))}
               </ScrollView>
@@ -649,8 +680,9 @@ export default function MatchesScreen() {
         onRequestLocation={requestAndSaveLocation}
         onApply={(next) => {
           setFilters(next);
-          // Reload deck with the new filters applied
-          setTimeout(() => loadProfiles(false), 0);
+          // Reload deck with the new filters applied (pass explicitly — state
+          // hasn't committed yet inside this callback).
+          loadProfiles(false, { filters: next });
         }}
       />
 
@@ -677,6 +709,8 @@ export default function MatchesScreen() {
                       <Image 
                         source={{ uri: commentModal.profile.photos[0] }} 
                         style={styles.commentModalAvatarImage} 
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
                       />
                     ) : (
                       <LinearGradient 
@@ -883,6 +917,7 @@ export default function MatchesScreen() {
           style={styles.filterIconButton}
           onPress={openFilterModal}
           activeOpacity={0.8}
+          hitSlop={8}
           testID="open-discovery-filters-button"
         >
           <Ionicons name="options-outline" size={18} color="#5B9BD5" />
@@ -894,6 +929,7 @@ export default function MatchesScreen() {
           style={styles.likesYouIconButton}
           onPress={() => router.push('/(main)/likes-you')}
           activeOpacity={0.8}
+          hitSlop={8}
           testID="likes-you-icon-button"
         >
           <Ionicons name="heart" size={18} color={t.love} />
@@ -914,6 +950,7 @@ export default function MatchesScreen() {
       )}
 
       {/* Profiles List */}
+      <View style={styles.deck} onLayout={(e) => setDeckHeight(e.nativeEvent.layout.height)}>
       {currentIndex >= profiles.length ? (
         <View style={styles.emptyState}>
           <View style={styles.emptyIcon}>
@@ -938,12 +975,16 @@ export default function MatchesScreen() {
           ref={scrollRef}
           data={profiles}
           renderItem={renderProfile}
-          extraData={photoIndices}
+          extraData={[photoIndices, currentIndex, cardHeight]}
           keyExtractor={(item) => item.user_id}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           scrollEnabled={false}
+          windowSize={3}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          removeClippedSubviews={Platform.OS !== 'web'}
           getItemLayout={(data, index) => ({
             length: width,
             offset: width * index,
@@ -952,14 +993,54 @@ export default function MatchesScreen() {
           initialScrollIndex={currentIndex}
         />
       )}
+      {currentIndex < profiles.length && (
+        <TouchableOpacity
+          style={[styles.floatingSkip, { bottom: tabBarHeight + 12 }]}
+          onPress={() => handleSkip(profiles[currentIndex])}
+          activeOpacity={0.85}
+          testID="floating-skip-button"
+        >
+          <Ionicons name="close" size={22} color={t.textMuted} />
+          <Text style={styles.floatingSkipText}>Skip</Text>
+        </TouchableOpacity>
+      )}
+      </View>
     </SafeAreaView>
   );
 }
 
-const createStyles = (t: Theme) => StyleSheet.create({
+const createStyles = (t: Theme, width: number, cardHeight: number) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: t.bg,
+  },
+  deck: {
+    flex: 1,
+  },
+  floatingSkip: {
+    position: 'absolute',
+    bottom: 12,
+    left: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 999,
+    backgroundColor: t.card,
+    borderWidth: 1,
+    borderColor: t.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+    zIndex: 20,
+  },
+  floatingSkipText: {
+    color: t.textMuted,
+    fontSize: 14,
+    fontWeight: '600',
   },
   loadingContainer: {
     flex: 1,
@@ -975,7 +1056,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   profileContainer: {
     width: width,
-    height: height - 120,
+    height: cardHeight,
   },
   profileScroll: {
     flex: 1,
@@ -985,7 +1066,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   photoSection: {
     width: width,
-    height: height * 0.5,
+    height: Math.max(300, Math.round(cardHeight * 0.6)),
     position: 'relative',
   },
   mainPhotoSlide: {

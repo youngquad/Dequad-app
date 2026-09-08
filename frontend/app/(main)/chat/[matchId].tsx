@@ -13,12 +13,15 @@ import {
   AppState,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../../src/contexts/ThemeContext';
 import { api } from '../../../src/services/api';
 import { decrypt } from '../../../src/utils/encryption';
+import { haptic } from '../../../src/utils/haptics';
+import { notify } from '../../../src/utils/alert';
 import SafeguardingAlert from '../../../src/components/SafeguardingAlert';
 
 interface Message {
@@ -27,6 +30,7 @@ interface Message {
   sender_id: string;
   text: string;
   created_at: string;
+  pending?: boolean;
 }
 
 // A silence longer than this gets its own centered "Today 3:45 PM" style divider,
@@ -58,6 +62,7 @@ export default function ChatScreen() {
   const { matchId, name, picture } = useLocalSearchParams<{ matchId: string; name: string; picture?: string }>();
   const navigation = useNavigation();
   const router = useRouter();
+  const headerHeight = useHeaderHeight();
   const { theme: t } = useTheme();
   const styles = useMemo(() => createStyles(t), [t]);
   const { sessionToken, user, isAuthenticated } = useAuth();
@@ -152,13 +157,32 @@ export default function ChatScreen() {
     }
   }, [isLoading, messages.length]);
 
+  // Pin to the newest message whenever the list grows (own send, incoming poll,
+  // first load). onContentSizeChange alone fires before web layout settles.
+  useEffect(() => {
+    if (messages.length === 0) return;
+    const id = setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 80);
+    return () => clearTimeout(id);
+  }, [messages.length]);
+
   const loadMessages = async () => {
     if (!matchId || !sessionToken || !isMounted.current) return;
     
     try {
-      const data = await api.get(`/chat/${matchId}`, sessionToken);
+      const data: Message[] = await api.get(`/chat/${matchId}`, sessionToken);
       if (isMounted.current) {
-        setMessages(data);
+        setMessages((prev) => {
+          // Keep optimistic bubbles the server hasn't echoed back yet.
+          const pending = prev.filter(
+            (m) => m.pending && !data.some((d) => d.sender_id === m.sender_id && d.text === m.text),
+          );
+          const next = pending.length ? [...data, ...pending] : data;
+          // Same list as before → return the old reference so nothing re-renders.
+          const same =
+            prev.length === next.length &&
+            prev.every((m, i) => m.id === next[i].id && m.pending === next[i].pending);
+          return same ? prev : next;
+        });
         hasErrorRef.current = false;
       }
     } catch (error: any) {
@@ -195,7 +219,7 @@ export default function ChatScreen() {
   };
 
   const sendMessage = async () => {
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !user) return;
 
     setIsSending(true);
     // SEC-005 (2026-07): send plaintext so the server-side safeguarding /
@@ -204,6 +228,15 @@ export default function ChatScreen() {
     // Expo bundle, so it added no confidentiality but silently broke the
     // crisis-keyword scan. Messages are still protected in transit by TLS.
     const messageText = inputText.trim();
+
+    // Optimistic: show the bubble and clear the composer immediately.
+    const tempId = `pending-${Date.now()}`;
+    setMessages((prev) => [
+      ...prev,
+      { id: tempId, match_id: matchId!, sender_id: user.user_id, text: messageText, created_at: new Date().toISOString(), pending: true },
+    ]);
+    setInputText('');
+    haptic.light();
 
     try {
       const response = await api.post(
@@ -221,10 +254,14 @@ export default function ChatScreen() {
         setShowSafeguardingModal(true);
       }
       
-      setInputText('');
-      loadMessages();
-    } catch (error) {
+      setMessages((prev) => prev.filter((m) => m.id !== tempId));
+      await loadMessages();
+    } catch (error: any) {
       console.error('Error sending message:', error);
+      haptic.error();
+      setMessages((prev) => prev.filter((m) => m.id !== tempId));
+      setInputText(messageText);
+      notify('Not sent', error?.message || 'Your message could not be sent. Please try again.');
     } finally {
       setIsSending(false);
     }
@@ -300,9 +337,11 @@ export default function ChatScreen() {
             <Text style={[styles.messageText, !isOwnMessage && styles.otherMessageText]}>{decryptedText}</Text>
             {lastInGroup && (
               <View style={styles.messageFooter}>
-                <Text style={[styles.messageTime, !isOwnMessage && styles.otherMessageTime]}>{formatTime(item.created_at)}</Text>
+                <Text style={[styles.messageTime, !isOwnMessage && styles.otherMessageTime]}>
+                  {item.pending ? 'Sending…' : formatTime(item.created_at)}
+                </Text>
                 <Ionicons
-                  name="lock-closed"
+                  name={item.pending ? 'time-outline' : 'lock-closed'}
                   size={10}
                   color={isOwnMessage ? 'rgba(255,255,255,0.6)' : t.textFaint}
                   style={styles.lockIcon}
@@ -337,7 +376,7 @@ export default function ChatScreen() {
       <KeyboardAvoidingView
         style={styles.keyboardView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={100}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}
       >
         <View style={styles.encryptionBanner}>
           <Ionicons name="shield-checkmark" size={16} color={t.success} />
@@ -352,6 +391,8 @@ export default function ChatScreen() {
           keyExtractor={(item) => item.id}
           renderItem={renderMessage}
           contentContainerStyle={styles.messagesList}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
           onContentSizeChange={() =>
             flatListRef.current?.scrollToEnd({ animated: true })
           }
@@ -408,6 +449,7 @@ export default function ChatScreen() {
             ]}
             onPress={sendMessage}
             disabled={!inputText.trim() || isSending}
+            testID="chat-send-button"
           >
             {isSending ? (
               <ActivityIndicator size="small" color="#fff" />
@@ -459,6 +501,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   messagesList: {
     padding: 16,
+    paddingBottom: 24,
     flexGrow: 1,
   },
   dividerRow: {

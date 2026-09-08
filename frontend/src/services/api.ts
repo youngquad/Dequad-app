@@ -9,6 +9,7 @@ const BACKEND_URL =
   Constants.expoConfig?.extra?.backendUrl ||
   '';
 export const API_URL = BACKEND_URL;
+const REQUEST_TIMEOUT_MS = 20_000;
 
 class ApiService {
   private baseUrl: string;
@@ -82,6 +83,9 @@ class ApiService {
       headers['Authorization'] = `Bearer ${authToken}`;
     }
 
+    // Flaky mobile networks: abort hung requests so spinners never stick forever.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
       // Auth is via Bearer token in the Authorization header — cookies aren't used.
       // Sending `credentials: 'include'` triggers a CORS preflight that fails when
@@ -92,6 +96,7 @@ class ApiService {
         headers,
         body: data ? JSON.stringify(data) : undefined,
         credentials: 'omit',
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -114,14 +119,37 @@ class ApiService {
       }
 
       return await response.json();
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.name === 'AbortError') {
+        error = new Error('Connection timed out. Please check your network and try again.');
+      }
       console.error(`API ${method} ${endpoint} error:`, error);
       throw error;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
   async get(endpoint: string, token?: string | null) {
     return this.request('GET', endpoint, undefined, token);
+  }
+
+  /** Stale-while-revalidate GET: replays the last cached response instantly
+   * (so screens paint without a spinner), then delivers the fresh result. */
+  async getCached(
+    endpoint: string,
+    token: string | null | undefined,
+    onData: (data: any, fromCache: boolean) => void,
+  ) {
+    const key = `dequad_cache:${(token || '').slice(-12)}:${endpoint}`;
+    try {
+      const raw = await AsyncStorage.getItem(key);
+      if (raw) onData(JSON.parse(raw), true);
+    } catch {}
+    const data = await this.get(endpoint, token);
+    AsyncStorage.setItem(key, JSON.stringify(data)).catch(() => {});
+    onData(data, false);
+    return data;
   }
 
   async post(endpoint: string, data: any, token?: string | null) {

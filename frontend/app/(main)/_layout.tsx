@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Platform, TouchableOpacity, AppState } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
@@ -34,6 +35,7 @@ function TabIcon({
 export default function MainLayout() {
   const { sessionToken } = useAuth();
   const { theme: t } = useTheme();
+  const insets = useSafeAreaInsets();
   const [chatUnread, setChatUnread] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
 
@@ -67,8 +69,12 @@ export default function MainLayout() {
     };
     refresh();
     const id = setInterval(refresh, 20_000);
-    return () => { cancelled = true; clearInterval(id); };
+    // Also refresh the moment the app comes back to the foreground.
+    const sub = AppState.addEventListener('change', (s) => { if (s === 'active') refresh(); });
+    return () => { cancelled = true; clearInterval(id); sub.remove(); };
   }, [sessionToken]);
+
+  const tabBarBottom = Math.max(insets.bottom, 12);
 
   return (
     <Tabs
@@ -78,11 +84,12 @@ export default function MainLayout() {
           borderTopWidth: 1,
           borderTopColor: t.border,
           paddingTop: 8,
-          paddingBottom: Platform.OS === 'ios' ? 24 : 16,
-          height: Platform.OS === 'ios' ? 88 : 76,
+          paddingBottom: tabBarBottom,
+          height: 60 + tabBarBottom,
           position: 'absolute',
           elevation: 0,
         },
+        tabBarHideOnKeyboard: Platform.OS === 'android',
         tabBarActiveTintColor: t.primary,
         tabBarInactiveTintColor: t.textFaint,
         tabBarShowLabel: true,

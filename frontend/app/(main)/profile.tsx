@@ -24,6 +24,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { notify } from '../../src/utils/alert';
 import ConfirmDeleteAccountModal from '../../src/components/ConfirmDeleteAccountModal';
 import ProfileCardPreview from '../../src/components/ProfileCardPreview';
+import { haptic } from '../../src/utils/haptics';
+import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
 
 const INTEREST_CATEGORIES: { label: string; icon: string; items: string[] }[] = [
   {
@@ -113,6 +115,9 @@ export default function ProfileScreen() {
   const { mode: themeMode, setMode: setThemeMode, isDark } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  // Keep the profile (subscription status, photos saved elsewhere, etc.) fresh
+  // when the tab regains focus — but never while the user is mid-edit.
+  useRefreshOnFocus(() => { if (!isEditing) refreshUser(); });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [activeSection, setActiveSection] = useState<'photos' | 'basic' | 'preferences' | 'interests'>('photos');
@@ -321,9 +326,11 @@ export default function ProfileScreen() {
       );
       await refreshUser();
       setIsEditing(false);
+      haptic.success();
       notify('Success', 'Profile updated successfully');
     } catch (error) {
       console.error('Error saving profile:', error);
+      haptic.error();
       notify('Error', 'Failed to save profile');
     } finally {
       setIsSaving(false);

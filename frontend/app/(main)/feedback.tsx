@@ -20,6 +20,8 @@ import SafeguardingAlert from '../../src/components/SafeguardingAlert';
 import { MoodCardSkeleton } from '../../src/components/SkeletonLoader';
 import { getMoodInfo } from '../../src/utils/moods';
 import { notify } from '../../src/utils/alert';
+import { haptic } from '../../src/utils/haptics';
+import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
 
 interface FeedbackEntry {
   id: string;
@@ -43,14 +45,14 @@ export default function FeedbackScreen() {
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
 
-  useEffect(() => {
-    loadFeedbackHistory();
-  }, []);
+  useRefreshOnFocus(() => loadFeedbackHistory());
 
   const loadFeedbackHistory = async () => {
     try {
-      const data = await api.get('/feedback', sessionToken);
-      setFeedbackHistory(data);
+      await api.getCached('/feedback', sessionToken, (data) => {
+        setFeedbackHistory(data);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error loading feedback:', error);
     } finally {
@@ -87,6 +89,7 @@ export default function FeedbackScreen() {
         setSafeguardingAlert(result.safeguarding_alert);
         setShowSafeguardingModal(true);
       } else {
+        haptic.success();
         notify('Thank You!', 'Your feedback has been submitted successfully.');
       }
 
