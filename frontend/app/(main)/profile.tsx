@@ -964,7 +964,7 @@ export default function ProfileScreen() {
               <TouchableOpacity
                 style={styles.previewButton}
                 onPress={() => setShowPreview(true)}
-                data-testid="profile-preview-btn"
+                testID="profile-preview-btn"
               >
                 <Ionicons name="eye" size={18} color="#8B5CF6" />
                 <Text style={styles.previewButtonText}>Preview</Text>

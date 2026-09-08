@@ -5,14 +5,16 @@ import {
   StyleSheet,
   Modal,
   ScrollView,
-  Image,
+  Pressable,
   TouchableOpacity,
   Dimensions,
   useWindowDimensions,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme, Theme } from '../contexts/ThemeContext';
+import PhotoViewer from './PhotoViewer';
 
 interface PreviewProfile {
   name?: string;
@@ -42,6 +44,7 @@ export const ProfileCardPreview = ({ visible, onClose, profile }: Props) => {
   const cardWidth = Math.min(winWidth, 480);
   const photoHeight = Math.min(winHeight * 0.5, 460);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [viewerIndex, setViewerIndex] = useState<number | null>(null);
   const scrollRef = React.useRef<ScrollView | null>(null);
 
   const styles = createStyles(t, cardWidth, photoHeight);
@@ -62,6 +65,17 @@ export const ProfileCardPreview = ({ visible, onClose, profile }: Props) => {
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+      <PhotoViewer
+        visible={viewerIndex !== null}
+        photos={photoList}
+        initialIndex={viewerIndex ?? 0}
+        title={profile.name}
+        onClose={() => setViewerIndex(null)}
+        onIndexChange={(i) => {
+          scrollRef.current?.scrollTo({ x: i * cardWidth, animated: false });
+          setPhotoIndex(i);
+        }}
+      />
       <View style={styles.backdrop}>
         <View style={styles.sheet} testID="profile-preview-modal">
           <View style={styles.header}>
@@ -87,7 +101,14 @@ export const ProfileCardPreview = ({ visible, onClose, profile }: Props) => {
                   testID="preview-photo-carousel"
                 >
                   {photoList.map((photo, i) => (
-                    <Image key={`preview-slide-${i}`} source={{ uri: photo }} style={styles.photoSlide} />
+                    <Pressable
+                      key={`preview-slide-${i}`}
+                      style={styles.photoSlide}
+                      onPress={() => setViewerIndex(i)}
+                      testID={`preview-photo-slide-${i}`}
+                    >
+                      <Image source={{ uri: photo }} style={styles.photoSlideImage} contentFit="cover" cachePolicy="memory-disk" />
+                    </Pressable>
                   ))}
                 </ScrollView>
               ) : (
@@ -232,6 +253,10 @@ const createStyles = (t: Theme, cardWidth: number, photoHeight: number) =>
     },
     photoSlide: {
       width: cardWidth,
+      height: '100%',
+    },
+    photoSlideImage: {
+      width: '100%',
       height: '100%',
     },
     photoPlaceholder: {

@@ -1,0 +1,50 @@
+import asyncio
+from playwright.async_api import async_playwright
+
+URL = "https://review-extractor-2.preview.emergentagent.com"
+EMAIL, PW = "ui.tester@student.beds.ac.uk", "UiTester123!"
+
+async def main():
+    async with async_playwright() as p:
+        b = await p.chromium.launch()
+        ctx = await b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        page = await ctx.new_page()
+        errors = []
+        page.on("pageerror", lambda e: errors.append(str(e)))
+        await page.goto(f"{URL}/(auth)/login", wait_until="networkidle", timeout=120000)
+        await page.wait_for_timeout(1500)
+        await page.get_by_placeholder("Email address").fill(EMAIL)
+        await page.get_by_placeholder("Password", exact=True).fill(PW)
+        await page.get_by_text("Sign In", exact=True).click()
+        await page.wait_for_url("**/mood**", timeout=45000)
+        await page.goto(f"{URL}/(main)/profile", wait_until="networkidle")
+        await page.wait_for_timeout(3500)
+        await page.locator('[data-testid="profile-preview-btn"]').click()
+        await page.wait_for_selector('[data-testid="profile-preview-modal"]', timeout=8000)
+        await page.wait_for_timeout(1000)
+        slide = page.locator('[data-testid="preview-photo-slide-0"]')
+        print("preview slide found:", await slide.count())
+        await slide.click()
+        await page.wait_for_selector('[data-testid="photo-viewer"]', timeout=5000)
+        await page.wait_for_timeout(1200)
+        print("viewer counter:", await page.locator('[data-testid="photo-viewer-counter"]').inner_text())
+        await page.screenshot(path="/app/tests_ui/pz_open.png")
+        await page.locator('[data-testid="photo-viewer-next"]').click()
+        await page.wait_for_timeout(800)
+        img = page.locator('[data-testid="photo-viewer-image-1"]')
+        box = await img.bounding_box()
+        await page.mouse.dblclick(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+        await page.wait_for_timeout(900)
+        print("zoomed transform:", (await img.evaluate("el => getComputedStyle(el).transform"))[:30])
+        await page.locator('[data-testid="photo-viewer-close"]').click()
+        await page.wait_for_timeout(600)
+        print("viewer closed:", await page.locator('[data-testid="photo-viewer"]').count() == 0)
+        print("preview still open:", await page.locator('[data-testid="profile-preview-modal"]').count() == 1)
+        print("preview prev arrow visible (synced to photo 2):", await page.locator('[data-testid="preview-photo-prev"]').count())
+        await page.screenshot(path="/app/tests_ui/pz_after.png")
+        await page.locator('[data-testid="profile-preview-close"]').click()
+        await page.wait_for_timeout(500)
+        print("preview closed:", await page.locator('[data-testid="profile-preview-modal"]').count() == 0)
+        print("errors:", errors[:3])
+        await b.close()
+asyncio.run(main())

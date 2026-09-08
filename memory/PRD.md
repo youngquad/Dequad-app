@@ -340,3 +340,8 @@ User complaint: functions lag / don't update until reload on phone. Root causes:
 - Connect (matches.tsx): each carousel slide is now a Pressable (testID photo-slide-{uid}-{i}) → opens viewer at that photo; viewer index changes sync back to the card carousel/dots. testIDs: photo-viewer, photo-viewer-close/prev/next/counter, photo-viewer-image-{i}.
 - Gotcha: Pressable wrapper needs the slide size style (width + height 100%) or it collapses to 0px on web.
 - Playwright-verified (mobile viewport): open, counter, next, dbl-tap → matrix(2.5…), reset, close, dots synced. Not yet user-confirmed on device; not deployed.
+
+## Zoom in Profile Preview (June 2026)
+- ProfileCardPreview.tsx: carousel slides are Pressables (testID preview-photo-slide-{i}) opening the shared PhotoViewer (nested Modal); viewer navigation syncs back to the preview carousel/dots. Works for unsaved local photo URIs too.
+- Fixed profile.tsx Preview button to use `testID="profile-preview-btn"` (was `data-testid`, which RN-web drops).
+- Playwright-verified on mobile viewport: open from preview → counter 1/2 → next → dbl-tap zoom → close → preview still open, synced. Not user-confirmed; not deployed.
