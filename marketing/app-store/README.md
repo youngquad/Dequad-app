@@ -1,16 +1,21 @@
 # DEQUAD App Store media
 
-The `iphone-6.9` folder contains five English (U.K.) App Store screenshots at
-1284 × 2778 px. They are ordered so the first three communicate DEQUAD's core
-experience on the installation sheet:
+This folder contains two English (U.K.) App Store screenshot sets:
+
+- `iphone-6.5`: five 1284 × 2778 px portrait screenshots.
+- `ipad-13`: five 2064 × 2752 px portrait screenshots.
+
+The sets are ordered so the first three communicate DEQUAD's core experience on
+the installation sheet:
 
 1. Find verified student connections.
 2. Track daily mood and wellbeing.
 3. Chat safely with matches.
 
-Upload the PNG files to **Media Manager → iPhone → 6.9-inch Display** in filename
-order. Apple Watch and iMessage media are not included because this repository
-does not contain Watch or iMessage targets.
+Upload each PNG set in filename order. Apple currently lists 1284 × 2778 under
+the **6.5-inch iPhone display** and 2064 × 2752 under the **13-inch iPad
+display**. Apple Watch and iMessage media are not included because this
+repository does not contain Watch or iMessage targets.
 
-Run `./generate_iphone_screenshots.sh` from this folder to regenerate the set
-from the repository's mobile UI captures.
+Run `./generate_iphone_screenshots.sh` or `./generate_ipad_screenshots.sh` from
+this folder to regenerate either set from the repository's mobile UI captures.

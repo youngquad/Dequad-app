@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SOURCE_DIR="$REPO_DIR/tests_ui"
-OUTPUT_DIR="$SCRIPT_DIR/iphone-6.9"
+OUTPUT_DIR="$SCRIPT_DIR/iphone-6.5"
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
