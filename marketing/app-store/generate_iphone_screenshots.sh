@@ -58,7 +58,7 @@ make_screen() {
       -geometry +134+640 -composite \
     "$WORK_DIR/phone.png" -geometry +134+640 -composite \
     "$WORK_DIR/app.png" -geometry +174+680 -composite \
-    -strip -colorspace sRGB -depth 8 -quality 96 "$OUTPUT_DIR/$output_name"
+    -strip -colorspace sRGB -depth 8 -alpha off -quality 96 "$OUTPUT_DIR/$output_name"
 }
 
 make_screen '01' 'm_connect.png' \
