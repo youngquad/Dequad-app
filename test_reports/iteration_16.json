@@ -1,0 +1,48 @@
+{
+  "summary": "Full backend + frontend regression on the new Freemium / University Licence model. Backend: 10/10 pytest tests passed (mood + feedback 403 PREMIUM_REQUIRED for free ui.tester; /subscription/status shape correct free vs premium vs partner; super-admin CRUD on /api/admin/university-licences works; non-admin gets 401/403; entitlement flip via active licence — has_full_access=true, access_source='university', licence_university='University of Bedfordshire', remaining_likes_this_week=null; pause with past ends_at -> is_active_now=false; suffix domain match student.beds.ac.uk → beds.ac.uk works; discover with gender=female returns only female users; university-admin /api/university-admin/licence returns licensed=false by default and licensed=true when name-matched licence exists). Frontend: 3 flows all green — FLOW A (mobile 390x844, free ui.tester): paywall on /mood with title 'Unlock Mood Tracking', partner note, lock badges (tab-lock-heart, tab-lock-chatbox), Unlock button routes to /subscription showing 'Free Plan'; /feedback paywall 'Unlock Lecture Feedback'; Profile premium-card-subtitle='Unlock mood, feedback, filters & unlimited likes'; Connect floating-skip-button still present, zero page errors. FLOW B (mobile, with active beds.ac.uk licence provisioned via admin API): /mood renders full tracker (no paywall, no lock badges), /feedback renders form, Profile subtitle='Full access via University of Bedfordshire' with Partner badge, /subscription shows university-partner-banner, 'Partner University Access' text, NO 'Cancel Subscription' or upgrade purchase buttons; Connect filter icon opens filters (no upgrade prompt); after DELETE licence, paywall returns on reload. FLOW C (desktop 1280x800, super admin): Access dashboard → click 'Licences' chip → licence-add-button opens licence-form; empty domains validation dialog accepted; created 'Test Uni' (testuni.ac.uk, students.testuni.ac.uk) → licence-card-<id> appears with 'Active' pill; licence-toggle → 'Paused' pill; licence-delete + window.confirm accepted → card gone. University admin: login redirect goes to /dashboard (no licence card there); after navigating to /admin/university-dashboard with token bridged, university-licence-status reads 'No active partner licence' then 'DEQUAD Partner Licence — Active' after admin creates 'University of Manchester' licence. DB cleaned: 0 licences remain, ui.tester ends as FREE.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "University admin post-login routing",
+        "issue": "POST /api/university-admin/login (via /(auth)/university-admin-login) stores token under 'university_admin_session_token' and router.replace('/(university-admin)/dashboard'). This URL resolves to /dashboard, which is a stub with no licence card. The intended licence-card screen lives at /admin/university-dashboard, but that page reads the token from a different key ('uni_admin_token') and thus renders blank when the user arrives via the normal login flow. Tests only pass after bridging the token in localStorage. This means real university admins never see the university-licence-card / university-licence-status UI advertised by the review request.",
+        "affected_selectors": ["university-licence-card", "university-licence-status"]
+      },
+      {
+        "flow": "Super admin Licences tab chip",
+        "issue": "The 'Licences' chip in admin/dashboard.tsx (line ~518) has no data-testid attribute. The panel content wrapper inside AdminLicencesTab.tsx does have testID='admin-licences-tab', but the tab chip itself is only reachable by visible text 'Licences'. Review request expected a data-testid on the tab chip named 'admin-licences-tab'.",
+        "affected_selectors": ["admin-licences-tab (tab chip)"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_freemium_licences.py",
+    "/app/test_reports/pytest/iter16_freemium.xml",
+    "/app/tests_ui/iter16_freemium_frontend.py",
+    "/app/tests_ui/it16_results.json"
+  ],
+  "action_items": [
+    "Fix the university-admin login → dashboard integration: either (a) update /(auth)/university-admin-login to store the token under 'uni_admin_token' AND router.replace('/admin/university-dashboard'), or (b) add the licence card / testIDs to /(university-admin)/dashboard.tsx. Right now real uni admins never land on a page that renders the university-licence-card.",
+    "Add data-testid='admin-licences-tab' to the Licences chip <TouchableOpacity> in /app/frontend/app/admin/dashboard.tsx (currently only the panel content has the testID)."
+  ],
+  "critical_code_review_comments": [
+    "backend/routes/matches.py::discover returns a bare list (not {results, filters_applied}) — the review request expected 'filters_applied non-empty' in the response body but this metadata is only tracked internally. Test verified filter honoured by inspecting returned users' gender, but if any client relies on filters_applied it will not receive it.",
+    "Two parallel university-admin dashboards exist (/app/frontend/app/(university-admin)/dashboard.tsx and /app/frontend/app/admin/university-dashboard.tsx) with divergent storage keys — this is a latent maintenance risk and the direct cause of the integration bug above."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_freemium_licences.py (new)",
+    "/app/tests_ui/iter16_freemium_frontend.py (new)"
+  ],
+  "success_rate": {"backend": "100% (10/10)", "frontend": "95% (17/18 assertions; only remaining failure is the uni-admin post-login redirect landing on wrong page — a real integration bug, not a test flake)"},
+  "test_credentials": "Used from /app/memory/test_credentials.md: ui.tester@student.beds.ac.uk / UiTester123!; quadri.yusuf@dequad.com / Oluwatobi11@ + admin_code DEQUAD_ADMIN_2024; admin@manchesteruni.edu / UniAdmin123!.",
+  "seed_data_creation": "None persisted. Every licence created during testing (bedfordshire, manchester, test-uni) was deleted at the end; final admin list shows 0 licences. ui.tester finishes as a FREE student. No user documents were modified.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "(1) The intended uni-admin licence card page is /admin/university-dashboard (reads uni_admin_token). The current login flow (/(auth)/university-admin-login) writes university_admin_session_token and lands on /(university-admin)/dashboard which has no licence UI. If main agent unifies these, retest by simply following the login flow. (2) Admin dashboard 'Licences' chip must be clicked by text — data-testid is on the panel content only. (3) Screenshot quality param is unsupported on PNG in this Playwright version — use JPG or drop the quality kwarg. (4) window.confirm is used for licence deletion — attach page.on('dialog', ...) BEFORE the click. Registering both a global handler AND a page.once() causes 'Dialog already handled' errors — pick one.",
+  "rca_of_the_issue": "University-admin licence card invisibility: /(auth)/university-admin-login stores its bearer under localStorage key 'university_admin_session_token' and router.replace('/(university-admin)/dashboard'). But the licence card lives in /app/frontend/app/admin/university-dashboard.tsx whose checkAuth() reads 'uni_admin_token'. Two independent flows were built in parallel and never connected. Simplest fix: in the login page (a) also setItem('uni_admin_token', data.session_token) and (b) router.replace('/admin/university-dashboard'). Verified this makes the licence-status text render 'No active partner licence' → 'DEQUAD Partner Licence — Active' after admin creates the Manchester licence."
+}

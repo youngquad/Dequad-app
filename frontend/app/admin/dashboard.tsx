@@ -520,6 +520,7 @@ export default function AdminDashboard() {
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
             onPress={() => setActiveTab(tab as any)}
+            testID={`admin-tab-${tab}`}
           >
             <View style={{ position: 'relative' }}>
               <Ionicons

@@ -73,6 +73,7 @@ export default function UniversityAdminDashboard() {
   
   // Data states
   const [stats, setStats] = useState<UniversityStats | null>(null);
+  const [licence, setLicence] = useState<any>(null);
   const [students, setStudents] = useState<Student[]>([]);
   const [alerts, setAlerts] = useState<SafeguardingAlert[]>([]);
   const [moodTrends, setMoodTrends] = useState<MoodTrend[]>([]);
@@ -139,6 +140,7 @@ export default function UniversityAdminDashboard() {
     try {
       await Promise.all([
         loadStats(),
+        loadLicence(),
         loadStudents(),
         loadAlerts(),
         loadMoodTrends(),
@@ -185,6 +187,14 @@ export default function UniversityAdminDashboard() {
     }
   };
   
+  const loadLicence = async () => {
+    try {
+      setLicence(await apiCall('/university-admin/licence'));
+    } catch (err) {
+      console.error('Error loading licence:', err);
+    }
+  };
+
   const loadStudents = async () => {
     try {
       const data = await apiCall('/university-admin/students?limit=100');
@@ -378,6 +388,22 @@ export default function UniversityAdminDashboard() {
         {/* Overview Tab */}
         {activeTab === 'overview' && stats && (
           <View style={styles.content}>
+            {licence && (
+              <View style={[styles.licenceCard, licence.licensed ? styles.licenceCardOn : styles.licenceCardOff]} testID="university-licence-card">
+                <Ionicons name={licence.licensed ? 'ribbon' : 'ribbon-outline'} size={26} color={licence.licensed ? '#15803D' : '#B45309'} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.licenceTitle} testID="university-licence-status">
+                    {licence.licensed ? 'DEQUAD Partner Licence — Active' : 'No active partner licence'}
+                  </Text>
+                  <Text style={styles.licenceText}>
+                    {licence.licensed
+                      ? `Students on ${licence.licence.domains.join(', ')} get every Premium feature free${licence.licence.ends_at ? ` until ${licence.licence.ends_at.slice(0, 10)}` : ''}. ${licence.licence.students_covered} students currently covered.`
+                      : 'Your students currently only get Connect for free. Contact DEQUAD to activate a partner licence and unlock mood tracking, feedback and unlimited likes for everyone on your email domain.'}
+                  </Text>
+                </View>
+              </View>
+            )}
+
             {/* Quick Stats */}
             <View style={styles.statsGrid}>
               <View style={[styles.statCard, { backgroundColor: '#6366F1' }]}>
@@ -761,6 +787,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
+  licenceCard: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'flex-start',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+  },
+  licenceCardOn: { backgroundColor: '#F0FDF4', borderColor: '#BBF7D0' },
+  licenceCardOff: { backgroundColor: '#FFFBEB', borderColor: '#FDE68A' },
+  licenceTitle: { fontSize: 15, fontWeight: '700', color: '#111827' },
+  licenceText: { fontSize: 13, color: '#4B5563', marginTop: 4, lineHeight: 19 },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

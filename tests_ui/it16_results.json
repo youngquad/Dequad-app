@@ -1,0 +1,13 @@
+{
+  "C_licences_panel_visible": true,
+  "C_add_button_present": true,
+  "C_form_visible": true,
+  "C_card_created": true,
+  "C_active_pill_present": true,
+  "C_paused_pill": true,
+  "C_card_removed": true,
+  "C_errors": [],
+  "C_uni_login_redirect_url": "https://review-extractor-2.preview.emergentagent.com/dashboard",
+  "C_uni_status_no_licence": "No active partner licence",
+  "C_uni_status_with_licence": "DEQUAD Partner Licence \u2014 Active"
+}
