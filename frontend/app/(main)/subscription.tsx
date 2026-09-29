@@ -20,6 +20,8 @@ import { getOfferings, purchasePackage, restorePurchases } from '../../src/servi
 interface SubscriptionStatus {
   plan: string;
   is_premium: boolean;
+  access_source?: 'premium' | 'university' | 'free';
+  licence_university?: string | null;
   stripe_customer_id: string | null;
   subscription_platform: string | null;
   swipes_today: number;
@@ -230,9 +232,21 @@ export default function SubscriptionScreen() {
               styles.planBadgeText,
               status?.is_premium ? styles.premiumBadgeText : styles.freeBadgeText
             ]}>
-              {status?.is_premium ? 'Premium Member' : 'Free Plan'}
+              {status?.access_source === 'university' ? 'Partner University Access' : status?.is_premium ? 'Premium Member' : 'Free Plan'}
             </Text>
           </View>
+
+          {status?.access_source === 'university' && (
+            <View style={styles.partnerBanner} testID="university-partner-banner">
+              <Ionicons name="school" size={22} color={t.accent} />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.partnerTitle}>Covered by {status.licence_university}</Text>
+                <Text style={styles.partnerText}>
+                  Your university is a DEQUAD partner, so every Premium feature is free for you while you're a student there. No subscription needed.
+                </Text>
+              </View>
+            </View>
+          )}
 
           {/* Swipe Counter (for free users) */}
           {!status?.is_premium && (
@@ -315,7 +329,14 @@ export default function SubscriptionScreen() {
             </View>
 
             {/* Action Button */}
-            {status?.is_premium ? (
+            {status?.access_source === 'university' ? (
+              <View style={styles.premiumActions}>
+                <View style={styles.activeSubscription}>
+                  <Ionicons name="checkmark-circle" size={24} color={t.success} />
+                  <Text style={styles.activeText}>Included by your university</Text>
+                </View>
+              </View>
+            ) : status?.is_premium ? (
               <View style={styles.premiumActions}>
                 <View style={styles.activeSubscription}>
                   <Ionicons name="checkmark-circle" size={24} color={t.success} />
@@ -424,6 +445,19 @@ export default function SubscriptionScreen() {
 }
 
 const createStyles = (t: Theme) => StyleSheet.create({
+  partnerBanner: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'flex-start',
+    backgroundColor: t.card,
+    borderWidth: 1,
+    borderColor: t.accent,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+  },
+  partnerTitle: { color: t.text, fontSize: 16, fontWeight: '700' },
+  partnerText: { color: t.textMuted, fontSize: 13, marginTop: 4, lineHeight: 19 },
   container: {
     flex: 1,
     backgroundColor: t.bg,

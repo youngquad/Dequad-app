@@ -26,6 +26,7 @@ import ConfirmDeleteAccountModal from '../../src/components/ConfirmDeleteAccount
 import ProfileCardPreview from '../../src/components/ProfileCardPreview';
 import { haptic } from '../../src/utils/haptics';
 import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
+import { useEntitlements } from '../../src/contexts/EntitlementsContext';
 
 const INTEREST_CATEGORIES: { label: string; icon: string; items: string[] }[] = [
   {
@@ -115,6 +116,7 @@ export default function ProfileScreen() {
   const { mode: themeMode, setMode: setThemeMode, isDark } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const entitlements = useEntitlements();
   // Keep the profile (subscription status, photos saved elsewhere, etc.) fresh
   // when the tab regains focus — but never while the user is mid-edit.
   useRefreshOnFocus(() => { if (!isEditing) refreshUser(); });
@@ -1034,14 +1036,16 @@ export default function ProfileScreen() {
               </View>
               <View style={styles.premiumInfo}>
                 <Text style={styles.premiumTitle}>DEQUAD Premium</Text>
-                <Text style={styles.premiumSubtitle}>
-                  {user?.plan === 'premium' ? 'Manage your subscription' : 'Upgrade for unlimited swipes'}
+                <Text style={styles.premiumSubtitle} testID="premium-card-subtitle">
+                  {entitlements.accessSource === 'university'
+                    ? `Full access via ${entitlements.licenceUniversity}`
+                    : user?.plan === 'premium' ? 'Manage your subscription' : 'Unlock mood, feedback, filters & unlimited likes'}
                 </Text>
               </View>
-              {user?.plan === 'premium' ? (
+              {entitlements.hasFullAccess ? (
                 <View style={styles.premiumActiveBadge}>
                   <Ionicons name="checkmark-circle" size={16} color={t.success} />
-                  <Text style={styles.premiumActiveText}>Active</Text>
+                  <Text style={styles.premiumActiveText}>{entitlements.accessSource === 'university' ? 'Partner' : 'Active'}</Text>
                 </View>
               ) : (
                 <Ionicons name="chevron-forward" size={20} color={t.premium} />

@@ -5,6 +5,7 @@ import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
+import { EntitlementsProvider } from '../src/contexts/EntitlementsContext';
 import { ThemeProvider, useTheme } from '../src/contexts/ThemeContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { fontsToLoad } from '../src/constants/fonts';
@@ -145,7 +146,9 @@ export default function RootLayout() {
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <ThemeProvider>
         <AuthProvider>
-          <RootLayoutNav />
+          <EntitlementsProvider>
+            <RootLayoutNav />
+          </EntitlementsProvider>
         </AuthProvider>
       </ThemeProvider>
     </SafeAreaProvider>

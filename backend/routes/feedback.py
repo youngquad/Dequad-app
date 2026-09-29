@@ -6,6 +6,7 @@ import asyncio
 from database import db
 from models import User, FeedbackEntry, FeedbackCreate, SafeguardingAlert
 from helpers.auth import get_current_user
+from helpers.entitlements import require_full_access
 from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert
 from helpers.email import send_safeguarding_email_to_admins
 
@@ -13,7 +14,7 @@ router = APIRouter()
 
 
 @router.post("/feedback")
-async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get_current_user)):
+async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(require_full_access)):
     if data.mood < 1 or data.mood > 10:
         raise HTTPException(status_code=400, detail="Mood must be between 1 and 10")
 
@@ -80,7 +81,7 @@ async def submit_feedback(data: FeedbackCreate, current_user: User = Depends(get
 
 
 @router.get("/feedback", response_model=List[FeedbackEntry])
-async def get_feedback_history(current_user: User = Depends(get_current_user)):
+async def get_feedback_history(current_user: User = Depends(require_full_access)):
     entries = await db.feedback_entries.find(
         {"user_id": current_user.user_id}, {"_id": 0}
     ).sort("created_at", -1).to_list(100)

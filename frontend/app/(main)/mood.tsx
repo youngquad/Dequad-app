@@ -23,6 +23,8 @@ import { MOODS, getMoodInfo } from '../../src/utils/moods';
 import { notify } from '../../src/utils/alert';
 import { haptic } from '../../src/utils/haptics';
 import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
+import { useEntitlements } from '../../src/contexts/EntitlementsContext';
+import PaywallScreen from '../../src/components/PaywallScreen';
 
 interface MoodEntry {
   id: string;
@@ -130,7 +132,12 @@ export default function MoodScreen() {
     }).start();
   }, []);
 
-  useRefreshOnFocus(() => loadMoodHistory());
+  const { hasFullAccess, loading: entitlementsLoading, refresh: refreshEntitlements } = useEntitlements();
+  useRefreshOnFocus(() => {
+    refreshEntitlements();
+    if (hasFullAccess) loadMoodHistory();
+  });
+  useEffect(() => { if (hasFullAccess) loadMoodHistory(); }, [hasFullAccess]);
 
   const loadMoodHistory = async () => {
     try {
@@ -212,6 +219,21 @@ export default function MoodScreen() {
   };
 
   const selectedMoodInfo = selectedMood ? getMoodInfo(selectedMood) : null;
+
+  if (!entitlementsLoading && !hasFullAccess) {
+    return (
+      <SafeAreaView style={styles.container} edges={['bottom']}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <PaywallScreen
+            feature="Mood Tracking"
+            icon="heart"
+            description="Log how you feel each day, spot patterns over time and get support when you need it most."
+            benefits={['Daily mood check-ins with private notes', 'Your mood history and trends', 'Wellbeing support signposting', 'Unlimited likes and discovery filters on Connect']}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>

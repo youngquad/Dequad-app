@@ -6,6 +6,7 @@ import re
 from database import db
 from models import User, Match, SwipeAction
 from helpers.auth import get_current_user
+from helpers.entitlements import get_entitlements
 from helpers.notifications import send_push_notification
 from helpers.safeguarding import check_language_filter
 from config import FREE_LIKES_PER_WEEK
@@ -154,11 +155,9 @@ async def discover_matches(
 
     # Premium gating — only apply filters if the user actually has premium.
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0}) or {}
-    is_premium = (
-        user_doc.get("plan") == "premium"
-        or user_doc.get("is_premium") is True
-        or user_doc.get("subscription_status") in {"premium", "active", "cancel_at_period_end"}
-    )
+    # Full access = paid Premium OR an active university licence for the
+    # student's email domain (see helpers/entitlements.py).
+    is_premium = (await get_entitlements(user_doc))["has_full_access"]
     filters_applied: dict = {}
     if is_premium:
         if gender:
@@ -257,7 +256,8 @@ async def swipe_action(data: SwipeAction, current_user: User = Depends(get_curre
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     week_start = _week_start_iso()
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
-    user_plan = user_doc.get("plan", "free")
+    # Licensed-university students get unlimited likes like Premium.
+    user_plan = "premium" if (await get_entitlements(user_doc))["has_full_access"] else "free"
     likes_this_week = user_doc.get("likes_this_week", 0)
     last_like_week = user_doc.get("last_like_week")
 

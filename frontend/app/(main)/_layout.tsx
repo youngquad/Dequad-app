@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useTheme, Theme } from '../../src/contexts/ThemeContext';
+import { useEntitlements } from '../../src/contexts/EntitlementsContext';
 import { api } from '../../src/services/api';
 import { registerPushToken } from '../../src/utils/push';
 
@@ -16,11 +17,17 @@ function TabIcon({
   color,
   badgeCount,
   dotBorder,
-}: { name: string; focused: boolean; color: string; badgeCount?: number; dotBorder?: string }) {
+  locked,
+}: { name: string; focused: boolean; color: string; badgeCount?: number; dotBorder?: string; locked?: boolean }) {
   return (
     <View style={staticStyles.tabIconContainer}>
       {focused && <View style={[staticStyles.activeIndicator, { backgroundColor: color }]} />}
       <Ionicons name={name as any} size={24} color={color} />
+      {locked ? (
+        <View style={[staticStyles.tabLockDot, { borderColor: dotBorder || 'transparent' }]} testID={`tab-lock-${name.replace('-outline', '')}`}>
+          <Ionicons name="lock-closed" size={9} color="#fff" />
+        </View>
+      ) : null}
       {badgeCount && badgeCount > 0 ? (
         <View style={[staticStyles.tabUnreadDot, { borderColor: dotBorder || 'transparent' }]}>
           <Text style={staticStyles.tabUnreadText}>
@@ -36,6 +43,8 @@ export default function MainLayout() {
   const { sessionToken } = useAuth();
   const { theme: t } = useTheme();
   const insets = useSafeAreaInsets();
+  const { hasFullAccess, loading: entitlementsLoading } = useEntitlements();
+  const locked = !entitlementsLoading && !hasFullAccess;
   const [chatUnread, setChatUnread] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
 
@@ -111,7 +120,7 @@ export default function MainLayout() {
         options={{
           title: 'Mood',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name={focused ? 'heart' : 'heart-outline'} focused={focused} color={color} />
+            <TabIcon name={focused ? 'heart' : 'heart-outline'} focused={focused} color={color} locked={locked} dotBorder={t.tabBarBg} />
           ),
           headerTitle: 'Mood Tracker',
         }}
@@ -121,7 +130,7 @@ export default function MainLayout() {
         options={{
           title: 'Feedback',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name={focused ? 'chatbox' : 'chatbox-outline'} focused={focused} color={color} />
+            <TabIcon name={focused ? 'chatbox' : 'chatbox-outline'} focused={focused} color={color} locked={locked} dotBorder={t.tabBarBg} />
           ),
           headerTitle: 'Lecture Feedback',
         }}
@@ -202,6 +211,18 @@ export default function MainLayout() {
 }
 
 const staticStyles = StyleSheet.create({
+  tabLockDot: {
+    position: 'absolute',
+    top: -4,
+    right: -8,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#F59E0B',
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   tabLabel: {
     fontSize: 11,
     fontWeight: '600',

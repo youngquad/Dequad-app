@@ -21,6 +21,7 @@ import AdminSupportInbox from '../../src/components/AdminSupportInbox';
 import { AdminVerificationQueue } from '../../src/components/AdminVerificationQueue';
 import { AdminGrowthAnalytics } from '../../src/components/AdminGrowthAnalytics';
 import AdminSubscriptionsTab from '../../src/components/AdminSubscriptionsTab';
+import AdminLicencesTab from '../../src/components/AdminLicencesTab';
 import AdminUniversitiesTab from '../../src/components/AdminUniversitiesTab';
 import AdminAILearningTab from '../../src/components/AdminAILearningTab';
 import AdminExportTab from '../../src/components/AdminExportTab';
@@ -91,7 +92,7 @@ export default function AdminDashboard() {
   const [localSessionToken, setLocalSessionToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'feedback' | 'verifications' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'ai-learning' | 'export'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'safeguarding' | 'feedback' | 'verifications' | 'support' | 'analytics' | 'subscriptions' | 'universities' | 'licences' | 'ai-learning' | 'export'>('overview');
   const [supportUnread, setSupportUnread] = useState<number>(0);
   const [safeUnread, setSafeUnread] = useState<{ unread: number; high_risk: number }>({ unread: 0, high_risk: 0 });
   const [verifyUnread, setVerifyUnread] = useState<number>(0);
@@ -514,7 +515,7 @@ export default function AdminDashboard() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {['overview', 'safeguarding', 'feedback', 'verifications', 'support', 'subscriptions', 'ai-learning', 'team', 'universities', 'analytics', 'export'].map((tab) => (
+        {['overview', 'safeguarding', 'feedback', 'verifications', 'support', 'subscriptions', 'licences', 'ai-learning', 'team', 'universities', 'analytics', 'export'].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -529,6 +530,7 @@ export default function AdminDashboard() {
                   tab === 'verifications' ? 'shield-checkmark-outline' :
                   tab === 'support' ? 'chatbubbles-outline' :
                   tab === 'subscriptions' ? 'card-outline' :
+                  tab === 'licences' ? 'ribbon-outline' :
                   tab === 'ai-learning' ? 'bulb-outline' :
                   tab === 'team' ? 'people-outline' :
                   tab === 'universities' ? 'school-outline' :
@@ -582,6 +584,7 @@ export default function AdminDashboard() {
                tab === 'feedback' ? 'Feedback' :
                tab === 'verifications' ? 'Verify' :
                tab === 'subscriptions' ? 'Subs' :
+               tab === 'licences' ? 'Licences' :
                tab === 'team' ? 'Team' :
                tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Text>
@@ -1070,6 +1073,8 @@ export default function AdminDashboard() {
             onExport={() => exportData('subscriptions')}
           />
         )}
+
+        {activeTab === 'licences' && <AdminLicencesTab sessionToken={sessionToken} />}
 
         {/* Universities Tab */}
         {activeTab === 'universities' && (

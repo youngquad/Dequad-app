@@ -10,6 +10,7 @@ from database import db
 from models import User, CreateCheckoutRequest, UniversitySubscriptionRequest
 from helpers.auth import get_current_user
 from helpers.passwords import hash_password
+from helpers.entitlements import get_entitlements
 from config import (
     STRIPE_WEBHOOK_SECRET, STRIPE_UNIVERSITY_WEBHOOK_SECRET,
     STRIPE_PRICE_AMOUNT, STRIPE_PRICE_CURRENCY,
@@ -130,7 +131,12 @@ async def create_checkout_session(data: CreateCheckoutRequest, current_user: Use
 @router.get("/subscription/status")
 async def get_subscription_status(current_user: User = Depends(get_current_user)):
     user_doc = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
-    plan = user_doc.get("plan", "free")
+    entitlements = await get_entitlements(user_doc)
+    # `plan` below is the *effective* plan: a student covered by an active
+    # university licence behaves exactly like Premium (unlimited likes, filters,
+    # mood + feedback). `paid_plan` is what they actually pay for.
+    paid_plan = user_doc.get("plan", "free")
+    plan = "premium" if entitlements["has_full_access"] else "free"
     week_start = _week_start_iso()
     likes_this_week = user_doc.get("likes_this_week", 0)
     if user_doc.get("last_like_week") != week_start:
@@ -139,7 +145,9 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
     next_reset = _next_week_reset().isoformat() if plan == "free" else None
     return {
         "plan": plan,
+        "paid_plan": paid_plan,
         "is_premium": plan == "premium",
+        **entitlements,
         "stripe_customer_id": user_doc.get("stripe_customer_id"),
         # "apple" for RevenueCat/StoreKit subscriptions, None for the
         # existing Stripe web-checkout flow — tells the client which cancel
@@ -458,4 +466,19 @@ async def university_stripe_webhook(request: Request):
                 }
                 await db.users.insert_one(uni_admin)
                 logger.info(f"University admin auto-created: {admin_email} for {university}")
+            # Auto-create the student licence so everyone on the university's
+            # email domain gets full access straight away. Super admin can
+            # refine domains / dates in Admin > Licences.
+            from helpers.entitlements import email_domain, find_licence_for_university
+            if not await find_licence_for_university(university):
+                domain = email_domain(admin_email)
+                now_iso = datetime.now(timezone.utc).isoformat()
+                await db.university_licences.insert_one({
+                    "id": str(uuid.uuid4()), "name": university,
+                    "domains": [domain] if domain.endswith(".ac.uk") else [],
+                    "starts_at": now_iso, "ends_at": None, "active": True,
+                    "notes": "Auto-created from Stripe university subscription",
+                    "created_at": now_iso, "updated_at": now_iso, "created_by": "stripe-webhook",
+                    "stripe_customer_id": session.get("customer"),
+                })
     return {"received": True}

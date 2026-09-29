@@ -22,6 +22,8 @@ import { getMoodInfo } from '../../src/utils/moods';
 import { notify } from '../../src/utils/alert';
 import { haptic } from '../../src/utils/haptics';
 import { useRefreshOnFocus } from '../../src/hooks/useRefreshOnFocus';
+import { useEntitlements } from '../../src/contexts/EntitlementsContext';
+import PaywallScreen from '../../src/components/PaywallScreen';
 
 interface FeedbackEntry {
   id: string;
@@ -45,7 +47,12 @@ export default function FeedbackScreen() {
   const [safeguardingAlert, setSafeguardingAlert] = useState<any>(null);
   const [showSafeguardingModal, setShowSafeguardingModal] = useState(false);
 
-  useRefreshOnFocus(() => loadFeedbackHistory());
+  const { hasFullAccess, loading: entitlementsLoading, refresh: refreshEntitlements } = useEntitlements();
+  useRefreshOnFocus(() => {
+    refreshEntitlements();
+    if (hasFullAccess) loadFeedbackHistory();
+  });
+  useEffect(() => { if (hasFullAccess) loadFeedbackHistory(); }, [hasFullAccess]);
 
   const loadFeedbackHistory = async () => {
     try {
@@ -117,6 +124,21 @@ export default function FeedbackScreen() {
       minute: '2-digit',
     });
   };
+
+  if (!entitlementsLoading && !hasFullAccess) {
+    return (
+      <SafeAreaView style={styles.container} edges={['bottom']}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <PaywallScreen
+            feature="Lecture Feedback"
+            icon="chatbox"
+            description="Rate your lectures and share how they made you feel — anonymised insights help your university improve student wellbeing."
+            benefits={['Quick lecture ratings and reflections', 'Your feedback history in one place', 'Helps your university act on student wellbeing', 'Unlimited likes and discovery filters on Connect']}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>

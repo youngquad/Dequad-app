@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from database import db
 from models import User, MoodEntry, MoodCreate, SafeguardingAlert
 from helpers.auth import get_current_user
+from helpers.entitlements import require_full_access
 from helpers.safeguarding import check_safeguarding_content, create_safeguarding_alert, analyze_text_for_new_patterns
 from helpers.email import send_safeguarding_email_to_admins
 
@@ -13,7 +14,7 @@ router = APIRouter()
 
 
 @router.post("/mood")
-async def create_mood(data: MoodCreate, current_user: User = Depends(get_current_user)):
+async def create_mood(data: MoodCreate, current_user: User = Depends(require_full_access)):
     if data.mood < 1 or data.mood > 10:
         raise HTTPException(status_code=400, detail="Mood must be between 1 and 10")
 
@@ -66,7 +67,7 @@ async def create_mood(data: MoodCreate, current_user: User = Depends(get_current
 
 
 @router.get("/mood", response_model=List[MoodEntry])
-async def get_mood_history(current_user: User = Depends(get_current_user)):
+async def get_mood_history(current_user: User = Depends(require_full_access)):
     entries = await db.mood_entries.find(
         {"user_id": current_user.user_id}, {"_id": 0}
     ).sort("created_at", -1).to_list(100)
