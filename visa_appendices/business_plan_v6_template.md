@@ -10,7 +10,7 @@
 | **Founder (sole)** | Yusuf Quadri — Founder & Chief Executive Officer (lead applicant) |
 | **Wider founding team** | Dr Gerald Marfo (CMO) · Adedapo Ajuwon (Senior Software Engineer) · Chinyere Jennifer (Senior Advisor, Programme Delivery) |
 | **Base** | London — NatWest Accelerator (London hub) |
-| **Product** | Live in production at **dequad.co.uk** (web), Android and iOS |
+| **Product** | **Live and fully functional** on the **Apple App Store** and **Google Play Store**, and on the web at **dequad.co.uk** |
 | **Funding** | £3,000 founder's capital now; £11,000 further equity (£3,000 friends & family, £8,000 Nigerian company) on a successful pilot and signed letter of intent — £14,000 in total |
 | **Financial year** | 1 September – 31 August (aligned to the UK academic year). Year 1 = FY27 (Sep 2026 – Aug 2027) |
 | **Contact** | quadri.yusuf@dequad.com · 07928 132617 · linkedin.com/in/quadri-yusuf |
@@ -72,7 +72,7 @@ The lead founder, **Yusuf Quadri**, is a practising safeguarding professional. H
 
 | Evidence | Status |
 |---|---|
-| Product | **Built and live.** Web, Android and iOS. The live product includes verified matching, chat, daily mood tracking, lecture feedback, graded safeguarding alerts, admin verification queue, university dashboard, AI cohort analysis, CSV exports, Stripe and in-app billing, and partner-university licence management. |
+| Product | **Live and fully functional on the Apple App Store and Google Play Store**, and on the web at dequad.co.uk. Anyone with a UK university email can download it today. The live product includes verified matching, chat, daily mood tracking, lecture feedback, graded safeguarding alerts, admin verification queue, university dashboard, AI cohort analysis, CSV exports, Stripe and in-app billing, and partner-university licence management. |
 | Company | DEQUAD Ltd incorporated 18 August 2026; sole founder and director Yusuf Quadri. £3,000 founder's capital in place. A further £11,000 of equity (£3,000 friends and family; £8,000 from a Nigerian company) is agreed **subject to a successful pilot and a signed letter of intent**. |
 | Third-party validation | Santander Universities Pre-Incubator (completed 2025); NatWest Accelerator, London (joined 16 March 2026). |
 | Users | Closed beta with verified University of Bedfordshire students. |
@@ -92,7 +92,7 @@ The base case is deliberately cautious: one paying university in Year 2 and thre
 
 ### 2.1 The platform
 
-DEQUAD is a single codebase serving web (dequad.co.uk), Android and iOS (Expo / React Native), backed by a Python FastAPI service and MongoDB. It is built from five modules.
+DEQUAD is live and fully functional on the **Apple App Store** (iOS) and **Google Play Store** (Android), and on the web at dequad.co.uk. All three run from a single codebase (Expo / React Native), backed by a Python FastAPI service and MongoDB. Both app stores reviewed and approved it against their privacy, safety and in-app-purchase rules before publication. It is built from five modules.
 
 | Module | What it does | Why it matters |
 |---|---|---|
@@ -134,7 +134,7 @@ DEQUAD is not a new feature added to an existing app. It is a new combination of
 
 ### 3.2 Viability
 
-- **The build risk is already retired.** The product is live on web, Android and iOS, with billing, safeguarding and university tooling in production. Year 1 needs no development spend beyond hosting and tools.
+- **The build risk is already retired.** DEQUAD is live and fully functional on the Apple App Store and Google Play Store, as well as the web. It has passed both stores' review processes, and billing, safeguarding and university tooling are all in production. Year 1 needs no development spend beyond hosting and tools.
 - **The founder is the customer's peer.** University buyers are student-services and safeguarding professionals. The CEO does safeguarding work professionally and has led a students' union. He can talk to buyers in their own language, and he has existing relationships at the University of Bedfordshire, with whom pilot conversations are ongoing.
 - **The cost base is very lean.** Year 1 cash costs are about £400 a month. NatWest Accelerator support (office, legal and accountancy, in kind until March 2027) and a founder who takes no pay in Years 1–2 mean the founder's £3,000 carries the business through the pilot, and the £11,000 released after the pilot is more than enough to reach the first institutional revenue.
 - **Viability does not depend on a single deal.** Section 12.3 shows that even if the pilot fails, so that **neither a licence nor the £11,000 investment ever arrives**, the company stays solvent for all three years on Premium and Starter revenue in lean mode (Year 3 revenue {{DOWN_REV_Y3}}; closing cash {{DOWN_CASH_Y3}}). Founder pay and the first hires are the things that would wait.
@@ -352,6 +352,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 
 - **Student ambassadors.** Paid in referral rewards and vouchers; one per campus.
 - **Campus moments.** Freshers' and January welcome weeks, society fairs and SU events. Sign-ups follow the academic calendar: about 30% fall in Sep–Oct and about 12% in January (see Section 11.1).
+- **App-store presence.** DEQUAD is live on the Apple App Store and Google Play, so every campus campaign sends students straight to a one-tap download. App-store optimisation (keywords such as "uni friends" and "student wellbeing", screenshots and ratings prompts after a first match) is a free, always-on acquisition channel.
 - **In-product virality.** Free Connect, mutual-match notifications and invite links. Each new verified student makes the network more useful to everyone else at the same university.
 - **Content.** Instagram and TikTok content made by and for students; search-optimised guides on making friends at university.
 
@@ -378,7 +379,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 
 | **Strengths** | **Weaknesses** |
 |---|---|
-| Live, full-featured product on web, Android and iOS, so build risk is retired | Small funding base (£14,000) for a two-sided market |
+| Fully functional product live on the Apple App Store, Google Play and web, so build and distribution risk is retired | Small funding base (£14,000) for a two-sided market |
 | A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Bedfordshire pilot still under discussion; no signed pilot, letter of intent or paying institution yet |
 | A distinctive integrated loop: verification, connection, wellbeing, safeguarding | Sole founder: key-person risk until Year 3 hires, mitigated by the equity-only wider team |
 | Freemium model with a self-serve paid entry tier, already live in billing | Founder is unpaid in Years 1–2 and has other professional commitments |
