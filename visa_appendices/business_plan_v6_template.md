@@ -1,11 +1,12 @@
 # DEQUAD
-## Business Plan — UK Innovator Founder Endorsement
+## Pre-Pilot Stage Business Plan — UK Innovator Founder Endorsement
 ### Submitted to UK Endorsing Services (UKES)
 
 ---
 
 | | |
 |---|---|
+| **Stage** | **Pre-pilot.** Product live; pilot with the University of Bedfordshire under discussion (target Jan–Mar 2027); no paying institution yet |
 | **Company** | DEQUAD Ltd — Company No. 17405964, incorporated in England & Wales on 18 August 2026 |
 | **Founder (sole)** | Yusuf Quadri — Founder & Chief Executive Officer (lead applicant) |
 | **Wider founding team** | Dr Gerald Marfo (CMO) · Adedapo Ajuwon (Senior Software Engineer) · Chinyere Jennifer (Senior Advisor, Programme Delivery) |
@@ -14,7 +15,7 @@
 | **Funding** | £3,000 founder's capital now; £11,000 further equity (£3,000 friends & family, £8,000 Nigerian company) on a successful pilot and signed letter of intent — £14,000 in total |
 | **Financial year** | 1 September – 31 August (aligned to the UK academic year). Year 1 = FY27 (Sep 2026 – Aug 2027) |
 | **Contact** | quadri.yusuf@dequad.com · 07928 132617 · linkedin.com/in/quadri-yusuf |
-| **Version** | 6.0 — October 2026 (supersedes v5.0, August 2026) |
+| **Version** | 7.0 — October 2026, pre-pilot edition (supersedes v6.0 and v5.0) |
 
 ---
 
@@ -68,15 +69,27 @@ A student signs up with a UK university (`.ac.uk`) email address, is verified, a
 
 The lead founder, **Yusuf Quadri**, is a practising safeguarding professional. He is a Recovery Coordinator at Change Grow Live, where he makes safeguarding referrals and dynamic risk assessments every week. He is also a Clinical Support Worker at East London NHS Foundation Trust. He served **two terms as President of the University of Bedfordshire Students' Union (2021–23)**, representing more than 10,000 students and overseeing a £900,000 budget. DEQUAD's escalation design comes from a practitioner, not a textbook. He is DEQUAD's sole founder. Three senior specialists support him on equity-only terms: a PhD digital marketer (CMO), a senior full-stack engineer who leads day-to-day engineering, and a senior programme-delivery consultant.
 
-### Where the business is today (October 2026)
+### Stage of the business: pre-pilot
+
+DEQUAD is a **pre-pilot** business. The product is built and publicly available, and the company and its safeguarding, data-protection and online-safety groundwork are in place. **The next milestone, the one everything else in this plan depends on, is a successful pilot with a university.** The plan is organised as a series of stage gates. Each stage has to be passed before money is committed to the next. So spending, investment, hiring and patent work all follow evidence, not hope.
+
+| Stage | Period | What happens | Gate to pass before the next stage | Funded by |
+|---|---|---|---|---|
+| **0. Pre-pilot** *(current)* | Sep – Dec 2026 | Product live on App Store, Google Play and web; pilot terms, data-sharing agreement and evaluation method agreed with the University of Bedfordshire; student launch preparation | Signed pilot agreement and data-sharing agreement | Founder's £3,000 |
+| **1. Pilot** | Jan – Mar 2027 (12 weeks, unpaid) | Verified students at the university use DEQUAD; safeguarding alerts routed to the university's team; fortnightly steering group | Pilot success criteria met (Section 8.2) | Founder's £3,000 |
+| **2. Conversion** | Apr – Sep 2027 | Pilot readout; **letter of intent signed**; £11,000 post-pilot investment released; trademark and Cyber Essentials; freshers' 2027 campaign | Signed, paid partner licence | £11,000 post-pilot equity |
+| **3. First paid licence and growth** | Oct 2027 – Aug 2029 | First licence (Oct 2027); further licences and Starter subscriptions; first paid roles in Year 3 | Licence renewal and 3 paying universities | Licence revenue |
+| **4. After the endorsement period** | From Sep 2029 | Patent exploration with Panoramix IP (only after the three-year endorsement period and a successful university conversion); optional pre-seed round | — | Licence revenue |
+
+### Pre-pilot position (October 2026)
 
 | Evidence | Status |
 |---|---|
 | Product | **Live and fully functional on the Apple App Store and Google Play Store**, and on the web at dequad.co.uk. Anyone with a UK university email can download it today. The live product includes verified matching, chat, daily mood tracking, lecture feedback, graded safeguarding alerts, admin verification queue, university dashboard, AI cohort analysis, CSV exports, Stripe and in-app billing, and partner-university licence management. |
 | Company | DEQUAD Ltd incorporated 18 August 2026; sole founder and director Yusuf Quadri. £3,000 founder's capital in place. A further £11,000 of equity (£3,000 friends and family; £8,000 from a Nigerian company) is agreed **subject to a successful pilot and a signed letter of intent**. |
 | Third-party validation | Santander Universities Pre-Incubator (completed 2025); NatWest Accelerator, London (joined 16 March 2026). |
-| Users | Closed beta with verified University of Bedfordshire students. |
-| Commercial pipeline | **Conversations with the University of Bedfordshire about a pilot are ongoing.** No pilot agreement is signed yet. The base case assumes no institutional revenue at all in Year 1. |
+| Users | Pre-pilot beta with verified University of Bedfordshire students. The product is publicly available to any UK student with a university email address. |
+| Commercial pipeline | **Pre-pilot: conversations with the University of Bedfordshire about a 12-week pilot are ongoing.** No pilot agreement is signed yet. The base case assumes no institutional revenue at all in Year 1. |
 
 ### The financial plan at a glance
 
@@ -352,7 +365,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | Universities | "See wellbeing risk early. Act on evidence, not guesswork." | Graded alerts, AI cohort analysis, dashboard |
 | Students' unions and departments | "Start this week for £49.99 a month." | Self-serve Starter tier |
 
-### 8.2 Go-to-market: "land, prove, expand"
+### 8.2 Go-to-market from pre-pilot to scale: "prepare, prove, convert, expand"
 
 | Stage | What happens | Target timing (base case) |
 |---|---|---|
@@ -361,6 +374,44 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | **3. Prove** | Pilot readout: sign-ups, active use, mood-check completion, alert precision and staff feedback (method in Appendix D) | Apr–May 2027 |
 | **4. Convert** | Annual licence for academic year 2027/28, invoiced in advance | First licence term from Oct 2027 (contingent) |
 | **5. Expand** | Case study and referral used to win further universities; Starter customers upgraded to licences | 2 further licences in Year 3 (Sep 2028 and Mar 2029) |
+
+#### Proposed pilot design (to be agreed with the University of Bedfordshire)
+
+| Element | Proposal |
+|---|---|
+| Duration and cost | 12 weeks over the spring term (January – March 2027); **free to the university** |
+| Participants | Verified students who opt in; target **at least 150** verified sign-ups |
+| University involvement | Safeguarding alerts routed to the university's designated safeguarding lead; dashboard access for student services; fortnightly steering group (student services, safeguarding lead, students' union, DEQUAD) |
+| Data protection | Data-sharing agreement and university sign-off of the DPIA (Appendix E) **before** launch; data deleted or returned at the end if the university does not continue |
+| Evaluation | Method in Appendix D; joint readout in April 2027 |
+
+#### Pilot success criteria (proposed, to be agreed before launch)
+
+| Measure | Target |
+|---|---|
+| Verified student sign-ups | ≥ 150 |
+| Students active in week 8 | ≥ 40% of sign-ups |
+| Daily mood check-in completion (active students) | ≥ 50% |
+| High-risk safeguarding alerts reviewed by a human | 100%, within 1 hour in service hours |
+| Agreement between automated alerts and reviewer decisions | ≥ 80% |
+| Student-services staff satisfaction | ≥ 4 out of 5 |
+| **Commercial outcome** | **Letter of intent to take a paid licence** (template at Appendix H) |
+
+#### Pre-pilot readiness checklist
+
+| Item | Status (October 2026) |
+|---|---|
+| Product live on Apple App Store, Google Play and web | ✅ Done |
+| Safeguarding escalation policy and graded alerts | ✅ Done |
+| Partner-university licence tooling (unlocks full access for a university's students) | ✅ Done |
+| Data Protection Impact Assessment | ✅ Drafted (Appendix E); university sign-off before launch |
+| Online Safety Act risk assessment | ✅ Done (Appendix I) |
+| Pilot evaluation method | ✅ Done (Appendix D) |
+| Letter-of-intent template | ✅ Done (Appendix H) |
+| Pilot agreement and data-sharing agreement | ⏳ To draft with NatWest in-kind legal support, by Dec 2026 |
+| Confidentiality and IP-assignment deeds for all contributors | ⏳ By Dec 2026 |
+| University safeguarding contacts configured; staff briefing session | ⏳ Two weeks before launch |
+| Student launch materials and ambassador recruitment | ⏳ Dec 2026 |
 
 ### 8.3 Student acquisition
 
@@ -393,8 +444,8 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 
 | **Strengths** | **Weaknesses** |
 |---|---|
-| Fully functional product live on the Apple App Store, Google Play and web, so build and distribution risk is retired | Small funding base (£14,000) for a two-sided market |
-| A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Bedfordshire pilot still under discussion; no signed pilot, letter of intent or paying institution yet |
+| Fully functional product live on the Apple App Store, Google Play and web, so build and distribution risk is retired | **Pre-pilot stage:** no pilot, letter of intent or paying institution yet; £11,000 of the £14,000 funding depends on the pilot |
+| A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Small funding base for a two-sided market |
 | A distinctive integrated loop: verification, connection, wellbeing, safeguarding | Sole founder: key-person risk until Year 3 hires, mitigated by the equity-only wider team |
 | Server-side protected algorithms and a growing verified wellbeing dataset (Section 3.4) | No patent filed yet: a patent attorney has assessed the invention as borderline-patentable, with exploration planned only after the three-year endorsement period and a successful university conversion. No exclusivity agreed yet (Section 3.4) |
 | Freemium model with a self-serve paid entry tier, already live in billing | Founder is unpaid in Years 1–2 and has other professional commitments |
@@ -516,7 +567,7 @@ Licence revenue is recognised evenly over each 12-month term, although cash arri
 
 ### 12.2 Monthly cash flow
 
-**Year 1 (FY27): Sep 2026 – Aug 2027**
+**Year 1 (FY27): Sep 2026 – Aug 2027.** By stage: pre-pilot Sep–Dec 2026 and pilot Jan–Mar 2027, both funded by the founder's £3,000; conversion Apr–Aug 2027, after the £11,000 post-pilot investment is received.
 
 {{TABLE_CASH_MONTHLY_Y1}}
 
@@ -677,4 +728,4 @@ The Sales Lead, Support Agent and Student Ambassador roles are each paid **£25,
 
 ---
 
-*All figures are forecasts, not guarantees. This business plan was prepared by Yusuf Quadri (Founder & CEO) for the UK Innovator Founder endorsement application to UKES. Version 6.0, October 2026.*
+*All figures are forecasts, not guarantees. This pre-pilot stage business plan was prepared by Yusuf Quadri (Founder & CEO) for the UK Innovator Founder endorsement application to UKES. Version 7.0, October 2026.*
