@@ -286,12 +286,14 @@ def run(s: Scenario) -> dict:
         r["insurance"][m] = {1: 600, 2: 1_100, 3: 1_750 + (600 if s is GROWTH else 0)}[yc] / 12  # monthly instalments
         r["accountancy"][m] = {16: 600, 28: 750}.get(m, 0) + (0 if yc < 3 else 40 * (2 if s is GROWTH else 1))
         # Legal & IP: licence contract review (M13, M24, M30). Patents are
-        # explored in Year 3 with the patent attorney already consulted:
-        # search and patentability opinion (M26), then a UK priority
-        # application (M33) if the opinion is positive. Trade-secret /
-        # IP-assignment deeds are done under the NatWest in-kind legal
-        # support before M7, so cost nothing.
-        r["legal"][m] = 0 if s.lean else {13: 400, 24: 500, 26: 600, 30: 400, 33: 1_500}.get(m, 0)
+        # explored in Year 3 with Panoramix IP (consulted via the CIPA IP
+        # Clinic, Apr 2026): invention disclosure form, patentability
+        # assessment and surface search are free (M26); if positive, drafting
+        # (£3,000, low end of the £3-5k quote because a full IDF with diagrams
+        # is supplied) plus £350 filing in M33. Prosecution (£1,000-1,500 per
+        # round) falls after the forecast. Trade-secret / IP-assignment deeds
+        # are done under the NatWest in-kind legal support before M7.
+        r["legal"][m] = 0 if s.lean else {13: 400, 24: 500, 30: 400, 33: 3_350}.get(m, 0)
         r["office"][m] = 0 if m <= NATWEST_IN_KIND_UNTIL or s.lean else {1: 25, 2: 50, 3: 100}[y] * (3 if s is GROWTH and y == 3 else 1)
         # Lean mode drops the items only needed for institutional sales (Cyber
         # Essentials, trademark) and keeps the statutory ones (ICO fee, filings).
