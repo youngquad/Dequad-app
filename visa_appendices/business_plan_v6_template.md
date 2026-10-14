@@ -396,7 +396,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | Fully functional product live on the Apple App Store, Google Play and web, so build and distribution risk is retired | Small funding base (£14,000) for a two-sided market |
 | A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Bedfordshire pilot still under discussion; no signed pilot, letter of intent or paying institution yet |
 | A distinctive integrated loop: verification, connection, wellbeing, safeguarding | Sole founder: key-person risk until Year 3 hires, mitigated by the equity-only wider team |
-| Server-side protected algorithms and a growing verified wellbeing dataset (Section 3.4) | No patent filed yet: a patent attorney has assessed the invention as borderline-patentable, with exploration planned for Year 3. No exclusivity agreed yet (Section 3.4) |
+| Server-side protected algorithms and a growing verified wellbeing dataset (Section 3.4) | No patent filed yet: a patent attorney has assessed the invention as borderline-patentable, with exploration planned for Year 3, only once the pilot has converted into a paying university. No exclusivity agreed yet (Section 3.4) |
 | Freemium model with a self-serve paid entry tier, already live in billing | Founder is unpaid in Years 1–2 and has other professional commitments |
 | Lean cost base; NatWest in-kind support until March 2027 | No clinical advisory panel yet (planned for Year 2) |
 | Compliance work done before sale (OSA risk assessment, DPIA) | Limited brand awareness outside Bedfordshire |
