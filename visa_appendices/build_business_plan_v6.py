@@ -286,7 +286,7 @@ def run(s: Scenario) -> dict:
         r["insurance"][m] = {1: 600, 2: 1_100, 3: 1_750 + (600 if s is GROWTH else 0)}[yc] / 12  # monthly instalments
         r["accountancy"][m] = {16: 600, 28: 750}.get(m, 0) + (0 if yc < 3 else 40 * (2 if s is GROWTH else 1))
         # Legal & IP: licence contract review (M13, M24, M30). Patents are
-        # explored in Year 3 with Panoramix IP (consulted via the CIPA IP
+        # explored only after the pilot converts into a paying university, so in Year 3 with Panoramix IP (consulted via the CIPA IP
         # Clinic, Apr 2026): invention disclosure form, patentability
         # assessment and surface search are free (M26); if positive, drafting
         # (£3,000, low end of the £3-5k quote because a full IDF with diagrams
