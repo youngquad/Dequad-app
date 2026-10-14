@@ -46,6 +46,9 @@ STARTER_PRICE = 49.99          # £/month, DEQUAD University Dashboard (self-ser
 LICENCE_PRICE_PER_STUDENT = 2.00  # £/enrolled student/year, partner-university licence
 SIGNUP_SEASONALITY = [0.16, 0.14, 0.10, 0.04, 0.12, 0.09, 0.07, 0.05, 0.04, 0.03, 0.03, 0.13]
 ACTIVE_MONTHLY_ATTRITION = 0.06
+# Year 1 marketing is held back until the post-pilot investment lands (M8), then
+# weighted to August pre-arrival activity ahead of the 2027 freshers' season.
+MARKETING_Y1_PROFILE = [0.05, 0.05, 0.03, 0.02, 0.05, 0.03, 0.02, 0.10, 0.10, 0.10, 0.15, 0.30]
 OPENING_REGISTERED = 20        # closed-beta verified accounts at 1 Sep 2026
 PREMIUM_LIVE_FROM = 3          # paywall + live billing from Nov 2026
 PREMIUM_FEE_RATE = 0.10        # blended Stripe (~5.5% at £4.99) and App Store/Play (15%)
@@ -56,12 +59,13 @@ EMPLOYER_PENSION = 0.03        # paid on all salaries, regardless of auto-enrolm
 NATWEST_IN_KIND_UNTIL = 7      # office, legal and accountancy in kind until Mar 2027
 VAT_THRESHOLD = 90_000
 
-# Funding. Founders' capital is in the bank at the start of Year 1; the two
-# external equity investments arrive in the months shown (M2 = Oct 2026).
+# Funding. The founder's capital is in the bank at the start of Year 1. The two
+# external equity investments are conditional on a successful pilot and a signed
+# letter of intent, so they arrive after the pilot (M8 = Apr 2027).
 OPENING_CAPITAL = 3_000.0
+FUNDING_MONTH = 8
 FUNDING_INFLOWS = {
-    2: ("Friends & family equity investment", 3_000.0),
-    3: ("Strategic equity investment — Nigerian company", 8_000.0),
+    FUNDING_MONTH: ("Friends & family + Nigerian company equity (post-pilot, on LOI)", 11_000.0),
 }
 TOTAL_FUNDING = OPENING_CAPITAL + sum(v for _, v in FUNDING_INFLOWS.values())
 
@@ -115,7 +119,8 @@ class Scenario:
     staff: list[Hire]
     marketing: dict[str, tuple[int, int, int]]
     capex: dict[int, list[tuple[str, float]]]
-    pilot_cost: dict[int, float] = field(default_factory=lambda: {5: 500.0})
+    pilot_cost: dict[int, float] = field(default_factory=lambda: {5: 300.0})
+    funding: dict | None = None  # None -> FUNDING_INFLOWS
     lean: bool = False  # downside test: overheads held at Year 1 run-rate, remote working
 
 
@@ -143,13 +148,13 @@ BASE = Scenario(
     icb_contracts=[],
     staff=[
         Hire("Founder & CEO — Yusuf Quadri", 25, 10_000, 1.0, director=True),
-        Hire("Co-founder & CTO — Yusuff Adeagbo", 25, 10_000, 1.0, director=True),
+        Hire("Software Engineer (part-time, 0.5 FTE)", 25, 12_500, 0.5),
         Hire("Safeguarding & Trust Lead (part-time, c.10 hrs/wk)", 25, 8_000, 0.25),
     ],
     marketing=BASE_MARKETING,
     capex={
-        4: [("QA test handsets (1 x iOS, 1 x Android, refurbished)", 600.0)],
-        16: [("Development laptop (CTO replacement)", 900.0)],
+        8: [("QA test handsets (1 x iOS, 1 x Android, refurbished)", 600.0)],
+        16: [("Development laptop (engineering)", 900.0)],
         26: [("Laptop — Safeguarding & Trust Lead", 850.0), ("Campus event kit (banner, display)", 350.0)],
     },
 )
@@ -173,8 +178,8 @@ GROWTH = Scenario(
     ],
     icb_contracts=[(31, 20_000.0)],
     staff=[
-        Hire("Founder & CEO — Yusuf Quadri", 25, 20_000, 1.0, director=True),
-        Hire("Co-founder & CTO — Yusuff Adeagbo", 25, 20_000, 1.0, director=True),
+        Hire("Founder & CEO — Yusuf Quadri", 25, 24_000, 1.0, director=True),
+        Hire("Software Engineer (full-time)", 25, 30_000, 1.0),
         Hire("Safeguarding & Trust Lead (part-time)", 25, 8_000, 0.25),
         Hire("Sales Lead (full-time)", 25, 25_000, 1.0),
         Hire("Support Agent (full-time)", 26, 25_000, 1.0),
@@ -182,7 +187,7 @@ GROWTH = Scenario(
     ],
     marketing={k: (v[0], round(v[1] * 1.5, -1), round(v[2] * 2.0, -1)) for k, v in BASE_MARKETING.items()},
     capex={
-        4: [("QA test handsets", 600.0)],
+        8: [("QA test handsets", 600.0)],
         16: [("Development laptop", 900.0)],
         25: [("Laptops x 3 (new hires)", 2_550.0), ("Campus event kit", 350.0)],
         26: [("Laptop (Support Agent)", 850.0)],
@@ -255,8 +260,8 @@ def run(s: Scenario) -> dict:
         # offset by the Employment Allowance (available because at least one
         # non-director employee is on payroll from the same month as the directors).
         sal = ni = 0.0
-        hc = 2  # the two founders are always on the team, paid or not
-        fte = 2.0
+        hc = 1  # the founder is always on the team, paid or not
+        fte = 1.0
         for h in s.staff:
             if m >= h.start:
                 sal += h.annual_salary / 12
@@ -275,16 +280,18 @@ def run(s: Scenario) -> dict:
 
         idx = (m - 1) % 12
         mk_total = sum(v[y - 1] for v in s.marketing.values())
-        r["marketing"][m] = mk_total * SIGNUP_SEASONALITY[idx]
+        r["marketing"][m] = mk_total * (MARKETING_Y1_PROFILE[idx] if y == 1 else SIGNUP_SEASONALITY[idx])
         yc = 1 if s.lean else y  # lean: every overhead held at its Year 1 run-rate
         r["software"][m] = {1: 45, 2: 90, 3: 130}[yc] + (79 + 20 if m == 1 else 79 if m in (13, 25) else 0)
         r["insurance"][m] = {1: 600, 2: 1_100, 3: 1_750 + (600 if s is GROWTH else 0)}[yc] / 12  # monthly instalments
         r["accountancy"][m] = {16: 600, 28: 750}.get(m, 0) + (0 if yc < 3 else 40 * (2 if s is GROWTH else 1))
         r["legal"][m] = 0 if s.lean else {13: 400, 24: 500, 30: 400}.get(m, 0)
         r["office"][m] = 0 if m <= NATWEST_IN_KIND_UNTIL or s.lean else {1: 25, 2: 50, 3: 100}[y] * (3 if s is GROWTH and y == 3 else 1)
-        r["compliance"][m] = (52 if m in (1, 13, 25) else 0) + (384 if m in (4, 16, 28) else 0) + \
-            (50 if m in (12, 24, 36) else 0) + (270 if m == 2 else 0)
-        r["travel"][m] = {1: 30, 2: 100, 3: 150}[yc] * (2 if s is GROWTH and y == 3 else 1)
+        # Lean mode drops the items only needed for institutional sales (Cyber
+        # Essentials, trademark) and keeps the statutory ones (ICO fee, filings).
+        r["compliance"][m] = (52 if m in (1, 13, 25) else 0) + (50 if m in (12, 24, 36) else 0) + \
+            (0 if s.lean else (384 if m in (9, 21, 33) else 0) + (270 if m == 8 else 0))
+        r["travel"][m] = 10 if s.lean else {1: 30, 2: 100, 3: 150}[y] * (2 if s is GROWTH and y == 3 else 1)
         r["bank_comms"][m] = 10 + (0 if yc == 1 else 8)
 
         overheads = sum(r[k][m] for k in ["marketing", "software", "insurance", "accountancy", "legal",
@@ -348,7 +355,7 @@ def run(s: Scenario) -> dict:
         r["ct_paid"][m] = ct
         pay = r["cos_total"][m] + r["staff_total"][m] + r["overheads_ex_staff"][m] + r["capex"][m] + ct
         r["payments"][m] = pay
-        r["funding"][m] = FUNDING_INFLOWS.get(m, ("", 0.0))[1]
+        r["funding"][m] = (FUNDING_INFLOWS if s.funding is None else s.funding).get(m, ("", 0.0))[1]
         r["net_cash"][m] = r["receipts"][m] - pay + r["funding"][m]
         cash += r["net_cash"][m]
         r["closing_cash"][m] = cash
@@ -620,7 +627,7 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
                              ("Deferred income (licence fees invoiced in advance)", "deferred_income", False),
                              ("Corporation tax payable", "ct_creditor", False),
                              ("**Total liabilities**", "total_liabilities", True), ("**Net assets**", "net_assets", True),
-                             ("Share capital & share premium (founders £3k; friends £3k; Nigerian company £8k)", "share_capital", False),
+                             ("Share capital & share premium (founder £3k; friends & family £3k; Nigerian company £8k)", "share_capital", False),
                              ("Profit & loss reserve", "retained", False), ("**Total shareholders' funds**", "equity", True)]:
             sign = -1 if k in ("acc_dep", "deferred_income", "ct_creditor", "total_liabilities") else 1
             out.append([lbl] + [gbp(sign * bs[y][k], bold) for y in Y])
@@ -687,7 +694,7 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
     rows.append(annual_row(b, "Employer pension (3% of salary)", "pension"))
     rows.append(annual_row(b, "Other staff costs (enhanced DBS, induction & safeguarding training)", "other_staff"))
     rows.append(annual_row(b, "Total staff cost", "staff_total", bold=True))
-    rows.append(["Headcount at year end (incl. 2 founders)"] + [num(yend(b, "headcount", y)) for y in Y] + [""])
+    rows.append(["Headcount at year end (incl. founder)"] + [num(yend(b, "headcount", y)) for y in Y] + [""])
     rows.append(["FTE at year end"] + [num(yend(b, "fte", y), 2) for y in Y] + [""])
     t["TABLE_STAFF"] = table(H3T, rows)
 
@@ -712,9 +719,13 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
     t["TABLE_G_ACQ"] = table(H3, rows)
 
     # Sensitivity: what if no licence is ever signed?
+    # Downside: the pilot does not lead to an LOI, so neither the licence revenue
+    # nor the conditional investment arrives. The founder moves to "survival
+    # mode": overheads at Year 1 run-rate, marketing cut to 10%, no hires,
+    # no equipment, no institutional-sales costs.
     downside = Scenario(**{**BASE.__dict__, "name": "Downside", "licences": [], "staff": [], "lean": True,
-                           "licensed_share_of_active": (0.0, 0.0, 0.0),
-                           "marketing": {k: (v[0], v[0], v[0]) for k, v in BASE_MARKETING.items()},
+                           "funding": {}, "licensed_share_of_active": (0.0, 0.0, 0.0),
+                           "marketing": {k: (v[0] * 0.1,) * 3 for k, v in BASE_MARKETING.items()},
                            "capex": {}})
     d = run(downside)
     t["DOWN_CASH_Y3"] = gbp(yend(d, "closing_cash", 3))
@@ -736,7 +747,7 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
                    ("Paying partner universities (year end)", lambda y: t[f"LIC_END_Y{y}"]),
                    ("Insights Starter subscriptions (year end)", lambda y: t[f"STARTER_END_Y{y}"]),
                    ("Verified students on platform (year end)", lambda y: t[f"REG_Y{y}"]),
-                   ("Team headcount / FTE (year end)", lambda y: f"{num(yend(b, 'headcount', y))} / {num(yend(b, 'fte', y), 2)}" + (" (founders unpaid)" if y < 3 else "")),
+                   ("Team headcount / FTE (year end)", lambda y: f"{num(yend(b, 'headcount', y))} / {num(yend(b, 'fte', y), 2)}" + (" (founder unpaid)" if y < 3 else "")),
                    ]:
         rows.append([lbl] + [f(y) for y in Y])
     t["TABLE_HEADLINE"] = table(["Base case", "Year 1 (FY27)", "Year 2 (FY28)", "Year 3 (FY29)"], rows)
@@ -826,8 +837,9 @@ def write_xlsx(results: dict[str, dict]) -> None:
         ("Premium billing live from month", PREMIUM_LIVE_FROM), ("Blended Premium fee rate", PREMIUM_FEE_RATE),
         ("Corporation tax (small profits rate)", CORP_TAX), ("Employer NI rate / threshold", f"{NI_RATE} / {NI_THRESHOLD}"),
         ("Employment Allowance", EMPLOYMENT_ALLOWANCE), ("Employer pension", EMPLOYER_PENSION),
-        ("NatWest in-kind support until month", NATWEST_IN_KIND_UNTIL), ("Founders' opening capital (£)", OPENING_CAPITAL),
-        ("Friends & family equity (£, Oct 2026)", 3000), ("Nigerian company equity (£, Nov 2026)", 8000),
+        ("NatWest in-kind support until month", NATWEST_IN_KIND_UNTIL), ("Founder's opening capital (£)", OPENING_CAPITAL),
+        ("Friends & family equity (£, Apr 2027, after pilot + LOI)", 3000),
+        ("Nigerian company equity (£, Apr 2027, after pilot + LOI)", 8000),
         ("Licence billing", "Annual in advance, 30-day terms, revenue recognised monthly"),
         ("VAT", f"Not registered — taxable turnover below £{VAT_THRESHOLD:,} in base case"),
     ]:
