@@ -22,7 +22,7 @@
 
 1. Executive Summary
 2. Products and Services
-3. Innovation, Viability and Scalability
+3. Innovation, Viability and Scalability (incl. barriers to entry and IP)
 4. Research and Development
 5. Market Analysis
 6. Competitor Analysis
@@ -130,7 +130,7 @@ DEQUAD is not a new feature added to an existing app. It is a new combination of
 4. **Decision support, not just dashboards.** A large-language-model layer reads multi-signal cohort data and returns a structured, plain-English analysis (a wellbeing score, the top concerns, positive indicators and prioritised actions) for staff who are not data analysts.
 5. **Compliance built in from day one.** We drafted an Online Safety Act 2023 risk assessment, in-app reporting, a UK GDPR Data Protection Impact Assessment and per-institution data scoping before the first sale. This answers a major procurement objection before a buyer raises it.
 
-**Defensibility.** A competitor could copy an email-domain check in weeks. It would be much harder to copy the safeguarding taxonomy, the human-review operating model, institutional trust and the longitudinal wellbeing data that builds up at each partner university. Over time, the verified network at each university also becomes more valuable to every student who joins it.
+**Defensibility.** A competitor could copy an email-domain check in weeks. It would be much harder to copy the safeguarding taxonomy, the human-review operating model, institutional trust and the longitudinal wellbeing data that builds up at each partner university. Over time, the verified network at each university also becomes more valuable to every student who joins it. Section 3.4 sets out the specific barriers to entry DEQUAD is building and how each one is protected.
 
 ### 3.2 Viability
 
@@ -149,6 +149,20 @@ DEQUAD is not a new feature added to an existing app. It is a new combination of
 - **National scale.** The UK has 2.9 million higher-education students (HESA 2023/24) at about 285 providers. The growth case needs only 7 of them to sign within three years.
 - **International scale.** The verification engine is a configurable domain allow-list, not a rule hard-coded to `.ac.uk`. The same mechanism works for `.edu` (US), `.edu.au` (Australia) and European academic domains. We see international expansion as a post-Year-3 opportunity, not part of this forecast.
 - **Job creation.** The base case grows from 1 unpaid founder to a paid team of {{HC_END}} ({{FTE_END}} FTE) by the end of Year 3. The growth case reaches **{{G_PEAK_HC}} people**: the founder paid, a full-time Software Engineer, three full-time hires at £25,000 a year, and a part-time Safeguarding & Trust Lead. All of these roles are UK-based and funded from revenue.
+
+### 3.4 Barriers to entry and intellectual property
+
+A good idea in student wellbeing can be copied. DEQUAD's long-term defence therefore rests on four barriers: **protected algorithms**, **proprietary data**, **exclusive partnerships** and **registered IP** (patents and trademarks). The table separates what is already in place from what is planned, so each claim can be checked.
+
+| Barrier | In place today (October 2026) | Next step | Timing and cost |
+|---|---|---|---|
+| **Protected algorithms** (trade secrets) | The safeguarding logic runs **only on DEQUAD's servers**, never inside the app downloaded from the App Store or Google Play. That logic covers the graded-alert rules, low-mood-streak thresholds, crisis-language lexicon, risk scoring, cohort wellbeing score and the AI prompt designs. So it cannot be extracted by decompiling the app. Source code is held in a private repository with access limited to named team members. | Formal trade-secret register; confidentiality and **IP-assignment deeds** signed by every contributor (including the equity-only wider team), so all code and know-how is owned by DEQUAD Ltd; access logging and least-privilege access to production | Before the pilot (by Mar 2027), drafted under the NatWest Accelerator's in-kind legal support at no cash cost |
+| **Proprietary dataset** | Every verified sign-up, daily mood check-in, match and engagement signal builds a **longitudinal, identity-verified wellbeing dataset** of UK students that no competitor holds. Anonymous peer-support platforms cannot build it, because they do not know who their users are. Generic social apps cannot build it, because they do not collect wellbeing data. | Licence terms giving DEQUAD the right to use **anonymised, aggregated** data to improve its models (never individual data, consistent with the DPIA at Appendix E); the personal-baseline model (Section 4.2) is trained on this data, so the product gets more accurate with every term | Data clause in the standard licence from the first contract (Oct 2027). Value grows each academic year: {{REG_Y3}} verified students and three years of daily signals by the end of Year 3 |
+| **Exclusive partnerships** | Pilot conversations with the University of Bedfordshire are ongoing; strategic investment from a Nigerian company is agreed, conditional on the pilot | The **letter of intent** and first licence will ask for **preferred-supplier status for verified peer connection and wellbeing early warning** for the licence term. Partner universities would not run a competing product in that category while the licence is active. Each university's alert routing, safeguarding contacts and domain configuration also create switching costs once it is embedded in their safeguarding process | Sought in the LOI (target Apr 2027) and first licence (Oct 2027). Exclusivity is a negotiating aim, not an assumption: no revenue in the forecast depends on it |
+| **Patents** | No patent has been filed yet. Software "as such" is excluded from patent protection in the UK, so DEQUAD will only file if a specialist confirms a technical contribution | **Patent search and patentability opinion** from a UK patent attorney on the most technical candidate: the method of combining verified-identity, mood-trajectory and engagement signals to produce graded, routed safeguarding alerts with per-institution data scoping. If the opinion is positive, a **UK priority application** at the UK IPO | Opinion in Year 2 (May 2028, £600); UK filing in Year 3 (Feb 2029, £1,500), both in the financial forecast (Section 13, legal & IP line) |
+| **Trademarks and copyright** | Copyright in the code, designs and content belongs to DEQUAD Ltd automatically; dequad.co.uk domain registered | **UK trademark for "DEQUAD"** in classes 9 (software), 41 (education) and 45 (safeguarding / social services) | Filed once the post-pilot investment arrives (Apr 2027, £270, in the forecast) |
+
+**Why these barriers stack.** A competitor would need to copy all of them at once to catch up. That means rebuilding the safeguarding logic without access to it. It means waiting several academic years to collect a comparable verified dataset. And it means displacing DEQUAD at universities where it is already embedded in the safeguarding process, and possibly working around a patent. That is a far higher bar than copying an email-domain check.
 
 ---
 
@@ -382,6 +396,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | Fully functional product live on the Apple App Store, Google Play and web, so build and distribution risk is retired | Small funding base (£14,000) for a two-sided market |
 | A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Bedfordshire pilot still under discussion; no signed pilot, letter of intent or paying institution yet |
 | A distinctive integrated loop: verification, connection, wellbeing, safeguarding | Sole founder: key-person risk until Year 3 hires, mitigated by the equity-only wider team |
+| Server-side protected algorithms and a growing verified wellbeing dataset (Section 3.4) | No patent filed or exclusivity agreed yet: both are planned (Section 3.4), not in place |
 | Freemium model with a self-serve paid entry tier, already live in billing | Founder is unpaid in Years 1–2 and has other professional commitments |
 | Lean cost base; NatWest in-kind support until March 2027 | No clinical advisory panel yet (planned for Year 2) |
 | Compliance work done before sale (OSA risk assessment, DPIA) | Limited brand awareness outside Bedfordshire |
@@ -399,7 +414,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | No pilot or licence converts | The plan stays solvent without any licence (Section 12.3); Starter and Premium give revenue from other sources; the pipeline is widened to other universities through the NatWest and SU networks from Year 1 Q3 |
 | Safeguarding incident | Human review of every high-risk flag; crisis routes always visible in the app; incident playbook written by the CEO; professional indemnity and cyber insurance from Month 1; clinical advisory panel in Year 2 |
 | Data breach | Data minimised and identity separated from mood data; encryption; Cyber Essentials in Year 1; DPIA reviewed annually |
-| Competitive copying | Move fast on the university relationships and longitudinal data that cannot be copied; position DEQUAD as complementary to clinical incumbents |
+| Competitive copying | Barriers in Section 3.4: server-side trade secrets and IP-assignment deeds, a growing proprietary verified dataset, preferred-supplier terms sought in the LOI and licences, a patentability opinion and possible UK filing, and a UK trademark; plus positioning DEQUAD as complementary to clinical incumbents |
 | Founder capacity (sole founder) | Founder pay starts in Year 3; the wider team covers engineering, marketing and delivery; the Year 3 hires take over engineering and safeguarding review; documented operating procedures and managed infrastructure reduce dependence on one person |
 
 The full scored risk register is at Appendix L.
@@ -533,7 +548,7 @@ DEQUAD then trades on Premium and Starter revenue alone (Year 3 revenue {{DOWN_R
 
 Year 1's loss is carried forward against Year 2 profits. Equipment qualifies for the 100% Annual Investment Allowance. Profits are below £50,000, so the 19% small profits rate applies.
 
-**Commentary.** Year 1 is a deliberate investment year, with a loss of {{OP_Y1}} funded from the equity raised. Year 2 turns profitable ({{PAT_Y2}} after tax) on the first licence and a cost base still carried by an unpaid founder. In Year 3 the company starts paying the founder and makes its first two part-time hires, and still makes a profit ({{PAT_Y3}}). Profit is not the aim in the early years; showing that the company can pay for its own team from revenue is.
+**Commentary.** Year 1 is a deliberate investment year, with a loss of {{OP_Y1}} funded from the equity raised. Year 2 turns profitable ({{PAT_Y2}} after tax) on the first licence and a cost base still carried by an unpaid founder. In Year 3 the company starts paying the founder, makes its first two part-time hires and invests in a UK patent application, and still roughly breaks even, with an after-tax result of {{PAT_Y3}}. Profit is not the aim in the early years; showing that the company can pay for its own team from revenue is.
 
 ---
 

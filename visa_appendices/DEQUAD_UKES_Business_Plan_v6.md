@@ -22,7 +22,7 @@
 
 1. Executive Summary
 2. Products and Services
-3. Innovation, Viability and Scalability
+3. Innovation, Viability and Scalability (incl. barriers to entry and IP)
 4. Research and Development
 5. Market Analysis
 6. Competitor Analysis
@@ -86,14 +86,14 @@ The plan is funded by **£14,000 of equity** in two stages. The founder's £3,00
 |---|---:|---:|---:|
 | Total revenue | £569 | £22,111 | £54,308 |
 | Gross margin | n/a | 87.9% | 89.3% |
-| Profit / (loss) after tax | (£4,803) | £8,597 | £938 |
-| Closing cash | £8,680 | £19,126 | £25,216 |
+| Profit / (loss) after tax | (£4,803) | £8,111 | (£420) |
+| Closing cash | £8,680 | £18,526 | £23,230 |
 | Paying partner universities (year end) | 0 | 1 | 3 |
 | Insights Starter subscriptions (year end) | 2 | 6 | 11 |
 | Verified students on platform (year end) | 320 | 1,820 | 5,820 |
 | Team headcount / FTE (year end) | 1 / 1.00 (founder unpaid) | 1 / 1.00 (founder unpaid) | 3 / 1.75 |
 
-The base case is deliberately cautious: one paying university in Year 2 and three by the end of Year 3. That is about 1% of UK higher-education providers. A **growth case** (Section 10.5), also fully reconciled, shows what happens if seven universities and one NHS Integrated Care Board sign by the end of Year 3. In that case DEQUAD creates **four full-time UK jobs (a £30,000 Software Engineer and three roles at £25,000) plus a part-time safeguarding role**, pays the founder, and still ends Year 3 with £23,050 in the bank.
+The base case is deliberately cautious: one paying university in Year 2 and three by the end of Year 3. That is about 1% of UK higher-education providers. A **growth case** (Section 10.5), also fully reconciled, shows what happens if seven universities and one NHS Integrated Care Board sign by the end of Year 3. In that case DEQUAD creates **four full-time UK jobs (a £30,000 Software Engineer and three roles at £25,000) plus a part-time safeguarding role**, pays the founder, and still ends Year 3 with £21,064 in the bank.
 
 ---
 
@@ -139,7 +139,7 @@ DEQUAD is not a new feature added to an existing app. It is a new combination of
 4. **Decision support, not just dashboards.** A large-language-model layer reads multi-signal cohort data and returns a structured, plain-English analysis (a wellbeing score, the top concerns, positive indicators and prioritised actions) for staff who are not data analysts.
 5. **Compliance built in from day one.** We drafted an Online Safety Act 2023 risk assessment, in-app reporting, a UK GDPR Data Protection Impact Assessment and per-institution data scoping before the first sale. This answers a major procurement objection before a buyer raises it.
 
-**Defensibility.** A competitor could copy an email-domain check in weeks. It would be much harder to copy the safeguarding taxonomy, the human-review operating model, institutional trust and the longitudinal wellbeing data that builds up at each partner university. Over time, the verified network at each university also becomes more valuable to every student who joins it.
+**Defensibility.** A competitor could copy an email-domain check in weeks. It would be much harder to copy the safeguarding taxonomy, the human-review operating model, institutional trust and the longitudinal wellbeing data that builds up at each partner university. Over time, the verified network at each university also becomes more valuable to every student who joins it. Section 3.4 sets out the specific barriers to entry DEQUAD is building and how each one is protected.
 
 ### 3.2 Viability
 
@@ -158,6 +158,20 @@ DEQUAD is not a new feature added to an existing app. It is a new combination of
 - **National scale.** The UK has 2.9 million higher-education students (HESA 2023/24) at about 285 providers. The growth case needs only 7 of them to sign within three years.
 - **International scale.** The verification engine is a configurable domain allow-list, not a rule hard-coded to `.ac.uk`. The same mechanism works for `.edu` (US), `.edu.au` (Australia) and European academic domains. We see international expansion as a post-Year-3 opportunity, not part of this forecast.
 - **Job creation.** The base case grows from 1 unpaid founder to a paid team of 3 (1.75 FTE) by the end of Year 3. The growth case reaches **6 people**: the founder paid, a full-time Software Engineer, three full-time hires at £25,000 a year, and a part-time Safeguarding & Trust Lead. All of these roles are UK-based and funded from revenue.
+
+### 3.4 Barriers to entry and intellectual property
+
+A good idea in student wellbeing can be copied. DEQUAD's long-term defence therefore rests on four barriers: **protected algorithms**, **proprietary data**, **exclusive partnerships** and **registered IP** (patents and trademarks). The table separates what is already in place from what is planned, so each claim can be checked.
+
+| Barrier | In place today (October 2026) | Next step | Timing and cost |
+|---|---|---|---|
+| **Protected algorithms** (trade secrets) | The safeguarding logic runs **only on DEQUAD's servers**, never inside the app downloaded from the App Store or Google Play. That logic covers the graded-alert rules, low-mood-streak thresholds, crisis-language lexicon, risk scoring, cohort wellbeing score and the AI prompt designs. So it cannot be extracted by decompiling the app. Source code is held in a private repository with access limited to named team members. | Formal trade-secret register; confidentiality and **IP-assignment deeds** signed by every contributor (including the equity-only wider team), so all code and know-how is owned by DEQUAD Ltd; access logging and least-privilege access to production | Before the pilot (by Mar 2027), drafted under the NatWest Accelerator's in-kind legal support at no cash cost |
+| **Proprietary dataset** | Every verified sign-up, daily mood check-in, match and engagement signal builds a **longitudinal, identity-verified wellbeing dataset** of UK students that no competitor holds. Anonymous peer-support platforms cannot build it, because they do not know who their users are. Generic social apps cannot build it, because they do not collect wellbeing data. | Licence terms giving DEQUAD the right to use **anonymised, aggregated** data to improve its models (never individual data, consistent with the DPIA at Appendix E); the personal-baseline model (Section 4.2) is trained on this data, so the product gets more accurate with every term | Data clause in the standard licence from the first contract (Oct 2027). Value grows each academic year: 5,820 verified students and three years of daily signals by the end of Year 3 |
+| **Exclusive partnerships** | Pilot conversations with the University of Bedfordshire are ongoing; strategic investment from a Nigerian company is agreed, conditional on the pilot | The **letter of intent** and first licence will ask for **preferred-supplier status for verified peer connection and wellbeing early warning** for the licence term. Partner universities would not run a competing product in that category while the licence is active. Each university's alert routing, safeguarding contacts and domain configuration also create switching costs once it is embedded in their safeguarding process | Sought in the LOI (target Apr 2027) and first licence (Oct 2027). Exclusivity is a negotiating aim, not an assumption: no revenue in the forecast depends on it |
+| **Patents** | No patent has been filed yet. Software "as such" is excluded from patent protection in the UK, so DEQUAD will only file if a specialist confirms a technical contribution | **Patent search and patentability opinion** from a UK patent attorney on the most technical candidate: the method of combining verified-identity, mood-trajectory and engagement signals to produce graded, routed safeguarding alerts with per-institution data scoping. If the opinion is positive, a **UK priority application** at the UK IPO | Opinion in Year 2 (May 2028, £600); UK filing in Year 3 (Feb 2029, £1,500), both in the financial forecast (Section 13, legal & IP line) |
+| **Trademarks and copyright** | Copyright in the code, designs and content belongs to DEQUAD Ltd automatically; dequad.co.uk domain registered | **UK trademark for "DEQUAD"** in classes 9 (software), 41 (education) and 45 (safeguarding / social services) | Filed once the post-pilot investment arrives (Apr 2027, £270, in the forecast) |
+
+**Why these barriers stack.** A competitor would need to copy all of them at once to catch up. That means rebuilding the safeguarding logic without access to it. It means waiting several academic years to collect a comparable verified dataset. And it means displacing DEQUAD at universities where it is already embedded in the safeguarding process, and possibly working around a patent. That is a far higher bar than copying an email-domain check.
 
 ---
 
@@ -391,6 +405,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | Fully functional product live on the Apple App Store, Google Play and web, so build and distribution risk is retired | Small funding base (£14,000) for a two-sided market |
 | A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Bedfordshire pilot still under discussion; no signed pilot, letter of intent or paying institution yet |
 | A distinctive integrated loop: verification, connection, wellbeing, safeguarding | Sole founder: key-person risk until Year 3 hires, mitigated by the equity-only wider team |
+| Server-side protected algorithms and a growing verified wellbeing dataset (Section 3.4) | No patent filed or exclusivity agreed yet: both are planned (Section 3.4), not in place |
 | Freemium model with a self-serve paid entry tier, already live in billing | Founder is unpaid in Years 1–2 and has other professional commitments |
 | Lean cost base; NatWest in-kind support until March 2027 | No clinical advisory panel yet (planned for Year 2) |
 | Compliance work done before sale (OSA risk assessment, DPIA) | Limited brand awareness outside Bedfordshire |
@@ -408,7 +423,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | No pilot or licence converts | The plan stays solvent without any licence (Section 12.3); Starter and Premium give revenue from other sources; the pipeline is widened to other universities through the NatWest and SU networks from Year 1 Q3 |
 | Safeguarding incident | Human review of every high-risk flag; crisis routes always visible in the app; incident playbook written by the CEO; professional indemnity and cyber insurance from Month 1; clinical advisory panel in Year 2 |
 | Data breach | Data minimised and identity separated from mood data; encryption; Cyber Essentials in Year 1; DPIA reviewed annually |
-| Competitive copying | Move fast on the university relationships and longitudinal data that cannot be copied; position DEQUAD as complementary to clinical incumbents |
+| Competitive copying | Barriers in Section 3.4: server-side trade secrets and IP-assignment deeds, a growing proprietary verified dataset, preferred-supplier terms sought in the LOI and licences, a patentability opinion and possible UK filing, and a UK trademark; plus positioning DEQUAD as complementary to clinical incumbents |
 | Founder capacity (sole founder) | Founder pay starts in Year 3; the wider team covers engineering, marketing and delivery; the Year 3 hires take over engineering and safeguarding review; documented operating procedures and managed infrastructure reduce dependence on one person |
 
 The full scored risk register is at Appendix L.
@@ -462,8 +477,8 @@ The growth case uses the same model and the same costs, with faster institutiona
 | Growth case | Year 1 (FY27) | Year 2 (FY28) | Year 3 (FY29) |
 |---|---:|---:|---:|
 | Total revenue | £569 | £36,763 | £149,301 |
-| Operating profit / (loss) | (£4,803) | £20,774 | (£34,226) |
-| Closing cash | £8,680 | £37,312 | £23,050 |
+| Operating profit / (loss) | (£4,803) | £20,174 | (£35,726) |
+| Closing cash | £8,680 | £36,712 | £21,064 |
 | Headcount (year end) | 1 | 1 | 6 |
 
 |  | Year 1 (FY27) | Year 2 (FY28) | Year 3 (FY29) |
@@ -557,7 +572,7 @@ Licence revenue is recognised evenly over each 12-month term, although cash arri
 
 |  | Year 1 (FY27) | Year 2 (FY28) | Year 3 (FY29) | 3-yr total |
 |---|---:|---:|---:|---:|
-| Opening cash | £3,000 | £8,680 | £19,126 | £3,000 |
+| Opening cash | £3,000 | £8,680 | £18,526 | £3,000 |
 | Receipts — Premium & Starter subscriptions | £569 | £3,778 | £8,308 | £12,655 |
 | Receipts — licences & contracts (annual in advance) | – | £20,000 | £52,000 | £72,000 |
 | **Total trading receipts** | **£569** | **£23,778** | **£60,308** | **£84,655** |
@@ -565,12 +580,12 @@ Licence revenue is recognised evenly over each 12-month term, although cash arri
 | Cost of sales | (£1,190) | (£2,671) | (£5,805) | (£9,665) |
 | Staff costs (salaries, NI, pension) | – | – | (£31,835) | (£31,835) |
 | Marketing | (£1,500) | (£3,500) | (£6,000) | (£11,000) |
-| Other overheads (software, insurance, professional, office, compliance, travel) | (£2,600) | (£6,261) | (£8,721) | (£17,582) |
+| Other overheads (software, insurance, professional, office, compliance, travel) | (£2,600) | (£6,861) | (£10,221) | (£19,682) |
 | Capital expenditure | (£600) | (£900) | (£1,200) | (£2,700) |
-| Corporation tax paid | – | – | (£657) | (£657) |
-| **Total payments** | **(£5,890)** | **(£13,332)** | **(£54,218)** | **(£73,439)** |
-| **Net cash flow** | **£5,680** | **£10,446** | **£6,090** | **£22,216** |
-| **Closing cash** | **£8,680** | **£19,126** | **£25,216** | **£25,216** |
+| Corporation tax paid | – | – | (£543) | (£543) |
+| **Total payments** | **(£5,890)** | **(£13,932)** | **(£55,604)** | **(£75,425)** |
+| **Net cash flow** | **£5,680** | **£9,846** | **£4,704** | **£20,230** |
+| **Closing cash** | **£8,680** | **£18,526** | **£23,230** | **£23,230** |
 
 **Cash-timing assumptions.** Licences are invoiced on signature, one month before each term starts, and paid on 30-day terms. Premium and Starter are collected monthly by card. Suppliers are paid in the month incurred, by card or direct debit. Insurance is paid in monthly instalments. Corporation tax is paid nine months and one day after each 31 August year end.
 
@@ -596,33 +611,33 @@ Licence revenue is recognised evenly over each 12-month term, although cash arri
 
 | £ | Sep-27 | Oct-27 | Nov-27 | Dec-27 | Jan-28 | Feb-28 | Mar-28 | Apr-28 | May-28 | Jun-28 | Jul-28 | Aug-28 | Total |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Opening cash | £8,680 | £7,339 | £25,945 | £25,345 | £23,453 | £22,784 | £22,274 | £21,835 | £21,464 | £20,792 | £20,538 | £20,278 |  |
+| Opening cash | £8,680 | £7,339 | £25,945 | £25,345 | £23,453 | £22,784 | £22,274 | £21,835 | £20,864 | £20,192 | £19,938 | £19,678 |  |
 | Equity investment | – | – | – | – | – | – | – | – | – | – | – | – | – |
 | **Trading receipts** | **£190** | **£20,205** | **£265** | **£265** | **£275** | **£335** | **£340** | **£340** | **£390** | **£390** | **£385** | **£400** | **£23,778** |
 | Cost of sales | (£90) | (£759) | (£166) | (£167) | (£174) | (£180) | (£184) | (£186) | (£188) | (£189) | (£190) | (£197) | (£2,671) |
 | Staff | – | – | – | – | – | – | – | – | – | – | – | – | – |
 | Marketing | (£560) | (£490) | (£350) | (£140) | (£420) | (£315) | (£245) | (£175) | (£140) | (£105) | (£105) | (£455) | (£3,500) |
-| Other overheads | (£881) | (£350) | (£350) | (£950) | (£350) | (£350) | (£350) | (£350) | (£734) | (£350) | (£350) | (£900) | (£6,261) |
+| Other overheads | (£881) | (£350) | (£350) | (£950) | (£350) | (£350) | (£350) | (£950) | (£734) | (£350) | (£350) | (£900) | (£6,861) |
 | Capex | – | – | – | (£900) | – | – | – | – | – | – | – | – | (£900) |
 | Corp. tax | – | – | – | – | – | – | – | – | – | – | – | – | – |
-| **Net cash flow** | **(£1,341)** | **£18,606** | **(£600)** | **(£1,892)** | **(£669)** | **(£510)** | **(£439)** | **(£371)** | **(£672)** | **(£254)** | **(£260)** | **(£1,152)** | **£10,446** |
-| **Closing cash** | **£7,339** | **£25,945** | **£25,345** | **£23,453** | **£22,784** | **£22,274** | **£21,835** | **£21,464** | **£20,792** | **£20,538** | **£20,278** | **£19,126** |  |
+| **Net cash flow** | **(£1,341)** | **£18,606** | **(£600)** | **(£1,892)** | **(£669)** | **(£510)** | **(£439)** | **(£971)** | **(£672)** | **(£254)** | **(£260)** | **(£1,152)** | **£9,846** |
+| **Closing cash** | **£7,339** | **£25,945** | **£25,345** | **£23,453** | **£22,784** | **£22,274** | **£21,835** | **£20,864** | **£20,192** | **£19,938** | **£19,678** | **£18,526** |  |
 
 **Year 3 (FY29): Sep 2028 – Aug 2029**
 
 | £ | Sep-28 | Oct-28 | Nov-28 | Dec-28 | Jan-29 | Feb-29 | Mar-29 | Apr-29 | May-29 | Jun-29 | Jul-29 | Aug-29 | Total |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Opening cash | £19,126 | £34,032 | £49,026 | £45,520 | £41,619 | £38,049 | £34,212 | £42,286 | £39,078 | £35,588 | £31,878 | £28,866 |  |
+| Opening cash | £18,526 | £33,432 | £48,426 | £44,920 | £41,019 | £37,449 | £32,112 | £40,186 | £36,978 | £33,488 | £29,892 | £26,880 |  |
 | Equity investment | – | – | – | – | – | – | – | – | – | – | – | – | – |
 | **Trading receipts** | **£20,505** | **£20,545** | **£619** | **£619** | **£699** | **£664** | **£12,724** | **£729** | **£774** | **£769** | **£814** | **£844** | **£60,308** |
 | Cost of sales | (£886) | (£308) | (£324) | (£328) | (£348) | (£359) | (£1,029) | (£435) | (£439) | (£441) | (£444) | (£463) | (£5,805) |
 | Staff | (£3,038) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£2,618) | (£31,835) |
 | Marketing | (£960) | (£840) | (£600) | (£240) | (£720) | (£540) | (£420) | (£300) | (£240) | (£180) | (£180) | (£780) | (£6,000) |
-| Other overheads | (£715) | (£584) | (£584) | (£1,334) | (£584) | (£984) | (£584) | (£584) | (£968) | (£584) | (£584) | (£634) | (£8,721) |
+| Other overheads | (£715) | (£584) | (£584) | (£1,334) | (£584) | (£2,484) | (£584) | (£584) | (£968) | (£584) | (£584) | (£634) | (£10,221) |
 | Capex | – | (£1,200) | – | – | – | – | – | – | – | – | – | – | (£1,200) |
-| Corp. tax | – | – | – | – | – | – | – | – | – | (£657) | – | – | (£657) |
-| **Net cash flow** | **£14,906** | **£14,995** | **(£3,507)** | **(£3,901)** | **(£3,570)** | **(£3,837)** | **£8,073** | **(£3,207)** | **(£3,490)** | **(£3,710)** | **(£3,011)** | **(£3,651)** | **£6,090** |
-| **Closing cash** | **£34,032** | **£49,026** | **£45,520** | **£41,619** | **£38,049** | **£34,212** | **£42,286** | **£39,078** | **£35,588** | **£31,878** | **£28,866** | **£25,216** |  |
+| Corp. tax | – | – | – | – | – | – | – | – | – | (£543) | – | – | (£543) |
+| **Net cash flow** | **£14,906** | **£14,995** | **(£3,507)** | **(£3,901)** | **(£3,570)** | **(£5,337)** | **£8,073** | **(£3,207)** | **(£3,490)** | **(£3,596)** | **(£3,011)** | **(£3,651)** | **£4,704** |
+| **Closing cash** | **£33,432** | **£48,426** | **£44,920** | **£41,019** | **£37,449** | **£32,112** | **£40,186** | **£36,978** | **£33,488** | **£29,892** | **£26,880** | **£23,230** |  |
 
 The tightest point is Mar-27 (£823), at the end of the pilot and just before the post-pilot investment arrives. Until then the business runs only on the founder's £3,000, with marketing held to a minimum and every institutional-sales cost deferred. From April 2027 the balance does not fall below about £7,000. If the letter of intent takes longer to sign, the founder will keep the business in this lean mode (about £300 a month) until it is signed.
 
@@ -649,30 +664,30 @@ DEQUAD then trades on Premium and Starter revenue alone (Year 3 revenue £12,744
 | Software & developer accounts | (£639) | (£1,159) | (£1,639) | (£3,437) |
 | Insurance (PI, cyber, public & employers' liability) | (£600) | (£1,100) | (£1,750) | (£3,450) |
 | Accountancy & bookkeeping | – | (£600) | (£1,230) | (£1,830) |
-| Legal | – | (£900) | (£400) | (£1,300) |
+| Legal & IP protection (contracts, patent search, UK patent filing) | – | (£1,500) | (£1,900) | (£3,400) |
 | Office / co-working | (£125) | (£600) | (£1,200) | (£1,925) |
 | Compliance (ICO, Cyber Essentials, IP, filings) | (£756) | (£486) | (£486) | (£1,728) |
 | Travel & campus visits | (£360) | (£1,200) | (£1,800) | (£3,360) |
 | Bank, telephone & internet | (£120) | (£216) | (£216) | (£552) |
-| **Total overheads** | **(£4,100)** | **(£9,761)** | **(£46,556)** | **(£60,417)** |
-| **EBITDA** | **(£4,720)** | **£9,679** | **£1,947** | **£6,906** |
+| **Total overheads** | **(£4,100)** | **(£10,361)** | **(£48,056)** | **(£62,517)** |
+| **EBITDA** | **(£4,720)** | **£9,079** | **£447** | **£4,806** |
 | Depreciation | (£83) | (£425) | (£867) | (£1,375) |
-| **Operating profit / (loss)** | **(£4,803)** | **£9,254** | **£1,080** | **£5,531** |
-| Corporation tax (19%, after losses b/f and 100% AIA) | – | (£657) | (£142) | (£799) |
-| **Profit / (loss) after tax** | **(£4,803)** | **£8,597** | **£938** | **£4,732** |
-| Net margin | n/a | 38.9% | 1.7% |  |
+| **Operating profit / (loss)** | **(£4,803)** | **£8,654** | **(£420)** | **£3,431** |
+| Corporation tax (19%, after losses b/f and 100% AIA) | – | (£543) | – | (£543) |
+| **Profit / (loss) after tax** | **(£4,803)** | **£8,111** | **(£420)** | **£2,888** |
+| Net margin | n/a | 36.7% | -0.8% |  |
 
 **Corporation tax computation**
 
 |  | Operating result | Add back depreciation | Less AIA | Tax-adjusted result | Losses c/f | CT @19% | Paid |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Year 1 | (£4,803) | £83 | (£600) | (£5,320) | £5,320 | – | Jun-28 |
-| Year 2 | £9,254 | £425 | (£900) | £8,779 | – | £657 | Jun-29 |
-| Year 3 | £1,080 | £867 | (£1,200) | £747 | – | £142 | Jun-30 (after forecast) |
+| Year 2 | £8,654 | £425 | (£900) | £8,179 | – | £543 | Jun-29 |
+| Year 3 | (£420) | £867 | (£1,200) | (£753) | £753 | – | Jun-30 (after forecast) |
 
 Year 1's loss is carried forward against Year 2 profits. Equipment qualifies for the 100% Annual Investment Allowance. Profits are below £50,000, so the 19% small profits rate applies.
 
-**Commentary.** Year 1 is a deliberate investment year, with a loss of (£4,803) funded from the equity raised. Year 2 turns profitable (£8,597 after tax) on the first licence and a cost base still carried by an unpaid founder. In Year 3 the company starts paying the founder and makes its first two part-time hires, and still makes a profit (£938). Profit is not the aim in the early years; showing that the company can pay for its own team from revenue is.
+**Commentary.** Year 1 is a deliberate investment year, with a loss of (£4,803) funded from the equity raised. Year 2 turns profitable (£8,111 after tax) on the first licence and a cost base still carried by an unpaid founder. In Year 3 the company starts paying the founder, makes its first two part-time hires and invests in a UK patent application, and still roughly breaks even, with an after-tax result of (£420). Profit is not the aim in the early years; showing that the company can pay for its own team from revenue is.
 
 ---
 
@@ -685,15 +700,15 @@ Year 1's loss is carried forward against Year 2 profits. Equipment qualifies for
 | **Net book value of fixed assets** | **£517** | **£992** | **£1,325** |
 | Stock | – | – | – |
 | Trade debtors (licence invoices, 30-day terms) | – | £20,000 | £20,000 |
-| Cash at bank | £8,680 | £19,126 | £25,216 |
-| **Total assets** | **£9,197** | **£40,117** | **£46,541** |
+| Cash at bank | £8,680 | £18,526 | £23,230 |
+| **Total assets** | **£9,197** | **£39,517** | **£44,555** |
 | Deferred income (licence fees invoiced in advance) | – | (£21,667) | (£27,667) |
-| Corporation tax payable | – | (£657) | (£142) |
-| **Total liabilities** | **–** | **(£22,324)** | **(£27,809)** |
-| **Net assets** | **£9,197** | **£17,794** | **£18,732** |
+| Corporation tax payable | – | (£543) | – |
+| **Total liabilities** | **–** | **(£22,210)** | **(£27,667)** |
+| **Net assets** | **£9,197** | **£17,308** | **£16,888** |
 | Share capital & share premium (founder £3k; friends & family £3k; Nigerian company £8k) | £14,000 | £14,000 | £14,000 |
-| Profit & loss reserve | (£4,803) | £3,794 | £4,732 |
-| **Total shareholders' funds** | **£9,197** | **£17,794** | **£18,732** |
+| Profit & loss reserve | (£4,803) | £3,308 | £2,888 |
+| **Total shareholders' funds** | **£9,197** | **£17,308** | **£16,888** |
 
 The balance sheet is generated by the same model as the P&L and cash flow, and balances in every year. **Deferred income** is licence fees invoiced in advance but not yet earned. This is a sign of healthy, up-front payment terms, not debt. There are no borrowings. Shareholders' funds include the £14,000 of equity invested by the founder, friends and family, and the Nigerian company investor. The split between nominal share capital and share premium depends on the share price agreed for each allotment.
 
@@ -873,24 +888,24 @@ The Sales Lead, Support Agent and Student Ambassador roles are each paid **£25,
 | Software & developer accounts | (£639) | (£1,159) | (£1,639) | (£3,437) |
 | Insurance (PI, cyber, public & employers' liability) | (£600) | (£1,100) | (£2,350) | (£4,050) |
 | Accountancy & bookkeeping | – | (£600) | (£1,710) | (£2,310) |
-| Legal | – | (£900) | (£400) | (£1,300) |
+| Legal & IP protection (contracts, patent search, UK patent filing) | – | (£1,500) | (£1,900) | (£3,400) |
 | Office / co-working | (£125) | (£600) | (£3,600) | (£4,325) |
 | Compliance (ICO, Cyber Essentials, IP, filings) | (£756) | (£486) | (£486) | (£1,728) |
 | Travel & campus visits | (£360) | (£1,200) | (£3,600) | (£5,160) |
 | Bank, telephone & internet | (£120) | (£216) | (£216) | (£552) |
-| **Total overheads** | **(£4,100)** | **(£11,511)** | **(£168,919)** | **(£184,530)** |
-| **EBITDA** | **(£4,720)** | **£21,199** | **(£32,500)** | **(£16,021)** |
+| **Total overheads** | **(£4,100)** | **(£12,111)** | **(£170,419)** | **(£186,630)** |
+| **EBITDA** | **(£4,720)** | **£20,599** | **(£34,000)** | **(£18,121)** |
 | Depreciation | (£83) | (£425) | (£1,726) | (£2,235) |
-| **Operating profit / (loss)** | **(£4,803)** | **£20,774** | **(£34,226)** | **(£18,255)** |
-| Corporation tax (19%, after losses b/f and 100% AIA) | – | (£2,846) | – | (£2,846) |
-| **Profit / (loss) after tax** | **(£4,803)** | **£17,928** | **(£34,226)** | **(£21,101)** |
-| Net margin | n/a | 48.8% | -22.9% |  |
+| **Operating profit / (loss)** | **(£4,803)** | **£20,174** | **(£35,726)** | **(£20,355)** |
+| Corporation tax (19%, after losses b/f and 100% AIA) | – | (£2,732) | – | (£2,732) |
+| **Profit / (loss) after tax** | **(£4,803)** | **£17,442** | **(£35,726)** | **(£23,087)** |
+| Net margin | n/a | 47.4% | -23.9% |  |
 
 ### F.3 Growth case — Cash flow
 
 |  | Year 1 (FY27) | Year 2 (FY28) | Year 3 (FY29) | 3-yr total |
 |---|---:|---:|---:|---:|
-| Opening cash | £3,000 | £8,680 | £37,312 | £3,000 |
+| Opening cash | £3,000 | £8,680 | £36,712 | £3,000 |
 | Receipts — Premium & Starter subscriptions | £569 | £5,097 | £12,134 | £17,800 |
 | Receipts — licences & contracts (annual in advance) | – | £40,000 | £162,000 | £202,000 |
 | **Total trading receipts** | **£569** | **£45,097** | **£174,134** | **£219,800** |
@@ -898,12 +913,12 @@ The Sales Lead, Support Agent and Student Ambassador roles are each paid **£25,
 | Cost of sales | (£1,190) | (£4,053) | (£12,881) | (£18,124) |
 | Staff costs (salaries, NI, pension) | – | – | (£142,918) | (£142,918) |
 | Marketing | (£1,500) | (£5,250) | (£12,000) | (£18,750) |
-| Other overheads (software, insurance, professional, office, compliance, travel) | (£2,600) | (£6,261) | (£14,001) | (£22,862) |
+| Other overheads (software, insurance, professional, office, compliance, travel) | (£2,600) | (£6,861) | (£15,501) | (£24,962) |
 | Capital expenditure | (£600) | (£900) | (£3,750) | (£5,250) |
-| Corporation tax paid | – | – | (£2,846) | (£2,846) |
-| **Total payments** | **(£5,890)** | **(£16,464)** | **(£188,397)** | **(£210,750)** |
-| **Net cash flow** | **£5,680** | **£28,633** | **(£14,262)** | **£20,050** |
-| **Closing cash** | **£8,680** | **£37,312** | **£23,050** | **£23,050** |
+| Corporation tax paid | – | – | (£2,732) | (£2,732) |
+| **Total payments** | **(£5,890)** | **(£17,064)** | **(£189,783)** | **(£212,736)** |
+| **Net cash flow** | **£5,680** | **£28,033** | **(£15,648)** | **£18,064** |
+| **Closing cash** | **£8,680** | **£36,712** | **£21,064** | **£21,064** |
 
 *In the growth case, turnover would pass the £90,000 VAT registration threshold during Year 3. Universities cannot usually recover VAT, so DEQUAD would review licence pricing at that point. The growth-case figures are shown net of VAT.*
 
