@@ -12,7 +12,7 @@
 | **Wider founding team** | Dr Gerald Marfo (CMO) · Adedapo Ajuwon (Senior Software Engineer) · Chinyere Jennifer (Senior Advisor, Programme Delivery) |
 | **Base** | London — NatWest Accelerator (London hub) |
 | **Product** | Live in production at **dequad.co.uk** (web), Android and iOS |
-| **Founder capital** | £6,000 share capital (£3,000 per founder), paid into the company account at incorporation |
+| **Funding** | £14,000 total: £3,000 founders' capital, £3,000 friends & family equity, £8,000 strategic equity from a Nigerian company |
 | **Financial year** | 1 September – 31 August (aligned to the UK academic year). Year 1 = FY27 (Sep 2026 – Aug 2027) |
 | **Contact** | quadri.yusuf@dequad.com · 07928 132617 · linkedin.com/in/quadri-yusuf |
 | **Version** | 6.0 — October 2026 (supersedes v5.0, August 2026) |
@@ -74,14 +74,14 @@ The lead founder, **Yusuf Quadri**, is a practising safeguarding professional. H
 | Evidence | Status |
 |---|---|
 | Product | **Built and live.** Web, Android and iOS. The live product includes verified matching, chat, daily mood tracking, lecture feedback, graded safeguarding alerts, admin verification queue, university dashboard, AI cohort analysis, CSV exports, Stripe and in-app billing, and partner-university licence management. |
-| Company | DEQUAD Ltd incorporated 18 August 2026; £6,000 founder share capital paid in. |
+| Company | DEQUAD Ltd incorporated 18 August 2026. Funding of £14,000 committed: £3,000 founders' capital, £3,000 from friends and family, and £8,000 from a Nigerian company investor. |
 | Third-party validation | Santander Universities Pre-Incubator (completed 2025); NatWest Accelerator, London (joined 16 March 2026). |
 | Users | Closed beta with verified University of Bedfordshire students. |
-| Commercial pipeline | Early, informal conversations with the University of Bedfordshire about an unpaid pilot. **Nothing is signed.** The base case assumes no institutional revenue at all in Year 1. |
+| Commercial pipeline | **Conversations with the University of Bedfordshire about a pilot are ongoing.** No pilot agreement is signed yet. The base case assumes no institutional revenue at all in Year 1. |
 
 ### The financial plan at a glance
 
-The plan is **self-funded**. The £6,000 of founder capital, the in-kind support of the NatWest Accelerator, and revenue earned along the way fund every month of the forecast. No external investment, grant or tax credit is assumed. Cash stays positive in every one of the 36 months. The lowest month-end balance is {{MIN_CASH}} ({{MIN_CASH_MONTH}}).
+The plan is funded by **£14,000 of equity**: £3,000 from the founders, £3,000 from friends and family, and £8,000 from a strategic investor, a Nigerian company. Together with the in-kind support of the NatWest Accelerator and revenue earned along the way, this funds every month of the forecast. No loans, grants, tax credits or further investment are assumed. Cash stays positive in every one of the 36 months. The lowest month-end balance is {{MIN_CASH}} ({{MIN_CASH_MONTH}}).
 
 {{TABLE_HEADLINE}}
 
@@ -136,11 +136,11 @@ DEQUAD is not a new feature added to an existing app. It is a new combination of
 ### 3.2 Viability
 
 - **The build risk is already retired.** The product is live on web, Android and iOS, with billing, safeguarding and university tooling in production. Year 1 needs no development spend beyond hosting and tools.
-- **The founder is the customer's peer.** University buyers are student-services and safeguarding professionals. The CEO does safeguarding work professionally and has led a students' union. He can talk to buyers in their own language, and he has existing relationships at the University of Bedfordshire, our proposed pilot partner.
-- **The cost base is very lean.** Year 1 cash costs are about £400 a month. NatWest Accelerator support (office, legal and accountancy, in kind until March 2027) and founders who take no pay in Years 1–2 mean the £6,000 of share capital is enough to reach the first institutional revenue.
+- **The founder is the customer's peer.** University buyers are student-services and safeguarding professionals. The CEO does safeguarding work professionally and has led a students' union. He can talk to buyers in their own language, and he has existing relationships at the University of Bedfordshire, with whom pilot conversations are ongoing.
+- **The cost base is very lean.** Year 1 cash costs are about £400 a month. NatWest Accelerator support (office, legal and accountancy, in kind until March 2027) and founders who take no pay in Years 1–2 mean the £14,000 of equity funding is more than enough to reach the first institutional revenue, with a cash reserve to spare.
 - **Viability does not depend on a single deal.** Section 12.3 shows that even if **no university licence is ever signed**, the company stays solvent for all three years on Premium and Starter revenue, with costs held at Year 1 levels (Year 3 revenue {{DOWN_REV_Y3}}; closing cash {{DOWN_CASH_Y3}}). Founders' pay and the first hire are the things that would wait.
 - **Willingness to pay is already proven.** UK universities already buy digital student-support services. Togetherall alone reports more than 200 education-institution partners, and UniBuddy has a large UK university client base. Universities have budgets for this kind of product; DEQUAD offers a more complete one.
-- **The founders are committed.** Both founders have each put £3,000 of personal money into share capital and signed commitment undertakings (Appendix C).
+- **The founders are committed, and others are backing them.** The founders have put £3,000 of their own money into the company and signed commitment undertakings (Appendix C). Friends and family (£3,000) and a Nigerian company (£8,000) have also chosen to invest.
 
 ### 3.3 Scalability
 
@@ -326,7 +326,7 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 | Stage | What happens | Target timing (base case) |
 |---|---|---|
 | **1. Land (students)** | Ambassador-led launch at the University of Bedfordshire; freshers' and January welcome-week activity; social content made by students | Sep 2026 onwards |
-| **2. Land (institution)** | Unpaid 12-week pilot proposed to the University of Bedfordshire, plus Starter subscriptions sold to students' unions and departments | Pilot targeted for Jan–Mar 2027 (**not signed**); first Starter subscription Apr 2027 |
+| **2. Land (institution)** | Unpaid 12-week pilot with the University of Bedfordshire (conversations ongoing), plus Starter subscriptions sold to students' unions and departments | Pilot targeted for Jan–Mar 2027 (**not yet signed**); first Starter subscription Apr 2027 |
 | **3. Prove** | Pilot readout: sign-ups, active use, mood-check completion, alert precision and staff feedback (method in Appendix D) | Apr–May 2027 |
 | **4. Convert** | Annual licence for academic year 2027/28, invoiced in advance | First licence term from Oct 2027 (contingent) |
 | **5. Expand** | Case study and referral used to win further universities; Starter customers upgraded to licences | 2 further licences in Year 3 (Sep 2028 and Mar 2029) |
@@ -361,8 +361,8 @@ Full job descriptions are at Appendix G. Every role is UK-based and paid through
 
 | **Strengths** | **Weaknesses** |
 |---|---|
-| Live, full-featured product on web, Android and iOS, so build risk is retired | Very small cash base (£6,000); no external funding |
-| A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | No signed pilot, letter of intent or paying institution yet |
+| Live, full-featured product on web, Android and iOS, so build risk is retired | Small funding base (£14,000) for a two-sided market |
+| A CEO who practises safeguarding and has led a students' union: strong credibility with buyers | Bedfordshire pilot still under discussion; no signed pilot, letter of intent or paying institution yet |
 | A distinctive integrated loop: verification, connection, wellbeing, safeguarding | Two-founder core team, so key-person risk until Year 3 |
 | Freemium model with a self-serve paid entry tier, already live in billing | Founders are unpaid in Years 1–2 and have other commitments |
 | Lean cost base; NatWest in-kind support until March 2027 | No clinical advisory panel yet (planned for Year 2) |
@@ -392,30 +392,44 @@ The full scored risk register is at Appendix L.
 
 ### 10.1 Funding requirement
 
-**DEQUAD does not need external investment to deliver this plan.** The plan's cash requirement is the founders' £6,000 share capital, plus in-kind support already secured.
+DEQUAD needs **£14,000** to deliver this plan. It has three sources:
 
-| Source | Amount | Status |
-|---|---|---|
-| Founder share capital: Yusuf Quadri | £3,000 | **Paid** at incorporation (18 Aug 2026) |
-| Founder share capital: Yusuff Adeagbo | £3,000 | **Paid** at incorporation (18 Aug 2026) |
-| NatWest Accelerator in-kind support (office space, legal, accountancy, mentoring) | Non-cash | **Active** until March 2027 |
-| **Total cash funding assumed** | **£6,000** | |
+| Source | Amount | Form | Timing (as modelled) |
+|---|---:|---|---|
+| Founders' capital (Yusuf Quadri and Yusuff Adeagbo) | £3,000 | Ordinary shares | In the company account at the start of Year 1 (Sep 2026) |
+| Friends and family | £3,000 | Ordinary shares | October 2026 |
+| Strategic investor: Nigerian company | £8,000 | Ordinary shares | November 2026 |
+| **Total cash funding** | **{{TOTAL_FUNDING}}** | | |
+| NatWest Accelerator in-kind support (office space, legal, accountancy, mentoring) | Non-cash | | Active until March 2027 |
 
-### 10.2 How the £6,000 is used (Year 1)
+All three investments are equity. There is no debt to repay and no interest to pay. Shares for each investor will be issued and filed with Companies House (form SH01). The founders will keep a majority of the company. Evidence of each investor's identity and source of funds, including the Nigerian company's registration, the board resolution approving the investment and the bank transfer record, will be held on file and is available to UKES.
 
-Year 1 net cash outflow is {{Y1_BURN}}. It covers hosting and AI inference, developer accounts, insurance, ICO registration, UK trademark filing (3 classes), Cyber Essentials, the pilot, and a small student-acquisition budget. The company ends Year 1 with {{CASH_Y1}} in the bank. From Year 2, licence fees invoiced annually in advance turn cash flow positive.
+**Why a Nigerian strategic investor matters.** As well as cash, the investment is an early commercial link to one of Africa's largest higher-education markets. That supports the international scalability case in Section 3.3. Any expansion into that market is a post-Year-3 opportunity and is not in the forecast.
 
-### 10.3 Why we are not raising now
+### 10.2 Use of funds
 
-Raising equity before a university has paid would mean selling a large share of the company at a low valuation. The disciplined route is to prove conversion with one paying university first. That makes the business investable on better terms, and the plan does not depend on it.
+| Use | Year 1 | Funded by |
+|---|---:|---|
+| Platform running costs (hosting, AI inference, email/push, payment fees) | c.£900 | Founders' capital |
+| Insurance, ICO registration, Cyber Essentials, UK trademark (3 classes), developer accounts, travel, office and bank | c.£2,600 | Founders' capital and friends & family |
+| Bedfordshire pilot delivery (training, travel, materials) | £500 | Friends & family |
+| Student acquisition and campus marketing | £1,500 | Friends & family |
+| QA test devices (iOS and Android) | £600 | Friends & family |
+| **Working-capital reserve** carried into Year 2 (freshers' season and first licence onboarding) | {{CASH_Y1}} | Nigerian company investment |
+
+Year 1 net trading cash outflow is {{Y1_BURN}}. The company ends Year 1 with {{CASH_Y1}} in the bank. From Year 2, licence fees invoiced annually in advance turn cash flow positive. The investment means DEQUAD never needs to delay its freshers'-season activity while waiting for the first licence fee to arrive.
+
+### 10.3 Why the round is small
+
+The founders have deliberately raised only what the plan needs. Raising a large equity round before a university has paid would mean giving away a large share of the company at a low valuation. The disciplined route is to prove conversion with one paying university first, which makes DEQUAD investable on much better terms.
 
 ### 10.4 Future investment (optional, not assumed)
 
 When the first licence has renewed and at least three universities are paying (base case: during Year 3), the founders may raise a **pre-seed round of about £250,000**, for example under SEIS/EIS. The purpose would be to speed up the hiring in the growth case and expand to further-education and international markets. This is an option, not a requirement. None of the forecasts in this plan include it.
 
-### 10.5 Growth case: fully reconciled, still self-funded
+### 10.5 Growth case: fully reconciled, no further investment
 
-The growth case uses the same model and the same costs, with faster institutional adoption: 2 licences in Year 2, 7 by the end of Year 3, plus one NHS ICB contract from March 2029. It is funded entirely from revenue (no external investment) and pays for the three full-time hires.
+The growth case uses the same model and the same costs, with faster institutional adoption: 2 licences in Year 2, 7 by the end of Year 3, plus one NHS ICB contract from March 2029. It needs no investment beyond the £14,000 already committed; revenue pays for the three full-time hires.
 
 {{TABLE_G_HEADLINE}}
 
@@ -480,7 +494,7 @@ Licence revenue is recognised evenly over each 12-month term, although cash arri
 
 {{TABLE_CASH_MONTHLY_Y3}}
 
-The tightest point is {{MIN_CASH_MONTH}}, when the freshers'-season marketing spend and the annual software renewals fall just before the first licence fee is received. Cash is still positive at {{MIN_CASH}}. If the first licence is delayed, the founders will hold back the Year 2 equipment purchases, paid search and B2B event spend (about £2,400 in total) until it is received. Section 12.3 shows the company stays solvent even if it never arrives.
+The tightest point is {{MIN_CASH_MONTH}} ({{MIN_CASH}}), before the friends-and-family and Nigerian-company investments arrive. After November 2026 the balance does not fall below about £7,000. If either investment arrives late, the founders will hold back Year 1 marketing and the test-device purchase until it lands. Section 12.3 shows the company stays solvent even if the first licence never arrives.
 
 ### 12.3 Downside test: no university ever signs
 
@@ -498,7 +512,7 @@ If **no partner licence is signed at any point** in the three years, DEQUAD stil
 
 Year 1's loss is carried forward against Year 2 profits. Equipment qualifies for the 100% Annual Investment Allowance. Profits are below £50,000, so the 19% small profits rate applies.
 
-**Commentary.** Year 1 is a deliberate investment year, with a loss of {{OP_Y1}} absorbed by founder capital. Year 2 turns profitable ({{PAT_Y2}} after tax) on the first licence and a cost base still carried by unpaid founders. In Year 3 the company starts paying both founders and makes its first hire, and still makes a profit ({{PAT_Y3}}). Profit is not the aim in the early years; showing that the company can pay for its own team from revenue is.
+**Commentary.** Year 1 is a deliberate investment year, with a loss of {{OP_Y1}} funded from the equity raised. Year 2 turns profitable ({{PAT_Y2}} after tax) on the first licence and a cost base still carried by unpaid founders. In Year 3 the company starts paying both founders and makes its first hire, and still makes a profit ({{PAT_Y3}}). Profit is not the aim in the early years; showing that the company can pay for its own team from revenue is.
 
 ---
 
@@ -506,7 +520,7 @@ Year 1's loss is carried forward against Year 2 profits. Equipment qualifies for
 
 {{TABLE_BS}}
 
-The balance sheet is generated by the same model as the P&L and cash flow, and balances in every year. **Deferred income** is licence fees invoiced in advance but not yet earned. This is a sign of healthy, up-front payment terms, not debt. There are no borrowings, no external shareholders and no share premium.
+The balance sheet is generated by the same model as the P&L and cash flow, and balances in every year. **Deferred income** is licence fees invoiced in advance but not yet earned. This is a sign of healthy, up-front payment terms, not debt. There are no borrowings. Shareholders' funds include the £14,000 of equity invested by the founders, friends and family, and the Nigerian company investor. The split between nominal share capital and share premium depends on the share price agreed for each allotment.
 
 ---
 
@@ -607,7 +621,7 @@ The three full-time roles are each paid **£25,000 a year**, and the plan funds 
 
 | Area | Assumption |
 |---|---|
-| Funding | £6,000 founder share capital only; no loans, grants, investment or R&D tax credits |
+| Funding | £14,000 equity: founders £3,000 (Sep 2026), friends & family £3,000 (Oct 2026), Nigerian company £8,000 (Nov 2026); no loans, grants or R&D tax credits |
 | Prices | Premium £4.99/month; Insights Starter £49.99/month; Licence £2.00/enrolled student/year |
 | Billing | Licences invoiced annually, one month before each term, on 30-day terms; revenue recognised monthly |
 | In-kind support | NatWest Accelerator office space, legal and accountancy support until March 2027 |

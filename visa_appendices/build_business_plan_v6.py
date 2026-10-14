@@ -56,6 +56,15 @@ EMPLOYER_PENSION = 0.03        # paid on all salaries, regardless of auto-enrolm
 NATWEST_IN_KIND_UNTIL = 7      # office, legal and accountancy in kind until Mar 2027
 VAT_THRESHOLD = 90_000
 
+# Funding. Founders' capital is in the bank at the start of Year 1; the two
+# external equity investments arrive in the months shown (M2 = Oct 2026).
+OPENING_CAPITAL = 3_000.0
+FUNDING_INFLOWS = {
+    2: ("Friends & family equity investment", 3_000.0),
+    3: ("Strategic equity investment — Nigerian company", 8_000.0),
+}
+TOTAL_FUNDING = OPENING_CAPITAL + sum(v for _, v in FUNDING_INFLOWS.values())
+
 
 @dataclass
 class Licence:
@@ -106,17 +115,17 @@ class Scenario:
     staff: list[Hire]
     marketing: dict[str, tuple[int, int, int]]
     capex: dict[int, list[tuple[str, float]]]
-    pilot_cost: dict[int, float] = field(default_factory=lambda: {5: 300.0})
+    pilot_cost: dict[int, float] = field(default_factory=lambda: {5: 500.0})
     lean: bool = False  # downside test: overheads held at Year 1 run-rate, remote working
 
 
 BASE_MARKETING = {
-    "Student ambassador programme (incentives, referral rewards)": (300, 900, 1_500),
-    "Freshers' / Welcome Week stands & printed materials": (200, 700, 1_000),
-    "Instagram & TikTok (organic content + boosted posts)": (150, 700, 1_200),
+    "Student ambassador programme (incentives, referral rewards)": (500, 900, 1_500),
+    "Freshers' / Welcome Week stands & printed materials": (400, 700, 1_000),
+    "Instagram & TikTok (organic content + boosted posts)": (300, 700, 1_200),
     "Google Search ads (brand + 'student friends' terms)": (0, 300, 600),
-    "Content, SEO & safeguarding white paper": (50, 300, 500),
-    "B2B events & PR (AMOSSHE, UUK, Wonkhe, NatWest network)": (100, 600, 1_200),
+    "Content, SEO & safeguarding white paper": (100, 300, 500),
+    "B2B events & PR (AMOSSHE, UUK, Wonkhe, NatWest network)": (200, 600, 1_200),
 }
 
 BASE = Scenario(
@@ -139,8 +148,8 @@ BASE = Scenario(
     ],
     marketing=BASE_MARKETING,
     capex={
-        16: [("QA test handsets (1 x iOS, 1 x Android, refurbished)", 600.0),
-             ("Development laptop (CTO replacement)", 900.0)],
+        4: [("QA test handsets (1 x iOS, 1 x Android, refurbished)", 600.0)],
+        16: [("Development laptop (CTO replacement)", 900.0)],
         26: [("Laptop — Safeguarding & Trust Lead", 850.0), ("Campus event kit (banner, display)", 350.0)],
     },
 )
@@ -173,7 +182,8 @@ GROWTH = Scenario(
     ],
     marketing={k: (v[0], round(v[1] * 1.5, -1), round(v[2] * 2.0, -1)) for k, v in BASE_MARKETING.items()},
     capex={
-        16: [("QA test handsets", 600.0), ("Development laptop", 900.0)],
+        4: [("QA test handsets", 600.0)],
+        16: [("Development laptop", 900.0)],
         25: [("Laptops x 3 (new hires)", 2_550.0), ("Campus event kit", 350.0)],
         26: [("Laptop (Support Agent)", 850.0)],
     },
@@ -192,13 +202,12 @@ def run(s: Scenario) -> dict:
         "salaries", "employer_ni", "pension", "other_staff", "staff_total",
         "marketing", "software", "insurance", "accountancy", "legal", "office", "compliance",
         "travel", "bank_comms", "overheads_ex_staff", "ebitda", "depreciation", "operating_profit",
-        "capex", "receipts", "licence_invoiced", "payments", "ct_paid", "net_cash", "closing_cash",
+        "capex", "receipts", "licence_invoiced", "payments", "ct_paid", "funding", "net_cash", "closing_cash",
         "headcount", "fte",
     ]}
     registered = OPENING_REGISTERED
     active = OPENING_REGISTERED * 0.5
     starter = 0
-    cash = 6_000.0  # founder share capital, paid into the company bank account at incorporation
     deferred = 0.0
     debtors = 0.0
     licence_invoices_pending: dict[int, float] = {}
@@ -333,13 +342,14 @@ def run(s: Scenario) -> dict:
         tax_due[y] = tax
         annual[y] = {"taxable_before_losses": taxable, "tax": tax, "losses_cf": losses}
     ct_payment_month = {1: 22, 2: 34}
-    cash = 6_000.0
+    cash = OPENING_CAPITAL
     for m in range(1, MONTHS + 1):
         ct = sum(tax_due[y] for y, pm in ct_payment_month.items() if pm == m)
         r["ct_paid"][m] = ct
         pay = r["cos_total"][m] + r["staff_total"][m] + r["overheads_ex_staff"][m] + r["capex"][m] + ct
         r["payments"][m] = pay
-        r["net_cash"][m] = r["receipts"][m] - pay
+        r["funding"][m] = FUNDING_INFLOWS.get(m, ("", 0.0))[1]
+        r["net_cash"][m] = r["receipts"][m] - pay + r["funding"][m]
         cash += r["net_cash"][m]
         r["closing_cash"][m] = cash
 
@@ -365,7 +375,9 @@ def run(s: Scenario) -> dict:
             "fixed_cost": cost, "acc_dep": acc_dep, "nbv": cost - acc_dep, "cash": r["closing_cash"][end],
             "debtors": debt, "stock": 0.0, "total_assets": assets_total, "deferred_income": deferred_income,
             "ct_creditor": ct_creditor, "total_liabilities": liabilities, "net_assets": assets_total - liabilities,
-            "share_capital": 6_000.0, "retained": retained, "equity": 6_000.0 + retained,
+            "share_capital": OPENING_CAPITAL + sum(r["funding"][m] for m in range(1, end + 1)),
+            "retained": retained,
+            "equity": OPENING_CAPITAL + sum(r["funding"][m] for m in range(1, end + 1)) + retained,
         }
         assert abs(bs[y]["net_assets"] - bs[y]["equity"]) < 0.5, (s.name, y, bs[y])
     r["_annual_tax"] = annual
@@ -448,7 +460,8 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
     t["MIN_CASH_MONTH"] = label(min(range(1, MONTHS + 1), key=lambda m: b["closing_cash"][m]))
     t["G_MIN_CASH"] = gbp(min(g["closing_cash"][1:]))
     t["G_MIN_CASH_MONTH"] = label(min(range(1, MONTHS + 1), key=lambda m: g["closing_cash"][m]))
-    t["Y1_BURN"] = gbp(-ysum(b, "net_cash", 1))
+    t["Y1_BURN"] = gbp(-(ysum(b, "net_cash", 1) - ysum(b, "funding", 1)))
+    t["TOTAL_FUNDING"] = gbp(TOTAL_FUNDING)
     t["REV_3YR"] = gbp(sum(ysum(b, "revenue", y) for y in Y))
     t["G_PEAK_HC"] = num(max(g["headcount"][1:]))
     t["G_FTE_END"] = num(g["fte"][36], 2)
@@ -508,14 +521,15 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
 
     # 12 Cash flow — annual
     def cf_rows(r):
-        rows = [["Opening cash"] + [gbp(6_000 if y == 1 else yend(r, "closing_cash", y - 1)) for y in Y] + [gbp(6_000)]]
+        rows = [["Opening cash"] + [gbp(OPENING_CAPITAL if y == 1 else yend(r, "closing_cash", y - 1)) for y in Y] + [gbp(OPENING_CAPITAL)]]
         rows.append(annual_row(r, "Receipts — Premium & Starter", "rev_premium"))
         rows[-1] = ["Receipts — Premium & Starter subscriptions"] + [
             gbp(ysum(r, "rev_premium", y) + ysum(r, "rev_starter", y)) for y in Y] + [
             gbp(sum(ysum(r, "rev_premium", y) + ysum(r, "rev_starter", y) for y in Y))]
         lic = [ysum(r, "receipts", y) - ysum(r, "rev_premium", y) - ysum(r, "rev_starter", y) for y in Y]
         rows.append(["Receipts — licences & contracts (annual in advance)"] + [gbp(v) for v in lic] + [gbp(sum(lic))])
-        rows.append(annual_row(r, "Total receipts", "receipts", bold=True))
+        rows.append(annual_row(r, "Total trading receipts", "receipts", bold=True))
+        rows.append(annual_row(r, "Equity investment received (friends & family; Nigerian company)", "funding"))
         rows.append(annual_row(r, "Cost of sales", "cos_total", neg=True))
         rows.append(annual_row(r, "Staff costs (salaries, NI, pension)", "staff_total", neg=True))
         rows.append(annual_row(r, "Marketing", "marketing", neg=True))
@@ -539,8 +553,9 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
             vals = [r[key][m] * (-1 if neg else 1) for m in ms]
             n = f"**{name}**" if bold else name
             return [n] + [gbp(v, bold) for v in vals] + [gbp(sum(vals), bold)]
-        rows = [["Opening cash"] + [gbp(r["closing_cash"][m - 1] if m > 1 else 6_000) for m in ms] + [""]]
-        rows += [line("Receipts", "receipts", bold=True),
+        rows = [["Opening cash"] + [gbp(r["closing_cash"][m - 1] if m > 1 else OPENING_CAPITAL) for m in ms] + [""]]
+        rows += [line("Equity investment", "funding"),
+                 line("Trading receipts", "receipts", bold=True),
                  line("Cost of sales", "cos_total", neg=True),
                  line("Staff", "staff_total", neg=True),
                  line("Marketing", "marketing", neg=True)]
@@ -605,7 +620,7 @@ def build_tokens(b: dict, g: dict) -> dict[str, str]:
                              ("Deferred income (licence fees invoiced in advance)", "deferred_income", False),
                              ("Corporation tax payable", "ct_creditor", False),
                              ("**Total liabilities**", "total_liabilities", True), ("**Net assets**", "net_assets", True),
-                             ("Share capital (founders, £3,000 each)", "share_capital", False),
+                             ("Share capital & share premium (founders £3k; friends £3k; Nigerian company £8k)", "share_capital", False),
                              ("Profit & loss reserve", "retained", False), ("**Total shareholders' funds**", "equity", True)]:
             sign = -1 if k in ("acc_dep", "deferred_income", "ct_creditor", "total_liabilities") else 1
             out.append([lbl] + [gbp(sign * bs[y][k], bold) for y in Y])
@@ -764,7 +779,7 @@ def write_xlsx(results: dict[str, dict]) -> None:
         ("Travel", "travel"), ("Bank & comms", "bank_comms"), ("EBITDA", "ebitda"), ("Depreciation", "depreciation"),
         ("Operating profit", "operating_profit"),
         ("CASH (£)", None), ("Licence/contract invoices raised", "licence_invoiced"), ("Cash receipts", "receipts"),
-        ("Capex", "capex"), ("Corporation tax paid", "ct_paid"), ("Total payments", "payments"),
+        ("Capex", "capex"), ("Corporation tax paid", "ct_paid"), ("Equity investment received", "funding"), ("Total payments", "payments"),
         ("Net cash flow", "net_cash"), ("Closing cash", "closing_cash"),
         ("TEAM", None), ("Headcount", "headcount"), ("FTE", "fte"),
     ]
@@ -811,7 +826,8 @@ def write_xlsx(results: dict[str, dict]) -> None:
         ("Premium billing live from month", PREMIUM_LIVE_FROM), ("Blended Premium fee rate", PREMIUM_FEE_RATE),
         ("Corporation tax (small profits rate)", CORP_TAX), ("Employer NI rate / threshold", f"{NI_RATE} / {NI_THRESHOLD}"),
         ("Employment Allowance", EMPLOYMENT_ALLOWANCE), ("Employer pension", EMPLOYER_PENSION),
-        ("NatWest in-kind support until month", NATWEST_IN_KIND_UNTIL), ("Founder share capital (£)", 6000),
+        ("NatWest in-kind support until month", NATWEST_IN_KIND_UNTIL), ("Founders' opening capital (£)", OPENING_CAPITAL),
+        ("Friends & family equity (£, Oct 2026)", 3000), ("Nigerian company equity (£, Nov 2026)", 8000),
         ("Licence billing", "Annual in advance, 30-day terms, revenue recognised monthly"),
         ("VAT", f"Not registered — taxable turnover below £{VAT_THRESHOLD:,} in base case"),
     ]:
