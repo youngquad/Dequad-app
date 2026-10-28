@@ -88,7 +88,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     AUTH_LIMIT = int(os.environ.get("RATE_LIMIT_AUTH", "120"))
     WINDOW_SECONDS = 60
 
-    AUTH_PREFIXES = ("/api/auth/admin-login", "/api/auth/email-login",
+    AUTH_PREFIXES = ("/api/auth/admin-login", "/api/auth/email-login", "/api/auth/verification-delivery",
                      "/api/auth/register", "/api/auth/verify-email",
                      "/api/auth/resend-verification",
                      "/api/auth/forgot-password", "/api/auth/reset-password",

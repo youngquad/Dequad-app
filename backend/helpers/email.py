@@ -24,7 +24,7 @@ def send_email_via_resend(to_emails: List[str], subject: str, html_body: str, te
     try:
         resend.api_key = RESEND_API_KEY
         params = {
-            "from": f"{from_name or SMTP_FROM_NAME} <{RESEND_SENDER_EMAIL}>",
+            "from": f"{from_name or 'DEQUAD'} <{RESEND_SENDER_EMAIL}>",
             "to": to_emails,
             "subject": subject,
             "html": html_body,
@@ -45,7 +45,7 @@ def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_bod
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
-        msg["From"] = f"{from_name or SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
+        msg["From"] = f"{from_name or 'DEQUAD'} <{SMTP_FROM_EMAIL}>"
         msg["To"] = ", ".join(to_emails)
 
         if text_body:
@@ -210,7 +210,7 @@ async def send_safeguarding_email_to_admins(alert_data: dict):
     text_body = create_safeguarding_email_text(alert_data)
 
     try:
-        success = await send_email_async(admin_emails, subject, html_body, text_body)
+        success = await send_email_async(admin_emails, subject, html_body, text_body, from_name=SMTP_FROM_NAME)
         if success:
             logger.info(f"Safeguarding email sent to {len(admin_emails)} admin(s)")
         else:

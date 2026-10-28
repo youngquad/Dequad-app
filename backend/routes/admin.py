@@ -584,7 +584,7 @@ async def test_email_notification(admin: User = Depends(require_admin)):
         subject = "TEST - Safeguarding Email Notification"
         html_body = create_safeguarding_email_html(test_alert)
         text_body = create_safeguarding_email_text(test_alert)
-        success = await send_email_async(admin_emails, subject, html_body, text_body)
+        success = await send_email_async(admin_emails, subject, html_body, text_body, from_name=SMTP_FROM_NAME)
         return {"success": success, "message": f"Test email sent to {len(admin_emails)} admin(s)" if success else "Failed", "recipients": admin_emails}
     except Exception as e:
         return {"success": False, "message": f"Error: {str(e)}"}

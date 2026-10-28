@@ -168,7 +168,7 @@ export default function VerifyEmail() {
           <Pressable
             style={styles.backButton}
             onPress={() => router.back()}
-            data-testid="verify-back"
+            testID="verify-back"
           >
             <Ionicons name="arrow-back" size={20} color={t.text} />
           </Pressable>
@@ -179,7 +179,7 @@ export default function VerifyEmail() {
           </View>
 
           <Text style={styles.kicker}>VERIFY YOUR UNI EMAIL</Text>
-          <Text style={styles.title} data-testid="verify-title">
+          <Text style={styles.title} testID="verify-title">
             Check your inbox.
           </Text>
           <Text style={styles.lede}>
@@ -188,7 +188,7 @@ export default function VerifyEmail() {
             below to unlock your DEQUAD account.
           </Text>
 
-          <View style={styles.codeRow} data-testid="verify-code-row">
+          <View style={styles.codeRow} testID="verify-code-row">
             {code.map((digit, idx) => (
               <TextInput
                 key={idx}
@@ -201,7 +201,7 @@ export default function VerifyEmail() {
                 maxLength={1}
                 editable={!submitting}
                 style={[styles.codeInput, !!digit && styles.codeInputFilled]}
-                data-testid={`verify-code-${idx}`}
+                testID={`verify-code-${idx}`}
                 selectTextOnFocus
               />
             ))}
@@ -235,12 +235,12 @@ export default function VerifyEmail() {
           )}
 
           {error && (
-            <Text style={styles.error} data-testid="verify-error">
+            <Text style={styles.error} testID="verify-error">
               {error}
             </Text>
           )}
           {info && !error && (
-            <Text style={styles.info} data-testid="verify-info">
+            <Text style={styles.info} testID="verify-info">
               {info}
             </Text>
           )}
@@ -252,7 +252,7 @@ export default function VerifyEmail() {
               styles.submit,
               (submitting || code.some((d) => !d)) && styles.submitDisabled,
             ]}
-            data-testid="verify-submit"
+            testID="verify-submit"
           >
             {submitting ? (
               <ActivityIndicator color={t.primaryText} />
@@ -262,7 +262,7 @@ export default function VerifyEmail() {
           </Pressable>
 
           {cooldown > 0 ? (
-            <View style={styles.cooldownPill} data-testid="verify-cooldown-timer">
+            <View style={styles.cooldownPill} testID="verify-cooldown-timer">
               <Ionicons name="time-outline" size={16} color={t.textMuted} />
               <Text style={styles.cooldownText}>
                 You can request a new code in{' '}
@@ -270,7 +270,7 @@ export default function VerifyEmail() {
               </Text>
             </View>
           ) : (
-            <Pressable onPress={handleResend} style={styles.resendBtn} data-testid="verify-resend">
+            <Pressable onPress={handleResend} style={styles.resendBtn} testID="verify-resend">
               <Text style={styles.resendText}>Didn't get it? Resend code</Text>
             </Pressable>
           )}

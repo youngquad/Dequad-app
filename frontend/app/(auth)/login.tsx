@@ -112,7 +112,7 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Pressable style={styles.backButton} onPress={() => router.back()} data-testid="login-back">
+          <Pressable style={styles.backButton} onPress={() => router.back()} testID="login-back">
             <Ionicons name="arrow-back" size={20} color={t.text} />
           </Pressable>
 
@@ -127,7 +127,7 @@ export default function LoginScreen() {
 
             {/* Heading */}
             <Text style={styles.kicker}>{mode === 'signin' ? 'WELCOME BACK' : 'JOIN DEQUAD'}</Text>
-            <Text style={styles.title} data-testid="login-title">
+            <Text style={styles.title} testID="login-title">
               {mode === 'signin' ? 'Sign in to continue.' : 'Create your account.'}
             </Text>
             <Text style={styles.lede}>
@@ -147,7 +147,7 @@ export default function LoginScreen() {
                     placeholder="Your name (optional)"
                     placeholderTextColor={t.textFaint}
                     style={styles.input}
-                    data-testid="auth-name-input"
+                    testID="auth-name-input"
                     autoCapitalize="words"
                   />
                 </View>
@@ -163,7 +163,7 @@ export default function LoginScreen() {
                   autoCapitalize="none"
                   autoCorrect={false}
                   keyboardType="email-address"
-                  data-testid="auth-email-input"
+                  testID="auth-email-input"
                 />
               </View>
               <View style={styles.inputWrap}>
@@ -175,19 +175,19 @@ export default function LoginScreen() {
                   placeholderTextColor={t.textFaint}
                   style={styles.input}
                   secureTextEntry
-                  data-testid="auth-password-input"
+                  testID="auth-password-input"
                 />
               </View>
 
               {emailErr ? (
-                <Text style={styles.errorText} data-testid="auth-error">{emailErr}</Text>
+                <Text style={styles.errorText} testID="auth-error">{emailErr}</Text>
               ) : null}
 
               {mode === 'signup' && (
                 <Pressable
                   onPress={() => setConfirmStudent((v) => !v)}
                   style={styles.checkboxRow}
-                  data-testid="auth-confirm-student"
+                  testID="auth-confirm-student"
                 >
                   <View style={[styles.checkbox, confirmStudent && styles.checkboxOn]}>
                     {confirmStudent ? (
@@ -206,7 +206,7 @@ export default function LoginScreen() {
                 onPress={handleEmailSubmit}
                 disabled={busy}
                 style={[styles.primaryBtn, busy && styles.btnDisabled]}
-                data-testid="auth-submit"
+                testID="auth-submit"
               >
                 <Text style={styles.primaryBtnText}>
                   {busy ? 'Please wait…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
@@ -217,7 +217,7 @@ export default function LoginScreen() {
                 <TouchableOpacity
                   onPress={() => router.push('/(auth)/forgot-password')}
                   style={styles.forgotLink}
-                  data-testid="auth-forgot-password"
+                  testID="auth-forgot-password"
                 >
                   <Text style={styles.forgotLinkText}>Forgot your password?</Text>
                 </TouchableOpacity>
@@ -229,7 +229,7 @@ export default function LoginScreen() {
                 </Text>
                 <TouchableOpacity
                   onPress={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setEmailErr(null); }}
-                  data-testid="auth-mode-toggle"
+                  testID="auth-mode-toggle"
                 >
                   <Text style={styles.modeAccent}>
                     {mode === 'signin' ? 'Sign up' : 'Sign in'}

@@ -1,0 +1,39 @@
+{
+  "summary": "Tested OTP email delivery-status feedback end to end. Backend: 8/8 pytest pass. A fake @beds.ac.uk address showed 'bounced' at the first 5s poll with Microsoft '550 5.4.1 Recipient address rejected' saved in delivery_detail. provider_email_id was saved and delivery_status became 'bounced' in the DB. An unknown email returns {unknown, true, null}. The student.leeds.ac.uk address stayed 'sent' (deliverable) for 20s. The resend 60s cooldown, forgot-password and email-login still work. Checked on Resend: OTP emails come from 'DEQUAD <noreply@noreply.dequad.co.uk>'. Frontend (390x844): sign-up to /verify-email works. The red 'Email could not be delivered' box appears with its message and 'Use a different email', which goes to /login. The 6 code inputs and the cooldown pill render. On the leeds address no red box appeared in 25s. After the cooldown, 'Resend code' showed 'A new code is on its way to your inbox.' and the cooldown restarted with no errors. Login for ui.tester still lands on /mood. No JS page errors. Problems found: the screen shows a raw 'verify-email' header, and every element using the raw data-testid prop is missing from the DOM on web.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/forgot-password (and welcome / support emails)", "issue": "Still sent from 'DEQUAD Safeguarding <noreply@...>' (checked on Resend). Only the OTP email got from_name='DEQUAD'. Password-reset emails to students have the same spam / trust risk."},
+      {"endpoint": "/api/auth/verification-delivery", "issue": "Public and unauthenticated. 'unknown' vs 'sent'/'bounced' shows whether a pending registration exists for an email (small enumeration risk). Consider rate-limiting it."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "verify-email screen header", "issue": "A default Stack header with the raw title 'verify-email' shows above the screen, on top of the screen's own back button (two back controls). verify-email is not registered in app/_layout.tsx with headerShown:false.", "selector": "app/_layout.tsx Stack", "priority": "MEDIUM"},
+      {"component": "verify-email.tsx / (auth)/login.tsx", "issue": "Elements using the raw data-testid prop are not in the DOM on RN-web: verify-title, verify-code-0..5, verify-cooldown-timer, verify-resend, verify-info, verify-error, verify-submit, verify-back, auth-mode-toggle, auth-confirm-student, auth-submit. Only testID props are emitted. Switch them to testID.", "selector": "[data-testid=verify-*]", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/verify-email", "issues": ["Raw 'verify-email' header bar at the top (see ui_bugs)."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_verification_delivery.py", "/app/tests_ui/verify_delivery_test.py", "/app/test_reports/pytest/verification_delivery.xml"],
+  "action_items": [
+    "Add <Stack.Screen name=\"verify-email\" options={{ headerShown: false }} /> to app/_layout.tsx",
+    "Replace data-testid with testID in verify-email.tsx and (auth)/login.tsx so they show up on web",
+    "Optional: pass from_name='DEQUAD' for the password-reset and welcome emails too",
+    "Optional: rate-limit GET /api/auth/verification-delivery"
+  ],
+  "critical_code_review_comments": [
+    "verify-email header not hidden in the root Stack (see above)",
+    "The raw data-testid prop is dropped by RN-web; use testID",
+    "Other email senders still use SMTP_FROM_NAME 'DEQUAD Safeguarding'",
+    "The leeds test address stayed 'sent' (never 'delivered') for 20s, so the 'Delivered' OK line did not show in the UI test. This is expected provider timing, not a bug."
+  ],
+  "updated_files": ["/app/backend/tests/test_verification_delivery.py", "/app/tests_ui/verify_delivery_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100% functional (1 medium UI header issue, 1 low testability issue)"},
+  "seed_data_creation": "Created 4 QA accounts: qa.bounce.7d02460a@beds.ac.uk, qa.sent.7d02460a@student.leeds.ac.uk, qa.ui.bounce.a62421@beds.ac.uk, qa.ui.ok.212a75@student.leeds.ac.uk (only 2 @beds.ac.uk). All deleted from users, email_verifications and password_resets (regex ^qa\\.).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Login page selectors on web: get_by_text('Sign up'), placeholders 'Your name (optional)' / 'Email address' / 'Create a password (8+ characters)', click the text \"I confirm I'm currently enrolled\", then get_by_text('Create Account'). To retest the bounce UI without sending again, open /verify-email?email=<already-bounced email> while its email_verifications record exists. Run Playwright with PLAYWRIGHT_BROWSERS_PATH=/root/pw-browsers."
+}
