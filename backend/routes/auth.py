@@ -19,6 +19,7 @@ from models import (
 from helpers.auth import get_session_token, get_current_user
 from helpers.passwords import hash_password, verify_and_maybe_rehash
 from helpers.email import (
+    get_resend_delivery_status, DELIVERY_FAILED_EVENTS,
     is_smtp_configured, send_email_async, create_password_reset_email_html,
     send_welcome_email,
 )
@@ -119,12 +120,26 @@ async def _send_verification_otp(email: str, *, force: bool = False) -> dict:
                 subject="Your DEQUAD verification code",
                 html_body=html,
                 text_body=text,
+                from_name="DEQUAD",
             )
         except Exception as exc:
             logger.warning(f"Failed to send verification OTP to {email}: {exc}")
             sent = False
     else:
         logger.info("SMTP not configured — OTP generated but not emailed")
+
+    # Remember the provider message id so /auth/verification-delivery can tell
+    # the user if their university mail server bounced the code.
+    await db.email_verifications.update_one(
+        {"email": email},
+        {"$set": {
+            "provider_email_id": sent if isinstance(sent, str) else None,
+            "send_failed": not bool(sent),
+            "delivery_status": None,
+            "delivery_checked_at": None,
+        }},
+    )
+    sent = bool(sent)
 
     # Dev-mode: surface the code in logs so testers can verify without an inbox.
     if os.environ.get("DEV_LOG_OTP", "").lower() in ("1", "true", "yes"):
@@ -403,6 +418,52 @@ async def verify_email(data: VerifyEmailRequest, response: Response):
         httponly=True, secure=True, samesite="none", path="/", max_age=7 * 24 * 60 * 60,
     )
     return {"user": user, "session_token": session_token, "email_verified": True}
+
+
+DELIVERY_MESSAGES = {
+    "not_sent": "We couldn't send the code. Tap “Resend code” to try again, or use a different email.",
+    "bounced": "Your university's mail server rejected this address, so the code could not be delivered. Double-check the spelling — some universities use a separate student domain (e.g. study.beds.ac.uk) — then sign up again with the correct address.",
+    "suppressed": "This address previously bounced, so emails to it are being blocked. Please sign up again with a different or corrected university email.",
+    "complained": "Emails to this address are blocked because a previous message was marked as spam.",
+    "delivered": "Delivered — if it's not in your inbox, check Junk/Spam and search for “DEQUAD”.",
+    "delivery_delayed": "Your university's mail server is delaying delivery. Give it a minute or two, then check Junk/Spam.",
+}
+
+
+@router.get("/auth/verification-delivery")
+async def verification_delivery(email: str):
+    """Delivery status of the most recent OTP email, so the verify screen can
+    tell users when their uni mail server bounced it (instead of a silent wait)."""
+    email_lower = (email or "").lower().strip()
+    record = await db.email_verifications.find_one({"email": email_lower}, {"_id": 0})
+    if not record:
+        return {"status": "unknown", "deliverable": True, "message": None}
+    if record.get("send_failed"):
+        return {"status": "not_sent", "deliverable": False, "message": DELIVERY_MESSAGES["not_sent"]}
+
+    status = record.get("delivery_status")
+    checked_at = record.get("delivery_checked_at")
+    now = datetime.now(timezone.utc)
+    stale = True
+    if isinstance(checked_at, datetime):
+        if checked_at.tzinfo is None:
+            checked_at = checked_at.replace(tzinfo=timezone.utc)
+        stale = (now - checked_at).total_seconds() > 8
+    # Final states never change — no need to re-query the provider.
+    if stale and status not in DELIVERY_FAILED_EVENTS and status != "delivered":
+        info = await get_resend_delivery_status(record.get("provider_email_id"))
+        if info:
+            status = info["status"]
+            await db.email_verifications.update_one(
+                {"email": email_lower},
+                {"$set": {"delivery_status": status, "delivery_detail": info.get("detail"), "delivery_checked_at": now}},
+            )
+    status = status or "sent"
+    return {
+        "status": status,
+        "deliverable": status not in DELIVERY_FAILED_EVENTS,
+        "message": DELIVERY_MESSAGES.get(status),
+    }
 
 
 @router.post("/auth/resend-verification")

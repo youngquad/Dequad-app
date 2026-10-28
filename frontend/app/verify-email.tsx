@@ -17,6 +17,7 @@ import { useAuth } from '../src/contexts/AuthContext';
 import { DequadLogo } from '../src/components/DequadLogo';
 import { useTheme, Theme } from '../src/contexts/ThemeContext';
 import { Fonts } from '../src/constants/fonts';
+import { api } from '../src/services/api';
 
 /**
  * Email-verification (OTP) screen. After signup, users land here with their
@@ -50,6 +51,28 @@ export default function VerifyEmail() {
     // Auto-focus the first box on mount
     setTimeout(() => inputs.current[0]?.focus(), 200);
   }, []);
+
+  // Delivery feedback: ask the backend whether the code email actually reached
+  // the university's mail server. Hard bounces (wrong address) show up within
+  // seconds — far better than letting the user stare at an empty inbox.
+  type Delivery = { status: string; deliverable: boolean; message: string | null };
+  const [delivery, setDelivery] = useState<Delivery | null>(null);
+  const [deliveryTick, setDeliveryTick] = useState(0);
+  useEffect(() => {
+    if (!email) return;
+    let cancelled = false;
+    const delays = [4000, 8000, 15000, 30000, 60000];
+    const timers = delays.map((ms) =>
+      setTimeout(async () => {
+        if (cancelled) return;
+        try {
+          const d: Delivery = await api.get(`/auth/verification-delivery?email=${encodeURIComponent(email)}`);
+          if (!cancelled) setDelivery(d);
+        } catch {}
+      }, ms),
+    );
+    return () => { cancelled = true; timers.forEach(clearTimeout); };
+  }, [email, deliveryTick]);
 
   const handleChange = (idx: number, value: string) => {
     setError(null);
@@ -120,6 +143,8 @@ export default function VerifyEmail() {
     setError(null);
     setInfo(null);
     try {
+      setDelivery(null);
+      setDeliveryTick((n) => n + 1);
       const res = await resendVerification(email);
       if (res?.cooldown_seconds) {
         setCooldown(res.cooldown_seconds);
@@ -181,6 +206,33 @@ export default function VerifyEmail() {
               />
             ))}
           </View>
+
+          {delivery && !delivery.deliverable && (
+            <View style={styles.deliveryFail} testID="verify-delivery-failed">
+              <Ionicons name="alert-circle" size={20} color={t.danger} />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.deliveryFailTitle}>
+                  {delivery.status === 'not_sent' ? "We couldn't send the code" : 'Email could not be delivered'}
+                </Text>
+                <Text style={styles.deliveryFailText} testID="verify-delivery-message">{delivery.message}</Text>
+                {delivery.status !== 'not_sent' && (
+                  <Pressable
+                    onPress={() => router.replace('/(auth)/login' as any)}
+                    style={styles.deliveryFailBtn}
+                    testID="verify-use-different-email"
+                  >
+                    <Text style={styles.deliveryFailBtnText}>Use a different email</Text>
+                  </Pressable>
+                )}
+              </View>
+            </View>
+          )}
+          {delivery?.deliverable && delivery.message && !error && (
+            <View style={styles.deliveryOk} testID="verify-delivery-ok">
+              <Ionicons name={delivery.status === 'delivered' ? 'checkmark-circle' : 'time-outline'} size={16} color={t.success} />
+              <Text style={styles.deliveryOkText}>{delivery.message}</Text>
+            </View>
+          )}
 
           {error && (
             <Text style={styles.error} data-testid="verify-error">
@@ -280,6 +332,29 @@ const createStyles = (t: Theme) => StyleSheet.create({
   },
   codeInputFilled: { borderColor: t.success, backgroundColor: t.isDark ? t.card : '#F0FAF6' },
   error: { color: t.danger, fontSize: 14, fontWeight: '600' },
+  deliveryFail: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'flex-start',
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: t.card,
+    borderWidth: 1,
+    borderColor: t.danger,
+  },
+  deliveryFailTitle: { color: t.danger, fontSize: 14, fontWeight: '800' },
+  deliveryFailText: { color: t.text, fontSize: 13, lineHeight: 19, marginTop: 4 },
+  deliveryFailBtn: {
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 999,
+    backgroundColor: t.danger,
+  },
+  deliveryFailBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  deliveryOk: { flexDirection: 'row', gap: 8, alignItems: 'center' },
+  deliveryOkText: { color: t.textMuted, fontSize: 13, flex: 1 },
   info: { color: t.success, fontSize: 14, fontWeight: '600' },
   submit: {
     backgroundColor: t.primary,

@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import asyncio
 import logging
-from typing import List
+from typing import List, Optional
 import resend
 from config import (
     SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL, SMTP_FROM_NAME,
@@ -19,11 +19,12 @@ def is_smtp_configured() -> bool:
     return bool(RESEND_API_KEY and RESEND_SENDER_EMAIL) or bool(SMTP_HOST and SMTP_USERNAME and SMTP_PASSWORD)
 
 
-def send_email_via_resend(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+def send_email_via_resend(to_emails: List[str], subject: str, html_body: str, text_body: str = None, from_name: str = None):
+    """Returns the Resend email id (truthy) on success, False on failure."""
     try:
         resend.api_key = RESEND_API_KEY
         params = {
-            "from": f"{SMTP_FROM_NAME} <{RESEND_SENDER_EMAIL}>",
+            "from": f"{from_name or SMTP_FROM_NAME} <{RESEND_SENDER_EMAIL}>",
             "to": to_emails,
             "subject": subject,
             "html": html_body,
@@ -32,19 +33,19 @@ def send_email_via_resend(to_emails: List[str], subject: str, html_body: str, te
             params["text"] = text_body
         result = resend.Emails.send(params)
         logger.info(f"Resend email sent to {to_emails} (id={result.get('id')})")
-        return True
+        return result.get("id") or True
     except Exception as e:
         logger.error(f"Resend failed to send email to {to_emails}: {e}")
         return False
 
 
-def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_body: str = None, from_name: str = None):
     if RESEND_API_KEY and RESEND_SENDER_EMAIL:
-        return send_email_via_resend(to_emails, subject, html_body, text_body)
+        return send_email_via_resend(to_emails, subject, html_body, text_body, from_name)
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
-        msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
+        msg["From"] = f"{from_name or SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
         msg["To"] = ", ".join(to_emails)
 
         if text_body:
@@ -63,9 +64,36 @@ def send_email_sync(to_emails: List[str], subject: str, html_body: str, text_bod
         return False
 
 
-async def send_email_async(to_emails: List[str], subject: str, html_body: str, text_body: str = None):
+async def send_email_async(to_emails: List[str], subject: str, html_body: str, text_body: str = None, from_name: str = None):
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, send_email_sync, to_emails, subject, html_body, text_body)
+    return await loop.run_in_executor(None, send_email_sync, to_emails, subject, html_body, text_body, from_name)
+
+
+# Resend `last_event` → what we tell the user on the verify screen.
+DELIVERY_FAILED_EVENTS = {"bounced", "suppressed", "complained", "failed"}
+
+
+async def get_resend_delivery_status(email_id: str) -> Optional[dict]:
+    """Look up a sent email on Resend. Returns {"status", "detail"} or None if unavailable."""
+    if not (RESEND_API_KEY and email_id):
+        return None
+
+    def _fetch():
+        resend.api_key = RESEND_API_KEY
+        return resend.Emails.get(email_id)
+
+    try:
+        loop = asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, _fetch)
+        bounce = data.get("bounce") or {}
+        diag = bounce.get("diagnosticCode") or []
+        return {
+            "status": data.get("last_event") or "sent",
+            "detail": (diag[0] if diag else bounce.get("message")) if bounce else None,
+        }
+    except Exception as e:
+        logger.warning(f"Resend status lookup failed for {email_id}: {e}")
+        return None
 
 
 async def get_admin_emails() -> List[str]:
