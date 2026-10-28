@@ -1,0 +1,19 @@
+{
+  "summary": "Iteration 18 retest of the iteration_17 follow-ups. Everything passed. (1) Mobile /verify-email no longer shows a 'verify-email' navigation header; only the round back button is there (screenshot checked). (2) data-testid hooks are emitted on web: login has auth-mode-toggle and auth-submit, and auth-confirm-student appears in sign-up mode; verify-email has verify-title, verify-code-0..5, verify-cooldown-timer, verify-submit and verify-back. (3) Bug-fix regression: one sign-up with qa.retest.ee70c3@beds.ac.uk showed the red verify-delivery-failed box with its message and the 'Use a different email' button within 30s; the button goes to /login; no JS page errors. (4) GET /api/auth/verification-delivery is now rate-limited: of 130 concurrent GETs, 120 returned 200 and 10 returned 429, X-RateLimit-Remaining reached 0 and Retry-After was set. Health returns 200. (5) Resend shows both the OTP email and the forgot-password email (to ui.tester@student.beds.ac.uk) sent from 'DEQUAD <noreply@noreply.dequad.co.uk>'. An older reset email sent before the fix had 'DEQUAD Safeguarding', which confirms the change. Code check: the safeguarding alert (helpers/email.py:213) and the admin test email (routes/admin.py:587) both pass from_name=SMTP_FROM_NAME.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "RateLimitMiddleware (helpers/middleware.py)", "issue": "Existing issue, not a regression: the client IP is the first value of X-Forwarded-For, which the client can spoof. A client can change that header to get past the auth-bucket limit. Better to use the last trusted proxy hop or the ingress-provided real IP."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": ["/app/backend/tests/test_iter18_followups.py", "/app/tests_ui/iter18_followups_test.py", "/app/test_reports/pytest/pytest_iter18.xml"],
+  "action_items": ["Optional: harden the rate-limiter's client-IP extraction against a spoofed X-Forwarded-For"],
+  "critical_code_review_comments": ["routes/auth.py:123 passes from_name='DEQUAD' explicitly, which is now the default anyway, so it is redundant but harmless.", "The rate-limit bucket is per IP and per path, so OTP polling on /verify-email does not use up the register or login allowance. Good."],
+  "updated_files": ["/app/backend/tests/test_iter18_followups.py", "/app/tests_ui/iter18_followups_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "seed_data_creation": "Created one account, qa.retest.ee70c3@beds.ac.uk. It was deleted afterwards along with all other ^qa\\. rows in users and email_verifications (1 user and 1 verification deleted).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run the Playwright tests with PLAYWRIGHT_BROWSERS_PATH=/root/pw-browsers. Running the rate-limit test fills the verification-delivery bucket for this pod's IP for about 60s, so wait before running UI tests that poll that endpoint. Each @beds.ac.uk bounce goes onto Resend's suppression list, so keep them to a minimum."
+}
