@@ -1,3 +1,4 @@
+
 {
   "cli": {
     "version": ">= 7.0.0",
@@ -43,7 +44,8 @@
     "production": {
       "ios": {
         "appleId": "yusufquadri83@gmail.com",
-        "appleTeamId": "84H2486MJS"
+        "appleTeamId": "84H2486MJS",
+        "ascAppId": "6802088672"
       },
       "android": {
         "serviceAccountKeyPath": "./play-service-account.json",
